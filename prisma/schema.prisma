@@ -1,0 +1,326 @@
+// trading_journal/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─── 枚举类型 ────────────────────────────────────────────────
+
+enum Direction {
+  LONG
+  SHORT
+  TBD  // 待定
+}
+
+enum PriceTier {
+  BELOW_2       // < $2/股
+  BETWEEN_2_20  // $2 - $20/股
+  ABOVE_20      // > $20/股
+}
+
+enum MarketCapTier {
+  BELOW_300M      // < $300M
+  BETWEEN_300M_2B // $300M - $2B
+  BETWEEN_2B_10B  // $2B - $10B
+  ABOVE_10B       // > $10B
+}
+
+enum SetupStatus {
+  WATCHING    // 盘中持续观察
+  EXECUTED    // 已执行
+  MISSED      // 错过
+  INVALIDATED // 机会自动失效
+  CANCELLED   // 主动取消
+}
+
+enum MissedReason {
+  HESITATION          // 犹豫，不确定
+  NO_CLEAR_SIGNAL     // 等待的信号没出现
+  DISTRACTED          // 走神/错过时间窗口
+  ALREADY_IN_TRADE    // 当时已有其他持仓
+  RISK_LIMIT_HIT      // 当日亏损到上限
+  SPREAD_TOO_WIDE     // 价差不合适
+  NEWS_RISK           // 有未知新闻风险
+  CHANGED_ANALYSIS    // 重新分析后放弃
+  FEAR_OF_LOSS        // 近期亏损带来的恐惧
+  OTHER
+}
+
+enum Grade {
+  A
+  B
+  C
+  D
+}
+
+enum NewsType {
+  EARNINGS   // 财报
+  FED        // 美联储
+  MACRO      // 宏观数据（CPI、NFP等）
+  SECTOR     // 行业新闻
+  COMPANY    // 公司公告
+  TECHNICAL  // 纯技术面机会（无新闻催化）
+}
+
+enum NewsImpact {
+  BULLISH
+  BEARISH
+  NEUTRAL
+  UNCERTAIN
+}
+
+enum NewsStrength {
+  STRONG  // 强催化剂
+  MEDIUM  // 中等催化剂
+  WEAK    // 弱催化剂
+}
+
+enum ChartTag {
+  PRE_MARKET_PLAN  // 盘前计划图
+  ENTRY_SIGNAL     // 入场信号图
+  EXIT_SIGNAL      // 出场信号图
+  MISSED_SIGNAL    // 错过时的信号图
+  POST_REVIEW      // 复盘标注图
+  MARKET_OVERVIEW  // 大盘/指数图
+}
+
+// ─── 核心模型 ────────────────────────────────────────────────
+
+// 新闻催化剂库（用户自维护）
+model NewsCatalog {
+  id          String       @id @default(cuid())
+  name        String       // 新闻名称/简述模板
+  category    String       // 一级类别（如：财报、宏观政策、公司事件）
+  subCategory String?      // 二级类别（可选，如：EPS超预期、指引上调）
+  strength        NewsStrength // 催化剂强度
+  description     String?      // 详细说明（可选）
+  entryConditions String?      // 入场基本条件 JSON 数组，如 ["盘前波动>10%", "volume排前列"]
+  riskFactors     String?      // 风险因素 JSON 数组，如 ["连续上涨多日", "盘前涨幅已逆转"]
+  isActive        Boolean      @default(true)
+  setups      TradeSetup[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+// 策略（思维导图）
+model Strategy {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  description  String?
+  isActive     Boolean  @default(true)
+  mindmapData  String   @default("{}") // Mind Elixir JSON 字符串
+  ruleHistory  String   @default("[]") // 历史版本快照 JSON
+  setups       TradeSetup[]
+  tradeTypes   TradeType[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// 交易类型（从属于某个策略，供 Setup 多选）
+model TradeType {
+  id         String   @id @default(cuid())
+  name       String
+  strategyId String
+  strategy   Strategy @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+}
+
+// 每个交易日的顶层记录
+model DailySession {
+  date             DateTime  @unique // 美东时间日期（精确到日即可）
+
+  // 盘前
+  marketContext    String?   // 大盘环境（富文本 HTML）
+  preMarketPlan    String?   // 今日整体计划（富文本 HTML）
+  selectedStrategy String    @default("[]") // JSON 数组，如 ["VWAP Bounce","ORB"]
+
+  // 盘后
+  postReview       String?   // 复盘总结（富文本 HTML）
+  lessonsLearned   String?   // 今日教训
+  whatWentWell     String?   // 做对了什么（正向强化）
+
+  // 每日评分 1-5
+  planFollowed     Int?      // 是否遵守计划
+  emotionRating    Int?      // 情绪评分
+  focusRating      Int?      // 专注度评分
+
+  // 关联
+  newsEvents       NewsEvent[]
+  setups           TradeSetup[]
+  screenshots      Screenshot[]
+
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+// 新闻催化剂
+model NewsEvent {
+  id           String      @id @default(cuid())
+  sessionDate  DateTime
+  session      DailySession @relation(fields: [sessionDate], references: [date], onDelete: Cascade)
+
+  symbol       String?     // null = 全市场事件（如 FOMC）
+  headline     String      // 新闻标题
+  source       String?     // 来源：Bloomberg / Reuters / 公司公告
+  eventType    NewsType
+  impact       NewsImpact
+  notes        String?     // 你对这条新闻的判断
+
+  setups       TradeSetup[] @relation("SetupNews")
+
+  createdAt    DateTime    @default(now())
+}
+
+// 交易机会（核心实体）
+model TradeSetup {
+  id           String       @id @default(cuid())
+  sessionDate  DateTime
+  session      DailySession @relation(fields: [sessionDate], references: [date], onDelete: Cascade)
+
+  // 标的与方向
+  symbol        String
+  direction     Direction
+  priceTier     PriceTier?    // 价格分层标签
+  marketCapTier MarketCapTier? // 市值分层标签
+
+  // 策略与逻辑
+  strategy     String?      // "VWAP Bounce" / "ORB" 等（可选）
+  strategyId   String?      // 关联到 Strategy 模型（可选）
+  strategyRef  Strategy?    @relation(fields: [strategyId], references: [id], onDelete: SetNull)
+  setupLogic   String?      // 为什么选这个机会（富文本 HTML）
+  newsEvents   NewsEvent[]  @relation("SetupNews")
+
+  // 新闻催化剂（内嵌在 Setup 中，按标的录入）
+  newsType     NewsType?    // 新闻类型
+  newsImpact   NewsImpact?  // 新闻对标的的影响方向
+  newsHeadline String?      // 新闻标题 / 简述
+  newsCatalogId  String?
+  newsCatalogRef NewsCatalog? @relation(fields: [newsCatalogId], references: [id], onDelete: SetNull)
+
+  // ── 入场计划（定性为主，定量可选）──
+  entryCondition   String?  // 入场触发条件，如"回调至 VWAP 站稳，成交量萎缩后放量"
+  entryPriceNote   String?  // 价格区域备注，如"VWAP 附近 $185-186"
+  entryPriceExact  Float?   // 精确入场价（可留空，盘后补填）
+
+  // ── 止损计划 ──
+  stopCondition    String?  // 止损条件，如"跌破 VWAP 且一分钟 K 线收盘破位"
+  stopPriceNote    String?  // 止损价格区域，如"前低下方约 $181"
+  stopPriceExact   Float?   // 精确止损价（可留空）
+
+  // ── 目标计划 ──
+  target1Condition   String?  // 第一目标描述
+  target1PriceNote   String?  // 第一目标价格区域
+  target1PriceExact  Float?   // 精确第一目标价（可留空）
+  target2Condition   String?  // 第二目标描述（可选）
+  target2PriceNote   String?  // 第二目标价格区域（可选）
+  target2PriceExact  Float?   // 精确第二目标价（可留空）
+
+  // 盈亏比与仓位
+  plannedRiskReward  Float?   // 计划 R 值（可手动填或自动计算）
+  plannedSize        Int?     // 计划股数（可选）
+
+  // 机会状态
+  status         SetupStatus @default(WATCHING)
+
+  // 错过交易专属
+  missedReason   MissedReason?
+  missedNotes    String?      // 错过的详细说明
+  missedHypoPnL  Float?       // 假设按计划执行的盈亏（事后估算）
+
+  // 实际执行（支持分批建仓）
+  executions     Execution[]
+
+  // 截图（盘后统一上传）
+  screenshots    Screenshot[]
+
+  // ── 盘中评估 ──
+  stockSelectionAccurate   Boolean?  // 盘前选择这只股票是否准确
+  stockSelectionNote       String?   // 选股准确性说明
+  analysisAccurate         Boolean?  // 旧字段，保留兼容
+  analysisAccurateNote     String?   // 旧字段，保留兼容
+  // 判断准确性（细分四项）
+  marketJudgmentAccurate    Boolean? // 行情判断是否准确
+  marketJudgmentNote        String?
+  strategySelectionAccurate Boolean? // 交易策略选择是否准确
+  strategySelectionNote     String?
+  entryOpportunityAccurate  Boolean? // 入场机会是否判断准确
+  entryOpportunityNote      String?
+  exitOpportunityAccurate   Boolean? // 出场机会是否判断准确
+  exitOpportunityNote       String?
+  actualEntryOpportunity   String?   // 实际入场机会（开盘后实际出现的进入机会）
+  actualExitOpportunity    String?   // 实际出场机会（实际有的退出机会）
+  dailySummary             String?   // 单日标的总结（盘中填写）
+
+  // 选中的交易类型（JSON 数组存 TradeType 名称，便于显示）
+  selectedTradeTypes String   @default("[]")
+
+  // 复盘
+  setupGrade     Grade?       // 机会本身的质量评分
+  setupNotes     String?      // 复盘分析文字
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+// 实际执行记录（每笔成交）
+model Execution {
+  id        String     @id @default(cuid())
+  setupId   String
+  setup     TradeSetup @relation(fields: [setupId], references: [id], onDelete: Cascade)
+
+  // 成交数据
+  entryPrice  Float
+  exitPrice   Float?
+  quantity    Int
+  entryTime   DateTime
+  exitTime    DateTime?
+  commission  Float     @default(0)
+  pnl         Float?    // 自动计算后存储
+
+  // 执行纪律评估（定性为主）
+  actualDirection      Direction? // 实际执行方向（可与计划方向不同）
+
+  entryConditionMet    Boolean?  // 入场时计划条件是否已满足
+  entryConditionNotes  String?   // 说明，如"VWAP 还没站稳就进了，追了 $0.30"
+  exitConditionMet     Boolean?  // 出场是否符合原定条件
+  exitConditionNotes   String?   // 说明，如"目标一到了就全跑，没等目标二"
+
+  executionGrade  Grade?   // 执行质量评分
+  executionNotes  String?  // 综合执行备注
+
+  screenshots     Screenshot[]
+
+  createdAt  DateTime @default(now())
+}
+
+// 截图（盘后统一上传并分配）
+model Screenshot {
+  id           String    @id @default(cuid())
+  filename     String    // 存储文件名
+  originalName String    // 原始文件名
+  filePath     String    // 相对路径，如 /uploads/2024/01/15/xxx.png
+  fileSize     Int       // 字节数
+  mimeType     String    // image/png 等
+
+  // 截图语义标注
+  caption      String?   // 图表说明
+  timeframe    String?   // 1min / 5min / 15min / 1H / Daily
+  chartTag     ChartTag? // 截图用途
+
+  // 关联（三选一，或关联到日志）
+  setupId      String?
+  setup        TradeSetup?  @relation(fields: [setupId], references: [id], onDelete: SetNull)
+  executionId  String?
+  execution    Execution?   @relation(fields: [executionId], references: [id], onDelete: SetNull)
+  sessionDate  DateTime?
+  session      DailySession? @relation(fields: [sessionDate], references: [date], onDelete: SetNull)
+
+  takenAt      DateTime?  // 截图时间（可选）
+  createdAt    DateTime   @default(now())
+}
