@@ -101,7 +101,7 @@ export default async function MissedAnalysisPage() {
                       <Badge variant="outline" className="text-xs">{s.strategy}</Badge>
                       {s.missedReason && (
                         <Badge variant="secondary" className="text-xs">
-                          {MISSED_REASON_LABELS[s.missedReason]}
+                          {MISSED_REASON_LABELS[s.missedReason as keyof typeof MISSED_REASON_LABELS] ?? s.missedReason}
                         </Badge>
                       )}
                     </div>

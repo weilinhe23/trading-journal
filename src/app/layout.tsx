@@ -60,6 +60,12 @@ export default function RootLayout({
                 >
                   新闻
                 </Link>
+                <Link
+                  href="/weekly"
+                  className="hover:text-foreground transition-colors"
+                >
+                  周报
+                </Link>
               </nav>
             </div>
           </header>
