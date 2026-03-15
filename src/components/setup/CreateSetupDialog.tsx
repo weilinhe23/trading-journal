@@ -17,7 +17,7 @@ import {
 import { Separator } from "~/components/ui/separator"
 import { Badge } from "~/components/ui/badge"
 import { cn } from "~/lib/utils"
-import { type NewsCatalogItem, type NewsStrength, NEWS_STRENGTH_LABELS } from "~/types"
+import { type NewsCatalogItem, type NewsStrength, NEWS_STRENGTH_LABELS, type SetupPriority, SETUP_PRIORITY_LABELS } from "~/types"
 
 const STRENGTH_BADGE_CLASS: Record<NewsStrength, string> = {
   STRONG: "bg-red-500/20 text-red-400 border-red-500/30",
@@ -88,9 +88,16 @@ const TARGET2_QUICK = [
 
 const UNDECIDED = "__UNDECIDED__"
 
+const PRIORITY_OPTIONS: Array<{ value: SetupPriority; label: string; className: string }> = [
+  { value: "HIGH",   label: SETUP_PRIORITY_LABELS.HIGH,   className: "border-red-700 text-red-400 hover:bg-red-950" },
+  { value: "MEDIUM", label: SETUP_PRIORITY_LABELS.MEDIUM, className: "border-yellow-700 text-yellow-400 hover:bg-yellow-950" },
+  { value: "LOW",    label: SETUP_PRIORITY_LABELS.LOW,    className: "border-muted-foreground/40 text-muted-foreground hover:border-muted-foreground" },
+]
+
 const defaultForm = {
   symbol: "",
   direction: "" as "LONG" | "SHORT" | "TBD" | "",
+  priority: "MEDIUM" as SetupPriority,
   priceTier: "" as string,
   marketCapTier: "" as string,
   // strategy: UNDECIDED means 未定, a real ID means a library strategy
@@ -164,6 +171,7 @@ export function CreateSetupDialog({ date }: Props) {
       const body: Record<string, unknown> = {
         symbol: form.symbol.trim().toUpperCase(),
         direction: form.direction,
+        priority: form.priority,
       }
       if (form.priceTier) body.priceTier = form.priceTier
       if (form.marketCapTier) body.marketCapTier = form.marketCapTier
@@ -256,6 +264,32 @@ export function CreateSetupDialog({ date }: Props) {
                   <SelectItem value="TBD">待定 TBD</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+          </div>
+
+          {/* 优先级别 */}
+          <div className="space-y-1">
+            <Label className="text-xs text-muted-foreground">优先级别</Label>
+            <div className="flex gap-1.5">
+              {PRIORITY_OPTIONS.map((o) => (
+                <button
+                  key={o.value}
+                  type="button"
+                  onClick={() => setForm((prev) => ({ ...prev, priority: o.value }))}
+                  className={cn(
+                    "text-xs px-3 py-1 rounded border transition-colors",
+                    form.priority === o.value
+                      ? o.value === "HIGH"
+                        ? "bg-red-700 text-white border-red-700"
+                        : o.value === "MEDIUM"
+                          ? "bg-yellow-700 text-white border-yellow-700"
+                          : "bg-muted text-foreground border-muted-foreground"
+                      : o.className,
+                  )}
+                >
+                  {o.label}
+                </button>
+              ))}
             </div>
           </div>
 

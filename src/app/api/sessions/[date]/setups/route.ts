@@ -36,10 +36,12 @@ export async function GET(
 const CreateSetupSchema = z.object({
   symbol: z.string().min(1, "标的不能为空").toUpperCase(),
   direction: z.enum(["LONG", "SHORT", "TBD"]),
+  priority: z.enum(["HIGH", "MEDIUM", "LOW"]).optional(),
   priceTier: z.enum(["BELOW_2", "BETWEEN_2_20", "ABOVE_20"]).optional(),
   marketCapTier: z.enum(["BELOW_300M", "BETWEEN_300M_2B", "BETWEEN_2B_10B", "ABOVE_10B"]).optional(),
   strategy: z.string().min(1).optional(),
   strategyId: z.string().optional(),
+  selectedTradeTypes: z.string().optional(),
   setupLogic: z.string().optional(),
   entryCondition: z.string().optional(),
   entryPriceNote: z.string().optional(),
@@ -54,6 +56,7 @@ const CreateSetupSchema = z.object({
   newsType: z.enum(["EARNINGS", "FED", "MACRO", "SECTOR", "COMPANY", "TECHNICAL"]).optional(),
   newsImpact: z.enum(["BULLISH", "BEARISH", "NEUTRAL", "UNCERTAIN"]).optional(),
   newsHeadline: z.string().optional(),
+  newsCatalogId: z.string().optional(),
 })
 
 // POST /api/sessions/[date]/setups

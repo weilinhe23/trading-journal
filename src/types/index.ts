@@ -17,6 +17,7 @@ export type SetupStatus =
   | "INVALIDATED"
   | "CANCELLED"
 
+// 保留旧 MissedReason 用于兼容存量数据的显示
 export type MissedReason =
   | "HESITATION"
   | "NO_CLEAR_SIGNAL"
@@ -28,6 +29,10 @@ export type MissedReason =
   | "CHANGED_ANALYSIS"
   | "FEAR_OF_LOSS"
   | "OTHER"
+
+export type SetupPriority = "HIGH" | "MEDIUM" | "LOW"
+
+export type ChartTimeframe = "M1" | "M5" | "M15" | "M30" | "H1" | "H4" | "D1"
 
 export type Grade = "A" | "B" | "C" | "D"
 
@@ -69,7 +74,7 @@ export const NEWS_IMPACT_LABELS: Record<NewsImpact, string> = {
   UNCERTAIN: "不确定",
 }
 
-// ─── 展示用的 MissedReason 标签 ──────────────────────────────────────
+// ─── 展示用的 MissedReason 标签（兼容旧存量数据的枚举 key）─────────────
 
 export const MISSED_REASON_LABELS: Record<MissedReason, string> = {
   HESITATION: "犹豫，不确定",
@@ -82,6 +87,36 @@ export const MISSED_REASON_LABELS: Record<MissedReason, string> = {
   CHANGED_ANALYSIS: "重新分析后放弃",
   FEAR_OF_LOSS: "近期亏损带来的恐惧",
   OTHER: "其他",
+}
+
+// ─── 展示用的 SetupPriority 标签 ─────────────────────────────────────
+
+export const SETUP_PRIORITY_LABELS: Record<SetupPriority, string> = {
+  HIGH:   "高优先",
+  MEDIUM: "中",
+  LOW:    "低/观察",
+}
+
+// ─── 展示用的 ChartTimeframe 标签 ────────────────────────────────────
+
+export const CHART_TIMEFRAME_LABELS: Record<ChartTimeframe, string> = {
+  M1:  "1m",
+  M5:  "5m",
+  M15: "15m",
+  M30: "30m",
+  H1:  "1h",
+  H4:  "4h",
+  D1:  "1D",
+}
+
+// ─── MissedReasonOption (用户自定义错过原因) ──────────────────────────
+
+export interface MissedReasonOption {
+  id:        string
+  label:     string
+  isActive:  boolean
+  sortOrder: number
+  createdAt: string
 }
 
 // ─── 展示用的 PriceTier 标签 ──────────────────────────────────────────

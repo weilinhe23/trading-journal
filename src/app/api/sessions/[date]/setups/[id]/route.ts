@@ -5,6 +5,7 @@ import { prisma } from "~/lib/prisma"
 const UpdateSetupSchema = z.object({
   symbol: z.string().min(1).toUpperCase().optional(),
   direction: z.enum(["LONG", "SHORT", "TBD"]).optional(),
+  priority: z.enum(["HIGH", "MEDIUM", "LOW"]).optional(),
   priceTier: z.enum(["BELOW_2", "BETWEEN_2_20", "ABOVE_20"]).nullable().optional(),
   marketCapTier: z.enum(["BELOW_300M", "BETWEEN_300M_2B", "BETWEEN_2B_10B", "ABOVE_10B"]).nullable().optional(),
   strategy: z.string().nullable().optional(),
@@ -45,6 +46,7 @@ const UpdateSetupSchema = z.object({
   actualEntryOpportunity: z.string().optional(),
   actualExitOpportunity: z.string().optional(),
   dailySummary: z.string().optional(),
+  chartTimeframe: z.enum(["M1", "M5", "M15", "M30", "H1", "H4", "D1"]).nullable().optional(),
 })
 
 // GET /api/sessions/[date]/setups/[id]

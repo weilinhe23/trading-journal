@@ -3,11 +3,7 @@ import { z } from "zod"
 import { prisma } from "~/lib/prisma"
 
 const MissSchema = z.object({
-  missedReason: z.enum([
-    "HESITATION", "NO_CLEAR_SIGNAL", "DISTRACTED", "ALREADY_IN_TRADE",
-    "RISK_LIMIT_HIT", "SPREAD_TOO_WIDE", "NEWS_RISK", "CHANGED_ANALYSIS",
-    "FEAR_OF_LOSS", "OTHER",
-  ]),
+  missedReason: z.string().min(1, "错过原因不能为空"),
   missedNotes: z.string().optional(),
   missedHypoPnL: z.number().optional(),
 })

@@ -22,8 +22,9 @@ import { formatPnL } from "~/lib/pnl"
 import {
   MISSED_REASON_LABELS, NEWS_TYPE_LABELS, NEWS_IMPACT_LABELS,
   PRICE_TIER_LABELS, MARKET_CAP_TIER_LABELS,
+  SETUP_PRIORITY_LABELS, CHART_TIMEFRAME_LABELS,
   type MissedReason, type SetupStatus, type NewsType, type NewsImpact,
-  type PriceTier, type MarketCapTier,
+  type PriceTier, type MarketCapTier, type SetupPriority, type ChartTimeframe,
 } from "~/types"
 import { MissedReasonPanel } from "./MissedReasonPanel"
 import { AddExecutionDialog } from "./AddExecutionDialog"
@@ -54,6 +55,14 @@ const DIRECTION_CONFIG: Record<string, { label: string; className: string }> = {
   SHORT: { label: "做空", className: "bg-red-600 text-white" },
   TBD:   { label: "待定", className: "bg-gray-600 text-white" },
 }
+
+const PRIORITY_BADGE_CONFIG: Record<SetupPriority, { label: string; className: string }> = {
+  HIGH:   { label: "高优先", className: "border-red-700 text-red-400" },
+  MEDIUM: { label: "中",     className: "border-yellow-700/60 text-yellow-400/60" },
+  LOW:    { label: "低/观察", className: "border-muted-foreground/30 text-muted-foreground/50" },
+}
+
+const CHART_TIMEFRAME_OPTIONS: ChartTimeframe[] = ["M1", "M5", "M15", "M30", "H1", "H4", "D1"]
 
 export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged }: Props) {
   const router = useRouter()
@@ -96,6 +105,9 @@ export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged
     setup.actualExitOpportunity ?? "",
   )
   const [dailySummary, setDailySummary] = useState(setup.dailySummary ?? "")
+  const [chartTimeframe, setChartTimeframe] = useState<ChartTimeframe | null>(
+    (s.chartTimeframe as ChartTimeframe | null | undefined) ?? null,
+  )
 
   const statusCfg = STATUS_CONFIG[setup.status as SetupStatus]
   const dirCfg = DIRECTION_CONFIG[setup.direction] ?? DIRECTION_CONFIG["TBD"]!
@@ -118,6 +130,7 @@ export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged
     strategySelectionAccurate !== null ||
     entryOpportunityAccurate !== null ||
     exitOpportunityAccurate !== null ||
+    chartTimeframe !== null ||
     actualEntryOpportunity.trim() ||
     actualExitOpportunity.trim() ||
     dailySummary.trim()
@@ -189,6 +202,7 @@ export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged
           actualEntryOpportunity,
           actualExitOpportunity,
           dailySummary,
+          chartTimeframe,
         }),
       })
       const json = (await res.json()) as { success: boolean }
@@ -219,6 +233,31 @@ export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged
   function renderIntraEvalSection() {
     return (
       <div className="space-y-2.5 mt-2">
+        {/* K 线维度 */}
+        <div className="space-y-1">
+          <Label className="text-xs text-muted-foreground">实际交易 K 线维度</Label>
+          <div className="flex flex-wrap gap-1">
+            {CHART_TIMEFRAME_OPTIONS.map((tf) => (
+              <button
+                key={tf}
+                type="button"
+                onClick={() => {
+                  setChartTimeframe((prev) => prev === tf ? null : tf)
+                  setIntraSaved(false)
+                }}
+                className={cn(
+                  "text-xs px-2 py-0.5 rounded border transition-colors",
+                  chartTimeframe === tf
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "border-muted-foreground/40 text-muted-foreground hover:border-primary hover:text-foreground",
+                )}
+              >
+                {CHART_TIMEFRAME_LABELS[tf]}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* 盘前选股准确性 */}
         <div className="space-y-1">
           <Label className="text-xs text-muted-foreground">盘前选股</Label>
@@ -371,6 +410,17 @@ export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged
             <span className={cn("text-xs px-1.5 py-0.5 rounded font-medium", dirCfg.className)}>
               {dirCfg.label}
             </span>
+            {/* 优先级别 */}
+            {(() => {
+              const priority = (setup as unknown as { priority?: SetupPriority }).priority
+              if (!priority || priority === "MEDIUM") return null
+              const cfg = PRIORITY_BADGE_CONFIG[priority]
+              return (
+                <Badge variant="outline" className={cn("text-xs py-0", cfg.className)}>
+                  {cfg.label}
+                </Badge>
+              )
+            })()}
             {setup.strategy && (
               <Badge variant="secondary" className="text-xs py-0">{setup.strategy}</Badge>
             )}
@@ -446,6 +496,12 @@ export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged
                 </Badge>
               )
             })()}
+            {/* K 线维度标签 */}
+            {intraMode && chartTimeframe && (
+              <Badge variant="outline" className="text-xs py-0 border-primary/50 text-primary/80">
+                {CHART_TIMEFRAME_LABELS[chartTimeframe]}
+              </Badge>
+            )}
             {/* 盘中评估已保存指示器 */}
             {intraMode && hasIntraData && intraSaved && (
               <Badge variant="outline" className="text-xs py-0 border-green-800 text-green-400">
@@ -561,7 +617,8 @@ export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged
               <Separator className="my-1" />
               <div className="text-xs text-muted-foreground">
                 <span className="font-medium">错过：</span>
-                {MISSED_REASON_LABELS[setup.missedReason as MissedReason]}
+                {/* 兼容旧存量枚举 key，新数据直接存中文标签 */}
+                {MISSED_REASON_LABELS[setup.missedReason as MissedReason] ?? setup.missedReason}
                 {setup.missedNotes && <span className="ml-1">— {setup.missedNotes}</span>}
               </div>
             </>
