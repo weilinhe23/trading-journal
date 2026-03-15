@@ -14,7 +14,8 @@ import {
   isSameMonth,
 } from "date-fns"
 import { zhCN } from "date-fns/locale"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import Link from "next/link"
+import { ChevronLeft, ChevronRight, Search } from "lucide-react"
 import { Button } from "~/components/ui/button"
 import { cn } from "~/lib/utils"
 
@@ -67,13 +68,21 @@ export default function JournalPage() {
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">交易日志</h1>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => router.push(`/journal/${format(new Date(), "yyyy-MM-dd")}`)}
-        >
-          今天
-        </Button>
+        <div className="flex gap-2">
+          <Link href="/journal/search">
+            <Button variant="outline" size="sm" className="gap-1.5">
+              <Search className="h-3.5 w-3.5" />
+              批量查询
+            </Button>
+          </Link>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push(`/journal/${format(new Date(), "yyyy-MM-dd")}`)}
+          >
+            今天
+          </Button>
+        </div>
       </div>
 
       {/* 月份导航 */}
