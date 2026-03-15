@@ -20,6 +20,10 @@ db.sqlite
 
 # prisma query engine temp files
 *.tmp
+*.node.tmp*
+
+# personal notes (not part of codebase)
+需要修正的.md
 
 # next.js
 /.next/

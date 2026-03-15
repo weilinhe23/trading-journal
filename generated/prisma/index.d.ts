@@ -49,6 +49,16 @@ export type TradeSetup = $Result.DefaultSelection<Prisma.$TradeSetupPayload>
  */
 export type Execution = $Result.DefaultSelection<Prisma.$ExecutionPayload>
 /**
+ * Model WeeklyReport
+ * 
+ */
+export type WeeklyReport = $Result.DefaultSelection<Prisma.$WeeklyReportPayload>
+/**
+ * Model MissedReasonOption
+ * 
+ */
+export type MissedReasonOption = $Result.DefaultSelection<Prisma.$MissedReasonOptionPayload>
+/**
  * Model Screenshot
  * 
  */
@@ -97,20 +107,26 @@ export const SetupStatus: {
 export type SetupStatus = (typeof SetupStatus)[keyof typeof SetupStatus]
 
 
-export const MissedReason: {
-  HESITATION: 'HESITATION',
-  NO_CLEAR_SIGNAL: 'NO_CLEAR_SIGNAL',
-  DISTRACTED: 'DISTRACTED',
-  ALREADY_IN_TRADE: 'ALREADY_IN_TRADE',
-  RISK_LIMIT_HIT: 'RISK_LIMIT_HIT',
-  SPREAD_TOO_WIDE: 'SPREAD_TOO_WIDE',
-  NEWS_RISK: 'NEWS_RISK',
-  CHANGED_ANALYSIS: 'CHANGED_ANALYSIS',
-  FEAR_OF_LOSS: 'FEAR_OF_LOSS',
-  OTHER: 'OTHER'
+export const SetupPriority: {
+  HIGH: 'HIGH',
+  MEDIUM: 'MEDIUM',
+  LOW: 'LOW'
 };
 
-export type MissedReason = (typeof MissedReason)[keyof typeof MissedReason]
+export type SetupPriority = (typeof SetupPriority)[keyof typeof SetupPriority]
+
+
+export const ChartTimeframe: {
+  M1: 'M1',
+  M5: 'M5',
+  M15: 'M15',
+  M30: 'M30',
+  H1: 'H1',
+  H4: 'H4',
+  D1: 'D1'
+};
+
+export type ChartTimeframe = (typeof ChartTimeframe)[keyof typeof ChartTimeframe]
 
 
 export const Grade: {
@@ -183,9 +199,13 @@ export type SetupStatus = $Enums.SetupStatus
 
 export const SetupStatus: typeof $Enums.SetupStatus
 
-export type MissedReason = $Enums.MissedReason
+export type SetupPriority = $Enums.SetupPriority
 
-export const MissedReason: typeof $Enums.MissedReason
+export const SetupPriority: typeof $Enums.SetupPriority
+
+export type ChartTimeframe = $Enums.ChartTimeframe
+
+export const ChartTimeframe: typeof $Enums.ChartTimeframe
 
 export type Grade = $Enums.Grade
 
@@ -394,6 +414,26 @@ export class PrismaClient<
     * ```
     */
   get execution(): Prisma.ExecutionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.weeklyReport`: Exposes CRUD operations for the **WeeklyReport** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WeeklyReports
+    * const weeklyReports = await prisma.weeklyReport.findMany()
+    * ```
+    */
+  get weeklyReport(): Prisma.WeeklyReportDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.missedReasonOption`: Exposes CRUD operations for the **MissedReasonOption** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MissedReasonOptions
+    * const missedReasonOptions = await prisma.missedReasonOption.findMany()
+    * ```
+    */
+  get missedReasonOption(): Prisma.MissedReasonOptionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.screenshot`: Exposes CRUD operations for the **Screenshot** model.
@@ -852,6 +892,8 @@ export namespace Prisma {
     NewsEvent: 'NewsEvent',
     TradeSetup: 'TradeSetup',
     Execution: 'Execution',
+    WeeklyReport: 'WeeklyReport',
+    MissedReasonOption: 'MissedReasonOption',
     Screenshot: 'Screenshot'
   };
 
@@ -871,7 +913,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "newsCatalog" | "strategy" | "tradeType" | "dailySession" | "newsEvent" | "tradeSetup" | "execution" | "screenshot"
+      modelProps: "newsCatalog" | "strategy" | "tradeType" | "dailySession" | "newsEvent" | "tradeSetup" | "execution" | "weeklyReport" | "missedReasonOption" | "screenshot"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1393,6 +1435,154 @@ export namespace Prisma {
           }
         }
       }
+      WeeklyReport: {
+        payload: Prisma.$WeeklyReportPayload<ExtArgs>
+        fields: Prisma.WeeklyReportFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WeeklyReportFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WeeklyReportPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WeeklyReportFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WeeklyReportPayload>
+          }
+          findFirst: {
+            args: Prisma.WeeklyReportFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WeeklyReportPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WeeklyReportFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WeeklyReportPayload>
+          }
+          findMany: {
+            args: Prisma.WeeklyReportFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WeeklyReportPayload>[]
+          }
+          create: {
+            args: Prisma.WeeklyReportCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WeeklyReportPayload>
+          }
+          createMany: {
+            args: Prisma.WeeklyReportCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WeeklyReportCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WeeklyReportPayload>[]
+          }
+          delete: {
+            args: Prisma.WeeklyReportDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WeeklyReportPayload>
+          }
+          update: {
+            args: Prisma.WeeklyReportUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WeeklyReportPayload>
+          }
+          deleteMany: {
+            args: Prisma.WeeklyReportDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WeeklyReportUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WeeklyReportUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WeeklyReportPayload>[]
+          }
+          upsert: {
+            args: Prisma.WeeklyReportUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WeeklyReportPayload>
+          }
+          aggregate: {
+            args: Prisma.WeeklyReportAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWeeklyReport>
+          }
+          groupBy: {
+            args: Prisma.WeeklyReportGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WeeklyReportGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WeeklyReportCountArgs<ExtArgs>
+            result: $Utils.Optional<WeeklyReportCountAggregateOutputType> | number
+          }
+        }
+      }
+      MissedReasonOption: {
+        payload: Prisma.$MissedReasonOptionPayload<ExtArgs>
+        fields: Prisma.MissedReasonOptionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MissedReasonOptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MissedReasonOptionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MissedReasonOptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MissedReasonOptionPayload>
+          }
+          findFirst: {
+            args: Prisma.MissedReasonOptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MissedReasonOptionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MissedReasonOptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MissedReasonOptionPayload>
+          }
+          findMany: {
+            args: Prisma.MissedReasonOptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MissedReasonOptionPayload>[]
+          }
+          create: {
+            args: Prisma.MissedReasonOptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MissedReasonOptionPayload>
+          }
+          createMany: {
+            args: Prisma.MissedReasonOptionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MissedReasonOptionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MissedReasonOptionPayload>[]
+          }
+          delete: {
+            args: Prisma.MissedReasonOptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MissedReasonOptionPayload>
+          }
+          update: {
+            args: Prisma.MissedReasonOptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MissedReasonOptionPayload>
+          }
+          deleteMany: {
+            args: Prisma.MissedReasonOptionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MissedReasonOptionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MissedReasonOptionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MissedReasonOptionPayload>[]
+          }
+          upsert: {
+            args: Prisma.MissedReasonOptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MissedReasonOptionPayload>
+          }
+          aggregate: {
+            args: Prisma.MissedReasonOptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMissedReasonOption>
+          }
+          groupBy: {
+            args: Prisma.MissedReasonOptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MissedReasonOptionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MissedReasonOptionCountArgs<ExtArgs>
+            result: $Utils.Optional<MissedReasonOptionCountAggregateOutputType> | number
+          }
+        }
+      }
       Screenshot: {
         payload: Prisma.$ScreenshotPayload<ExtArgs>
         fields: Prisma.ScreenshotFieldRefs
@@ -1570,6 +1760,8 @@ export namespace Prisma {
     newsEvent?: NewsEventOmit
     tradeSetup?: TradeSetupOmit
     execution?: ExecutionOmit
+    weeklyReport?: WeeklyReportOmit
+    missedReasonOption?: MissedReasonOptionOmit
     screenshot?: ScreenshotOmit
   }
 
@@ -7637,6 +7829,7 @@ export namespace Prisma {
     sessionDate: Date | null
     symbol: string | null
     direction: $Enums.Direction | null
+    priority: $Enums.SetupPriority | null
     priceTier: $Enums.PriceTier | null
     marketCapTier: $Enums.MarketCapTier | null
     strategy: string | null
@@ -7661,7 +7854,7 @@ export namespace Prisma {
     plannedRiskReward: number | null
     plannedSize: number | null
     status: $Enums.SetupStatus | null
-    missedReason: $Enums.MissedReason | null
+    missedReason: string | null
     missedNotes: string | null
     missedHypoPnL: number | null
     stockSelectionAccurate: boolean | null
@@ -7679,6 +7872,7 @@ export namespace Prisma {
     actualEntryOpportunity: string | null
     actualExitOpportunity: string | null
     dailySummary: string | null
+    chartTimeframe: $Enums.ChartTimeframe | null
     selectedTradeTypes: string | null
     setupGrade: $Enums.Grade | null
     setupNotes: string | null
@@ -7691,6 +7885,7 @@ export namespace Prisma {
     sessionDate: Date | null
     symbol: string | null
     direction: $Enums.Direction | null
+    priority: $Enums.SetupPriority | null
     priceTier: $Enums.PriceTier | null
     marketCapTier: $Enums.MarketCapTier | null
     strategy: string | null
@@ -7715,7 +7910,7 @@ export namespace Prisma {
     plannedRiskReward: number | null
     plannedSize: number | null
     status: $Enums.SetupStatus | null
-    missedReason: $Enums.MissedReason | null
+    missedReason: string | null
     missedNotes: string | null
     missedHypoPnL: number | null
     stockSelectionAccurate: boolean | null
@@ -7733,6 +7928,7 @@ export namespace Prisma {
     actualEntryOpportunity: string | null
     actualExitOpportunity: string | null
     dailySummary: string | null
+    chartTimeframe: $Enums.ChartTimeframe | null
     selectedTradeTypes: string | null
     setupGrade: $Enums.Grade | null
     setupNotes: string | null
@@ -7745,6 +7941,7 @@ export namespace Prisma {
     sessionDate: number
     symbol: number
     direction: number
+    priority: number
     priceTier: number
     marketCapTier: number
     strategy: number
@@ -7787,6 +7984,7 @@ export namespace Prisma {
     actualEntryOpportunity: number
     actualExitOpportunity: number
     dailySummary: number
+    chartTimeframe: number
     selectedTradeTypes: number
     setupGrade: number
     setupNotes: number
@@ -7821,6 +8019,7 @@ export namespace Prisma {
     sessionDate?: true
     symbol?: true
     direction?: true
+    priority?: true
     priceTier?: true
     marketCapTier?: true
     strategy?: true
@@ -7863,6 +8062,7 @@ export namespace Prisma {
     actualEntryOpportunity?: true
     actualExitOpportunity?: true
     dailySummary?: true
+    chartTimeframe?: true
     selectedTradeTypes?: true
     setupGrade?: true
     setupNotes?: true
@@ -7875,6 +8075,7 @@ export namespace Prisma {
     sessionDate?: true
     symbol?: true
     direction?: true
+    priority?: true
     priceTier?: true
     marketCapTier?: true
     strategy?: true
@@ -7917,6 +8118,7 @@ export namespace Prisma {
     actualEntryOpportunity?: true
     actualExitOpportunity?: true
     dailySummary?: true
+    chartTimeframe?: true
     selectedTradeTypes?: true
     setupGrade?: true
     setupNotes?: true
@@ -7929,6 +8131,7 @@ export namespace Prisma {
     sessionDate?: true
     symbol?: true
     direction?: true
+    priority?: true
     priceTier?: true
     marketCapTier?: true
     strategy?: true
@@ -7971,6 +8174,7 @@ export namespace Prisma {
     actualEntryOpportunity?: true
     actualExitOpportunity?: true
     dailySummary?: true
+    chartTimeframe?: true
     selectedTradeTypes?: true
     setupGrade?: true
     setupNotes?: true
@@ -8070,6 +8274,7 @@ export namespace Prisma {
     sessionDate: Date
     symbol: string
     direction: $Enums.Direction
+    priority: $Enums.SetupPriority
     priceTier: $Enums.PriceTier | null
     marketCapTier: $Enums.MarketCapTier | null
     strategy: string | null
@@ -8094,7 +8299,7 @@ export namespace Prisma {
     plannedRiskReward: number | null
     plannedSize: number | null
     status: $Enums.SetupStatus
-    missedReason: $Enums.MissedReason | null
+    missedReason: string | null
     missedNotes: string | null
     missedHypoPnL: number | null
     stockSelectionAccurate: boolean | null
@@ -8112,6 +8317,7 @@ export namespace Prisma {
     actualEntryOpportunity: string | null
     actualExitOpportunity: string | null
     dailySummary: string | null
+    chartTimeframe: $Enums.ChartTimeframe | null
     selectedTradeTypes: string
     setupGrade: $Enums.Grade | null
     setupNotes: string | null
@@ -8143,6 +8349,7 @@ export namespace Prisma {
     sessionDate?: boolean
     symbol?: boolean
     direction?: boolean
+    priority?: boolean
     priceTier?: boolean
     marketCapTier?: boolean
     strategy?: boolean
@@ -8185,6 +8392,7 @@ export namespace Prisma {
     actualEntryOpportunity?: boolean
     actualExitOpportunity?: boolean
     dailySummary?: boolean
+    chartTimeframe?: boolean
     selectedTradeTypes?: boolean
     setupGrade?: boolean
     setupNotes?: boolean
@@ -8204,6 +8412,7 @@ export namespace Prisma {
     sessionDate?: boolean
     symbol?: boolean
     direction?: boolean
+    priority?: boolean
     priceTier?: boolean
     marketCapTier?: boolean
     strategy?: boolean
@@ -8246,6 +8455,7 @@ export namespace Prisma {
     actualEntryOpportunity?: boolean
     actualExitOpportunity?: boolean
     dailySummary?: boolean
+    chartTimeframe?: boolean
     selectedTradeTypes?: boolean
     setupGrade?: boolean
     setupNotes?: boolean
@@ -8261,6 +8471,7 @@ export namespace Prisma {
     sessionDate?: boolean
     symbol?: boolean
     direction?: boolean
+    priority?: boolean
     priceTier?: boolean
     marketCapTier?: boolean
     strategy?: boolean
@@ -8303,6 +8514,7 @@ export namespace Prisma {
     actualEntryOpportunity?: boolean
     actualExitOpportunity?: boolean
     dailySummary?: boolean
+    chartTimeframe?: boolean
     selectedTradeTypes?: boolean
     setupGrade?: boolean
     setupNotes?: boolean
@@ -8318,6 +8530,7 @@ export namespace Prisma {
     sessionDate?: boolean
     symbol?: boolean
     direction?: boolean
+    priority?: boolean
     priceTier?: boolean
     marketCapTier?: boolean
     strategy?: boolean
@@ -8360,6 +8573,7 @@ export namespace Prisma {
     actualEntryOpportunity?: boolean
     actualExitOpportunity?: boolean
     dailySummary?: boolean
+    chartTimeframe?: boolean
     selectedTradeTypes?: boolean
     setupGrade?: boolean
     setupNotes?: boolean
@@ -8367,7 +8581,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type TradeSetupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionDate" | "symbol" | "direction" | "priceTier" | "marketCapTier" | "strategy" | "strategyId" | "setupLogic" | "newsType" | "newsImpact" | "newsHeadline" | "newsCatalogId" | "entryCondition" | "entryPriceNote" | "entryPriceExact" | "stopCondition" | "stopPriceNote" | "stopPriceExact" | "target1Condition" | "target1PriceNote" | "target1PriceExact" | "target2Condition" | "target2PriceNote" | "target2PriceExact" | "plannedRiskReward" | "plannedSize" | "status" | "missedReason" | "missedNotes" | "missedHypoPnL" | "stockSelectionAccurate" | "stockSelectionNote" | "analysisAccurate" | "analysisAccurateNote" | "marketJudgmentAccurate" | "marketJudgmentNote" | "strategySelectionAccurate" | "strategySelectionNote" | "entryOpportunityAccurate" | "entryOpportunityNote" | "exitOpportunityAccurate" | "exitOpportunityNote" | "actualEntryOpportunity" | "actualExitOpportunity" | "dailySummary" | "selectedTradeTypes" | "setupGrade" | "setupNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["tradeSetup"]>
+  export type TradeSetupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionDate" | "symbol" | "direction" | "priority" | "priceTier" | "marketCapTier" | "strategy" | "strategyId" | "setupLogic" | "newsType" | "newsImpact" | "newsHeadline" | "newsCatalogId" | "entryCondition" | "entryPriceNote" | "entryPriceExact" | "stopCondition" | "stopPriceNote" | "stopPriceExact" | "target1Condition" | "target1PriceNote" | "target1PriceExact" | "target2Condition" | "target2PriceNote" | "target2PriceExact" | "plannedRiskReward" | "plannedSize" | "status" | "missedReason" | "missedNotes" | "missedHypoPnL" | "stockSelectionAccurate" | "stockSelectionNote" | "analysisAccurate" | "analysisAccurateNote" | "marketJudgmentAccurate" | "marketJudgmentNote" | "strategySelectionAccurate" | "strategySelectionNote" | "entryOpportunityAccurate" | "entryOpportunityNote" | "exitOpportunityAccurate" | "exitOpportunityNote" | "actualEntryOpportunity" | "actualExitOpportunity" | "dailySummary" | "chartTimeframe" | "selectedTradeTypes" | "setupGrade" | "setupNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["tradeSetup"]>
   export type TradeSetupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     session?: boolean | DailySessionDefaultArgs<ExtArgs>
     strategyRef?: boolean | TradeSetup$strategyRefArgs<ExtArgs>
@@ -8403,6 +8617,7 @@ export namespace Prisma {
       sessionDate: Date
       symbol: string
       direction: $Enums.Direction
+      priority: $Enums.SetupPriority
       priceTier: $Enums.PriceTier | null
       marketCapTier: $Enums.MarketCapTier | null
       strategy: string | null
@@ -8427,7 +8642,7 @@ export namespace Prisma {
       plannedRiskReward: number | null
       plannedSize: number | null
       status: $Enums.SetupStatus
-      missedReason: $Enums.MissedReason | null
+      missedReason: string | null
       missedNotes: string | null
       missedHypoPnL: number | null
       stockSelectionAccurate: boolean | null
@@ -8445,6 +8660,7 @@ export namespace Prisma {
       actualEntryOpportunity: string | null
       actualExitOpportunity: string | null
       dailySummary: string | null
+      chartTimeframe: $Enums.ChartTimeframe | null
       selectedTradeTypes: string
       setupGrade: $Enums.Grade | null
       setupNotes: string | null
@@ -8883,6 +9099,7 @@ export namespace Prisma {
     readonly sessionDate: FieldRef<"TradeSetup", 'DateTime'>
     readonly symbol: FieldRef<"TradeSetup", 'String'>
     readonly direction: FieldRef<"TradeSetup", 'Direction'>
+    readonly priority: FieldRef<"TradeSetup", 'SetupPriority'>
     readonly priceTier: FieldRef<"TradeSetup", 'PriceTier'>
     readonly marketCapTier: FieldRef<"TradeSetup", 'MarketCapTier'>
     readonly strategy: FieldRef<"TradeSetup", 'String'>
@@ -8907,7 +9124,7 @@ export namespace Prisma {
     readonly plannedRiskReward: FieldRef<"TradeSetup", 'Float'>
     readonly plannedSize: FieldRef<"TradeSetup", 'Int'>
     readonly status: FieldRef<"TradeSetup", 'SetupStatus'>
-    readonly missedReason: FieldRef<"TradeSetup", 'MissedReason'>
+    readonly missedReason: FieldRef<"TradeSetup", 'String'>
     readonly missedNotes: FieldRef<"TradeSetup", 'String'>
     readonly missedHypoPnL: FieldRef<"TradeSetup", 'Float'>
     readonly stockSelectionAccurate: FieldRef<"TradeSetup", 'Boolean'>
@@ -8925,6 +9142,7 @@ export namespace Prisma {
     readonly actualEntryOpportunity: FieldRef<"TradeSetup", 'String'>
     readonly actualExitOpportunity: FieldRef<"TradeSetup", 'String'>
     readonly dailySummary: FieldRef<"TradeSetup", 'String'>
+    readonly chartTimeframe: FieldRef<"TradeSetup", 'ChartTimeframe'>
     readonly selectedTradeTypes: FieldRef<"TradeSetup", 'String'>
     readonly setupGrade: FieldRef<"TradeSetup", 'Grade'>
     readonly setupNotes: FieldRef<"TradeSetup", 'String'>
@@ -10745,6 +10963,2112 @@ export namespace Prisma {
 
 
   /**
+   * Model WeeklyReport
+   */
+
+  export type AggregateWeeklyReport = {
+    _count: WeeklyReportCountAggregateOutputType | null
+    _avg: WeeklyReportAvgAggregateOutputType | null
+    _sum: WeeklyReportSumAggregateOutputType | null
+    _min: WeeklyReportMinAggregateOutputType | null
+    _max: WeeklyReportMaxAggregateOutputType | null
+  }
+
+  export type WeeklyReportAvgAggregateOutputType = {
+    overallRating: number | null
+  }
+
+  export type WeeklyReportSumAggregateOutputType = {
+    overallRating: number | null
+  }
+
+  export type WeeklyReportMinAggregateOutputType = {
+    weekStart: Date | null
+    summary: string | null
+    strengths: string | null
+    weaknesses: string | null
+    keyLessons: string | null
+    nextWeekPlan: string | null
+    overallRating: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WeeklyReportMaxAggregateOutputType = {
+    weekStart: Date | null
+    summary: string | null
+    strengths: string | null
+    weaknesses: string | null
+    keyLessons: string | null
+    nextWeekPlan: string | null
+    overallRating: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WeeklyReportCountAggregateOutputType = {
+    weekStart: number
+    summary: number
+    strengths: number
+    weaknesses: number
+    keyLessons: number
+    nextWeekPlan: number
+    overallRating: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WeeklyReportAvgAggregateInputType = {
+    overallRating?: true
+  }
+
+  export type WeeklyReportSumAggregateInputType = {
+    overallRating?: true
+  }
+
+  export type WeeklyReportMinAggregateInputType = {
+    weekStart?: true
+    summary?: true
+    strengths?: true
+    weaknesses?: true
+    keyLessons?: true
+    nextWeekPlan?: true
+    overallRating?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WeeklyReportMaxAggregateInputType = {
+    weekStart?: true
+    summary?: true
+    strengths?: true
+    weaknesses?: true
+    keyLessons?: true
+    nextWeekPlan?: true
+    overallRating?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WeeklyReportCountAggregateInputType = {
+    weekStart?: true
+    summary?: true
+    strengths?: true
+    weaknesses?: true
+    keyLessons?: true
+    nextWeekPlan?: true
+    overallRating?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WeeklyReportAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WeeklyReport to aggregate.
+     */
+    where?: WeeklyReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WeeklyReports to fetch.
+     */
+    orderBy?: WeeklyReportOrderByWithRelationInput | WeeklyReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WeeklyReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WeeklyReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WeeklyReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WeeklyReports
+    **/
+    _count?: true | WeeklyReportCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WeeklyReportAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WeeklyReportSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WeeklyReportMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WeeklyReportMaxAggregateInputType
+  }
+
+  export type GetWeeklyReportAggregateType<T extends WeeklyReportAggregateArgs> = {
+        [P in keyof T & keyof AggregateWeeklyReport]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWeeklyReport[P]>
+      : GetScalarType<T[P], AggregateWeeklyReport[P]>
+  }
+
+
+
+
+  export type WeeklyReportGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WeeklyReportWhereInput
+    orderBy?: WeeklyReportOrderByWithAggregationInput | WeeklyReportOrderByWithAggregationInput[]
+    by: WeeklyReportScalarFieldEnum[] | WeeklyReportScalarFieldEnum
+    having?: WeeklyReportScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WeeklyReportCountAggregateInputType | true
+    _avg?: WeeklyReportAvgAggregateInputType
+    _sum?: WeeklyReportSumAggregateInputType
+    _min?: WeeklyReportMinAggregateInputType
+    _max?: WeeklyReportMaxAggregateInputType
+  }
+
+  export type WeeklyReportGroupByOutputType = {
+    weekStart: Date
+    summary: string | null
+    strengths: string | null
+    weaknesses: string | null
+    keyLessons: string | null
+    nextWeekPlan: string | null
+    overallRating: number | null
+    createdAt: Date
+    updatedAt: Date
+    _count: WeeklyReportCountAggregateOutputType | null
+    _avg: WeeklyReportAvgAggregateOutputType | null
+    _sum: WeeklyReportSumAggregateOutputType | null
+    _min: WeeklyReportMinAggregateOutputType | null
+    _max: WeeklyReportMaxAggregateOutputType | null
+  }
+
+  type GetWeeklyReportGroupByPayload<T extends WeeklyReportGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WeeklyReportGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WeeklyReportGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WeeklyReportGroupByOutputType[P]>
+            : GetScalarType<T[P], WeeklyReportGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WeeklyReportSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    weekStart?: boolean
+    summary?: boolean
+    strengths?: boolean
+    weaknesses?: boolean
+    keyLessons?: boolean
+    nextWeekPlan?: boolean
+    overallRating?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["weeklyReport"]>
+
+  export type WeeklyReportSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    weekStart?: boolean
+    summary?: boolean
+    strengths?: boolean
+    weaknesses?: boolean
+    keyLessons?: boolean
+    nextWeekPlan?: boolean
+    overallRating?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["weeklyReport"]>
+
+  export type WeeklyReportSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    weekStart?: boolean
+    summary?: boolean
+    strengths?: boolean
+    weaknesses?: boolean
+    keyLessons?: boolean
+    nextWeekPlan?: boolean
+    overallRating?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["weeklyReport"]>
+
+  export type WeeklyReportSelectScalar = {
+    weekStart?: boolean
+    summary?: boolean
+    strengths?: boolean
+    weaknesses?: boolean
+    keyLessons?: boolean
+    nextWeekPlan?: boolean
+    overallRating?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WeeklyReportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"weekStart" | "summary" | "strengths" | "weaknesses" | "keyLessons" | "nextWeekPlan" | "overallRating" | "createdAt" | "updatedAt", ExtArgs["result"]["weeklyReport"]>
+
+  export type $WeeklyReportPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WeeklyReport"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      weekStart: Date
+      summary: string | null
+      strengths: string | null
+      weaknesses: string | null
+      keyLessons: string | null
+      nextWeekPlan: string | null
+      overallRating: number | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["weeklyReport"]>
+    composites: {}
+  }
+
+  type WeeklyReportGetPayload<S extends boolean | null | undefined | WeeklyReportDefaultArgs> = $Result.GetResult<Prisma.$WeeklyReportPayload, S>
+
+  type WeeklyReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WeeklyReportFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WeeklyReportCountAggregateInputType | true
+    }
+
+  export interface WeeklyReportDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WeeklyReport'], meta: { name: 'WeeklyReport' } }
+    /**
+     * Find zero or one WeeklyReport that matches the filter.
+     * @param {WeeklyReportFindUniqueArgs} args - Arguments to find a WeeklyReport
+     * @example
+     * // Get one WeeklyReport
+     * const weeklyReport = await prisma.weeklyReport.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WeeklyReportFindUniqueArgs>(args: SelectSubset<T, WeeklyReportFindUniqueArgs<ExtArgs>>): Prisma__WeeklyReportClient<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WeeklyReport that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WeeklyReportFindUniqueOrThrowArgs} args - Arguments to find a WeeklyReport
+     * @example
+     * // Get one WeeklyReport
+     * const weeklyReport = await prisma.weeklyReport.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WeeklyReportFindUniqueOrThrowArgs>(args: SelectSubset<T, WeeklyReportFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WeeklyReportClient<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WeeklyReport that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WeeklyReportFindFirstArgs} args - Arguments to find a WeeklyReport
+     * @example
+     * // Get one WeeklyReport
+     * const weeklyReport = await prisma.weeklyReport.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WeeklyReportFindFirstArgs>(args?: SelectSubset<T, WeeklyReportFindFirstArgs<ExtArgs>>): Prisma__WeeklyReportClient<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WeeklyReport that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WeeklyReportFindFirstOrThrowArgs} args - Arguments to find a WeeklyReport
+     * @example
+     * // Get one WeeklyReport
+     * const weeklyReport = await prisma.weeklyReport.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WeeklyReportFindFirstOrThrowArgs>(args?: SelectSubset<T, WeeklyReportFindFirstOrThrowArgs<ExtArgs>>): Prisma__WeeklyReportClient<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WeeklyReports that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WeeklyReportFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WeeklyReports
+     * const weeklyReports = await prisma.weeklyReport.findMany()
+     * 
+     * // Get first 10 WeeklyReports
+     * const weeklyReports = await prisma.weeklyReport.findMany({ take: 10 })
+     * 
+     * // Only select the `weekStart`
+     * const weeklyReportWithWeekStartOnly = await prisma.weeklyReport.findMany({ select: { weekStart: true } })
+     * 
+     */
+    findMany<T extends WeeklyReportFindManyArgs>(args?: SelectSubset<T, WeeklyReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WeeklyReport.
+     * @param {WeeklyReportCreateArgs} args - Arguments to create a WeeklyReport.
+     * @example
+     * // Create one WeeklyReport
+     * const WeeklyReport = await prisma.weeklyReport.create({
+     *   data: {
+     *     // ... data to create a WeeklyReport
+     *   }
+     * })
+     * 
+     */
+    create<T extends WeeklyReportCreateArgs>(args: SelectSubset<T, WeeklyReportCreateArgs<ExtArgs>>): Prisma__WeeklyReportClient<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WeeklyReports.
+     * @param {WeeklyReportCreateManyArgs} args - Arguments to create many WeeklyReports.
+     * @example
+     * // Create many WeeklyReports
+     * const weeklyReport = await prisma.weeklyReport.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WeeklyReportCreateManyArgs>(args?: SelectSubset<T, WeeklyReportCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WeeklyReports and returns the data saved in the database.
+     * @param {WeeklyReportCreateManyAndReturnArgs} args - Arguments to create many WeeklyReports.
+     * @example
+     * // Create many WeeklyReports
+     * const weeklyReport = await prisma.weeklyReport.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WeeklyReports and only return the `weekStart`
+     * const weeklyReportWithWeekStartOnly = await prisma.weeklyReport.createManyAndReturn({
+     *   select: { weekStart: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WeeklyReportCreateManyAndReturnArgs>(args?: SelectSubset<T, WeeklyReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WeeklyReport.
+     * @param {WeeklyReportDeleteArgs} args - Arguments to delete one WeeklyReport.
+     * @example
+     * // Delete one WeeklyReport
+     * const WeeklyReport = await prisma.weeklyReport.delete({
+     *   where: {
+     *     // ... filter to delete one WeeklyReport
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WeeklyReportDeleteArgs>(args: SelectSubset<T, WeeklyReportDeleteArgs<ExtArgs>>): Prisma__WeeklyReportClient<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WeeklyReport.
+     * @param {WeeklyReportUpdateArgs} args - Arguments to update one WeeklyReport.
+     * @example
+     * // Update one WeeklyReport
+     * const weeklyReport = await prisma.weeklyReport.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WeeklyReportUpdateArgs>(args: SelectSubset<T, WeeklyReportUpdateArgs<ExtArgs>>): Prisma__WeeklyReportClient<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WeeklyReports.
+     * @param {WeeklyReportDeleteManyArgs} args - Arguments to filter WeeklyReports to delete.
+     * @example
+     * // Delete a few WeeklyReports
+     * const { count } = await prisma.weeklyReport.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WeeklyReportDeleteManyArgs>(args?: SelectSubset<T, WeeklyReportDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WeeklyReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WeeklyReportUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WeeklyReports
+     * const weeklyReport = await prisma.weeklyReport.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WeeklyReportUpdateManyArgs>(args: SelectSubset<T, WeeklyReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WeeklyReports and returns the data updated in the database.
+     * @param {WeeklyReportUpdateManyAndReturnArgs} args - Arguments to update many WeeklyReports.
+     * @example
+     * // Update many WeeklyReports
+     * const weeklyReport = await prisma.weeklyReport.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WeeklyReports and only return the `weekStart`
+     * const weeklyReportWithWeekStartOnly = await prisma.weeklyReport.updateManyAndReturn({
+     *   select: { weekStart: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WeeklyReportUpdateManyAndReturnArgs>(args: SelectSubset<T, WeeklyReportUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WeeklyReport.
+     * @param {WeeklyReportUpsertArgs} args - Arguments to update or create a WeeklyReport.
+     * @example
+     * // Update or create a WeeklyReport
+     * const weeklyReport = await prisma.weeklyReport.upsert({
+     *   create: {
+     *     // ... data to create a WeeklyReport
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WeeklyReport we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WeeklyReportUpsertArgs>(args: SelectSubset<T, WeeklyReportUpsertArgs<ExtArgs>>): Prisma__WeeklyReportClient<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WeeklyReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WeeklyReportCountArgs} args - Arguments to filter WeeklyReports to count.
+     * @example
+     * // Count the number of WeeklyReports
+     * const count = await prisma.weeklyReport.count({
+     *   where: {
+     *     // ... the filter for the WeeklyReports we want to count
+     *   }
+     * })
+    **/
+    count<T extends WeeklyReportCountArgs>(
+      args?: Subset<T, WeeklyReportCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WeeklyReportCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WeeklyReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WeeklyReportAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WeeklyReportAggregateArgs>(args: Subset<T, WeeklyReportAggregateArgs>): Prisma.PrismaPromise<GetWeeklyReportAggregateType<T>>
+
+    /**
+     * Group by WeeklyReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WeeklyReportGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WeeklyReportGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WeeklyReportGroupByArgs['orderBy'] }
+        : { orderBy?: WeeklyReportGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WeeklyReportGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWeeklyReportGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WeeklyReport model
+   */
+  readonly fields: WeeklyReportFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WeeklyReport.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WeeklyReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WeeklyReport model
+   */
+  interface WeeklyReportFieldRefs {
+    readonly weekStart: FieldRef<"WeeklyReport", 'DateTime'>
+    readonly summary: FieldRef<"WeeklyReport", 'String'>
+    readonly strengths: FieldRef<"WeeklyReport", 'String'>
+    readonly weaknesses: FieldRef<"WeeklyReport", 'String'>
+    readonly keyLessons: FieldRef<"WeeklyReport", 'String'>
+    readonly nextWeekPlan: FieldRef<"WeeklyReport", 'String'>
+    readonly overallRating: FieldRef<"WeeklyReport", 'Int'>
+    readonly createdAt: FieldRef<"WeeklyReport", 'DateTime'>
+    readonly updatedAt: FieldRef<"WeeklyReport", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WeeklyReport findUnique
+   */
+  export type WeeklyReportFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WeeklyReport
+     */
+    select?: WeeklyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WeeklyReport
+     */
+    omit?: WeeklyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which WeeklyReport to fetch.
+     */
+    where: WeeklyReportWhereUniqueInput
+  }
+
+  /**
+   * WeeklyReport findUniqueOrThrow
+   */
+  export type WeeklyReportFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WeeklyReport
+     */
+    select?: WeeklyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WeeklyReport
+     */
+    omit?: WeeklyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which WeeklyReport to fetch.
+     */
+    where: WeeklyReportWhereUniqueInput
+  }
+
+  /**
+   * WeeklyReport findFirst
+   */
+  export type WeeklyReportFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WeeklyReport
+     */
+    select?: WeeklyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WeeklyReport
+     */
+    omit?: WeeklyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which WeeklyReport to fetch.
+     */
+    where?: WeeklyReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WeeklyReports to fetch.
+     */
+    orderBy?: WeeklyReportOrderByWithRelationInput | WeeklyReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WeeklyReports.
+     */
+    cursor?: WeeklyReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WeeklyReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WeeklyReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WeeklyReports.
+     */
+    distinct?: WeeklyReportScalarFieldEnum | WeeklyReportScalarFieldEnum[]
+  }
+
+  /**
+   * WeeklyReport findFirstOrThrow
+   */
+  export type WeeklyReportFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WeeklyReport
+     */
+    select?: WeeklyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WeeklyReport
+     */
+    omit?: WeeklyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which WeeklyReport to fetch.
+     */
+    where?: WeeklyReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WeeklyReports to fetch.
+     */
+    orderBy?: WeeklyReportOrderByWithRelationInput | WeeklyReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WeeklyReports.
+     */
+    cursor?: WeeklyReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WeeklyReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WeeklyReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WeeklyReports.
+     */
+    distinct?: WeeklyReportScalarFieldEnum | WeeklyReportScalarFieldEnum[]
+  }
+
+  /**
+   * WeeklyReport findMany
+   */
+  export type WeeklyReportFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WeeklyReport
+     */
+    select?: WeeklyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WeeklyReport
+     */
+    omit?: WeeklyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which WeeklyReports to fetch.
+     */
+    where?: WeeklyReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WeeklyReports to fetch.
+     */
+    orderBy?: WeeklyReportOrderByWithRelationInput | WeeklyReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WeeklyReports.
+     */
+    cursor?: WeeklyReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WeeklyReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WeeklyReports.
+     */
+    skip?: number
+    distinct?: WeeklyReportScalarFieldEnum | WeeklyReportScalarFieldEnum[]
+  }
+
+  /**
+   * WeeklyReport create
+   */
+  export type WeeklyReportCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WeeklyReport
+     */
+    select?: WeeklyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WeeklyReport
+     */
+    omit?: WeeklyReportOmit<ExtArgs> | null
+    /**
+     * The data needed to create a WeeklyReport.
+     */
+    data: XOR<WeeklyReportCreateInput, WeeklyReportUncheckedCreateInput>
+  }
+
+  /**
+   * WeeklyReport createMany
+   */
+  export type WeeklyReportCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WeeklyReports.
+     */
+    data: WeeklyReportCreateManyInput | WeeklyReportCreateManyInput[]
+  }
+
+  /**
+   * WeeklyReport createManyAndReturn
+   */
+  export type WeeklyReportCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WeeklyReport
+     */
+    select?: WeeklyReportSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WeeklyReport
+     */
+    omit?: WeeklyReportOmit<ExtArgs> | null
+    /**
+     * The data used to create many WeeklyReports.
+     */
+    data: WeeklyReportCreateManyInput | WeeklyReportCreateManyInput[]
+  }
+
+  /**
+   * WeeklyReport update
+   */
+  export type WeeklyReportUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WeeklyReport
+     */
+    select?: WeeklyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WeeklyReport
+     */
+    omit?: WeeklyReportOmit<ExtArgs> | null
+    /**
+     * The data needed to update a WeeklyReport.
+     */
+    data: XOR<WeeklyReportUpdateInput, WeeklyReportUncheckedUpdateInput>
+    /**
+     * Choose, which WeeklyReport to update.
+     */
+    where: WeeklyReportWhereUniqueInput
+  }
+
+  /**
+   * WeeklyReport updateMany
+   */
+  export type WeeklyReportUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WeeklyReports.
+     */
+    data: XOR<WeeklyReportUpdateManyMutationInput, WeeklyReportUncheckedUpdateManyInput>
+    /**
+     * Filter which WeeklyReports to update
+     */
+    where?: WeeklyReportWhereInput
+    /**
+     * Limit how many WeeklyReports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WeeklyReport updateManyAndReturn
+   */
+  export type WeeklyReportUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WeeklyReport
+     */
+    select?: WeeklyReportSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WeeklyReport
+     */
+    omit?: WeeklyReportOmit<ExtArgs> | null
+    /**
+     * The data used to update WeeklyReports.
+     */
+    data: XOR<WeeklyReportUpdateManyMutationInput, WeeklyReportUncheckedUpdateManyInput>
+    /**
+     * Filter which WeeklyReports to update
+     */
+    where?: WeeklyReportWhereInput
+    /**
+     * Limit how many WeeklyReports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WeeklyReport upsert
+   */
+  export type WeeklyReportUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WeeklyReport
+     */
+    select?: WeeklyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WeeklyReport
+     */
+    omit?: WeeklyReportOmit<ExtArgs> | null
+    /**
+     * The filter to search for the WeeklyReport to update in case it exists.
+     */
+    where: WeeklyReportWhereUniqueInput
+    /**
+     * In case the WeeklyReport found by the `where` argument doesn't exist, create a new WeeklyReport with this data.
+     */
+    create: XOR<WeeklyReportCreateInput, WeeklyReportUncheckedCreateInput>
+    /**
+     * In case the WeeklyReport was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WeeklyReportUpdateInput, WeeklyReportUncheckedUpdateInput>
+  }
+
+  /**
+   * WeeklyReport delete
+   */
+  export type WeeklyReportDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WeeklyReport
+     */
+    select?: WeeklyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WeeklyReport
+     */
+    omit?: WeeklyReportOmit<ExtArgs> | null
+    /**
+     * Filter which WeeklyReport to delete.
+     */
+    where: WeeklyReportWhereUniqueInput
+  }
+
+  /**
+   * WeeklyReport deleteMany
+   */
+  export type WeeklyReportDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WeeklyReports to delete
+     */
+    where?: WeeklyReportWhereInput
+    /**
+     * Limit how many WeeklyReports to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WeeklyReport without action
+   */
+  export type WeeklyReportDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WeeklyReport
+     */
+    select?: WeeklyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WeeklyReport
+     */
+    omit?: WeeklyReportOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MissedReasonOption
+   */
+
+  export type AggregateMissedReasonOption = {
+    _count: MissedReasonOptionCountAggregateOutputType | null
+    _avg: MissedReasonOptionAvgAggregateOutputType | null
+    _sum: MissedReasonOptionSumAggregateOutputType | null
+    _min: MissedReasonOptionMinAggregateOutputType | null
+    _max: MissedReasonOptionMaxAggregateOutputType | null
+  }
+
+  export type MissedReasonOptionAvgAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type MissedReasonOptionSumAggregateOutputType = {
+    sortOrder: number | null
+  }
+
+  export type MissedReasonOptionMinAggregateOutputType = {
+    id: string | null
+    label: string | null
+    isActive: boolean | null
+    sortOrder: number | null
+    createdAt: Date | null
+  }
+
+  export type MissedReasonOptionMaxAggregateOutputType = {
+    id: string | null
+    label: string | null
+    isActive: boolean | null
+    sortOrder: number | null
+    createdAt: Date | null
+  }
+
+  export type MissedReasonOptionCountAggregateOutputType = {
+    id: number
+    label: number
+    isActive: number
+    sortOrder: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type MissedReasonOptionAvgAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type MissedReasonOptionSumAggregateInputType = {
+    sortOrder?: true
+  }
+
+  export type MissedReasonOptionMinAggregateInputType = {
+    id?: true
+    label?: true
+    isActive?: true
+    sortOrder?: true
+    createdAt?: true
+  }
+
+  export type MissedReasonOptionMaxAggregateInputType = {
+    id?: true
+    label?: true
+    isActive?: true
+    sortOrder?: true
+    createdAt?: true
+  }
+
+  export type MissedReasonOptionCountAggregateInputType = {
+    id?: true
+    label?: true
+    isActive?: true
+    sortOrder?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type MissedReasonOptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MissedReasonOption to aggregate.
+     */
+    where?: MissedReasonOptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MissedReasonOptions to fetch.
+     */
+    orderBy?: MissedReasonOptionOrderByWithRelationInput | MissedReasonOptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MissedReasonOptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MissedReasonOptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MissedReasonOptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MissedReasonOptions
+    **/
+    _count?: true | MissedReasonOptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MissedReasonOptionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MissedReasonOptionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MissedReasonOptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MissedReasonOptionMaxAggregateInputType
+  }
+
+  export type GetMissedReasonOptionAggregateType<T extends MissedReasonOptionAggregateArgs> = {
+        [P in keyof T & keyof AggregateMissedReasonOption]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMissedReasonOption[P]>
+      : GetScalarType<T[P], AggregateMissedReasonOption[P]>
+  }
+
+
+
+
+  export type MissedReasonOptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MissedReasonOptionWhereInput
+    orderBy?: MissedReasonOptionOrderByWithAggregationInput | MissedReasonOptionOrderByWithAggregationInput[]
+    by: MissedReasonOptionScalarFieldEnum[] | MissedReasonOptionScalarFieldEnum
+    having?: MissedReasonOptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MissedReasonOptionCountAggregateInputType | true
+    _avg?: MissedReasonOptionAvgAggregateInputType
+    _sum?: MissedReasonOptionSumAggregateInputType
+    _min?: MissedReasonOptionMinAggregateInputType
+    _max?: MissedReasonOptionMaxAggregateInputType
+  }
+
+  export type MissedReasonOptionGroupByOutputType = {
+    id: string
+    label: string
+    isActive: boolean
+    sortOrder: number
+    createdAt: Date
+    _count: MissedReasonOptionCountAggregateOutputType | null
+    _avg: MissedReasonOptionAvgAggregateOutputType | null
+    _sum: MissedReasonOptionSumAggregateOutputType | null
+    _min: MissedReasonOptionMinAggregateOutputType | null
+    _max: MissedReasonOptionMaxAggregateOutputType | null
+  }
+
+  type GetMissedReasonOptionGroupByPayload<T extends MissedReasonOptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MissedReasonOptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MissedReasonOptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MissedReasonOptionGroupByOutputType[P]>
+            : GetScalarType<T[P], MissedReasonOptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MissedReasonOptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    label?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["missedReasonOption"]>
+
+  export type MissedReasonOptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    label?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["missedReasonOption"]>
+
+  export type MissedReasonOptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    label?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["missedReasonOption"]>
+
+  export type MissedReasonOptionSelectScalar = {
+    id?: boolean
+    label?: boolean
+    isActive?: boolean
+    sortOrder?: boolean
+    createdAt?: boolean
+  }
+
+  export type MissedReasonOptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "label" | "isActive" | "sortOrder" | "createdAt", ExtArgs["result"]["missedReasonOption"]>
+
+  export type $MissedReasonOptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MissedReasonOption"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      label: string
+      isActive: boolean
+      sortOrder: number
+      createdAt: Date
+    }, ExtArgs["result"]["missedReasonOption"]>
+    composites: {}
+  }
+
+  type MissedReasonOptionGetPayload<S extends boolean | null | undefined | MissedReasonOptionDefaultArgs> = $Result.GetResult<Prisma.$MissedReasonOptionPayload, S>
+
+  type MissedReasonOptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MissedReasonOptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MissedReasonOptionCountAggregateInputType | true
+    }
+
+  export interface MissedReasonOptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MissedReasonOption'], meta: { name: 'MissedReasonOption' } }
+    /**
+     * Find zero or one MissedReasonOption that matches the filter.
+     * @param {MissedReasonOptionFindUniqueArgs} args - Arguments to find a MissedReasonOption
+     * @example
+     * // Get one MissedReasonOption
+     * const missedReasonOption = await prisma.missedReasonOption.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MissedReasonOptionFindUniqueArgs>(args: SelectSubset<T, MissedReasonOptionFindUniqueArgs<ExtArgs>>): Prisma__MissedReasonOptionClient<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MissedReasonOption that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MissedReasonOptionFindUniqueOrThrowArgs} args - Arguments to find a MissedReasonOption
+     * @example
+     * // Get one MissedReasonOption
+     * const missedReasonOption = await prisma.missedReasonOption.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MissedReasonOptionFindUniqueOrThrowArgs>(args: SelectSubset<T, MissedReasonOptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MissedReasonOptionClient<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MissedReasonOption that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MissedReasonOptionFindFirstArgs} args - Arguments to find a MissedReasonOption
+     * @example
+     * // Get one MissedReasonOption
+     * const missedReasonOption = await prisma.missedReasonOption.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MissedReasonOptionFindFirstArgs>(args?: SelectSubset<T, MissedReasonOptionFindFirstArgs<ExtArgs>>): Prisma__MissedReasonOptionClient<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MissedReasonOption that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MissedReasonOptionFindFirstOrThrowArgs} args - Arguments to find a MissedReasonOption
+     * @example
+     * // Get one MissedReasonOption
+     * const missedReasonOption = await prisma.missedReasonOption.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MissedReasonOptionFindFirstOrThrowArgs>(args?: SelectSubset<T, MissedReasonOptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__MissedReasonOptionClient<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MissedReasonOptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MissedReasonOptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MissedReasonOptions
+     * const missedReasonOptions = await prisma.missedReasonOption.findMany()
+     * 
+     * // Get first 10 MissedReasonOptions
+     * const missedReasonOptions = await prisma.missedReasonOption.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const missedReasonOptionWithIdOnly = await prisma.missedReasonOption.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MissedReasonOptionFindManyArgs>(args?: SelectSubset<T, MissedReasonOptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MissedReasonOption.
+     * @param {MissedReasonOptionCreateArgs} args - Arguments to create a MissedReasonOption.
+     * @example
+     * // Create one MissedReasonOption
+     * const MissedReasonOption = await prisma.missedReasonOption.create({
+     *   data: {
+     *     // ... data to create a MissedReasonOption
+     *   }
+     * })
+     * 
+     */
+    create<T extends MissedReasonOptionCreateArgs>(args: SelectSubset<T, MissedReasonOptionCreateArgs<ExtArgs>>): Prisma__MissedReasonOptionClient<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MissedReasonOptions.
+     * @param {MissedReasonOptionCreateManyArgs} args - Arguments to create many MissedReasonOptions.
+     * @example
+     * // Create many MissedReasonOptions
+     * const missedReasonOption = await prisma.missedReasonOption.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MissedReasonOptionCreateManyArgs>(args?: SelectSubset<T, MissedReasonOptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MissedReasonOptions and returns the data saved in the database.
+     * @param {MissedReasonOptionCreateManyAndReturnArgs} args - Arguments to create many MissedReasonOptions.
+     * @example
+     * // Create many MissedReasonOptions
+     * const missedReasonOption = await prisma.missedReasonOption.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MissedReasonOptions and only return the `id`
+     * const missedReasonOptionWithIdOnly = await prisma.missedReasonOption.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MissedReasonOptionCreateManyAndReturnArgs>(args?: SelectSubset<T, MissedReasonOptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MissedReasonOption.
+     * @param {MissedReasonOptionDeleteArgs} args - Arguments to delete one MissedReasonOption.
+     * @example
+     * // Delete one MissedReasonOption
+     * const MissedReasonOption = await prisma.missedReasonOption.delete({
+     *   where: {
+     *     // ... filter to delete one MissedReasonOption
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MissedReasonOptionDeleteArgs>(args: SelectSubset<T, MissedReasonOptionDeleteArgs<ExtArgs>>): Prisma__MissedReasonOptionClient<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MissedReasonOption.
+     * @param {MissedReasonOptionUpdateArgs} args - Arguments to update one MissedReasonOption.
+     * @example
+     * // Update one MissedReasonOption
+     * const missedReasonOption = await prisma.missedReasonOption.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MissedReasonOptionUpdateArgs>(args: SelectSubset<T, MissedReasonOptionUpdateArgs<ExtArgs>>): Prisma__MissedReasonOptionClient<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MissedReasonOptions.
+     * @param {MissedReasonOptionDeleteManyArgs} args - Arguments to filter MissedReasonOptions to delete.
+     * @example
+     * // Delete a few MissedReasonOptions
+     * const { count } = await prisma.missedReasonOption.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MissedReasonOptionDeleteManyArgs>(args?: SelectSubset<T, MissedReasonOptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MissedReasonOptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MissedReasonOptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MissedReasonOptions
+     * const missedReasonOption = await prisma.missedReasonOption.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MissedReasonOptionUpdateManyArgs>(args: SelectSubset<T, MissedReasonOptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MissedReasonOptions and returns the data updated in the database.
+     * @param {MissedReasonOptionUpdateManyAndReturnArgs} args - Arguments to update many MissedReasonOptions.
+     * @example
+     * // Update many MissedReasonOptions
+     * const missedReasonOption = await prisma.missedReasonOption.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MissedReasonOptions and only return the `id`
+     * const missedReasonOptionWithIdOnly = await prisma.missedReasonOption.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MissedReasonOptionUpdateManyAndReturnArgs>(args: SelectSubset<T, MissedReasonOptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MissedReasonOption.
+     * @param {MissedReasonOptionUpsertArgs} args - Arguments to update or create a MissedReasonOption.
+     * @example
+     * // Update or create a MissedReasonOption
+     * const missedReasonOption = await prisma.missedReasonOption.upsert({
+     *   create: {
+     *     // ... data to create a MissedReasonOption
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MissedReasonOption we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MissedReasonOptionUpsertArgs>(args: SelectSubset<T, MissedReasonOptionUpsertArgs<ExtArgs>>): Prisma__MissedReasonOptionClient<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MissedReasonOptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MissedReasonOptionCountArgs} args - Arguments to filter MissedReasonOptions to count.
+     * @example
+     * // Count the number of MissedReasonOptions
+     * const count = await prisma.missedReasonOption.count({
+     *   where: {
+     *     // ... the filter for the MissedReasonOptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends MissedReasonOptionCountArgs>(
+      args?: Subset<T, MissedReasonOptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MissedReasonOptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MissedReasonOption.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MissedReasonOptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MissedReasonOptionAggregateArgs>(args: Subset<T, MissedReasonOptionAggregateArgs>): Prisma.PrismaPromise<GetMissedReasonOptionAggregateType<T>>
+
+    /**
+     * Group by MissedReasonOption.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MissedReasonOptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MissedReasonOptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MissedReasonOptionGroupByArgs['orderBy'] }
+        : { orderBy?: MissedReasonOptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MissedReasonOptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMissedReasonOptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MissedReasonOption model
+   */
+  readonly fields: MissedReasonOptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MissedReasonOption.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MissedReasonOptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MissedReasonOption model
+   */
+  interface MissedReasonOptionFieldRefs {
+    readonly id: FieldRef<"MissedReasonOption", 'String'>
+    readonly label: FieldRef<"MissedReasonOption", 'String'>
+    readonly isActive: FieldRef<"MissedReasonOption", 'Boolean'>
+    readonly sortOrder: FieldRef<"MissedReasonOption", 'Int'>
+    readonly createdAt: FieldRef<"MissedReasonOption", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MissedReasonOption findUnique
+   */
+  export type MissedReasonOptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MissedReasonOption
+     */
+    select?: MissedReasonOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MissedReasonOption
+     */
+    omit?: MissedReasonOptionOmit<ExtArgs> | null
+    /**
+     * Filter, which MissedReasonOption to fetch.
+     */
+    where: MissedReasonOptionWhereUniqueInput
+  }
+
+  /**
+   * MissedReasonOption findUniqueOrThrow
+   */
+  export type MissedReasonOptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MissedReasonOption
+     */
+    select?: MissedReasonOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MissedReasonOption
+     */
+    omit?: MissedReasonOptionOmit<ExtArgs> | null
+    /**
+     * Filter, which MissedReasonOption to fetch.
+     */
+    where: MissedReasonOptionWhereUniqueInput
+  }
+
+  /**
+   * MissedReasonOption findFirst
+   */
+  export type MissedReasonOptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MissedReasonOption
+     */
+    select?: MissedReasonOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MissedReasonOption
+     */
+    omit?: MissedReasonOptionOmit<ExtArgs> | null
+    /**
+     * Filter, which MissedReasonOption to fetch.
+     */
+    where?: MissedReasonOptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MissedReasonOptions to fetch.
+     */
+    orderBy?: MissedReasonOptionOrderByWithRelationInput | MissedReasonOptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MissedReasonOptions.
+     */
+    cursor?: MissedReasonOptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MissedReasonOptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MissedReasonOptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MissedReasonOptions.
+     */
+    distinct?: MissedReasonOptionScalarFieldEnum | MissedReasonOptionScalarFieldEnum[]
+  }
+
+  /**
+   * MissedReasonOption findFirstOrThrow
+   */
+  export type MissedReasonOptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MissedReasonOption
+     */
+    select?: MissedReasonOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MissedReasonOption
+     */
+    omit?: MissedReasonOptionOmit<ExtArgs> | null
+    /**
+     * Filter, which MissedReasonOption to fetch.
+     */
+    where?: MissedReasonOptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MissedReasonOptions to fetch.
+     */
+    orderBy?: MissedReasonOptionOrderByWithRelationInput | MissedReasonOptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MissedReasonOptions.
+     */
+    cursor?: MissedReasonOptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MissedReasonOptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MissedReasonOptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MissedReasonOptions.
+     */
+    distinct?: MissedReasonOptionScalarFieldEnum | MissedReasonOptionScalarFieldEnum[]
+  }
+
+  /**
+   * MissedReasonOption findMany
+   */
+  export type MissedReasonOptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MissedReasonOption
+     */
+    select?: MissedReasonOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MissedReasonOption
+     */
+    omit?: MissedReasonOptionOmit<ExtArgs> | null
+    /**
+     * Filter, which MissedReasonOptions to fetch.
+     */
+    where?: MissedReasonOptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MissedReasonOptions to fetch.
+     */
+    orderBy?: MissedReasonOptionOrderByWithRelationInput | MissedReasonOptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MissedReasonOptions.
+     */
+    cursor?: MissedReasonOptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MissedReasonOptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MissedReasonOptions.
+     */
+    skip?: number
+    distinct?: MissedReasonOptionScalarFieldEnum | MissedReasonOptionScalarFieldEnum[]
+  }
+
+  /**
+   * MissedReasonOption create
+   */
+  export type MissedReasonOptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MissedReasonOption
+     */
+    select?: MissedReasonOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MissedReasonOption
+     */
+    omit?: MissedReasonOptionOmit<ExtArgs> | null
+    /**
+     * The data needed to create a MissedReasonOption.
+     */
+    data: XOR<MissedReasonOptionCreateInput, MissedReasonOptionUncheckedCreateInput>
+  }
+
+  /**
+   * MissedReasonOption createMany
+   */
+  export type MissedReasonOptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MissedReasonOptions.
+     */
+    data: MissedReasonOptionCreateManyInput | MissedReasonOptionCreateManyInput[]
+  }
+
+  /**
+   * MissedReasonOption createManyAndReturn
+   */
+  export type MissedReasonOptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MissedReasonOption
+     */
+    select?: MissedReasonOptionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MissedReasonOption
+     */
+    omit?: MissedReasonOptionOmit<ExtArgs> | null
+    /**
+     * The data used to create many MissedReasonOptions.
+     */
+    data: MissedReasonOptionCreateManyInput | MissedReasonOptionCreateManyInput[]
+  }
+
+  /**
+   * MissedReasonOption update
+   */
+  export type MissedReasonOptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MissedReasonOption
+     */
+    select?: MissedReasonOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MissedReasonOption
+     */
+    omit?: MissedReasonOptionOmit<ExtArgs> | null
+    /**
+     * The data needed to update a MissedReasonOption.
+     */
+    data: XOR<MissedReasonOptionUpdateInput, MissedReasonOptionUncheckedUpdateInput>
+    /**
+     * Choose, which MissedReasonOption to update.
+     */
+    where: MissedReasonOptionWhereUniqueInput
+  }
+
+  /**
+   * MissedReasonOption updateMany
+   */
+  export type MissedReasonOptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MissedReasonOptions.
+     */
+    data: XOR<MissedReasonOptionUpdateManyMutationInput, MissedReasonOptionUncheckedUpdateManyInput>
+    /**
+     * Filter which MissedReasonOptions to update
+     */
+    where?: MissedReasonOptionWhereInput
+    /**
+     * Limit how many MissedReasonOptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MissedReasonOption updateManyAndReturn
+   */
+  export type MissedReasonOptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MissedReasonOption
+     */
+    select?: MissedReasonOptionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MissedReasonOption
+     */
+    omit?: MissedReasonOptionOmit<ExtArgs> | null
+    /**
+     * The data used to update MissedReasonOptions.
+     */
+    data: XOR<MissedReasonOptionUpdateManyMutationInput, MissedReasonOptionUncheckedUpdateManyInput>
+    /**
+     * Filter which MissedReasonOptions to update
+     */
+    where?: MissedReasonOptionWhereInput
+    /**
+     * Limit how many MissedReasonOptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MissedReasonOption upsert
+   */
+  export type MissedReasonOptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MissedReasonOption
+     */
+    select?: MissedReasonOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MissedReasonOption
+     */
+    omit?: MissedReasonOptionOmit<ExtArgs> | null
+    /**
+     * The filter to search for the MissedReasonOption to update in case it exists.
+     */
+    where: MissedReasonOptionWhereUniqueInput
+    /**
+     * In case the MissedReasonOption found by the `where` argument doesn't exist, create a new MissedReasonOption with this data.
+     */
+    create: XOR<MissedReasonOptionCreateInput, MissedReasonOptionUncheckedCreateInput>
+    /**
+     * In case the MissedReasonOption was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MissedReasonOptionUpdateInput, MissedReasonOptionUncheckedUpdateInput>
+  }
+
+  /**
+   * MissedReasonOption delete
+   */
+  export type MissedReasonOptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MissedReasonOption
+     */
+    select?: MissedReasonOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MissedReasonOption
+     */
+    omit?: MissedReasonOptionOmit<ExtArgs> | null
+    /**
+     * Filter which MissedReasonOption to delete.
+     */
+    where: MissedReasonOptionWhereUniqueInput
+  }
+
+  /**
+   * MissedReasonOption deleteMany
+   */
+  export type MissedReasonOptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MissedReasonOptions to delete
+     */
+    where?: MissedReasonOptionWhereInput
+    /**
+     * Limit how many MissedReasonOptions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MissedReasonOption without action
+   */
+  export type MissedReasonOptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MissedReasonOption
+     */
+    select?: MissedReasonOptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MissedReasonOption
+     */
+    omit?: MissedReasonOptionOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model Screenshot
    */
 
@@ -12114,6 +14438,7 @@ export namespace Prisma {
     sessionDate: 'sessionDate',
     symbol: 'symbol',
     direction: 'direction',
+    priority: 'priority',
     priceTier: 'priceTier',
     marketCapTier: 'marketCapTier',
     strategy: 'strategy',
@@ -12156,6 +14481,7 @@ export namespace Prisma {
     actualEntryOpportunity: 'actualEntryOpportunity',
     actualExitOpportunity: 'actualExitOpportunity',
     dailySummary: 'dailySummary',
+    chartTimeframe: 'chartTimeframe',
     selectedTradeTypes: 'selectedTradeTypes',
     setupGrade: 'setupGrade',
     setupNotes: 'setupNotes',
@@ -12187,6 +14513,32 @@ export namespace Prisma {
   };
 
   export type ExecutionScalarFieldEnum = (typeof ExecutionScalarFieldEnum)[keyof typeof ExecutionScalarFieldEnum]
+
+
+  export const WeeklyReportScalarFieldEnum: {
+    weekStart: 'weekStart',
+    summary: 'summary',
+    strengths: 'strengths',
+    weaknesses: 'weaknesses',
+    keyLessons: 'keyLessons',
+    nextWeekPlan: 'nextWeekPlan',
+    overallRating: 'overallRating',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WeeklyReportScalarFieldEnum = (typeof WeeklyReportScalarFieldEnum)[keyof typeof WeeklyReportScalarFieldEnum]
+
+
+  export const MissedReasonOptionScalarFieldEnum: {
+    id: 'id',
+    label: 'label',
+    isActive: 'isActive',
+    sortOrder: 'sortOrder',
+    createdAt: 'createdAt'
+  };
+
+  export type MissedReasonOptionScalarFieldEnum = (typeof MissedReasonOptionScalarFieldEnum)[keyof typeof MissedReasonOptionScalarFieldEnum]
 
 
   export const ScreenshotScalarFieldEnum: {
@@ -12287,6 +14639,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'SetupPriority'
+   */
+  export type EnumSetupPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SetupPriority'>
+    
+
+
+  /**
    * Reference to a field of type 'PriceTier'
    */
   export type EnumPriceTierFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceTier'>
@@ -12315,9 +14674,9 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'MissedReason'
+   * Reference to a field of type 'ChartTimeframe'
    */
-  export type EnumMissedReasonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MissedReason'>
+  export type EnumChartTimeframeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChartTimeframe'>
     
 
 
@@ -12730,6 +15089,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFilter<"TradeSetup"> | Date | string
     symbol?: StringFilter<"TradeSetup"> | string
     direction?: EnumDirectionFilter<"TradeSetup"> | $Enums.Direction
+    priority?: EnumSetupPriorityFilter<"TradeSetup"> | $Enums.SetupPriority
     priceTier?: EnumPriceTierNullableFilter<"TradeSetup"> | $Enums.PriceTier | null
     marketCapTier?: EnumMarketCapTierNullableFilter<"TradeSetup"> | $Enums.MarketCapTier | null
     strategy?: StringNullableFilter<"TradeSetup"> | string | null
@@ -12754,7 +15114,7 @@ export namespace Prisma {
     plannedRiskReward?: FloatNullableFilter<"TradeSetup"> | number | null
     plannedSize?: IntNullableFilter<"TradeSetup"> | number | null
     status?: EnumSetupStatusFilter<"TradeSetup"> | $Enums.SetupStatus
-    missedReason?: EnumMissedReasonNullableFilter<"TradeSetup"> | $Enums.MissedReason | null
+    missedReason?: StringNullableFilter<"TradeSetup"> | string | null
     missedNotes?: StringNullableFilter<"TradeSetup"> | string | null
     missedHypoPnL?: FloatNullableFilter<"TradeSetup"> | number | null
     stockSelectionAccurate?: BoolNullableFilter<"TradeSetup"> | boolean | null
@@ -12772,6 +15132,7 @@ export namespace Prisma {
     actualEntryOpportunity?: StringNullableFilter<"TradeSetup"> | string | null
     actualExitOpportunity?: StringNullableFilter<"TradeSetup"> | string | null
     dailySummary?: StringNullableFilter<"TradeSetup"> | string | null
+    chartTimeframe?: EnumChartTimeframeNullableFilter<"TradeSetup"> | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFilter<"TradeSetup"> | string
     setupGrade?: EnumGradeNullableFilter<"TradeSetup"> | $Enums.Grade | null
     setupNotes?: StringNullableFilter<"TradeSetup"> | string | null
@@ -12790,6 +15151,7 @@ export namespace Prisma {
     sessionDate?: SortOrder
     symbol?: SortOrder
     direction?: SortOrder
+    priority?: SortOrder
     priceTier?: SortOrderInput | SortOrder
     marketCapTier?: SortOrderInput | SortOrder
     strategy?: SortOrderInput | SortOrder
@@ -12832,6 +15194,7 @@ export namespace Prisma {
     actualEntryOpportunity?: SortOrderInput | SortOrder
     actualExitOpportunity?: SortOrderInput | SortOrder
     dailySummary?: SortOrderInput | SortOrder
+    chartTimeframe?: SortOrderInput | SortOrder
     selectedTradeTypes?: SortOrder
     setupGrade?: SortOrderInput | SortOrder
     setupNotes?: SortOrderInput | SortOrder
@@ -12853,6 +15216,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFilter<"TradeSetup"> | Date | string
     symbol?: StringFilter<"TradeSetup"> | string
     direction?: EnumDirectionFilter<"TradeSetup"> | $Enums.Direction
+    priority?: EnumSetupPriorityFilter<"TradeSetup"> | $Enums.SetupPriority
     priceTier?: EnumPriceTierNullableFilter<"TradeSetup"> | $Enums.PriceTier | null
     marketCapTier?: EnumMarketCapTierNullableFilter<"TradeSetup"> | $Enums.MarketCapTier | null
     strategy?: StringNullableFilter<"TradeSetup"> | string | null
@@ -12877,7 +15241,7 @@ export namespace Prisma {
     plannedRiskReward?: FloatNullableFilter<"TradeSetup"> | number | null
     plannedSize?: IntNullableFilter<"TradeSetup"> | number | null
     status?: EnumSetupStatusFilter<"TradeSetup"> | $Enums.SetupStatus
-    missedReason?: EnumMissedReasonNullableFilter<"TradeSetup"> | $Enums.MissedReason | null
+    missedReason?: StringNullableFilter<"TradeSetup"> | string | null
     missedNotes?: StringNullableFilter<"TradeSetup"> | string | null
     missedHypoPnL?: FloatNullableFilter<"TradeSetup"> | number | null
     stockSelectionAccurate?: BoolNullableFilter<"TradeSetup"> | boolean | null
@@ -12895,6 +15259,7 @@ export namespace Prisma {
     actualEntryOpportunity?: StringNullableFilter<"TradeSetup"> | string | null
     actualExitOpportunity?: StringNullableFilter<"TradeSetup"> | string | null
     dailySummary?: StringNullableFilter<"TradeSetup"> | string | null
+    chartTimeframe?: EnumChartTimeframeNullableFilter<"TradeSetup"> | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFilter<"TradeSetup"> | string
     setupGrade?: EnumGradeNullableFilter<"TradeSetup"> | $Enums.Grade | null
     setupNotes?: StringNullableFilter<"TradeSetup"> | string | null
@@ -12913,6 +15278,7 @@ export namespace Prisma {
     sessionDate?: SortOrder
     symbol?: SortOrder
     direction?: SortOrder
+    priority?: SortOrder
     priceTier?: SortOrderInput | SortOrder
     marketCapTier?: SortOrderInput | SortOrder
     strategy?: SortOrderInput | SortOrder
@@ -12955,6 +15321,7 @@ export namespace Prisma {
     actualEntryOpportunity?: SortOrderInput | SortOrder
     actualExitOpportunity?: SortOrderInput | SortOrder
     dailySummary?: SortOrderInput | SortOrder
+    chartTimeframe?: SortOrderInput | SortOrder
     selectedTradeTypes?: SortOrder
     setupGrade?: SortOrderInput | SortOrder
     setupNotes?: SortOrderInput | SortOrder
@@ -12975,6 +15342,7 @@ export namespace Prisma {
     sessionDate?: DateTimeWithAggregatesFilter<"TradeSetup"> | Date | string
     symbol?: StringWithAggregatesFilter<"TradeSetup"> | string
     direction?: EnumDirectionWithAggregatesFilter<"TradeSetup"> | $Enums.Direction
+    priority?: EnumSetupPriorityWithAggregatesFilter<"TradeSetup"> | $Enums.SetupPriority
     priceTier?: EnumPriceTierNullableWithAggregatesFilter<"TradeSetup"> | $Enums.PriceTier | null
     marketCapTier?: EnumMarketCapTierNullableWithAggregatesFilter<"TradeSetup"> | $Enums.MarketCapTier | null
     strategy?: StringNullableWithAggregatesFilter<"TradeSetup"> | string | null
@@ -12999,7 +15367,7 @@ export namespace Prisma {
     plannedRiskReward?: FloatNullableWithAggregatesFilter<"TradeSetup"> | number | null
     plannedSize?: IntNullableWithAggregatesFilter<"TradeSetup"> | number | null
     status?: EnumSetupStatusWithAggregatesFilter<"TradeSetup"> | $Enums.SetupStatus
-    missedReason?: EnumMissedReasonNullableWithAggregatesFilter<"TradeSetup"> | $Enums.MissedReason | null
+    missedReason?: StringNullableWithAggregatesFilter<"TradeSetup"> | string | null
     missedNotes?: StringNullableWithAggregatesFilter<"TradeSetup"> | string | null
     missedHypoPnL?: FloatNullableWithAggregatesFilter<"TradeSetup"> | number | null
     stockSelectionAccurate?: BoolNullableWithAggregatesFilter<"TradeSetup"> | boolean | null
@@ -13017,6 +15385,7 @@ export namespace Prisma {
     actualEntryOpportunity?: StringNullableWithAggregatesFilter<"TradeSetup"> | string | null
     actualExitOpportunity?: StringNullableWithAggregatesFilter<"TradeSetup"> | string | null
     dailySummary?: StringNullableWithAggregatesFilter<"TradeSetup"> | string | null
+    chartTimeframe?: EnumChartTimeframeNullableWithAggregatesFilter<"TradeSetup"> | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringWithAggregatesFilter<"TradeSetup"> | string
     setupGrade?: EnumGradeNullableWithAggregatesFilter<"TradeSetup"> | $Enums.Grade | null
     setupNotes?: StringNullableWithAggregatesFilter<"TradeSetup"> | string | null
@@ -13142,6 +15511,134 @@ export namespace Prisma {
     executionGrade?: EnumGradeNullableWithAggregatesFilter<"Execution"> | $Enums.Grade | null
     executionNotes?: StringNullableWithAggregatesFilter<"Execution"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Execution"> | Date | string
+  }
+
+  export type WeeklyReportWhereInput = {
+    AND?: WeeklyReportWhereInput | WeeklyReportWhereInput[]
+    OR?: WeeklyReportWhereInput[]
+    NOT?: WeeklyReportWhereInput | WeeklyReportWhereInput[]
+    weekStart?: DateTimeFilter<"WeeklyReport"> | Date | string
+    summary?: StringNullableFilter<"WeeklyReport"> | string | null
+    strengths?: StringNullableFilter<"WeeklyReport"> | string | null
+    weaknesses?: StringNullableFilter<"WeeklyReport"> | string | null
+    keyLessons?: StringNullableFilter<"WeeklyReport"> | string | null
+    nextWeekPlan?: StringNullableFilter<"WeeklyReport"> | string | null
+    overallRating?: IntNullableFilter<"WeeklyReport"> | number | null
+    createdAt?: DateTimeFilter<"WeeklyReport"> | Date | string
+    updatedAt?: DateTimeFilter<"WeeklyReport"> | Date | string
+  }
+
+  export type WeeklyReportOrderByWithRelationInput = {
+    weekStart?: SortOrder
+    summary?: SortOrderInput | SortOrder
+    strengths?: SortOrderInput | SortOrder
+    weaknesses?: SortOrderInput | SortOrder
+    keyLessons?: SortOrderInput | SortOrder
+    nextWeekPlan?: SortOrderInput | SortOrder
+    overallRating?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WeeklyReportWhereUniqueInput = Prisma.AtLeast<{
+    weekStart?: Date | string
+    AND?: WeeklyReportWhereInput | WeeklyReportWhereInput[]
+    OR?: WeeklyReportWhereInput[]
+    NOT?: WeeklyReportWhereInput | WeeklyReportWhereInput[]
+    summary?: StringNullableFilter<"WeeklyReport"> | string | null
+    strengths?: StringNullableFilter<"WeeklyReport"> | string | null
+    weaknesses?: StringNullableFilter<"WeeklyReport"> | string | null
+    keyLessons?: StringNullableFilter<"WeeklyReport"> | string | null
+    nextWeekPlan?: StringNullableFilter<"WeeklyReport"> | string | null
+    overallRating?: IntNullableFilter<"WeeklyReport"> | number | null
+    createdAt?: DateTimeFilter<"WeeklyReport"> | Date | string
+    updatedAt?: DateTimeFilter<"WeeklyReport"> | Date | string
+  }, "weekStart">
+
+  export type WeeklyReportOrderByWithAggregationInput = {
+    weekStart?: SortOrder
+    summary?: SortOrderInput | SortOrder
+    strengths?: SortOrderInput | SortOrder
+    weaknesses?: SortOrderInput | SortOrder
+    keyLessons?: SortOrderInput | SortOrder
+    nextWeekPlan?: SortOrderInput | SortOrder
+    overallRating?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WeeklyReportCountOrderByAggregateInput
+    _avg?: WeeklyReportAvgOrderByAggregateInput
+    _max?: WeeklyReportMaxOrderByAggregateInput
+    _min?: WeeklyReportMinOrderByAggregateInput
+    _sum?: WeeklyReportSumOrderByAggregateInput
+  }
+
+  export type WeeklyReportScalarWhereWithAggregatesInput = {
+    AND?: WeeklyReportScalarWhereWithAggregatesInput | WeeklyReportScalarWhereWithAggregatesInput[]
+    OR?: WeeklyReportScalarWhereWithAggregatesInput[]
+    NOT?: WeeklyReportScalarWhereWithAggregatesInput | WeeklyReportScalarWhereWithAggregatesInput[]
+    weekStart?: DateTimeWithAggregatesFilter<"WeeklyReport"> | Date | string
+    summary?: StringNullableWithAggregatesFilter<"WeeklyReport"> | string | null
+    strengths?: StringNullableWithAggregatesFilter<"WeeklyReport"> | string | null
+    weaknesses?: StringNullableWithAggregatesFilter<"WeeklyReport"> | string | null
+    keyLessons?: StringNullableWithAggregatesFilter<"WeeklyReport"> | string | null
+    nextWeekPlan?: StringNullableWithAggregatesFilter<"WeeklyReport"> | string | null
+    overallRating?: IntNullableWithAggregatesFilter<"WeeklyReport"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"WeeklyReport"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WeeklyReport"> | Date | string
+  }
+
+  export type MissedReasonOptionWhereInput = {
+    AND?: MissedReasonOptionWhereInput | MissedReasonOptionWhereInput[]
+    OR?: MissedReasonOptionWhereInput[]
+    NOT?: MissedReasonOptionWhereInput | MissedReasonOptionWhereInput[]
+    id?: StringFilter<"MissedReasonOption"> | string
+    label?: StringFilter<"MissedReasonOption"> | string
+    isActive?: BoolFilter<"MissedReasonOption"> | boolean
+    sortOrder?: IntFilter<"MissedReasonOption"> | number
+    createdAt?: DateTimeFilter<"MissedReasonOption"> | Date | string
+  }
+
+  export type MissedReasonOptionOrderByWithRelationInput = {
+    id?: SortOrder
+    label?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MissedReasonOptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MissedReasonOptionWhereInput | MissedReasonOptionWhereInput[]
+    OR?: MissedReasonOptionWhereInput[]
+    NOT?: MissedReasonOptionWhereInput | MissedReasonOptionWhereInput[]
+    label?: StringFilter<"MissedReasonOption"> | string
+    isActive?: BoolFilter<"MissedReasonOption"> | boolean
+    sortOrder?: IntFilter<"MissedReasonOption"> | number
+    createdAt?: DateTimeFilter<"MissedReasonOption"> | Date | string
+  }, "id">
+
+  export type MissedReasonOptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    label?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+    _count?: MissedReasonOptionCountOrderByAggregateInput
+    _avg?: MissedReasonOptionAvgOrderByAggregateInput
+    _max?: MissedReasonOptionMaxOrderByAggregateInput
+    _min?: MissedReasonOptionMinOrderByAggregateInput
+    _sum?: MissedReasonOptionSumOrderByAggregateInput
+  }
+
+  export type MissedReasonOptionScalarWhereWithAggregatesInput = {
+    AND?: MissedReasonOptionScalarWhereWithAggregatesInput | MissedReasonOptionScalarWhereWithAggregatesInput[]
+    OR?: MissedReasonOptionScalarWhereWithAggregatesInput[]
+    NOT?: MissedReasonOptionScalarWhereWithAggregatesInput | MissedReasonOptionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MissedReasonOption"> | string
+    label?: StringWithAggregatesFilter<"MissedReasonOption"> | string
+    isActive?: BoolWithAggregatesFilter<"MissedReasonOption"> | boolean
+    sortOrder?: IntWithAggregatesFilter<"MissedReasonOption"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"MissedReasonOption"> | Date | string
   }
 
   export type ScreenshotWhereInput = {
@@ -13695,6 +16192,7 @@ export namespace Prisma {
     id?: string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -13717,7 +16215,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -13735,6 +16233,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -13753,6 +16252,7 @@ export namespace Prisma {
     sessionDate: Date | string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -13777,7 +16277,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -13795,6 +16295,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -13809,6 +16310,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13831,7 +16333,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -13849,6 +16351,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13867,6 +16370,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13891,7 +16395,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -13909,6 +16413,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13924,6 +16429,7 @@ export namespace Prisma {
     sessionDate: Date | string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -13948,7 +16454,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -13966,6 +16472,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -13977,6 +16484,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13999,7 +16507,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -14017,6 +16525,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14029,6 +16538,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14053,7 +16563,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -14071,6 +16581,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14218,6 +16729,146 @@ export namespace Prisma {
     exitConditionNotes?: NullableStringFieldUpdateOperationsInput | string | null
     executionGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     executionNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WeeklyReportCreateInput = {
+    weekStart: Date | string
+    summary?: string | null
+    strengths?: string | null
+    weaknesses?: string | null
+    keyLessons?: string | null
+    nextWeekPlan?: string | null
+    overallRating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WeeklyReportUncheckedCreateInput = {
+    weekStart: Date | string
+    summary?: string | null
+    strengths?: string | null
+    weaknesses?: string | null
+    keyLessons?: string | null
+    nextWeekPlan?: string | null
+    overallRating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WeeklyReportUpdateInput = {
+    weekStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    weaknesses?: NullableStringFieldUpdateOperationsInput | string | null
+    keyLessons?: NullableStringFieldUpdateOperationsInput | string | null
+    nextWeekPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    overallRating?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WeeklyReportUncheckedUpdateInput = {
+    weekStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    weaknesses?: NullableStringFieldUpdateOperationsInput | string | null
+    keyLessons?: NullableStringFieldUpdateOperationsInput | string | null
+    nextWeekPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    overallRating?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WeeklyReportCreateManyInput = {
+    weekStart: Date | string
+    summary?: string | null
+    strengths?: string | null
+    weaknesses?: string | null
+    keyLessons?: string | null
+    nextWeekPlan?: string | null
+    overallRating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WeeklyReportUpdateManyMutationInput = {
+    weekStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    weaknesses?: NullableStringFieldUpdateOperationsInput | string | null
+    keyLessons?: NullableStringFieldUpdateOperationsInput | string | null
+    nextWeekPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    overallRating?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WeeklyReportUncheckedUpdateManyInput = {
+    weekStart?: DateTimeFieldUpdateOperationsInput | Date | string
+    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    strengths?: NullableStringFieldUpdateOperationsInput | string | null
+    weaknesses?: NullableStringFieldUpdateOperationsInput | string | null
+    keyLessons?: NullableStringFieldUpdateOperationsInput | string | null
+    nextWeekPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    overallRating?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MissedReasonOptionCreateInput = {
+    id?: string
+    label: string
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+  }
+
+  export type MissedReasonOptionUncheckedCreateInput = {
+    id?: string
+    label: string
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+  }
+
+  export type MissedReasonOptionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MissedReasonOptionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MissedReasonOptionCreateManyInput = {
+    id?: string
+    label: string
+    isActive?: boolean
+    sortOrder?: number
+    createdAt?: Date | string
+  }
+
+  export type MissedReasonOptionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MissedReasonOptionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    sortOrder?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -14766,6 +17417,13 @@ export namespace Prisma {
     not?: NestedEnumDirectionFilter<$PrismaModel> | $Enums.Direction
   }
 
+  export type EnumSetupPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.SetupPriority | EnumSetupPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.SetupPriority[]
+    notIn?: $Enums.SetupPriority[]
+    not?: NestedEnumSetupPriorityFilter<$PrismaModel> | $Enums.SetupPriority
+  }
+
   export type EnumPriceTierNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.PriceTier | EnumPriceTierFieldRefInput<$PrismaModel> | null
     in?: $Enums.PriceTier[] | null
@@ -14812,16 +17470,16 @@ export namespace Prisma {
     not?: NestedEnumSetupStatusFilter<$PrismaModel> | $Enums.SetupStatus
   }
 
-  export type EnumMissedReasonNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.MissedReason | EnumMissedReasonFieldRefInput<$PrismaModel> | null
-    in?: $Enums.MissedReason[] | null
-    notIn?: $Enums.MissedReason[] | null
-    not?: NestedEnumMissedReasonNullableFilter<$PrismaModel> | $Enums.MissedReason | null
-  }
-
   export type BoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type EnumChartTimeframeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChartTimeframe | EnumChartTimeframeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ChartTimeframe[] | null
+    notIn?: $Enums.ChartTimeframe[] | null
+    not?: NestedEnumChartTimeframeNullableFilter<$PrismaModel> | $Enums.ChartTimeframe | null
   }
 
   export type EnumGradeNullableFilter<$PrismaModel = never> = {
@@ -14856,6 +17514,7 @@ export namespace Prisma {
     sessionDate?: SortOrder
     symbol?: SortOrder
     direction?: SortOrder
+    priority?: SortOrder
     priceTier?: SortOrder
     marketCapTier?: SortOrder
     strategy?: SortOrder
@@ -14898,6 +17557,7 @@ export namespace Prisma {
     actualEntryOpportunity?: SortOrder
     actualExitOpportunity?: SortOrder
     dailySummary?: SortOrder
+    chartTimeframe?: SortOrder
     selectedTradeTypes?: SortOrder
     setupGrade?: SortOrder
     setupNotes?: SortOrder
@@ -14920,6 +17580,7 @@ export namespace Prisma {
     sessionDate?: SortOrder
     symbol?: SortOrder
     direction?: SortOrder
+    priority?: SortOrder
     priceTier?: SortOrder
     marketCapTier?: SortOrder
     strategy?: SortOrder
@@ -14962,6 +17623,7 @@ export namespace Prisma {
     actualEntryOpportunity?: SortOrder
     actualExitOpportunity?: SortOrder
     dailySummary?: SortOrder
+    chartTimeframe?: SortOrder
     selectedTradeTypes?: SortOrder
     setupGrade?: SortOrder
     setupNotes?: SortOrder
@@ -14974,6 +17636,7 @@ export namespace Prisma {
     sessionDate?: SortOrder
     symbol?: SortOrder
     direction?: SortOrder
+    priority?: SortOrder
     priceTier?: SortOrder
     marketCapTier?: SortOrder
     strategy?: SortOrder
@@ -15016,6 +17679,7 @@ export namespace Prisma {
     actualEntryOpportunity?: SortOrder
     actualExitOpportunity?: SortOrder
     dailySummary?: SortOrder
+    chartTimeframe?: SortOrder
     selectedTradeTypes?: SortOrder
     setupGrade?: SortOrder
     setupNotes?: SortOrder
@@ -15041,6 +17705,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumDirectionFilter<$PrismaModel>
     _max?: NestedEnumDirectionFilter<$PrismaModel>
+  }
+
+  export type EnumSetupPriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SetupPriority | EnumSetupPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.SetupPriority[]
+    notIn?: $Enums.SetupPriority[]
+    not?: NestedEnumSetupPriorityWithAggregatesFilter<$PrismaModel> | $Enums.SetupPriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSetupPriorityFilter<$PrismaModel>
+    _max?: NestedEnumSetupPriorityFilter<$PrismaModel>
   }
 
   export type EnumPriceTierNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -15109,22 +17783,22 @@ export namespace Prisma {
     _max?: NestedEnumSetupStatusFilter<$PrismaModel>
   }
 
-  export type EnumMissedReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.MissedReason | EnumMissedReasonFieldRefInput<$PrismaModel> | null
-    in?: $Enums.MissedReason[] | null
-    notIn?: $Enums.MissedReason[] | null
-    not?: NestedEnumMissedReasonNullableWithAggregatesFilter<$PrismaModel> | $Enums.MissedReason | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumMissedReasonNullableFilter<$PrismaModel>
-    _max?: NestedEnumMissedReasonNullableFilter<$PrismaModel>
-  }
-
   export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedBoolNullableFilter<$PrismaModel>
     _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type EnumChartTimeframeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChartTimeframe | EnumChartTimeframeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ChartTimeframe[] | null
+    notIn?: $Enums.ChartTimeframe[] | null
+    not?: NestedEnumChartTimeframeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ChartTimeframe | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumChartTimeframeNullableFilter<$PrismaModel>
+    _max?: NestedEnumChartTimeframeNullableFilter<$PrismaModel>
   }
 
   export type EnumGradeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -15312,6 +17986,82 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumDirectionNullableFilter<$PrismaModel>
     _max?: NestedEnumDirectionNullableFilter<$PrismaModel>
+  }
+
+  export type WeeklyReportCountOrderByAggregateInput = {
+    weekStart?: SortOrder
+    summary?: SortOrder
+    strengths?: SortOrder
+    weaknesses?: SortOrder
+    keyLessons?: SortOrder
+    nextWeekPlan?: SortOrder
+    overallRating?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WeeklyReportAvgOrderByAggregateInput = {
+    overallRating?: SortOrder
+  }
+
+  export type WeeklyReportMaxOrderByAggregateInput = {
+    weekStart?: SortOrder
+    summary?: SortOrder
+    strengths?: SortOrder
+    weaknesses?: SortOrder
+    keyLessons?: SortOrder
+    nextWeekPlan?: SortOrder
+    overallRating?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WeeklyReportMinOrderByAggregateInput = {
+    weekStart?: SortOrder
+    summary?: SortOrder
+    strengths?: SortOrder
+    weaknesses?: SortOrder
+    keyLessons?: SortOrder
+    nextWeekPlan?: SortOrder
+    overallRating?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WeeklyReportSumOrderByAggregateInput = {
+    overallRating?: SortOrder
+  }
+
+  export type MissedReasonOptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    label?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MissedReasonOptionAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+  }
+
+  export type MissedReasonOptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    label?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MissedReasonOptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    label?: SortOrder
+    isActive?: SortOrder
+    sortOrder?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MissedReasonOptionSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
   }
 
   export type EnumChartTagNullableFilter<$PrismaModel = never> = {
@@ -15821,6 +18571,10 @@ export namespace Prisma {
     set?: $Enums.Direction
   }
 
+  export type EnumSetupPriorityFieldUpdateOperationsInput = {
+    set?: $Enums.SetupPriority
+  }
+
   export type NullableEnumPriceTierFieldUpdateOperationsInput = {
     set?: $Enums.PriceTier | null
   }
@@ -15849,12 +18603,12 @@ export namespace Prisma {
     set?: $Enums.SetupStatus
   }
 
-  export type NullableEnumMissedReasonFieldUpdateOperationsInput = {
-    set?: $Enums.MissedReason | null
-  }
-
   export type NullableBoolFieldUpdateOperationsInput = {
     set?: boolean | null
+  }
+
+  export type NullableEnumChartTimeframeFieldUpdateOperationsInput = {
+    set?: $Enums.ChartTimeframe | null
   }
 
   export type NullableEnumGradeFieldUpdateOperationsInput = {
@@ -16310,6 +19064,13 @@ export namespace Prisma {
     not?: NestedEnumDirectionFilter<$PrismaModel> | $Enums.Direction
   }
 
+  export type NestedEnumSetupPriorityFilter<$PrismaModel = never> = {
+    equals?: $Enums.SetupPriority | EnumSetupPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.SetupPriority[]
+    notIn?: $Enums.SetupPriority[]
+    not?: NestedEnumSetupPriorityFilter<$PrismaModel> | $Enums.SetupPriority
+  }
+
   export type NestedEnumPriceTierNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.PriceTier | EnumPriceTierFieldRefInput<$PrismaModel> | null
     in?: $Enums.PriceTier[] | null
@@ -16345,16 +19106,16 @@ export namespace Prisma {
     not?: NestedEnumSetupStatusFilter<$PrismaModel> | $Enums.SetupStatus
   }
 
-  export type NestedEnumMissedReasonNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.MissedReason | EnumMissedReasonFieldRefInput<$PrismaModel> | null
-    in?: $Enums.MissedReason[] | null
-    notIn?: $Enums.MissedReason[] | null
-    not?: NestedEnumMissedReasonNullableFilter<$PrismaModel> | $Enums.MissedReason | null
-  }
-
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type NestedEnumChartTimeframeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChartTimeframe | EnumChartTimeframeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ChartTimeframe[] | null
+    notIn?: $Enums.ChartTimeframe[] | null
+    not?: NestedEnumChartTimeframeNullableFilter<$PrismaModel> | $Enums.ChartTimeframe | null
   }
 
   export type NestedEnumGradeNullableFilter<$PrismaModel = never> = {
@@ -16372,6 +19133,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumDirectionFilter<$PrismaModel>
     _max?: NestedEnumDirectionFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSetupPriorityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SetupPriority | EnumSetupPriorityFieldRefInput<$PrismaModel>
+    in?: $Enums.SetupPriority[]
+    notIn?: $Enums.SetupPriority[]
+    not?: NestedEnumSetupPriorityWithAggregatesFilter<$PrismaModel> | $Enums.SetupPriority
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSetupPriorityFilter<$PrismaModel>
+    _max?: NestedEnumSetupPriorityFilter<$PrismaModel>
   }
 
   export type NestedEnumPriceTierNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -16440,22 +19211,22 @@ export namespace Prisma {
     _max?: NestedEnumSetupStatusFilter<$PrismaModel>
   }
 
-  export type NestedEnumMissedReasonNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.MissedReason | EnumMissedReasonFieldRefInput<$PrismaModel> | null
-    in?: $Enums.MissedReason[] | null
-    notIn?: $Enums.MissedReason[] | null
-    not?: NestedEnumMissedReasonNullableWithAggregatesFilter<$PrismaModel> | $Enums.MissedReason | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumMissedReasonNullableFilter<$PrismaModel>
-    _max?: NestedEnumMissedReasonNullableFilter<$PrismaModel>
-  }
-
   export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedBoolNullableFilter<$PrismaModel>
     _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumChartTimeframeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChartTimeframe | EnumChartTimeframeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ChartTimeframe[] | null
+    notIn?: $Enums.ChartTimeframe[] | null
+    not?: NestedEnumChartTimeframeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ChartTimeframe | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumChartTimeframeNullableFilter<$PrismaModel>
+    _max?: NestedEnumChartTimeframeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumGradeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -16574,6 +19345,7 @@ export namespace Prisma {
     id?: string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -16596,7 +19368,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -16614,6 +19386,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -16631,6 +19404,7 @@ export namespace Prisma {
     sessionDate: Date | string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -16654,7 +19428,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -16672,6 +19446,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -16715,6 +19490,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFilter<"TradeSetup"> | Date | string
     symbol?: StringFilter<"TradeSetup"> | string
     direction?: EnumDirectionFilter<"TradeSetup"> | $Enums.Direction
+    priority?: EnumSetupPriorityFilter<"TradeSetup"> | $Enums.SetupPriority
     priceTier?: EnumPriceTierNullableFilter<"TradeSetup"> | $Enums.PriceTier | null
     marketCapTier?: EnumMarketCapTierNullableFilter<"TradeSetup"> | $Enums.MarketCapTier | null
     strategy?: StringNullableFilter<"TradeSetup"> | string | null
@@ -16739,7 +19515,7 @@ export namespace Prisma {
     plannedRiskReward?: FloatNullableFilter<"TradeSetup"> | number | null
     plannedSize?: IntNullableFilter<"TradeSetup"> | number | null
     status?: EnumSetupStatusFilter<"TradeSetup"> | $Enums.SetupStatus
-    missedReason?: EnumMissedReasonNullableFilter<"TradeSetup"> | $Enums.MissedReason | null
+    missedReason?: StringNullableFilter<"TradeSetup"> | string | null
     missedNotes?: StringNullableFilter<"TradeSetup"> | string | null
     missedHypoPnL?: FloatNullableFilter<"TradeSetup"> | number | null
     stockSelectionAccurate?: BoolNullableFilter<"TradeSetup"> | boolean | null
@@ -16757,6 +19533,7 @@ export namespace Prisma {
     actualEntryOpportunity?: StringNullableFilter<"TradeSetup"> | string | null
     actualExitOpportunity?: StringNullableFilter<"TradeSetup"> | string | null
     dailySummary?: StringNullableFilter<"TradeSetup"> | string | null
+    chartTimeframe?: EnumChartTimeframeNullableFilter<"TradeSetup"> | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFilter<"TradeSetup"> | string
     setupGrade?: EnumGradeNullableFilter<"TradeSetup"> | $Enums.Grade | null
     setupNotes?: StringNullableFilter<"TradeSetup"> | string | null
@@ -16768,6 +19545,7 @@ export namespace Prisma {
     id?: string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -16790,7 +19568,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -16808,6 +19586,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -16825,6 +19604,7 @@ export namespace Prisma {
     sessionDate: Date | string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -16848,7 +19628,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -16866,6 +19646,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -17049,6 +19830,7 @@ export namespace Prisma {
     id?: string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -17071,7 +19853,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -17089,6 +19871,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -17105,6 +19888,7 @@ export namespace Prisma {
     id?: string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -17129,7 +19913,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -17147,6 +19931,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -17333,6 +20118,7 @@ export namespace Prisma {
     id?: string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -17355,7 +20141,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -17373,6 +20159,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -17390,6 +20177,7 @@ export namespace Prisma {
     sessionDate: Date | string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -17414,7 +20202,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -17432,6 +20220,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -17921,6 +20710,7 @@ export namespace Prisma {
     id?: string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -17943,7 +20733,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -17961,6 +20751,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -17978,6 +20769,7 @@ export namespace Prisma {
     sessionDate: Date | string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -18002,7 +20794,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -18020,6 +20812,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -18090,6 +20883,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18112,7 +20906,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -18130,6 +20924,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18147,6 +20942,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18171,7 +20967,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -18189,6 +20985,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18218,6 +21015,7 @@ export namespace Prisma {
     id?: string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -18240,7 +21038,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -18258,6 +21056,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -18275,6 +21074,7 @@ export namespace Prisma {
     sessionDate: Date | string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -18299,7 +21099,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -18317,6 +21117,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -18430,6 +21231,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18452,7 +21254,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -18470,6 +21272,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18487,6 +21290,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18511,7 +21315,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -18529,6 +21333,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18639,6 +21444,7 @@ export namespace Prisma {
     sessionDate: Date | string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -18662,7 +21468,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -18680,6 +21486,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -18691,6 +21498,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18713,7 +21521,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -18731,6 +21539,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18748,6 +21557,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18771,7 +21581,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -18789,6 +21599,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18804,6 +21615,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18827,7 +21639,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -18845,6 +21657,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18857,6 +21670,7 @@ export namespace Prisma {
     sessionDate: Date | string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -18880,7 +21694,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -18898,6 +21712,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -18915,6 +21730,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18937,7 +21753,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -18955,6 +21771,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18972,6 +21789,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18995,7 +21813,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -19013,6 +21831,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19028,6 +21847,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19051,7 +21871,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -19069,6 +21889,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19109,6 +21930,7 @@ export namespace Prisma {
     id?: string
     symbol: string
     direction: $Enums.Direction
+    priority?: $Enums.SetupPriority
     priceTier?: $Enums.PriceTier | null
     marketCapTier?: $Enums.MarketCapTier | null
     strategy?: string | null
@@ -19133,7 +21955,7 @@ export namespace Prisma {
     plannedRiskReward?: number | null
     plannedSize?: number | null
     status?: $Enums.SetupStatus
-    missedReason?: $Enums.MissedReason | null
+    missedReason?: string | null
     missedNotes?: string | null
     missedHypoPnL?: number | null
     stockSelectionAccurate?: boolean | null
@@ -19151,6 +21973,7 @@ export namespace Prisma {
     actualEntryOpportunity?: string | null
     actualExitOpportunity?: string | null
     dailySummary?: string | null
+    chartTimeframe?: $Enums.ChartTimeframe | null
     selectedTradeTypes?: string
     setupGrade?: $Enums.Grade | null
     setupNotes?: string | null
@@ -19213,6 +22036,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19235,7 +22059,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -19253,6 +22077,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19269,6 +22094,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19293,7 +22119,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -19311,6 +22137,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19325,6 +22152,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19349,7 +22177,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -19367,6 +22195,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19426,6 +22255,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19448,7 +22278,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -19466,6 +22296,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19483,6 +22314,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19507,7 +22339,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -19525,6 +22357,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19539,6 +22372,7 @@ export namespace Prisma {
     sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
     symbol?: StringFieldUpdateOperationsInput | string
     direction?: EnumDirectionFieldUpdateOperationsInput | $Enums.Direction
+    priority?: EnumSetupPriorityFieldUpdateOperationsInput | $Enums.SetupPriority
     priceTier?: NullableEnumPriceTierFieldUpdateOperationsInput | $Enums.PriceTier | null
     marketCapTier?: NullableEnumMarketCapTierFieldUpdateOperationsInput | $Enums.MarketCapTier | null
     strategy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19563,7 +22397,7 @@ export namespace Prisma {
     plannedRiskReward?: NullableFloatFieldUpdateOperationsInput | number | null
     plannedSize?: NullableIntFieldUpdateOperationsInput | number | null
     status?: EnumSetupStatusFieldUpdateOperationsInput | $Enums.SetupStatus
-    missedReason?: NullableEnumMissedReasonFieldUpdateOperationsInput | $Enums.MissedReason | null
+    missedReason?: NullableStringFieldUpdateOperationsInput | string | null
     missedNotes?: NullableStringFieldUpdateOperationsInput | string | null
     missedHypoPnL?: NullableFloatFieldUpdateOperationsInput | number | null
     stockSelectionAccurate?: NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -19581,6 +22415,7 @@ export namespace Prisma {
     actualEntryOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     actualExitOpportunity?: NullableStringFieldUpdateOperationsInput | string | null
     dailySummary?: NullableStringFieldUpdateOperationsInput | string | null
+    chartTimeframe?: NullableEnumChartTimeframeFieldUpdateOperationsInput | $Enums.ChartTimeframe | null
     selectedTradeTypes?: StringFieldUpdateOperationsInput | string
     setupGrade?: NullableEnumGradeFieldUpdateOperationsInput | $Enums.Grade | null
     setupNotes?: NullableStringFieldUpdateOperationsInput | string | null

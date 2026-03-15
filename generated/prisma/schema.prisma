@@ -39,17 +39,20 @@ enum SetupStatus {
   CANCELLED // 主动取消
 }
 
-enum MissedReason {
-  HESITATION // 犹豫，不确定
-  NO_CLEAR_SIGNAL // 等待的信号没出现
-  DISTRACTED // 走神/错过时间窗口
-  ALREADY_IN_TRADE // 当时已有其他持仓
-  RISK_LIMIT_HIT // 当日亏损到上限
-  SPREAD_TOO_WIDE // 价差不合适
-  NEWS_RISK // 有未知新闻风险
-  CHANGED_ANALYSIS // 重新分析后放弃
-  FEAR_OF_LOSS // 近期亏损带来的恐惧
-  OTHER
+enum SetupPriority {
+  HIGH // 高优先
+  MEDIUM // 中
+  LOW // 低/观察
+}
+
+enum ChartTimeframe {
+  M1 // 1m
+  M5 // 5m
+  M15 // 15m
+  M30 // 30m
+  H1 // 1h
+  H4 // 4h
+  D1 // 1d
 }
 
 enum Grade {
@@ -75,6 +78,12 @@ enum NewsImpact {
   UNCERTAIN
 }
 
+enum NewsStrength {
+  STRONG // 强催化剂
+  MEDIUM // 中等催化剂
+  WEAK // 弱催化剂
+}
+
 enum ChartTag {
   PRE_MARKET_PLAN // 盘前计划图
   ENTRY_SIGNAL // 入场信号图
@@ -85,6 +94,22 @@ enum ChartTag {
 }
 
 // ─── 核心模型 ────────────────────────────────────────────────
+
+// 新闻催化剂库（用户自维护）
+model NewsCatalog {
+  id              String       @id @default(cuid())
+  name            String // 新闻名称/简述模板
+  category        String // 一级类别（如：财报、宏观政策、公司事件）
+  subCategory     String? // 二级类别（可选，如：EPS超预期、指引上调）
+  strength        NewsStrength // 催化剂强度
+  description     String? // 详细说明（可选）
+  entryConditions String? // 入场基本条件 JSON 数组，如 ["盘前波动>10%", "volume排前列"]
+  riskFactors     String? // 风险因素 JSON 数组，如 ["连续上涨多日", "盘前涨幅已逆转"]
+  isActive        Boolean      @default(true)
+  setups          TradeSetup[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
 
 // 策略（思维导图）
 model Strategy {
@@ -164,6 +189,7 @@ model TradeSetup {
   // 标的与方向
   symbol        String
   direction     Direction
+  priority      SetupPriority  @default(MEDIUM) // 盘前优先级别
   priceTier     PriceTier? // 价格分层标签
   marketCapTier MarketCapTier? // 市值分层标签
 
@@ -175,9 +201,11 @@ model TradeSetup {
   newsEvents  NewsEvent[] @relation("SetupNews")
 
   // 新闻催化剂（内嵌在 Setup 中，按标的录入）
-  newsType     NewsType? // 新闻类型
-  newsImpact   NewsImpact? // 新闻对标的的影响方向
-  newsHeadline String? // 新闻标题 / 简述
+  newsType       NewsType? // 新闻类型
+  newsImpact     NewsImpact? // 新闻对标的的影响方向
+  newsHeadline   String? // 新闻标题 / 简述
+  newsCatalogId  String?
+  newsCatalogRef NewsCatalog? @relation(fields: [newsCatalogId], references: [id], onDelete: SetNull)
 
   // ── 入场计划（定性为主，定量可选）──
   entryCondition  String? // 入场触发条件，如"回调至 VWAP 站稳，成交量萎缩后放量"
@@ -205,7 +233,7 @@ model TradeSetup {
   status SetupStatus @default(WATCHING)
 
   // 错过交易专属
-  missedReason  MissedReason?
+  missedReason  String? // 错过原因（用户自定义选项的标签文本）
   missedNotes   String? // 错过的详细说明
   missedHypoPnL Float? // 假设按计划执行的盈亏（事后估算）
 
@@ -232,6 +260,9 @@ model TradeSetup {
   actualEntryOpportunity    String? // 实际入场机会（开盘后实际出现的进入机会）
   actualExitOpportunity     String? // 实际出场机会（实际有的退出机会）
   dailySummary              String? // 单日标的总结（盘中填写）
+
+  // 盘中 K 线维度
+  chartTimeframe ChartTimeframe? // 实际交易时使用的 K 线维度
 
   // 选中的交易类型（JSON 数组存 TradeType 名称，便于显示）
   selectedTradeTypes String @default("[]")
@@ -272,6 +303,15 @@ model Execution {
 
   screenshots Screenshot[]
 
+  createdAt DateTime @default(now())
+}
+
+// 错过原因选项（用户自定义）
+model MissedReasonOption {
+  id        String   @id @default(cuid())
+  label     String // 显示文字
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
   createdAt DateTime @default(now())
 }
 

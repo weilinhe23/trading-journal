@@ -182,6 +182,7 @@ exports.Prisma.TradeSetupScalarFieldEnum = {
   sessionDate: 'sessionDate',
   symbol: 'symbol',
   direction: 'direction',
+  priority: 'priority',
   priceTier: 'priceTier',
   marketCapTier: 'marketCapTier',
   strategy: 'strategy',
@@ -224,6 +225,7 @@ exports.Prisma.TradeSetupScalarFieldEnum = {
   actualEntryOpportunity: 'actualEntryOpportunity',
   actualExitOpportunity: 'actualExitOpportunity',
   dailySummary: 'dailySummary',
+  chartTimeframe: 'chartTimeframe',
   selectedTradeTypes: 'selectedTradeTypes',
   setupGrade: 'setupGrade',
   setupNotes: 'setupNotes',
@@ -248,6 +250,26 @@ exports.Prisma.ExecutionScalarFieldEnum = {
   exitConditionNotes: 'exitConditionNotes',
   executionGrade: 'executionGrade',
   executionNotes: 'executionNotes',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.WeeklyReportScalarFieldEnum = {
+  weekStart: 'weekStart',
+  summary: 'summary',
+  strengths: 'strengths',
+  weaknesses: 'weaknesses',
+  keyLessons: 'keyLessons',
+  nextWeekPlan: 'nextWeekPlan',
+  overallRating: 'overallRating',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MissedReasonOptionScalarFieldEnum = {
+  id: 'id',
+  label: 'label',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
   createdAt: 'createdAt'
 };
 
@@ -305,6 +327,12 @@ exports.Direction = exports.$Enums.Direction = {
   TBD: 'TBD'
 };
 
+exports.SetupPriority = exports.$Enums.SetupPriority = {
+  HIGH: 'HIGH',
+  MEDIUM: 'MEDIUM',
+  LOW: 'LOW'
+};
+
 exports.PriceTier = exports.$Enums.PriceTier = {
   BELOW_2: 'BELOW_2',
   BETWEEN_2_20: 'BETWEEN_2_20',
@@ -326,17 +354,14 @@ exports.SetupStatus = exports.$Enums.SetupStatus = {
   CANCELLED: 'CANCELLED'
 };
 
-exports.MissedReason = exports.$Enums.MissedReason = {
-  HESITATION: 'HESITATION',
-  NO_CLEAR_SIGNAL: 'NO_CLEAR_SIGNAL',
-  DISTRACTED: 'DISTRACTED',
-  ALREADY_IN_TRADE: 'ALREADY_IN_TRADE',
-  RISK_LIMIT_HIT: 'RISK_LIMIT_HIT',
-  SPREAD_TOO_WIDE: 'SPREAD_TOO_WIDE',
-  NEWS_RISK: 'NEWS_RISK',
-  CHANGED_ANALYSIS: 'CHANGED_ANALYSIS',
-  FEAR_OF_LOSS: 'FEAR_OF_LOSS',
-  OTHER: 'OTHER'
+exports.ChartTimeframe = exports.$Enums.ChartTimeframe = {
+  M1: 'M1',
+  M5: 'M5',
+  M15: 'M15',
+  M30: 'M30',
+  H1: 'H1',
+  H4: 'H4',
+  D1: 'D1'
 };
 
 exports.Grade = exports.$Enums.Grade = {
@@ -363,6 +388,8 @@ exports.Prisma.ModelName = {
   NewsEvent: 'NewsEvent',
   TradeSetup: 'TradeSetup',
   Execution: 'Execution',
+  WeeklyReport: 'WeeklyReport',
+  MissedReasonOption: 'MissedReasonOption',
   Screenshot: 'Screenshot'
 };
 
