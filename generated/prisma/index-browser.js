@@ -290,6 +290,41 @@ exports.Prisma.ScreenshotScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.MnqDailyPlanScalarFieldEnum = {
+  id: 'id',
+  sessionDate: 'sessionDate',
+  scenario: 'scenario',
+  sweepUpBand: 'sweepUpBand',
+  sweepDownBand: 'sweepDownBand',
+  hasNewsGap: 'hasNewsGap',
+  gapCanHold: 'gapCanHold',
+  condRangeMovingOver1h: 'condRangeMovingOver1h',
+  condRangeVwapFlat: 'condRangeVwapFlat',
+  condRangeNoMajorNews: 'condRangeNoMajorNews',
+  condRangePrevTrend: 'condRangePrevTrend',
+  condTrendSingleDir: 'condTrendSingleDir',
+  condTrendVwapTilted: 'condTrendVwapTilted',
+  condFadeNewsWeak: 'condFadeNewsWeak',
+  condHoldNewsReal: 'condHoldNewsReal',
+  evalRangeMovingOver1h: 'evalRangeMovingOver1h',
+  evalRangeVwapFlat: 'evalRangeVwapFlat',
+  evalRangeNoMajorNews: 'evalRangeNoMajorNews',
+  evalRangePrevTrend: 'evalRangePrevTrend',
+  evalTrendSingleDir: 'evalTrendSingleDir',
+  evalTrendVwapTilted: 'evalTrendVwapTilted',
+  evalFadeNewsWeak: 'evalFadeNewsWeak',
+  evalHoldNewsReal: 'evalHoldNewsReal',
+  evalUpBand: 'evalUpBand',
+  evalDownBand: 'evalDownBand',
+  evalNotesJson: 'evalNotesJson',
+  customConditionsJson: 'customConditionsJson',
+  customBandsJson: 'customBandsJson',
+  actCheckpointsJson: 'actCheckpointsJson',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -380,6 +415,13 @@ exports.ChartTag = exports.$Enums.ChartTag = {
   MARKET_OVERVIEW: 'MARKET_OVERVIEW'
 };
 
+exports.MnqScenario = exports.$Enums.MnqScenario = {
+  RANGE_SWEEP: 'RANGE_SWEEP',
+  TREND_REGULAR: 'TREND_REGULAR',
+  TREND_GAP_FADE: 'TREND_GAP_FADE',
+  TREND_GAP_HOLD: 'TREND_GAP_HOLD'
+};
+
 exports.Prisma.ModelName = {
   NewsCatalog: 'NewsCatalog',
   Strategy: 'Strategy',
@@ -390,7 +432,8 @@ exports.Prisma.ModelName = {
   Execution: 'Execution',
   WeeklyReport: 'WeeklyReport',
   MissedReasonOption: 'MissedReasonOption',
-  Screenshot: 'Screenshot'
+  Screenshot: 'Screenshot',
+  MnqDailyPlan: 'MnqDailyPlan'
 };
 
 /**

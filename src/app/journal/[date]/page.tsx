@@ -27,7 +27,31 @@ export default async function DailyJournalPage({ params }: PageProps) {
   const date = parseDateParam(dateParam)
   if (!date) notFound()
 
-  // upsert：不存在自动创建
+  // upsert：不存在自动创建（必须先于 MnqDailyPlan 和 MNQ Setup）
+  await prisma.dailySession.upsert({
+    where: { date },
+    create: { date },
+    update: {},
+  })
+
+  // 自动创建 MnqDailyPlan（upsert，DailySession 已存在）
+  await prisma.mnqDailyPlan.upsert({
+    where: { sessionDate: date },
+    create: { sessionDate: date },
+    update: {},
+  })
+
+  // 自动创建 MNQ TradeSetup（如果当天还没有）
+  const existingMnq = await prisma.tradeSetup.findFirst({
+    where: { sessionDate: date, symbol: "MNQ" },
+  })
+  if (!existingMnq) {
+    await prisma.tradeSetup.create({
+      data: { sessionDate: date, symbol: "MNQ", direction: "TBD", priority: "HIGH" },
+    })
+  }
+
+  // 重新查询完整数据（含关联）
   const session = await prisma.dailySession.upsert({
     where: { date },
     create: { date },
@@ -43,6 +67,7 @@ export default async function DailyJournalPage({ params }: PageProps) {
         },
       },
       screenshots: true,
+      mnqPlan: true,
     },
   })
 

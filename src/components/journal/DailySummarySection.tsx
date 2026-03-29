@@ -2,24 +2,10 @@
 
 import { useState, useRef, useCallback, useEffect } from "react"
 import { Card, CardContent, CardHeader } from "~/components/ui/card"
-import { Badge } from "~/components/ui/badge"
 import { Separator } from "~/components/ui/separator"
 import { Dialog, DialogContent, DialogTitle } from "~/components/ui/dialog"
-import { cn } from "~/lib/utils"
-import { formatPnL } from "~/lib/pnl"
-import {
-  MISSED_REASON_LABELS,
-  PRICE_TIER_LABELS,
-  MARKET_CAP_TIER_LABELS,
-  NEWS_TYPE_LABELS,
-  NEWS_IMPACT_LABELS,
-  type MissedReason,
-  type PriceTier,
-  type MarketCapTier,
-  type NewsType,
-  type NewsImpact,
-} from "~/types"
-import type { DailySession, Screenshot, TradeSetup, Execution } from "../../../generated/prisma"
+import type { DailySession, MnqDailyPlan, Screenshot, TradeSetup, Execution } from "../../../generated/prisma"
+import { SetupCard } from "~/components/setup/SetupCard"
 
 type SetupFull = TradeSetup & {
   executions: Execution[]
@@ -29,24 +15,11 @@ type SetupFull = TradeSetup & {
 type SessionFull = DailySession & {
   screenshots: Screenshot[]
   setups: SetupFull[]
+  mnqPlan: MnqDailyPlan | null
 }
 
 interface Props {
   session: SessionFull
-}
-
-const DIR_CFG: Record<string, { label: string; className: string }> = {
-  LONG:  { label: "做多", className: "bg-green-600 text-white" },
-  SHORT: { label: "做空", className: "bg-red-600 text-white" },
-  TBD:   { label: "待定", className: "bg-gray-600 text-white" },
-}
-
-const STATUS_LABEL: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
-  WATCHING:    { label: "观察中",  variant: "secondary" },
-  EXECUTED:    { label: "已执行",  variant: "default" },
-  MISSED:      { label: "已错过",  variant: "outline" },
-  INVALIDATED: { label: "已失效",  variant: "destructive" },
-  CANCELLED:   { label: "已取消",  variant: "outline" },
 }
 
 // ── 图片灯箱（支持滚轮缩放 + 拖拽平移）──────────────────────────────
@@ -224,376 +197,6 @@ function ScreenshotGrid({ screenshots, title }: { screenshots: Screenshot[]; tit
   )
 }
 
-// ── 单个 Setup 汇总卡片 ────────────────────────────────────────────────
-function SetupSummaryCard({ setup }: { setup: SetupFull }) {
-  const dir = DIR_CFG[setup.direction] ?? DIR_CFG["TBD"]!
-  const st = STATUS_LABEL[setup.status] ?? { label: setup.status, variant: "outline" as const }
-
-  const totalPnL = setup.executions.reduce<number | null>((acc, ex) => {
-    if (ex.pnl === null) return acc
-    return (acc ?? 0) + ex.pnl
-  }, null)
-
-  // 收集该 setup 下所有截图（setup 本身 + 执行记录）
-  const allScreenshots = setup.screenshots
-
-  return (
-    <Card>
-      {/* ── 标的标题行 ── */}
-      <CardHeader className="pb-2 pt-3 px-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="font-bold text-base">{setup.symbol}</span>
-          <span className={cn("text-xs px-1.5 py-0.5 rounded font-medium", dir.className)}>
-            {dir.label}
-          </span>
-          {setup.strategy && (
-            <Badge variant="secondary" className="text-xs py-0">{setup.strategy}</Badge>
-          )}
-          {/* 交易类型 */}
-          {(() => {
-            try {
-              const types = JSON.parse((setup as unknown as { selectedTradeTypes?: string }).selectedTradeTypes ?? "[]") as string[]
-              return types.map((t) => (
-                <Badge key={t} variant="outline" className="text-xs py-0 border-primary/40 text-primary/80">{t}</Badge>
-              ))
-            } catch { return null }
-          })()}
-          <Badge variant={st.variant} className="text-xs py-0">{st.label}</Badge>
-          {setup.priceTier && (
-            <Badge variant="outline" className="text-xs py-0 text-muted-foreground">
-              {PRICE_TIER_LABELS[setup.priceTier as PriceTier]}
-            </Badge>
-          )}
-          {setup.marketCapTier && (
-            <Badge variant="outline" className="text-xs py-0 text-muted-foreground">
-              {MARKET_CAP_TIER_LABELS[setup.marketCapTier as MarketCapTier]}
-            </Badge>
-          )}
-          {setup.newsType && (
-            <Badge
-              variant="outline"
-              className={cn(
-                "text-xs py-0",
-                setup.newsImpact === "BULLISH" && "border-green-700 text-green-400",
-                setup.newsImpact === "BEARISH" && "border-red-700 text-red-400",
-                setup.newsImpact === "UNCERTAIN" && "border-yellow-700 text-yellow-400",
-                (!setup.newsImpact || setup.newsImpact === "NEUTRAL") && "border-muted-foreground text-muted-foreground",
-              )}
-            >
-              {NEWS_TYPE_LABELS[setup.newsType as NewsType]}
-              {setup.newsImpact && setup.newsType !== "TECHNICAL" && (
-                <span className="ml-1 opacity-70">· {NEWS_IMPACT_LABELS[setup.newsImpact as NewsImpact]}</span>
-              )}
-            </Badge>
-          )}
-          {totalPnL !== null && (
-            <span className={cn("text-sm font-semibold ml-auto", totalPnL >= 0 ? "text-green-400" : "text-red-400")}>
-              {formatPnL(totalPnL)}
-            </span>
-          )}
-        </div>
-      </CardHeader>
-
-      <CardContent className="px-4 pb-4 space-y-3">
-
-        {/* ── 策略 & 催化剂行 ── */}
-        <div className="space-y-1">
-          {/* 策略 */}
-          {(() => {
-            try {
-              const types = JSON.parse((setup as unknown as { selectedTradeTypes?: string }).selectedTradeTypes ?? "[]") as string[]
-              const label = [setup.strategy, types.length > 0 ? types.join(" / ") : null].filter(Boolean).join("  ·  ")
-              if (!label) return null
-              return (
-                <div className="flex gap-1.5">
-                  <span className="text-violet-400 font-medium text-xs w-10 shrink-0">策略</span>
-                  <span className="text-xs text-foreground/80 leading-tight">{label}</span>
-                </div>
-              )
-            } catch { return null }
-          })()}
-          {/* 催化剂 — 始终显示 */}
-          <div className="flex gap-1.5">
-            <span className="text-yellow-500/80 font-medium text-xs w-10 shrink-0">催化剂</span>
-            {setup.newsType ? (
-              <span className={cn(
-                "text-xs leading-tight",
-                setup.newsImpact === "BULLISH" && "text-green-400",
-                setup.newsImpact === "BEARISH" && "text-red-400",
-                setup.newsImpact === "NEUTRAL" && "text-muted-foreground",
-                setup.newsImpact === "UNCERTAIN" && "text-yellow-400",
-                !setup.newsImpact && "text-foreground/80",
-              )}>
-                {NEWS_TYPE_LABELS[setup.newsType as NewsType]}
-                {setup.newsImpact && setup.newsType !== "TECHNICAL" && (
-                  <span className="ml-1 opacity-90">· {NEWS_IMPACT_LABELS[setup.newsImpact as NewsImpact]}</span>
-                )}
-                {setup.newsHeadline && (
-                  <span className="text-yellow-500/60 ml-1">— {setup.newsHeadline}</span>
-                )}
-              </span>
-            ) : (
-              <span className="text-xs text-muted-foreground">无</span>
-            )}
-          </div>
-        </div>
-
-        {/* ── 盘前计划 ── */}
-        {(setup.setupLogic ?? setup.entryCondition ?? setup.stopCondition ?? setup.target1Condition ?? setup.newsHeadline) && (
-          <div className="space-y-1.5">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">盘前计划</p>
-            {setup.newsHeadline && (
-              <p className="text-xs text-yellow-500/90">📰 {setup.newsHeadline}</p>
-            )}
-            {setup.setupLogic && (
-              <p className="text-xs text-foreground/70 leading-relaxed">{setup.setupLogic}</p>
-            )}
-            <div className="space-y-1">
-              {setup.entryCondition && (
-                <div className="flex gap-2">
-                  <span className="text-green-500 font-medium text-xs w-10 shrink-0">入场</span>
-                  <span className="text-xs text-foreground/80">
-                    {setup.entryCondition}
-                    {setup.entryPriceNote && <span className="text-muted-foreground ml-1">({setup.entryPriceNote})</span>}
-                  </span>
-                </div>
-              )}
-              {(setup.stopCondition ?? setup.stopPriceNote) && (
-                <div className="flex gap-2">
-                  <span className="text-red-500 font-medium text-xs w-10 shrink-0">止损</span>
-                  <span className="text-xs text-foreground/80">
-                    {setup.stopCondition ?? ""}
-                    {setup.stopPriceNote && <span className="text-muted-foreground ml-1">({setup.stopPriceNote})</span>}
-                  </span>
-                </div>
-              )}
-              {(setup.target1Condition ?? setup.target1PriceNote) && (
-                <div className="flex gap-2">
-                  <span className="text-blue-400 font-medium text-xs w-10 shrink-0">目标1</span>
-                  <span className="text-xs text-foreground/80">
-                    {setup.target1Condition ?? ""}
-                    {setup.target1PriceNote && <span className="text-muted-foreground ml-1">({setup.target1PriceNote})</span>}
-                  </span>
-                </div>
-              )}
-              {(setup.target2Condition ?? (setup as unknown as { target2PriceNote?: string }).target2PriceNote) && (
-                <div className="flex gap-2">
-                  <span className="text-blue-400/70 font-medium text-xs w-10 shrink-0">目标2</span>
-                  <span className="text-xs text-foreground/70">
-                    {setup.target2Condition ?? ""}
-                    {(setup as unknown as { target2PriceNote?: string }).target2PriceNote && (
-                      <span className="text-muted-foreground ml-1">({(setup as unknown as { target2PriceNote?: string }).target2PriceNote})</span>
-                    )}
-                  </span>
-                </div>
-              )}
-              {(setup.plannedRiskReward ?? setup.plannedSize) && (
-                <div className="flex gap-3 text-xs text-muted-foreground mt-0.5">
-                  {setup.plannedRiskReward && <span>计划R: {setup.plannedRiskReward}R</span>}
-                  {setup.plannedSize && <span>仓位: {setup.plannedSize}股</span>}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* ── 盘中评估 ── */}
-        {(() => {
-          const s = setup as unknown as Record<string, unknown>
-          const mktJudge = s.marketJudgmentAccurate as boolean | null | undefined
-          const mktNote = s.marketJudgmentNote as string | undefined
-          const stratSel = s.strategySelectionAccurate as boolean | null | undefined
-          const stratNote = s.strategySelectionNote as string | undefined
-          const entryOpp = s.entryOpportunityAccurate as boolean | null | undefined
-          const entryNote = s.entryOpportunityNote as string | undefined
-          const exitOpp = s.exitOpportunityAccurate as boolean | null | undefined
-          const exitNote = s.exitOpportunityNote as string | undefined
-
-          const hasIntraData =
-            setup.stockSelectionAccurate !== null ||
-            mktJudge !== null && mktJudge !== undefined ||
-            stratSel !== null && stratSel !== undefined ||
-            entryOpp !== null && entryOpp !== undefined ||
-            exitOpp !== null && exitOpp !== undefined ||
-            setup.actualEntryOpportunity ||
-            setup.actualExitOpportunity ||
-            setup.dailySummary ||
-            setup.status === "MISSED"
-
-          if (!hasIntraData) return null
-
-          const judgmentItems = [
-            { label: "行情", val: mktJudge, note: mktNote },
-            { label: "策略", val: stratSel, note: stratNote },
-            { label: "入场", val: entryOpp, note: entryNote },
-            { label: "出场", val: exitOpp, note: exitNote },
-          ]
-
-          return (
-            <>
-              <Separator />
-              <div className="space-y-1.5">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">盘中记录</p>
-
-                {/* 评估徽章行 */}
-                <div className="flex gap-1.5 flex-wrap">
-                  {setup.stockSelectionAccurate !== null && (
-                    <Badge
-                      variant="outline"
-                      className={cn("text-xs py-0", setup.stockSelectionAccurate
-                        ? "border-green-700 text-green-400"
-                        : "border-red-700 text-red-400")}
-                    >
-                      选股 {setup.stockSelectionAccurate ? "✓" : "✗"}
-                    </Badge>
-                  )}
-                  {judgmentItems.map(({ label, val }) =>
-                    val !== null && val !== undefined ? (
-                      <Badge
-                        key={label}
-                        variant="outline"
-                        className={cn("text-xs py-0", val
-                          ? "border-green-700 text-green-400"
-                          : "border-orange-700 text-orange-400")}
-                      >
-                        {label} {val ? "✓" : "✗"}
-                      </Badge>
-                    ) : null
-                  )}
-                </div>
-
-                {/* 失误说明 */}
-                {setup.stockSelectionAccurate === false && setup.stockSelectionNote && (
-                  <p className="text-xs text-red-400/80">
-                    <span className="font-medium">选股失误：</span>{setup.stockSelectionNote}
-                  </p>
-                )}
-                {judgmentItems.map(({ label, val, note }) =>
-                  val === false && note ? (
-                    <p key={label} className="text-xs text-orange-400/80">
-                      <span className="font-medium">{label}失误：</span>{note}
-                    </p>
-                  ) : null
-                )}
-
-                {setup.actualEntryOpportunity && (
-                  <p className="text-xs text-foreground/80">
-                    <span className="text-green-500 font-medium">实际入场：</span>{setup.actualEntryOpportunity}
-                  </p>
-                )}
-                {setup.actualExitOpportunity && (
-                  <p className="text-xs text-foreground/80">
-                    <span className="text-blue-400 font-medium">实际出场：</span>{setup.actualExitOpportunity}
-                  </p>
-                )}
-                {setup.dailySummary && (
-                  <p className="text-xs text-foreground/80 leading-relaxed">
-                    <span className="font-medium text-muted-foreground">标的总结：</span>{setup.dailySummary}
-                  </p>
-                )}
-
-              </div>
-            </>
-          )
-        })()}
-
-        {/* ── 错过记录 ── */}
-        {setup.status === "MISSED" && (
-          <>
-            <Separator />
-            <div className="space-y-1.5">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">错过记录</p>
-              <div className="text-xs space-y-0.5 pl-2 border-l-2 border-orange-800/50">
-                {setup.missedReason && (
-                  <p className="text-foreground/80">
-                    <span className="text-orange-400 font-medium">原因：</span>
-                    {MISSED_REASON_LABELS[setup.missedReason as MissedReason]}
-                  </p>
-                )}
-                {setup.missedNotes && (
-                  <p className="text-muted-foreground">{setup.missedNotes}</p>
-                )}
-                {setup.missedHypoPnL !== null && setup.missedHypoPnL !== undefined && (
-                  <p className={cn("font-semibold", setup.missedHypoPnL >= 0 ? "text-green-400" : "text-red-400")}>
-                    假设盈亏：{formatPnL(setup.missedHypoPnL)}
-                  </p>
-                )}
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* ── 执行记录 ── */}
-        {setup.executions.length > 0 && (
-          <>
-            <Separator />
-            <div className="space-y-1.5">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                执行记录（{setup.executions.length} 笔）
-              </p>
-              {setup.executions.map((ex, i) => (
-                <div key={ex.id} className="text-xs space-y-0.5 pl-2 border-l-2 border-primary/30">
-                  <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-foreground/80">
-                    <span className="font-medium text-muted-foreground">第{i + 1}笔</span>
-                    <span>入场 <strong>${ex.entryPrice}</strong> × {ex.quantity}股</span>
-                    {ex.entryTime && (
-                      <span className="text-muted-foreground">
-                        {new Date(ex.entryTime).toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}
-                      </span>
-                    )}
-                    {ex.exitPrice && <span>出场 <strong>${ex.exitPrice}</strong></span>}
-                    {ex.exitTime && (
-                      <span className="text-muted-foreground">
-                        {new Date(ex.exitTime).toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}
-                      </span>
-                    )}
-                    {ex.pnl !== null && (
-                      <span className={cn("font-semibold", ex.pnl >= 0 ? "text-green-400" : "text-red-400")}>
-                        {formatPnL(ex.pnl)}
-                      </span>
-                    )}
-                  </div>
-                  {(ex.entryConditionMet !== null || ex.exitConditionMet !== null) && (
-                    <div className="flex gap-2 flex-wrap">
-                      {ex.entryConditionMet !== null && (
-                        <span className={cn("text-[10px]", ex.entryConditionMet ? "text-green-400" : "text-red-400")}>
-                          入场条件{ex.entryConditionMet ? "✓ 满足" : "✗ 未满足"}
-                        </span>
-                      )}
-                      {ex.exitConditionMet !== null && (
-                        <span className={cn("text-[10px]", ex.exitConditionMet ? "text-green-400" : "text-orange-400")}>
-                          出场条件{ex.exitConditionMet ? "✓ 满足" : "✗ 未满足"}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                  {ex.entryConditionNotes && (
-                    <p className="text-[10px] text-muted-foreground">
-                      <span className="text-red-400/70">入场：</span>{ex.entryConditionNotes}
-                    </p>
-                  )}
-                  {ex.exitConditionNotes && (
-                    <p className="text-[10px] text-muted-foreground">
-                      <span className="text-orange-400/70">出场：</span>{ex.exitConditionNotes}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* ── 截图 ── */}
-        {allScreenshots.length > 0 && (
-          <>
-            <Separator />
-            <ScreenshotGrid screenshots={allScreenshots} title="截图记录" />
-          </>
-        )}
-      </CardContent>
-    </Card>
-  )
-}
 
 // ── 主组件 ────────────────────────────────────────────────────────────
 export function DailySummarySection({ session }: Props) {
@@ -667,7 +270,18 @@ export function DailySummarySection({ session }: Props) {
             </span>
           </div>
           {session.setups.map((setup) => (
-            <SetupSummaryCard key={setup.id} setup={setup} />
+            <div key={setup.id} className="space-y-0">
+              <SetupCard
+                setup={setup}
+                intraMode={true}
+                mnqPlan={setup.symbol === "MNQ" ? session.mnqPlan : null}
+              />
+              {setup.screenshots.length > 0 && (
+                <div className="px-4 pb-3 -mt-1">
+                  <ScreenshotGrid screenshots={setup.screenshots} title="Setup 截图" />
+                </div>
+              )}
+            </div>
           ))}
         </div>
       )}

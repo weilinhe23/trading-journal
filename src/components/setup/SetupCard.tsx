@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import {
   MoreHorizontal, CheckCircle, XCircle, Ban, Eye, Plus,
-  ThumbsUp, ThumbsDown, Undo2, ChevronDown, ChevronUp, Save, Check,
+  ThumbsUp, ThumbsDown, Undo2, ChevronDown, ChevronUp, Save, Check, Pencil, X,
 } from "lucide-react"
 import { Card, CardContent, CardHeader } from "~/components/ui/card"
 import { Badge } from "~/components/ui/badge"
@@ -30,11 +30,14 @@ import { MissedReasonPanel } from "./MissedReasonPanel"
 import { AddExecutionDialog } from "./AddExecutionDialog"
 import { ExecutionRecord } from "./ExecutionRecord"
 import { IntraStrategySelector } from "./IntraStrategySelector"
-import type { Execution, TradeSetup } from "../../../generated/prisma"
+import { MnqConditionsBlock } from "./MnqConditionsBlock"
+import { MnqActTracker } from "./MnqActTracker"
+import type { Execution, MnqDailyPlan, TradeSetup } from "../../../generated/prisma"
 
 interface Props {
   setup: TradeSetup & { executions: Execution[] }
   intraMode?: boolean
+  mnqPlan?: MnqDailyPlan | null
   onDeleted?: (id: string) => void
   onStatusChanged?: (id: string, status: SetupStatus) => void
 }
@@ -64,7 +67,7 @@ const PRIORITY_BADGE_CONFIG: Record<SetupPriority, { label: string; className: s
 
 const CHART_TIMEFRAME_OPTIONS: ChartTimeframe[] = ["M1", "M5", "M15", "M30", "H1", "H4", "D1"]
 
-export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged }: Props) {
+export function SetupCard({ setup, intraMode = false, mnqPlan, onDeleted, onStatusChanged }: Props) {
   const router = useRouter()
   const [showDelete, setShowDelete] = useState(false)
   const [showMissPanel, setShowMissPanel] = useState(false)
@@ -108,6 +111,14 @@ export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged
   const [chartTimeframe, setChartTimeframe] = useState<ChartTimeframe | null>(
     (s.chartTimeframe as ChartTimeframe | null | undefined) ?? null,
   )
+
+  // ── 可编辑条件 ──
+  const [editingConds, setEditingConds] = useState(false)
+  const [editSetupLogic, setEditSetupLogic] = useState(setup.setupLogic ?? "")
+  const [editEntry, setEditEntry] = useState(setup.entryCondition ?? "")
+  const [editStop, setEditStop] = useState(setup.stopCondition ?? "")
+  const [editTarget1, setEditTarget1] = useState(setup.target1Condition ?? "")
+  const [condsSaving, setCondsSaving] = useState(false)
 
   const statusCfg = STATUS_CONFIG[setup.status as SetupStatus]
   const dirCfg = DIRECTION_CONFIG[setup.direction] ?? DIRECTION_CONFIG["TBD"]!
@@ -154,6 +165,34 @@ export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged
     } finally {
       setDeleting(false)
       setShowDelete(false)
+    }
+  }
+
+  async function handleSaveConditions() {
+    setCondsSaving(true)
+    try {
+      const res = await fetch(`/api/sessions/${dateStr}/setups/${setup.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          setupLogic: editSetupLogic || null,
+          entryCondition: editEntry || null,
+          stopCondition: editStop || null,
+          target1Condition: editTarget1 || null,
+        }),
+      })
+      const json = (await res.json()) as { success: boolean }
+      if (json.success) {
+        toast.success("条件已保存")
+        setEditingConds(false)
+        router.refresh()
+      } else {
+        toast.error("保存失败")
+      }
+    } catch {
+      toast.error("网络错误")
+    } finally {
+      setCondsSaving(false)
     }
   }
 
@@ -557,57 +596,154 @@ export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged
               <span className="text-xs text-muted-foreground">无</span>
             )}
           </div>
-          {setup.setupLogic && (
-            <p className="text-muted-foreground text-xs line-clamp-2">{setup.setupLogic}</p>
+          {/* MNQ 情景条件块（仅 MNQ setup 显示，替代 setupLogic） */}
+          {mnqPlan ? (
+            <>
+              <MnqConditionsBlock
+                plan={mnqPlan}
+                date={dateStr}
+                intraMode={intraMode}
+              />
+              {/* 四幕剧决策记录（仅常规趋势日 + 盘中模式） */}
+              {intraMode && mnqPlan.scenario === "TREND_REGULAR" && (
+                <MnqActTracker plan={mnqPlan} date={dateStr} />
+              )}
+            </>
+          ) : (
+            !editingConds && editSetupLogic && (
+              <p className="text-muted-foreground text-xs line-clamp-2">{editSetupLogic}</p>
+            )
           )}
 
-          {/* 三行条件 */}
+          {/* 三行条件 — 查看 or 编辑 */}
           <div className="space-y-1">
-            {setup.entryCondition && (
-              <div className="flex gap-1.5">
-                <span className="text-green-500 font-medium text-xs w-8 shrink-0">入场</span>
-                <span className="text-xs text-foreground/80 leading-tight">
-                  {setup.entryCondition}
-                  {setup.entryPriceNote && (
-                    <span className="text-muted-foreground ml-1">({setup.entryPriceNote})</span>
-                  )}
-                </span>
+            {editingConds ? (
+              /* 编辑模式 */
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-1 mb-1">
+                  <span className="text-xs text-muted-foreground font-medium">编辑条件</span>
+                </div>
+                {!mnqPlan && (
+                  <div className="space-y-0.5">
+                    <Label className="text-[10px] text-muted-foreground">逻辑说明</Label>
+                    <Textarea
+                      value={editSetupLogic}
+                      onChange={(e) => setEditSetupLogic(e.target.value)}
+                      placeholder="Setup 逻辑说明..."
+                      rows={2}
+                      className="text-xs resize-none"
+                    />
+                  </div>
+                )}
+                <div className="space-y-0.5">
+                  <Label className="text-[10px] text-green-500">入场条件</Label>
+                  <Textarea
+                    value={editEntry}
+                    onChange={(e) => setEditEntry(e.target.value)}
+                    placeholder="入场条件..."
+                    rows={2}
+                    className="text-xs resize-none"
+                  />
+                </div>
+                <div className="space-y-0.5">
+                  <Label className="text-[10px] text-red-500">止损条件</Label>
+                  <Textarea
+                    value={editStop}
+                    onChange={(e) => setEditStop(e.target.value)}
+                    placeholder="止损条件..."
+                    rows={2}
+                    className="text-xs resize-none"
+                  />
+                </div>
+                <div className="space-y-0.5">
+                  <Label className="text-[10px] text-blue-400">目标条件</Label>
+                  <Textarea
+                    value={editTarget1}
+                    onChange={(e) => setEditTarget1(e.target.value)}
+                    placeholder="目标条件..."
+                    rows={2}
+                    className="text-xs resize-none"
+                  />
+                </div>
+                <div className="flex gap-1.5 pt-0.5">
+                  <Button
+                    size="sm"
+                    className="h-6 text-xs gap-1"
+                    onClick={handleSaveConditions}
+                    disabled={condsSaving}
+                  >
+                    <Save className="h-3 w-3" />
+                    {condsSaving ? "保存中..." : "保存"}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-6 text-xs gap-1 text-muted-foreground"
+                    onClick={() => setEditingConds(false)}
+                    disabled={condsSaving}
+                  >
+                    <X className="h-3 w-3" />取消
+                  </Button>
+                </div>
               </div>
-            )}
-            {(setup.stopCondition ?? setup.stopPriceNote) && (
-              <div className="flex gap-1.5">
-                <span className="text-red-500 font-medium text-xs w-8 shrink-0">止损</span>
-                <span className="text-xs text-foreground/80 leading-tight">
-                  {setup.stopCondition ?? ""}
-                  {setup.stopPriceNote && (
-                    <span className="text-muted-foreground ml-1">({setup.stopPriceNote})</span>
-                  )}
-                </span>
-              </div>
-            )}
-            {(setup.target1Condition ?? setup.target1PriceNote) && (
-              <div className="flex gap-1.5">
-                <span className="text-blue-400 font-medium text-xs w-8 shrink-0">目标1</span>
-                <span className="text-xs text-foreground/80 leading-tight">
-                  {setup.target1Condition ?? ""}
-                  {setup.target1PriceNote && (
-                    <span className="text-muted-foreground ml-1">({setup.target1PriceNote})</span>
-                  )}
-                </span>
-              </div>
-            )}
-            {(setup.target2Condition ?? (setup as unknown as { target2PriceNote?: string }).target2PriceNote) && (
-              <div className="flex gap-1.5">
-                <span className="text-blue-400/70 font-medium text-xs w-8 shrink-0">目标2</span>
-                <span className="text-xs text-foreground/70 leading-tight">
-                  {setup.target2Condition ?? ""}
-                  {(setup as unknown as { target2PriceNote?: string }).target2PriceNote && (
-                    <span className="text-muted-foreground ml-1">
-                      ({(setup as unknown as { target2PriceNote?: string }).target2PriceNote})
+            ) : (
+              /* 查看模式 */
+              <>
+                {editEntry && (
+                  <div className="flex gap-1.5">
+                    <span className="text-green-500 font-medium text-xs w-8 shrink-0">入场</span>
+                    <span className="text-xs text-foreground/80 leading-tight">
+                      {editEntry}
+                      {setup.entryPriceNote && (
+                        <span className="text-muted-foreground ml-1">({setup.entryPriceNote})</span>
+                      )}
                     </span>
-                  )}
-                </span>
-              </div>
+                  </div>
+                )}
+                {(editStop || setup.stopPriceNote) && (
+                  <div className="flex gap-1.5">
+                    <span className="text-red-500 font-medium text-xs w-8 shrink-0">止损</span>
+                    <span className="text-xs text-foreground/80 leading-tight">
+                      {editStop}
+                      {setup.stopPriceNote && (
+                        <span className="text-muted-foreground ml-1">({setup.stopPriceNote})</span>
+                      )}
+                    </span>
+                  </div>
+                )}
+                {(editTarget1 || setup.target1PriceNote) && (
+                  <div className="flex gap-1.5">
+                    <span className="text-blue-400 font-medium text-xs w-8 shrink-0">目标1</span>
+                    <span className="text-xs text-foreground/80 leading-tight">
+                      {editTarget1}
+                      {setup.target1PriceNote && (
+                        <span className="text-muted-foreground ml-1">({setup.target1PriceNote})</span>
+                      )}
+                    </span>
+                  </div>
+                )}
+                {(setup.target2Condition ?? (setup as unknown as { target2PriceNote?: string }).target2PriceNote) && (
+                  <div className="flex gap-1.5">
+                    <span className="text-blue-400/70 font-medium text-xs w-8 shrink-0">目标2</span>
+                    <span className="text-xs text-foreground/70 leading-tight">
+                      {setup.target2Condition ?? ""}
+                      {(setup as unknown as { target2PriceNote?: string }).target2PriceNote && (
+                        <span className="text-muted-foreground ml-1">
+                          ({(setup as unknown as { target2PriceNote?: string }).target2PriceNote})
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                )}
+                {/* 编辑条件按钮 */}
+                <button
+                  type="button"
+                  onClick={() => setEditingConds(true)}
+                  className="flex items-center gap-1 text-[10px] text-muted-foreground/50 hover:text-muted-foreground transition-colors mt-0.5"
+                >
+                  <Pencil className="h-2.5 w-2.5" />编辑条件
+                </button>
+              </>
             )}
           </div>
 
@@ -658,6 +794,29 @@ export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged
                   />
                 ))}
               </div>
+            </>
+          )}
+
+          {/* 盘中评估区域（可折叠） */}
+          {intraMode && (
+            <>
+              <Separator className="my-1.5" />
+              <button
+                onClick={() => setShowIntraEval((v) => !v)}
+                className="flex w-full items-center justify-between text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <span className="font-medium flex items-center gap-1.5">
+                  盘中评估
+                  {hasIntraData && !intraSaved && (
+                    <span className="text-yellow-500 text-[10px]">● 未保存</span>
+                  )}
+                </span>
+                {showIntraEval
+                  ? <ChevronUp className="h-3 w-3" />
+                  : <ChevronDown className="h-3 w-3" />
+                }
+              </button>
+              {showIntraEval && renderIntraEvalSection()}
             </>
           )}
 
@@ -734,29 +893,6 @@ export function SetupCard({ setup, intraMode = false, onDeleted, onStatusChanged
                   } catch { return [] }
                 })()}
               />
-            </>
-          )}
-
-          {/* 盘中评估区域（可折叠） */}
-          {intraMode && (
-            <>
-              <Separator className="my-1.5" />
-              <button
-                onClick={() => setShowIntraEval((v) => !v)}
-                className="flex w-full items-center justify-between text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <span className="font-medium flex items-center gap-1.5">
-                  盘中评估
-                  {hasIntraData && !intraSaved && (
-                    <span className="text-yellow-500 text-[10px]">● 未保存</span>
-                  )}
-                </span>
-                {showIntraEval
-                  ? <ChevronUp className="h-3 w-3" />
-                  : <ChevronDown className="h-3 w-3" />
-                }
-              </button>
-              {showIntraEval && renderIntraEvalSection()}
             </>
           )}
         </CardContent>

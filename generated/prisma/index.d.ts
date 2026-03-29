@@ -63,6 +63,11 @@ export type MissedReasonOption = $Result.DefaultSelection<Prisma.$MissedReasonOp
  * 
  */
 export type Screenshot = $Result.DefaultSelection<Prisma.$ScreenshotPayload>
+/**
+ * Model MnqDailyPlan
+ * 
+ */
+export type MnqDailyPlan = $Result.DefaultSelection<Prisma.$MnqDailyPlanPayload>
 
 /**
  * Enums
@@ -181,6 +186,16 @@ export const ChartTag: {
 
 export type ChartTag = (typeof ChartTag)[keyof typeof ChartTag]
 
+
+export const MnqScenario: {
+  RANGE_SWEEP: 'RANGE_SWEEP',
+  TREND_REGULAR: 'TREND_REGULAR',
+  TREND_GAP_FADE: 'TREND_GAP_FADE',
+  TREND_GAP_HOLD: 'TREND_GAP_HOLD'
+};
+
+export type MnqScenario = (typeof MnqScenario)[keyof typeof MnqScenario]
+
 }
 
 export type Direction = $Enums.Direction
@@ -226,6 +241,10 @@ export const NewsStrength: typeof $Enums.NewsStrength
 export type ChartTag = $Enums.ChartTag
 
 export const ChartTag: typeof $Enums.ChartTag
+
+export type MnqScenario = $Enums.MnqScenario
+
+export const MnqScenario: typeof $Enums.MnqScenario
 
 /**
  * ##  Prisma Client ʲˢ
@@ -444,6 +463,16 @@ export class PrismaClient<
     * ```
     */
   get screenshot(): Prisma.ScreenshotDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mnqDailyPlan`: Exposes CRUD operations for the **MnqDailyPlan** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MnqDailyPlans
+    * const mnqDailyPlans = await prisma.mnqDailyPlan.findMany()
+    * ```
+    */
+  get mnqDailyPlan(): Prisma.MnqDailyPlanDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -894,7 +923,8 @@ export namespace Prisma {
     Execution: 'Execution',
     WeeklyReport: 'WeeklyReport',
     MissedReasonOption: 'MissedReasonOption',
-    Screenshot: 'Screenshot'
+    Screenshot: 'Screenshot',
+    MnqDailyPlan: 'MnqDailyPlan'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -913,7 +943,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "newsCatalog" | "strategy" | "tradeType" | "dailySession" | "newsEvent" | "tradeSetup" | "execution" | "weeklyReport" | "missedReasonOption" | "screenshot"
+      modelProps: "newsCatalog" | "strategy" | "tradeType" | "dailySession" | "newsEvent" | "tradeSetup" | "execution" | "weeklyReport" | "missedReasonOption" | "screenshot" | "mnqDailyPlan"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1657,6 +1687,80 @@ export namespace Prisma {
           }
         }
       }
+      MnqDailyPlan: {
+        payload: Prisma.$MnqDailyPlanPayload<ExtArgs>
+        fields: Prisma.MnqDailyPlanFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MnqDailyPlanFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MnqDailyPlanPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MnqDailyPlanFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MnqDailyPlanPayload>
+          }
+          findFirst: {
+            args: Prisma.MnqDailyPlanFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MnqDailyPlanPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MnqDailyPlanFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MnqDailyPlanPayload>
+          }
+          findMany: {
+            args: Prisma.MnqDailyPlanFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MnqDailyPlanPayload>[]
+          }
+          create: {
+            args: Prisma.MnqDailyPlanCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MnqDailyPlanPayload>
+          }
+          createMany: {
+            args: Prisma.MnqDailyPlanCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MnqDailyPlanCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MnqDailyPlanPayload>[]
+          }
+          delete: {
+            args: Prisma.MnqDailyPlanDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MnqDailyPlanPayload>
+          }
+          update: {
+            args: Prisma.MnqDailyPlanUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MnqDailyPlanPayload>
+          }
+          deleteMany: {
+            args: Prisma.MnqDailyPlanDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MnqDailyPlanUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MnqDailyPlanUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MnqDailyPlanPayload>[]
+          }
+          upsert: {
+            args: Prisma.MnqDailyPlanUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MnqDailyPlanPayload>
+          }
+          aggregate: {
+            args: Prisma.MnqDailyPlanAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMnqDailyPlan>
+          }
+          groupBy: {
+            args: Prisma.MnqDailyPlanGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MnqDailyPlanGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MnqDailyPlanCountArgs<ExtArgs>
+            result: $Utils.Optional<MnqDailyPlanCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1763,6 +1867,7 @@ export namespace Prisma {
     weeklyReport?: WeeklyReportOmit
     missedReasonOption?: MissedReasonOptionOmit
     screenshot?: ScreenshotOmit
+    mnqDailyPlan?: MnqDailyPlanOmit
   }
 
   /* Types for Logging */
@@ -5662,6 +5767,7 @@ export namespace Prisma {
     newsEvents?: boolean | DailySession$newsEventsArgs<ExtArgs>
     setups?: boolean | DailySession$setupsArgs<ExtArgs>
     screenshots?: boolean | DailySession$screenshotsArgs<ExtArgs>
+    mnqPlan?: boolean | DailySession$mnqPlanArgs<ExtArgs>
     _count?: boolean | DailySessionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["dailySession"]>
 
@@ -5715,6 +5821,7 @@ export namespace Prisma {
     newsEvents?: boolean | DailySession$newsEventsArgs<ExtArgs>
     setups?: boolean | DailySession$setupsArgs<ExtArgs>
     screenshots?: boolean | DailySession$screenshotsArgs<ExtArgs>
+    mnqPlan?: boolean | DailySession$mnqPlanArgs<ExtArgs>
     _count?: boolean | DailySessionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DailySessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5726,6 +5833,7 @@ export namespace Prisma {
       newsEvents: Prisma.$NewsEventPayload<ExtArgs>[]
       setups: Prisma.$TradeSetupPayload<ExtArgs>[]
       screenshots: Prisma.$ScreenshotPayload<ExtArgs>[]
+      mnqPlan: Prisma.$MnqDailyPlanPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       date: Date
@@ -6137,6 +6245,7 @@ export namespace Prisma {
     newsEvents<T extends DailySession$newsEventsArgs<ExtArgs> = {}>(args?: Subset<T, DailySession$newsEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NewsEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     setups<T extends DailySession$setupsArgs<ExtArgs> = {}>(args?: Subset<T, DailySession$setupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradeSetupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     screenshots<T extends DailySession$screenshotsArgs<ExtArgs> = {}>(args?: Subset<T, DailySession$screenshotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mnqPlan<T extends DailySession$mnqPlanArgs<ExtArgs> = {}>(args?: Subset<T, DailySession$mnqPlanArgs<ExtArgs>>): Prisma__MnqDailyPlanClient<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6633,6 +6742,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ScreenshotScalarFieldEnum | ScreenshotScalarFieldEnum[]
+  }
+
+  /**
+   * DailySession.mnqPlan
+   */
+  export type DailySession$mnqPlanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanInclude<ExtArgs> | null
+    where?: MnqDailyPlanWhereInput
   }
 
   /**
@@ -14349,6 +14477,1413 @@ export namespace Prisma {
 
 
   /**
+   * Model MnqDailyPlan
+   */
+
+  export type AggregateMnqDailyPlan = {
+    _count: MnqDailyPlanCountAggregateOutputType | null
+    _min: MnqDailyPlanMinAggregateOutputType | null
+    _max: MnqDailyPlanMaxAggregateOutputType | null
+  }
+
+  export type MnqDailyPlanMinAggregateOutputType = {
+    id: string | null
+    sessionDate: Date | null
+    scenario: $Enums.MnqScenario | null
+    sweepUpBand: string | null
+    sweepDownBand: string | null
+    hasNewsGap: boolean | null
+    gapCanHold: boolean | null
+    condRangeMovingOver1h: boolean | null
+    condRangeVwapFlat: boolean | null
+    condRangeNoMajorNews: boolean | null
+    condRangePrevTrend: boolean | null
+    condTrendSingleDir: boolean | null
+    condTrendVwapTilted: boolean | null
+    condFadeNewsWeak: boolean | null
+    condHoldNewsReal: boolean | null
+    evalRangeMovingOver1h: boolean | null
+    evalRangeVwapFlat: boolean | null
+    evalRangeNoMajorNews: boolean | null
+    evalRangePrevTrend: boolean | null
+    evalTrendSingleDir: boolean | null
+    evalTrendVwapTilted: boolean | null
+    evalFadeNewsWeak: boolean | null
+    evalHoldNewsReal: boolean | null
+    evalUpBand: boolean | null
+    evalDownBand: boolean | null
+    evalNotesJson: string | null
+    customConditionsJson: string | null
+    customBandsJson: string | null
+    actCheckpointsJson: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MnqDailyPlanMaxAggregateOutputType = {
+    id: string | null
+    sessionDate: Date | null
+    scenario: $Enums.MnqScenario | null
+    sweepUpBand: string | null
+    sweepDownBand: string | null
+    hasNewsGap: boolean | null
+    gapCanHold: boolean | null
+    condRangeMovingOver1h: boolean | null
+    condRangeVwapFlat: boolean | null
+    condRangeNoMajorNews: boolean | null
+    condRangePrevTrend: boolean | null
+    condTrendSingleDir: boolean | null
+    condTrendVwapTilted: boolean | null
+    condFadeNewsWeak: boolean | null
+    condHoldNewsReal: boolean | null
+    evalRangeMovingOver1h: boolean | null
+    evalRangeVwapFlat: boolean | null
+    evalRangeNoMajorNews: boolean | null
+    evalRangePrevTrend: boolean | null
+    evalTrendSingleDir: boolean | null
+    evalTrendVwapTilted: boolean | null
+    evalFadeNewsWeak: boolean | null
+    evalHoldNewsReal: boolean | null
+    evalUpBand: boolean | null
+    evalDownBand: boolean | null
+    evalNotesJson: string | null
+    customConditionsJson: string | null
+    customBandsJson: string | null
+    actCheckpointsJson: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MnqDailyPlanCountAggregateOutputType = {
+    id: number
+    sessionDate: number
+    scenario: number
+    sweepUpBand: number
+    sweepDownBand: number
+    hasNewsGap: number
+    gapCanHold: number
+    condRangeMovingOver1h: number
+    condRangeVwapFlat: number
+    condRangeNoMajorNews: number
+    condRangePrevTrend: number
+    condTrendSingleDir: number
+    condTrendVwapTilted: number
+    condFadeNewsWeak: number
+    condHoldNewsReal: number
+    evalRangeMovingOver1h: number
+    evalRangeVwapFlat: number
+    evalRangeNoMajorNews: number
+    evalRangePrevTrend: number
+    evalTrendSingleDir: number
+    evalTrendVwapTilted: number
+    evalFadeNewsWeak: number
+    evalHoldNewsReal: number
+    evalUpBand: number
+    evalDownBand: number
+    evalNotesJson: number
+    customConditionsJson: number
+    customBandsJson: number
+    actCheckpointsJson: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MnqDailyPlanMinAggregateInputType = {
+    id?: true
+    sessionDate?: true
+    scenario?: true
+    sweepUpBand?: true
+    sweepDownBand?: true
+    hasNewsGap?: true
+    gapCanHold?: true
+    condRangeMovingOver1h?: true
+    condRangeVwapFlat?: true
+    condRangeNoMajorNews?: true
+    condRangePrevTrend?: true
+    condTrendSingleDir?: true
+    condTrendVwapTilted?: true
+    condFadeNewsWeak?: true
+    condHoldNewsReal?: true
+    evalRangeMovingOver1h?: true
+    evalRangeVwapFlat?: true
+    evalRangeNoMajorNews?: true
+    evalRangePrevTrend?: true
+    evalTrendSingleDir?: true
+    evalTrendVwapTilted?: true
+    evalFadeNewsWeak?: true
+    evalHoldNewsReal?: true
+    evalUpBand?: true
+    evalDownBand?: true
+    evalNotesJson?: true
+    customConditionsJson?: true
+    customBandsJson?: true
+    actCheckpointsJson?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MnqDailyPlanMaxAggregateInputType = {
+    id?: true
+    sessionDate?: true
+    scenario?: true
+    sweepUpBand?: true
+    sweepDownBand?: true
+    hasNewsGap?: true
+    gapCanHold?: true
+    condRangeMovingOver1h?: true
+    condRangeVwapFlat?: true
+    condRangeNoMajorNews?: true
+    condRangePrevTrend?: true
+    condTrendSingleDir?: true
+    condTrendVwapTilted?: true
+    condFadeNewsWeak?: true
+    condHoldNewsReal?: true
+    evalRangeMovingOver1h?: true
+    evalRangeVwapFlat?: true
+    evalRangeNoMajorNews?: true
+    evalRangePrevTrend?: true
+    evalTrendSingleDir?: true
+    evalTrendVwapTilted?: true
+    evalFadeNewsWeak?: true
+    evalHoldNewsReal?: true
+    evalUpBand?: true
+    evalDownBand?: true
+    evalNotesJson?: true
+    customConditionsJson?: true
+    customBandsJson?: true
+    actCheckpointsJson?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MnqDailyPlanCountAggregateInputType = {
+    id?: true
+    sessionDate?: true
+    scenario?: true
+    sweepUpBand?: true
+    sweepDownBand?: true
+    hasNewsGap?: true
+    gapCanHold?: true
+    condRangeMovingOver1h?: true
+    condRangeVwapFlat?: true
+    condRangeNoMajorNews?: true
+    condRangePrevTrend?: true
+    condTrendSingleDir?: true
+    condTrendVwapTilted?: true
+    condFadeNewsWeak?: true
+    condHoldNewsReal?: true
+    evalRangeMovingOver1h?: true
+    evalRangeVwapFlat?: true
+    evalRangeNoMajorNews?: true
+    evalRangePrevTrend?: true
+    evalTrendSingleDir?: true
+    evalTrendVwapTilted?: true
+    evalFadeNewsWeak?: true
+    evalHoldNewsReal?: true
+    evalUpBand?: true
+    evalDownBand?: true
+    evalNotesJson?: true
+    customConditionsJson?: true
+    customBandsJson?: true
+    actCheckpointsJson?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MnqDailyPlanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MnqDailyPlan to aggregate.
+     */
+    where?: MnqDailyPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MnqDailyPlans to fetch.
+     */
+    orderBy?: MnqDailyPlanOrderByWithRelationInput | MnqDailyPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MnqDailyPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MnqDailyPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MnqDailyPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MnqDailyPlans
+    **/
+    _count?: true | MnqDailyPlanCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MnqDailyPlanMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MnqDailyPlanMaxAggregateInputType
+  }
+
+  export type GetMnqDailyPlanAggregateType<T extends MnqDailyPlanAggregateArgs> = {
+        [P in keyof T & keyof AggregateMnqDailyPlan]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMnqDailyPlan[P]>
+      : GetScalarType<T[P], AggregateMnqDailyPlan[P]>
+  }
+
+
+
+
+  export type MnqDailyPlanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MnqDailyPlanWhereInput
+    orderBy?: MnqDailyPlanOrderByWithAggregationInput | MnqDailyPlanOrderByWithAggregationInput[]
+    by: MnqDailyPlanScalarFieldEnum[] | MnqDailyPlanScalarFieldEnum
+    having?: MnqDailyPlanScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MnqDailyPlanCountAggregateInputType | true
+    _min?: MnqDailyPlanMinAggregateInputType
+    _max?: MnqDailyPlanMaxAggregateInputType
+  }
+
+  export type MnqDailyPlanGroupByOutputType = {
+    id: string
+    sessionDate: Date
+    scenario: $Enums.MnqScenario | null
+    sweepUpBand: string | null
+    sweepDownBand: string | null
+    hasNewsGap: boolean
+    gapCanHold: boolean
+    condRangeMovingOver1h: boolean
+    condRangeVwapFlat: boolean
+    condRangeNoMajorNews: boolean
+    condRangePrevTrend: boolean
+    condTrendSingleDir: boolean
+    condTrendVwapTilted: boolean
+    condFadeNewsWeak: boolean
+    condHoldNewsReal: boolean
+    evalRangeMovingOver1h: boolean | null
+    evalRangeVwapFlat: boolean | null
+    evalRangeNoMajorNews: boolean | null
+    evalRangePrevTrend: boolean | null
+    evalTrendSingleDir: boolean | null
+    evalTrendVwapTilted: boolean | null
+    evalFadeNewsWeak: boolean | null
+    evalHoldNewsReal: boolean | null
+    evalUpBand: boolean | null
+    evalDownBand: boolean | null
+    evalNotesJson: string | null
+    customConditionsJson: string | null
+    customBandsJson: string | null
+    actCheckpointsJson: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: MnqDailyPlanCountAggregateOutputType | null
+    _min: MnqDailyPlanMinAggregateOutputType | null
+    _max: MnqDailyPlanMaxAggregateOutputType | null
+  }
+
+  type GetMnqDailyPlanGroupByPayload<T extends MnqDailyPlanGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MnqDailyPlanGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MnqDailyPlanGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MnqDailyPlanGroupByOutputType[P]>
+            : GetScalarType<T[P], MnqDailyPlanGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MnqDailyPlanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionDate?: boolean
+    scenario?: boolean
+    sweepUpBand?: boolean
+    sweepDownBand?: boolean
+    hasNewsGap?: boolean
+    gapCanHold?: boolean
+    condRangeMovingOver1h?: boolean
+    condRangeVwapFlat?: boolean
+    condRangeNoMajorNews?: boolean
+    condRangePrevTrend?: boolean
+    condTrendSingleDir?: boolean
+    condTrendVwapTilted?: boolean
+    condFadeNewsWeak?: boolean
+    condHoldNewsReal?: boolean
+    evalRangeMovingOver1h?: boolean
+    evalRangeVwapFlat?: boolean
+    evalRangeNoMajorNews?: boolean
+    evalRangePrevTrend?: boolean
+    evalTrendSingleDir?: boolean
+    evalTrendVwapTilted?: boolean
+    evalFadeNewsWeak?: boolean
+    evalHoldNewsReal?: boolean
+    evalUpBand?: boolean
+    evalDownBand?: boolean
+    evalNotesJson?: boolean
+    customConditionsJson?: boolean
+    customBandsJson?: boolean
+    actCheckpointsJson?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    session?: boolean | DailySessionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mnqDailyPlan"]>
+
+  export type MnqDailyPlanSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionDate?: boolean
+    scenario?: boolean
+    sweepUpBand?: boolean
+    sweepDownBand?: boolean
+    hasNewsGap?: boolean
+    gapCanHold?: boolean
+    condRangeMovingOver1h?: boolean
+    condRangeVwapFlat?: boolean
+    condRangeNoMajorNews?: boolean
+    condRangePrevTrend?: boolean
+    condTrendSingleDir?: boolean
+    condTrendVwapTilted?: boolean
+    condFadeNewsWeak?: boolean
+    condHoldNewsReal?: boolean
+    evalRangeMovingOver1h?: boolean
+    evalRangeVwapFlat?: boolean
+    evalRangeNoMajorNews?: boolean
+    evalRangePrevTrend?: boolean
+    evalTrendSingleDir?: boolean
+    evalTrendVwapTilted?: boolean
+    evalFadeNewsWeak?: boolean
+    evalHoldNewsReal?: boolean
+    evalUpBand?: boolean
+    evalDownBand?: boolean
+    evalNotesJson?: boolean
+    customConditionsJson?: boolean
+    customBandsJson?: boolean
+    actCheckpointsJson?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    session?: boolean | DailySessionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mnqDailyPlan"]>
+
+  export type MnqDailyPlanSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionDate?: boolean
+    scenario?: boolean
+    sweepUpBand?: boolean
+    sweepDownBand?: boolean
+    hasNewsGap?: boolean
+    gapCanHold?: boolean
+    condRangeMovingOver1h?: boolean
+    condRangeVwapFlat?: boolean
+    condRangeNoMajorNews?: boolean
+    condRangePrevTrend?: boolean
+    condTrendSingleDir?: boolean
+    condTrendVwapTilted?: boolean
+    condFadeNewsWeak?: boolean
+    condHoldNewsReal?: boolean
+    evalRangeMovingOver1h?: boolean
+    evalRangeVwapFlat?: boolean
+    evalRangeNoMajorNews?: boolean
+    evalRangePrevTrend?: boolean
+    evalTrendSingleDir?: boolean
+    evalTrendVwapTilted?: boolean
+    evalFadeNewsWeak?: boolean
+    evalHoldNewsReal?: boolean
+    evalUpBand?: boolean
+    evalDownBand?: boolean
+    evalNotesJson?: boolean
+    customConditionsJson?: boolean
+    customBandsJson?: boolean
+    actCheckpointsJson?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    session?: boolean | DailySessionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mnqDailyPlan"]>
+
+  export type MnqDailyPlanSelectScalar = {
+    id?: boolean
+    sessionDate?: boolean
+    scenario?: boolean
+    sweepUpBand?: boolean
+    sweepDownBand?: boolean
+    hasNewsGap?: boolean
+    gapCanHold?: boolean
+    condRangeMovingOver1h?: boolean
+    condRangeVwapFlat?: boolean
+    condRangeNoMajorNews?: boolean
+    condRangePrevTrend?: boolean
+    condTrendSingleDir?: boolean
+    condTrendVwapTilted?: boolean
+    condFadeNewsWeak?: boolean
+    condHoldNewsReal?: boolean
+    evalRangeMovingOver1h?: boolean
+    evalRangeVwapFlat?: boolean
+    evalRangeNoMajorNews?: boolean
+    evalRangePrevTrend?: boolean
+    evalTrendSingleDir?: boolean
+    evalTrendVwapTilted?: boolean
+    evalFadeNewsWeak?: boolean
+    evalHoldNewsReal?: boolean
+    evalUpBand?: boolean
+    evalDownBand?: boolean
+    evalNotesJson?: boolean
+    customConditionsJson?: boolean
+    customBandsJson?: boolean
+    actCheckpointsJson?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MnqDailyPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionDate" | "scenario" | "sweepUpBand" | "sweepDownBand" | "hasNewsGap" | "gapCanHold" | "condRangeMovingOver1h" | "condRangeVwapFlat" | "condRangeNoMajorNews" | "condRangePrevTrend" | "condTrendSingleDir" | "condTrendVwapTilted" | "condFadeNewsWeak" | "condHoldNewsReal" | "evalRangeMovingOver1h" | "evalRangeVwapFlat" | "evalRangeNoMajorNews" | "evalRangePrevTrend" | "evalTrendSingleDir" | "evalTrendVwapTilted" | "evalFadeNewsWeak" | "evalHoldNewsReal" | "evalUpBand" | "evalDownBand" | "evalNotesJson" | "customConditionsJson" | "customBandsJson" | "actCheckpointsJson" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["mnqDailyPlan"]>
+  export type MnqDailyPlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | DailySessionDefaultArgs<ExtArgs>
+  }
+  export type MnqDailyPlanIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | DailySessionDefaultArgs<ExtArgs>
+  }
+  export type MnqDailyPlanIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | DailySessionDefaultArgs<ExtArgs>
+  }
+
+  export type $MnqDailyPlanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MnqDailyPlan"
+    objects: {
+      session: Prisma.$DailySessionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      sessionDate: Date
+      scenario: $Enums.MnqScenario | null
+      sweepUpBand: string | null
+      sweepDownBand: string | null
+      hasNewsGap: boolean
+      gapCanHold: boolean
+      condRangeMovingOver1h: boolean
+      condRangeVwapFlat: boolean
+      condRangeNoMajorNews: boolean
+      condRangePrevTrend: boolean
+      condTrendSingleDir: boolean
+      condTrendVwapTilted: boolean
+      condFadeNewsWeak: boolean
+      condHoldNewsReal: boolean
+      evalRangeMovingOver1h: boolean | null
+      evalRangeVwapFlat: boolean | null
+      evalRangeNoMajorNews: boolean | null
+      evalRangePrevTrend: boolean | null
+      evalTrendSingleDir: boolean | null
+      evalTrendVwapTilted: boolean | null
+      evalFadeNewsWeak: boolean | null
+      evalHoldNewsReal: boolean | null
+      evalUpBand: boolean | null
+      evalDownBand: boolean | null
+      evalNotesJson: string | null
+      customConditionsJson: string | null
+      customBandsJson: string | null
+      actCheckpointsJson: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["mnqDailyPlan"]>
+    composites: {}
+  }
+
+  type MnqDailyPlanGetPayload<S extends boolean | null | undefined | MnqDailyPlanDefaultArgs> = $Result.GetResult<Prisma.$MnqDailyPlanPayload, S>
+
+  type MnqDailyPlanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MnqDailyPlanFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MnqDailyPlanCountAggregateInputType | true
+    }
+
+  export interface MnqDailyPlanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MnqDailyPlan'], meta: { name: 'MnqDailyPlan' } }
+    /**
+     * Find zero or one MnqDailyPlan that matches the filter.
+     * @param {MnqDailyPlanFindUniqueArgs} args - Arguments to find a MnqDailyPlan
+     * @example
+     * // Get one MnqDailyPlan
+     * const mnqDailyPlan = await prisma.mnqDailyPlan.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MnqDailyPlanFindUniqueArgs>(args: SelectSubset<T, MnqDailyPlanFindUniqueArgs<ExtArgs>>): Prisma__MnqDailyPlanClient<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MnqDailyPlan that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MnqDailyPlanFindUniqueOrThrowArgs} args - Arguments to find a MnqDailyPlan
+     * @example
+     * // Get one MnqDailyPlan
+     * const mnqDailyPlan = await prisma.mnqDailyPlan.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MnqDailyPlanFindUniqueOrThrowArgs>(args: SelectSubset<T, MnqDailyPlanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MnqDailyPlanClient<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MnqDailyPlan that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MnqDailyPlanFindFirstArgs} args - Arguments to find a MnqDailyPlan
+     * @example
+     * // Get one MnqDailyPlan
+     * const mnqDailyPlan = await prisma.mnqDailyPlan.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MnqDailyPlanFindFirstArgs>(args?: SelectSubset<T, MnqDailyPlanFindFirstArgs<ExtArgs>>): Prisma__MnqDailyPlanClient<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MnqDailyPlan that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MnqDailyPlanFindFirstOrThrowArgs} args - Arguments to find a MnqDailyPlan
+     * @example
+     * // Get one MnqDailyPlan
+     * const mnqDailyPlan = await prisma.mnqDailyPlan.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MnqDailyPlanFindFirstOrThrowArgs>(args?: SelectSubset<T, MnqDailyPlanFindFirstOrThrowArgs<ExtArgs>>): Prisma__MnqDailyPlanClient<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MnqDailyPlans that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MnqDailyPlanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MnqDailyPlans
+     * const mnqDailyPlans = await prisma.mnqDailyPlan.findMany()
+     * 
+     * // Get first 10 MnqDailyPlans
+     * const mnqDailyPlans = await prisma.mnqDailyPlan.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mnqDailyPlanWithIdOnly = await prisma.mnqDailyPlan.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MnqDailyPlanFindManyArgs>(args?: SelectSubset<T, MnqDailyPlanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MnqDailyPlan.
+     * @param {MnqDailyPlanCreateArgs} args - Arguments to create a MnqDailyPlan.
+     * @example
+     * // Create one MnqDailyPlan
+     * const MnqDailyPlan = await prisma.mnqDailyPlan.create({
+     *   data: {
+     *     // ... data to create a MnqDailyPlan
+     *   }
+     * })
+     * 
+     */
+    create<T extends MnqDailyPlanCreateArgs>(args: SelectSubset<T, MnqDailyPlanCreateArgs<ExtArgs>>): Prisma__MnqDailyPlanClient<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MnqDailyPlans.
+     * @param {MnqDailyPlanCreateManyArgs} args - Arguments to create many MnqDailyPlans.
+     * @example
+     * // Create many MnqDailyPlans
+     * const mnqDailyPlan = await prisma.mnqDailyPlan.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MnqDailyPlanCreateManyArgs>(args?: SelectSubset<T, MnqDailyPlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MnqDailyPlans and returns the data saved in the database.
+     * @param {MnqDailyPlanCreateManyAndReturnArgs} args - Arguments to create many MnqDailyPlans.
+     * @example
+     * // Create many MnqDailyPlans
+     * const mnqDailyPlan = await prisma.mnqDailyPlan.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MnqDailyPlans and only return the `id`
+     * const mnqDailyPlanWithIdOnly = await prisma.mnqDailyPlan.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MnqDailyPlanCreateManyAndReturnArgs>(args?: SelectSubset<T, MnqDailyPlanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MnqDailyPlan.
+     * @param {MnqDailyPlanDeleteArgs} args - Arguments to delete one MnqDailyPlan.
+     * @example
+     * // Delete one MnqDailyPlan
+     * const MnqDailyPlan = await prisma.mnqDailyPlan.delete({
+     *   where: {
+     *     // ... filter to delete one MnqDailyPlan
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MnqDailyPlanDeleteArgs>(args: SelectSubset<T, MnqDailyPlanDeleteArgs<ExtArgs>>): Prisma__MnqDailyPlanClient<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MnqDailyPlan.
+     * @param {MnqDailyPlanUpdateArgs} args - Arguments to update one MnqDailyPlan.
+     * @example
+     * // Update one MnqDailyPlan
+     * const mnqDailyPlan = await prisma.mnqDailyPlan.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MnqDailyPlanUpdateArgs>(args: SelectSubset<T, MnqDailyPlanUpdateArgs<ExtArgs>>): Prisma__MnqDailyPlanClient<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MnqDailyPlans.
+     * @param {MnqDailyPlanDeleteManyArgs} args - Arguments to filter MnqDailyPlans to delete.
+     * @example
+     * // Delete a few MnqDailyPlans
+     * const { count } = await prisma.mnqDailyPlan.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MnqDailyPlanDeleteManyArgs>(args?: SelectSubset<T, MnqDailyPlanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MnqDailyPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MnqDailyPlanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MnqDailyPlans
+     * const mnqDailyPlan = await prisma.mnqDailyPlan.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MnqDailyPlanUpdateManyArgs>(args: SelectSubset<T, MnqDailyPlanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MnqDailyPlans and returns the data updated in the database.
+     * @param {MnqDailyPlanUpdateManyAndReturnArgs} args - Arguments to update many MnqDailyPlans.
+     * @example
+     * // Update many MnqDailyPlans
+     * const mnqDailyPlan = await prisma.mnqDailyPlan.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MnqDailyPlans and only return the `id`
+     * const mnqDailyPlanWithIdOnly = await prisma.mnqDailyPlan.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MnqDailyPlanUpdateManyAndReturnArgs>(args: SelectSubset<T, MnqDailyPlanUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MnqDailyPlan.
+     * @param {MnqDailyPlanUpsertArgs} args - Arguments to update or create a MnqDailyPlan.
+     * @example
+     * // Update or create a MnqDailyPlan
+     * const mnqDailyPlan = await prisma.mnqDailyPlan.upsert({
+     *   create: {
+     *     // ... data to create a MnqDailyPlan
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MnqDailyPlan we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MnqDailyPlanUpsertArgs>(args: SelectSubset<T, MnqDailyPlanUpsertArgs<ExtArgs>>): Prisma__MnqDailyPlanClient<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MnqDailyPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MnqDailyPlanCountArgs} args - Arguments to filter MnqDailyPlans to count.
+     * @example
+     * // Count the number of MnqDailyPlans
+     * const count = await prisma.mnqDailyPlan.count({
+     *   where: {
+     *     // ... the filter for the MnqDailyPlans we want to count
+     *   }
+     * })
+    **/
+    count<T extends MnqDailyPlanCountArgs>(
+      args?: Subset<T, MnqDailyPlanCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MnqDailyPlanCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MnqDailyPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MnqDailyPlanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MnqDailyPlanAggregateArgs>(args: Subset<T, MnqDailyPlanAggregateArgs>): Prisma.PrismaPromise<GetMnqDailyPlanAggregateType<T>>
+
+    /**
+     * Group by MnqDailyPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MnqDailyPlanGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MnqDailyPlanGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MnqDailyPlanGroupByArgs['orderBy'] }
+        : { orderBy?: MnqDailyPlanGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MnqDailyPlanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMnqDailyPlanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MnqDailyPlan model
+   */
+  readonly fields: MnqDailyPlanFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MnqDailyPlan.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MnqDailyPlanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    session<T extends DailySessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DailySessionDefaultArgs<ExtArgs>>): Prisma__DailySessionClient<$Result.GetResult<Prisma.$DailySessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MnqDailyPlan model
+   */
+  interface MnqDailyPlanFieldRefs {
+    readonly id: FieldRef<"MnqDailyPlan", 'String'>
+    readonly sessionDate: FieldRef<"MnqDailyPlan", 'DateTime'>
+    readonly scenario: FieldRef<"MnqDailyPlan", 'MnqScenario'>
+    readonly sweepUpBand: FieldRef<"MnqDailyPlan", 'String'>
+    readonly sweepDownBand: FieldRef<"MnqDailyPlan", 'String'>
+    readonly hasNewsGap: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly gapCanHold: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly condRangeMovingOver1h: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly condRangeVwapFlat: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly condRangeNoMajorNews: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly condRangePrevTrend: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly condTrendSingleDir: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly condTrendVwapTilted: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly condFadeNewsWeak: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly condHoldNewsReal: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly evalRangeMovingOver1h: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly evalRangeVwapFlat: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly evalRangeNoMajorNews: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly evalRangePrevTrend: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly evalTrendSingleDir: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly evalTrendVwapTilted: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly evalFadeNewsWeak: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly evalHoldNewsReal: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly evalUpBand: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly evalDownBand: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly evalNotesJson: FieldRef<"MnqDailyPlan", 'String'>
+    readonly customConditionsJson: FieldRef<"MnqDailyPlan", 'String'>
+    readonly customBandsJson: FieldRef<"MnqDailyPlan", 'String'>
+    readonly actCheckpointsJson: FieldRef<"MnqDailyPlan", 'String'>
+    readonly notes: FieldRef<"MnqDailyPlan", 'String'>
+    readonly createdAt: FieldRef<"MnqDailyPlan", 'DateTime'>
+    readonly updatedAt: FieldRef<"MnqDailyPlan", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MnqDailyPlan findUnique
+   */
+  export type MnqDailyPlanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which MnqDailyPlan to fetch.
+     */
+    where: MnqDailyPlanWhereUniqueInput
+  }
+
+  /**
+   * MnqDailyPlan findUniqueOrThrow
+   */
+  export type MnqDailyPlanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which MnqDailyPlan to fetch.
+     */
+    where: MnqDailyPlanWhereUniqueInput
+  }
+
+  /**
+   * MnqDailyPlan findFirst
+   */
+  export type MnqDailyPlanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which MnqDailyPlan to fetch.
+     */
+    where?: MnqDailyPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MnqDailyPlans to fetch.
+     */
+    orderBy?: MnqDailyPlanOrderByWithRelationInput | MnqDailyPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MnqDailyPlans.
+     */
+    cursor?: MnqDailyPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MnqDailyPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MnqDailyPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MnqDailyPlans.
+     */
+    distinct?: MnqDailyPlanScalarFieldEnum | MnqDailyPlanScalarFieldEnum[]
+  }
+
+  /**
+   * MnqDailyPlan findFirstOrThrow
+   */
+  export type MnqDailyPlanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which MnqDailyPlan to fetch.
+     */
+    where?: MnqDailyPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MnqDailyPlans to fetch.
+     */
+    orderBy?: MnqDailyPlanOrderByWithRelationInput | MnqDailyPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MnqDailyPlans.
+     */
+    cursor?: MnqDailyPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MnqDailyPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MnqDailyPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MnqDailyPlans.
+     */
+    distinct?: MnqDailyPlanScalarFieldEnum | MnqDailyPlanScalarFieldEnum[]
+  }
+
+  /**
+   * MnqDailyPlan findMany
+   */
+  export type MnqDailyPlanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which MnqDailyPlans to fetch.
+     */
+    where?: MnqDailyPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MnqDailyPlans to fetch.
+     */
+    orderBy?: MnqDailyPlanOrderByWithRelationInput | MnqDailyPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MnqDailyPlans.
+     */
+    cursor?: MnqDailyPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MnqDailyPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MnqDailyPlans.
+     */
+    skip?: number
+    distinct?: MnqDailyPlanScalarFieldEnum | MnqDailyPlanScalarFieldEnum[]
+  }
+
+  /**
+   * MnqDailyPlan create
+   */
+  export type MnqDailyPlanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MnqDailyPlan.
+     */
+    data: XOR<MnqDailyPlanCreateInput, MnqDailyPlanUncheckedCreateInput>
+  }
+
+  /**
+   * MnqDailyPlan createMany
+   */
+  export type MnqDailyPlanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MnqDailyPlans.
+     */
+    data: MnqDailyPlanCreateManyInput | MnqDailyPlanCreateManyInput[]
+  }
+
+  /**
+   * MnqDailyPlan createManyAndReturn
+   */
+  export type MnqDailyPlanCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * The data used to create many MnqDailyPlans.
+     */
+    data: MnqDailyPlanCreateManyInput | MnqDailyPlanCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MnqDailyPlan update
+   */
+  export type MnqDailyPlanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MnqDailyPlan.
+     */
+    data: XOR<MnqDailyPlanUpdateInput, MnqDailyPlanUncheckedUpdateInput>
+    /**
+     * Choose, which MnqDailyPlan to update.
+     */
+    where: MnqDailyPlanWhereUniqueInput
+  }
+
+  /**
+   * MnqDailyPlan updateMany
+   */
+  export type MnqDailyPlanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MnqDailyPlans.
+     */
+    data: XOR<MnqDailyPlanUpdateManyMutationInput, MnqDailyPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which MnqDailyPlans to update
+     */
+    where?: MnqDailyPlanWhereInput
+    /**
+     * Limit how many MnqDailyPlans to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MnqDailyPlan updateManyAndReturn
+   */
+  export type MnqDailyPlanUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * The data used to update MnqDailyPlans.
+     */
+    data: XOR<MnqDailyPlanUpdateManyMutationInput, MnqDailyPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which MnqDailyPlans to update
+     */
+    where?: MnqDailyPlanWhereInput
+    /**
+     * Limit how many MnqDailyPlans to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MnqDailyPlan upsert
+   */
+  export type MnqDailyPlanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MnqDailyPlan to update in case it exists.
+     */
+    where: MnqDailyPlanWhereUniqueInput
+    /**
+     * In case the MnqDailyPlan found by the `where` argument doesn't exist, create a new MnqDailyPlan with this data.
+     */
+    create: XOR<MnqDailyPlanCreateInput, MnqDailyPlanUncheckedCreateInput>
+    /**
+     * In case the MnqDailyPlan was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MnqDailyPlanUpdateInput, MnqDailyPlanUncheckedUpdateInput>
+  }
+
+  /**
+   * MnqDailyPlan delete
+   */
+  export type MnqDailyPlanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanInclude<ExtArgs> | null
+    /**
+     * Filter which MnqDailyPlan to delete.
+     */
+    where: MnqDailyPlanWhereUniqueInput
+  }
+
+  /**
+   * MnqDailyPlan deleteMany
+   */
+  export type MnqDailyPlanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MnqDailyPlans to delete
+     */
+    where?: MnqDailyPlanWhereInput
+    /**
+     * Limit how many MnqDailyPlans to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MnqDailyPlan without action
+   */
+  export type MnqDailyPlanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MnqDailyPlan
+     */
+    select?: MnqDailyPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MnqDailyPlan
+     */
+    omit?: MnqDailyPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MnqDailyPlanInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -14561,6 +16096,44 @@ export namespace Prisma {
   export type ScreenshotScalarFieldEnum = (typeof ScreenshotScalarFieldEnum)[keyof typeof ScreenshotScalarFieldEnum]
 
 
+  export const MnqDailyPlanScalarFieldEnum: {
+    id: 'id',
+    sessionDate: 'sessionDate',
+    scenario: 'scenario',
+    sweepUpBand: 'sweepUpBand',
+    sweepDownBand: 'sweepDownBand',
+    hasNewsGap: 'hasNewsGap',
+    gapCanHold: 'gapCanHold',
+    condRangeMovingOver1h: 'condRangeMovingOver1h',
+    condRangeVwapFlat: 'condRangeVwapFlat',
+    condRangeNoMajorNews: 'condRangeNoMajorNews',
+    condRangePrevTrend: 'condRangePrevTrend',
+    condTrendSingleDir: 'condTrendSingleDir',
+    condTrendVwapTilted: 'condTrendVwapTilted',
+    condFadeNewsWeak: 'condFadeNewsWeak',
+    condHoldNewsReal: 'condHoldNewsReal',
+    evalRangeMovingOver1h: 'evalRangeMovingOver1h',
+    evalRangeVwapFlat: 'evalRangeVwapFlat',
+    evalRangeNoMajorNews: 'evalRangeNoMajorNews',
+    evalRangePrevTrend: 'evalRangePrevTrend',
+    evalTrendSingleDir: 'evalTrendSingleDir',
+    evalTrendVwapTilted: 'evalTrendVwapTilted',
+    evalFadeNewsWeak: 'evalFadeNewsWeak',
+    evalHoldNewsReal: 'evalHoldNewsReal',
+    evalUpBand: 'evalUpBand',
+    evalDownBand: 'evalDownBand',
+    evalNotesJson: 'evalNotesJson',
+    customConditionsJson: 'customConditionsJson',
+    customBandsJson: 'customBandsJson',
+    actCheckpointsJson: 'actCheckpointsJson',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MnqDailyPlanScalarFieldEnum = (typeof MnqDailyPlanScalarFieldEnum)[keyof typeof MnqDailyPlanScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -14691,6 +16264,13 @@ export namespace Prisma {
    * Reference to a field of type 'ChartTag'
    */
   export type EnumChartTagFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChartTag'>
+    
+
+
+  /**
+   * Reference to a field of type 'MnqScenario'
+   */
+  export type EnumMnqScenarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MnqScenario'>
     
   /**
    * Deep Input Types
@@ -14924,6 +16504,7 @@ export namespace Prisma {
     newsEvents?: NewsEventListRelationFilter
     setups?: TradeSetupListRelationFilter
     screenshots?: ScreenshotListRelationFilter
+    mnqPlan?: XOR<MnqDailyPlanNullableScalarRelationFilter, MnqDailyPlanWhereInput> | null
   }
 
   export type DailySessionOrderByWithRelationInput = {
@@ -14942,6 +16523,7 @@ export namespace Prisma {
     newsEvents?: NewsEventOrderByRelationAggregateInput
     setups?: TradeSetupOrderByRelationAggregateInput
     screenshots?: ScreenshotOrderByRelationAggregateInput
+    mnqPlan?: MnqDailyPlanOrderByWithRelationInput
   }
 
   export type DailySessionWhereUniqueInput = Prisma.AtLeast<{
@@ -14963,6 +16545,7 @@ export namespace Prisma {
     newsEvents?: NewsEventListRelationFilter
     setups?: TradeSetupListRelationFilter
     screenshots?: ScreenshotListRelationFilter
+    mnqPlan?: XOR<MnqDailyPlanNullableScalarRelationFilter, MnqDailyPlanWhereInput> | null
   }, "date">
 
   export type DailySessionOrderByWithAggregationInput = {
@@ -15749,6 +17332,196 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Screenshot"> | Date | string
   }
 
+  export type MnqDailyPlanWhereInput = {
+    AND?: MnqDailyPlanWhereInput | MnqDailyPlanWhereInput[]
+    OR?: MnqDailyPlanWhereInput[]
+    NOT?: MnqDailyPlanWhereInput | MnqDailyPlanWhereInput[]
+    id?: StringFilter<"MnqDailyPlan"> | string
+    sessionDate?: DateTimeFilter<"MnqDailyPlan"> | Date | string
+    scenario?: EnumMnqScenarioNullableFilter<"MnqDailyPlan"> | $Enums.MnqScenario | null
+    sweepUpBand?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    sweepDownBand?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    hasNewsGap?: BoolFilter<"MnqDailyPlan"> | boolean
+    gapCanHold?: BoolFilter<"MnqDailyPlan"> | boolean
+    condRangeMovingOver1h?: BoolFilter<"MnqDailyPlan"> | boolean
+    condRangeVwapFlat?: BoolFilter<"MnqDailyPlan"> | boolean
+    condRangeNoMajorNews?: BoolFilter<"MnqDailyPlan"> | boolean
+    condRangePrevTrend?: BoolFilter<"MnqDailyPlan"> | boolean
+    condTrendSingleDir?: BoolFilter<"MnqDailyPlan"> | boolean
+    condTrendVwapTilted?: BoolFilter<"MnqDailyPlan"> | boolean
+    condFadeNewsWeak?: BoolFilter<"MnqDailyPlan"> | boolean
+    condHoldNewsReal?: BoolFilter<"MnqDailyPlan"> | boolean
+    evalRangeMovingOver1h?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalRangeVwapFlat?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalRangeNoMajorNews?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalRangePrevTrend?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalTrendSingleDir?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalTrendVwapTilted?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalFadeNewsWeak?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalHoldNewsReal?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalUpBand?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalDownBand?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalNotesJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    customConditionsJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    customBandsJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    actCheckpointsJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    notes?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    createdAt?: DateTimeFilter<"MnqDailyPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"MnqDailyPlan"> | Date | string
+    session?: XOR<DailySessionScalarRelationFilter, DailySessionWhereInput>
+  }
+
+  export type MnqDailyPlanOrderByWithRelationInput = {
+    id?: SortOrder
+    sessionDate?: SortOrder
+    scenario?: SortOrderInput | SortOrder
+    sweepUpBand?: SortOrderInput | SortOrder
+    sweepDownBand?: SortOrderInput | SortOrder
+    hasNewsGap?: SortOrder
+    gapCanHold?: SortOrder
+    condRangeMovingOver1h?: SortOrder
+    condRangeVwapFlat?: SortOrder
+    condRangeNoMajorNews?: SortOrder
+    condRangePrevTrend?: SortOrder
+    condTrendSingleDir?: SortOrder
+    condTrendVwapTilted?: SortOrder
+    condFadeNewsWeak?: SortOrder
+    condHoldNewsReal?: SortOrder
+    evalRangeMovingOver1h?: SortOrderInput | SortOrder
+    evalRangeVwapFlat?: SortOrderInput | SortOrder
+    evalRangeNoMajorNews?: SortOrderInput | SortOrder
+    evalRangePrevTrend?: SortOrderInput | SortOrder
+    evalTrendSingleDir?: SortOrderInput | SortOrder
+    evalTrendVwapTilted?: SortOrderInput | SortOrder
+    evalFadeNewsWeak?: SortOrderInput | SortOrder
+    evalHoldNewsReal?: SortOrderInput | SortOrder
+    evalUpBand?: SortOrderInput | SortOrder
+    evalDownBand?: SortOrderInput | SortOrder
+    evalNotesJson?: SortOrderInput | SortOrder
+    customConditionsJson?: SortOrderInput | SortOrder
+    customBandsJson?: SortOrderInput | SortOrder
+    actCheckpointsJson?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    session?: DailySessionOrderByWithRelationInput
+  }
+
+  export type MnqDailyPlanWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    sessionDate?: Date | string
+    AND?: MnqDailyPlanWhereInput | MnqDailyPlanWhereInput[]
+    OR?: MnqDailyPlanWhereInput[]
+    NOT?: MnqDailyPlanWhereInput | MnqDailyPlanWhereInput[]
+    scenario?: EnumMnqScenarioNullableFilter<"MnqDailyPlan"> | $Enums.MnqScenario | null
+    sweepUpBand?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    sweepDownBand?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    hasNewsGap?: BoolFilter<"MnqDailyPlan"> | boolean
+    gapCanHold?: BoolFilter<"MnqDailyPlan"> | boolean
+    condRangeMovingOver1h?: BoolFilter<"MnqDailyPlan"> | boolean
+    condRangeVwapFlat?: BoolFilter<"MnqDailyPlan"> | boolean
+    condRangeNoMajorNews?: BoolFilter<"MnqDailyPlan"> | boolean
+    condRangePrevTrend?: BoolFilter<"MnqDailyPlan"> | boolean
+    condTrendSingleDir?: BoolFilter<"MnqDailyPlan"> | boolean
+    condTrendVwapTilted?: BoolFilter<"MnqDailyPlan"> | boolean
+    condFadeNewsWeak?: BoolFilter<"MnqDailyPlan"> | boolean
+    condHoldNewsReal?: BoolFilter<"MnqDailyPlan"> | boolean
+    evalRangeMovingOver1h?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalRangeVwapFlat?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalRangeNoMajorNews?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalRangePrevTrend?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalTrendSingleDir?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalTrendVwapTilted?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalFadeNewsWeak?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalHoldNewsReal?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalUpBand?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalDownBand?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    evalNotesJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    customConditionsJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    customBandsJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    actCheckpointsJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    notes?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    createdAt?: DateTimeFilter<"MnqDailyPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"MnqDailyPlan"> | Date | string
+    session?: XOR<DailySessionScalarRelationFilter, DailySessionWhereInput>
+  }, "id" | "sessionDate">
+
+  export type MnqDailyPlanOrderByWithAggregationInput = {
+    id?: SortOrder
+    sessionDate?: SortOrder
+    scenario?: SortOrderInput | SortOrder
+    sweepUpBand?: SortOrderInput | SortOrder
+    sweepDownBand?: SortOrderInput | SortOrder
+    hasNewsGap?: SortOrder
+    gapCanHold?: SortOrder
+    condRangeMovingOver1h?: SortOrder
+    condRangeVwapFlat?: SortOrder
+    condRangeNoMajorNews?: SortOrder
+    condRangePrevTrend?: SortOrder
+    condTrendSingleDir?: SortOrder
+    condTrendVwapTilted?: SortOrder
+    condFadeNewsWeak?: SortOrder
+    condHoldNewsReal?: SortOrder
+    evalRangeMovingOver1h?: SortOrderInput | SortOrder
+    evalRangeVwapFlat?: SortOrderInput | SortOrder
+    evalRangeNoMajorNews?: SortOrderInput | SortOrder
+    evalRangePrevTrend?: SortOrderInput | SortOrder
+    evalTrendSingleDir?: SortOrderInput | SortOrder
+    evalTrendVwapTilted?: SortOrderInput | SortOrder
+    evalFadeNewsWeak?: SortOrderInput | SortOrder
+    evalHoldNewsReal?: SortOrderInput | SortOrder
+    evalUpBand?: SortOrderInput | SortOrder
+    evalDownBand?: SortOrderInput | SortOrder
+    evalNotesJson?: SortOrderInput | SortOrder
+    customConditionsJson?: SortOrderInput | SortOrder
+    customBandsJson?: SortOrderInput | SortOrder
+    actCheckpointsJson?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MnqDailyPlanCountOrderByAggregateInput
+    _max?: MnqDailyPlanMaxOrderByAggregateInput
+    _min?: MnqDailyPlanMinOrderByAggregateInput
+  }
+
+  export type MnqDailyPlanScalarWhereWithAggregatesInput = {
+    AND?: MnqDailyPlanScalarWhereWithAggregatesInput | MnqDailyPlanScalarWhereWithAggregatesInput[]
+    OR?: MnqDailyPlanScalarWhereWithAggregatesInput[]
+    NOT?: MnqDailyPlanScalarWhereWithAggregatesInput | MnqDailyPlanScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MnqDailyPlan"> | string
+    sessionDate?: DateTimeWithAggregatesFilter<"MnqDailyPlan"> | Date | string
+    scenario?: EnumMnqScenarioNullableWithAggregatesFilter<"MnqDailyPlan"> | $Enums.MnqScenario | null
+    sweepUpBand?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    sweepDownBand?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    hasNewsGap?: BoolWithAggregatesFilter<"MnqDailyPlan"> | boolean
+    gapCanHold?: BoolWithAggregatesFilter<"MnqDailyPlan"> | boolean
+    condRangeMovingOver1h?: BoolWithAggregatesFilter<"MnqDailyPlan"> | boolean
+    condRangeVwapFlat?: BoolWithAggregatesFilter<"MnqDailyPlan"> | boolean
+    condRangeNoMajorNews?: BoolWithAggregatesFilter<"MnqDailyPlan"> | boolean
+    condRangePrevTrend?: BoolWithAggregatesFilter<"MnqDailyPlan"> | boolean
+    condTrendSingleDir?: BoolWithAggregatesFilter<"MnqDailyPlan"> | boolean
+    condTrendVwapTilted?: BoolWithAggregatesFilter<"MnqDailyPlan"> | boolean
+    condFadeNewsWeak?: BoolWithAggregatesFilter<"MnqDailyPlan"> | boolean
+    condHoldNewsReal?: BoolWithAggregatesFilter<"MnqDailyPlan"> | boolean
+    evalRangeMovingOver1h?: BoolNullableWithAggregatesFilter<"MnqDailyPlan"> | boolean | null
+    evalRangeVwapFlat?: BoolNullableWithAggregatesFilter<"MnqDailyPlan"> | boolean | null
+    evalRangeNoMajorNews?: BoolNullableWithAggregatesFilter<"MnqDailyPlan"> | boolean | null
+    evalRangePrevTrend?: BoolNullableWithAggregatesFilter<"MnqDailyPlan"> | boolean | null
+    evalTrendSingleDir?: BoolNullableWithAggregatesFilter<"MnqDailyPlan"> | boolean | null
+    evalTrendVwapTilted?: BoolNullableWithAggregatesFilter<"MnqDailyPlan"> | boolean | null
+    evalFadeNewsWeak?: BoolNullableWithAggregatesFilter<"MnqDailyPlan"> | boolean | null
+    evalHoldNewsReal?: BoolNullableWithAggregatesFilter<"MnqDailyPlan"> | boolean | null
+    evalUpBand?: BoolNullableWithAggregatesFilter<"MnqDailyPlan"> | boolean | null
+    evalDownBand?: BoolNullableWithAggregatesFilter<"MnqDailyPlan"> | boolean | null
+    evalNotesJson?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    customConditionsJson?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    customBandsJson?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    actCheckpointsJson?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"MnqDailyPlan"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MnqDailyPlan"> | Date | string
+  }
+
   export type NewsCatalogCreateInput = {
     id?: string
     name: string
@@ -16000,6 +17773,7 @@ export namespace Prisma {
     newsEvents?: NewsEventCreateNestedManyWithoutSessionInput
     setups?: TradeSetupCreateNestedManyWithoutSessionInput
     screenshots?: ScreenshotCreateNestedManyWithoutSessionInput
+    mnqPlan?: MnqDailyPlanCreateNestedOneWithoutSessionInput
   }
 
   export type DailySessionUncheckedCreateInput = {
@@ -16018,6 +17792,7 @@ export namespace Prisma {
     newsEvents?: NewsEventUncheckedCreateNestedManyWithoutSessionInput
     setups?: TradeSetupUncheckedCreateNestedManyWithoutSessionInput
     screenshots?: ScreenshotUncheckedCreateNestedManyWithoutSessionInput
+    mnqPlan?: MnqDailyPlanUncheckedCreateNestedOneWithoutSessionInput
   }
 
   export type DailySessionUpdateInput = {
@@ -16036,6 +17811,7 @@ export namespace Prisma {
     newsEvents?: NewsEventUpdateManyWithoutSessionNestedInput
     setups?: TradeSetupUpdateManyWithoutSessionNestedInput
     screenshots?: ScreenshotUpdateManyWithoutSessionNestedInput
+    mnqPlan?: MnqDailyPlanUpdateOneWithoutSessionNestedInput
   }
 
   export type DailySessionUncheckedUpdateInput = {
@@ -16054,6 +17830,7 @@ export namespace Prisma {
     newsEvents?: NewsEventUncheckedUpdateManyWithoutSessionNestedInput
     setups?: TradeSetupUncheckedUpdateManyWithoutSessionNestedInput
     screenshots?: ScreenshotUncheckedUpdateManyWithoutSessionNestedInput
+    mnqPlan?: MnqDailyPlanUncheckedUpdateOneWithoutSessionNestedInput
   }
 
   export type DailySessionCreateManyInput = {
@@ -16988,6 +18765,250 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MnqDailyPlanCreateInput = {
+    id?: string
+    scenario?: $Enums.MnqScenario | null
+    sweepUpBand?: string | null
+    sweepDownBand?: string | null
+    hasNewsGap?: boolean
+    gapCanHold?: boolean
+    condRangeMovingOver1h?: boolean
+    condRangeVwapFlat?: boolean
+    condRangeNoMajorNews?: boolean
+    condRangePrevTrend?: boolean
+    condTrendSingleDir?: boolean
+    condTrendVwapTilted?: boolean
+    condFadeNewsWeak?: boolean
+    condHoldNewsReal?: boolean
+    evalRangeMovingOver1h?: boolean | null
+    evalRangeVwapFlat?: boolean | null
+    evalRangeNoMajorNews?: boolean | null
+    evalRangePrevTrend?: boolean | null
+    evalTrendSingleDir?: boolean | null
+    evalTrendVwapTilted?: boolean | null
+    evalFadeNewsWeak?: boolean | null
+    evalHoldNewsReal?: boolean | null
+    evalUpBand?: boolean | null
+    evalDownBand?: boolean | null
+    evalNotesJson?: string | null
+    customConditionsJson?: string | null
+    customBandsJson?: string | null
+    actCheckpointsJson?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    session: DailySessionCreateNestedOneWithoutMnqPlanInput
+  }
+
+  export type MnqDailyPlanUncheckedCreateInput = {
+    id?: string
+    sessionDate: Date | string
+    scenario?: $Enums.MnqScenario | null
+    sweepUpBand?: string | null
+    sweepDownBand?: string | null
+    hasNewsGap?: boolean
+    gapCanHold?: boolean
+    condRangeMovingOver1h?: boolean
+    condRangeVwapFlat?: boolean
+    condRangeNoMajorNews?: boolean
+    condRangePrevTrend?: boolean
+    condTrendSingleDir?: boolean
+    condTrendVwapTilted?: boolean
+    condFadeNewsWeak?: boolean
+    condHoldNewsReal?: boolean
+    evalRangeMovingOver1h?: boolean | null
+    evalRangeVwapFlat?: boolean | null
+    evalRangeNoMajorNews?: boolean | null
+    evalRangePrevTrend?: boolean | null
+    evalTrendSingleDir?: boolean | null
+    evalTrendVwapTilted?: boolean | null
+    evalFadeNewsWeak?: boolean | null
+    evalHoldNewsReal?: boolean | null
+    evalUpBand?: boolean | null
+    evalDownBand?: boolean | null
+    evalNotesJson?: string | null
+    customConditionsJson?: string | null
+    customBandsJson?: string | null
+    actCheckpointsJson?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MnqDailyPlanUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scenario?: NullableEnumMnqScenarioFieldUpdateOperationsInput | $Enums.MnqScenario | null
+    sweepUpBand?: NullableStringFieldUpdateOperationsInput | string | null
+    sweepDownBand?: NullableStringFieldUpdateOperationsInput | string | null
+    hasNewsGap?: BoolFieldUpdateOperationsInput | boolean
+    gapCanHold?: BoolFieldUpdateOperationsInput | boolean
+    condRangeMovingOver1h?: BoolFieldUpdateOperationsInput | boolean
+    condRangeVwapFlat?: BoolFieldUpdateOperationsInput | boolean
+    condRangeNoMajorNews?: BoolFieldUpdateOperationsInput | boolean
+    condRangePrevTrend?: BoolFieldUpdateOperationsInput | boolean
+    condTrendSingleDir?: BoolFieldUpdateOperationsInput | boolean
+    condTrendVwapTilted?: BoolFieldUpdateOperationsInput | boolean
+    condFadeNewsWeak?: BoolFieldUpdateOperationsInput | boolean
+    condHoldNewsReal?: BoolFieldUpdateOperationsInput | boolean
+    evalRangeMovingOver1h?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangeVwapFlat?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangeNoMajorNews?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangePrevTrend?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalTrendSingleDir?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalTrendVwapTilted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalFadeNewsWeak?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalHoldNewsReal?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalUpBand?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalDownBand?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalNotesJson?: NullableStringFieldUpdateOperationsInput | string | null
+    customConditionsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    customBandsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    actCheckpointsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    session?: DailySessionUpdateOneRequiredWithoutMnqPlanNestedInput
+  }
+
+  export type MnqDailyPlanUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    scenario?: NullableEnumMnqScenarioFieldUpdateOperationsInput | $Enums.MnqScenario | null
+    sweepUpBand?: NullableStringFieldUpdateOperationsInput | string | null
+    sweepDownBand?: NullableStringFieldUpdateOperationsInput | string | null
+    hasNewsGap?: BoolFieldUpdateOperationsInput | boolean
+    gapCanHold?: BoolFieldUpdateOperationsInput | boolean
+    condRangeMovingOver1h?: BoolFieldUpdateOperationsInput | boolean
+    condRangeVwapFlat?: BoolFieldUpdateOperationsInput | boolean
+    condRangeNoMajorNews?: BoolFieldUpdateOperationsInput | boolean
+    condRangePrevTrend?: BoolFieldUpdateOperationsInput | boolean
+    condTrendSingleDir?: BoolFieldUpdateOperationsInput | boolean
+    condTrendVwapTilted?: BoolFieldUpdateOperationsInput | boolean
+    condFadeNewsWeak?: BoolFieldUpdateOperationsInput | boolean
+    condHoldNewsReal?: BoolFieldUpdateOperationsInput | boolean
+    evalRangeMovingOver1h?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangeVwapFlat?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangeNoMajorNews?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangePrevTrend?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalTrendSingleDir?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalTrendVwapTilted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalFadeNewsWeak?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalHoldNewsReal?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalUpBand?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalDownBand?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalNotesJson?: NullableStringFieldUpdateOperationsInput | string | null
+    customConditionsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    customBandsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    actCheckpointsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MnqDailyPlanCreateManyInput = {
+    id?: string
+    sessionDate: Date | string
+    scenario?: $Enums.MnqScenario | null
+    sweepUpBand?: string | null
+    sweepDownBand?: string | null
+    hasNewsGap?: boolean
+    gapCanHold?: boolean
+    condRangeMovingOver1h?: boolean
+    condRangeVwapFlat?: boolean
+    condRangeNoMajorNews?: boolean
+    condRangePrevTrend?: boolean
+    condTrendSingleDir?: boolean
+    condTrendVwapTilted?: boolean
+    condFadeNewsWeak?: boolean
+    condHoldNewsReal?: boolean
+    evalRangeMovingOver1h?: boolean | null
+    evalRangeVwapFlat?: boolean | null
+    evalRangeNoMajorNews?: boolean | null
+    evalRangePrevTrend?: boolean | null
+    evalTrendSingleDir?: boolean | null
+    evalTrendVwapTilted?: boolean | null
+    evalFadeNewsWeak?: boolean | null
+    evalHoldNewsReal?: boolean | null
+    evalUpBand?: boolean | null
+    evalDownBand?: boolean | null
+    evalNotesJson?: string | null
+    customConditionsJson?: string | null
+    customBandsJson?: string | null
+    actCheckpointsJson?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MnqDailyPlanUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scenario?: NullableEnumMnqScenarioFieldUpdateOperationsInput | $Enums.MnqScenario | null
+    sweepUpBand?: NullableStringFieldUpdateOperationsInput | string | null
+    sweepDownBand?: NullableStringFieldUpdateOperationsInput | string | null
+    hasNewsGap?: BoolFieldUpdateOperationsInput | boolean
+    gapCanHold?: BoolFieldUpdateOperationsInput | boolean
+    condRangeMovingOver1h?: BoolFieldUpdateOperationsInput | boolean
+    condRangeVwapFlat?: BoolFieldUpdateOperationsInput | boolean
+    condRangeNoMajorNews?: BoolFieldUpdateOperationsInput | boolean
+    condRangePrevTrend?: BoolFieldUpdateOperationsInput | boolean
+    condTrendSingleDir?: BoolFieldUpdateOperationsInput | boolean
+    condTrendVwapTilted?: BoolFieldUpdateOperationsInput | boolean
+    condFadeNewsWeak?: BoolFieldUpdateOperationsInput | boolean
+    condHoldNewsReal?: BoolFieldUpdateOperationsInput | boolean
+    evalRangeMovingOver1h?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangeVwapFlat?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangeNoMajorNews?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangePrevTrend?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalTrendSingleDir?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalTrendVwapTilted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalFadeNewsWeak?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalHoldNewsReal?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalUpBand?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalDownBand?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalNotesJson?: NullableStringFieldUpdateOperationsInput | string | null
+    customConditionsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    customBandsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    actCheckpointsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MnqDailyPlanUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    scenario?: NullableEnumMnqScenarioFieldUpdateOperationsInput | $Enums.MnqScenario | null
+    sweepUpBand?: NullableStringFieldUpdateOperationsInput | string | null
+    sweepDownBand?: NullableStringFieldUpdateOperationsInput | string | null
+    hasNewsGap?: BoolFieldUpdateOperationsInput | boolean
+    gapCanHold?: BoolFieldUpdateOperationsInput | boolean
+    condRangeMovingOver1h?: BoolFieldUpdateOperationsInput | boolean
+    condRangeVwapFlat?: BoolFieldUpdateOperationsInput | boolean
+    condRangeNoMajorNews?: BoolFieldUpdateOperationsInput | boolean
+    condRangePrevTrend?: BoolFieldUpdateOperationsInput | boolean
+    condTrendSingleDir?: BoolFieldUpdateOperationsInput | boolean
+    condTrendVwapTilted?: BoolFieldUpdateOperationsInput | boolean
+    condFadeNewsWeak?: BoolFieldUpdateOperationsInput | boolean
+    condHoldNewsReal?: BoolFieldUpdateOperationsInput | boolean
+    evalRangeMovingOver1h?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangeVwapFlat?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangeNoMajorNews?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangePrevTrend?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalTrendSingleDir?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalTrendVwapTilted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalFadeNewsWeak?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalHoldNewsReal?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalUpBand?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalDownBand?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalNotesJson?: NullableStringFieldUpdateOperationsInput | string | null
+    customConditionsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    customBandsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    actCheckpointsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -17252,6 +19273,11 @@ export namespace Prisma {
     every?: ScreenshotWhereInput
     some?: ScreenshotWhereInput
     none?: ScreenshotWhereInput
+  }
+
+  export type MnqDailyPlanNullableScalarRelationFilter = {
+    is?: MnqDailyPlanWhereInput | null
+    isNot?: MnqDailyPlanWhereInput | null
   }
 
   export type NewsEventOrderByRelationAggregateInput = {
@@ -18155,6 +20181,128 @@ export namespace Prisma {
     _max?: NestedEnumChartTagNullableFilter<$PrismaModel>
   }
 
+  export type EnumMnqScenarioNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.MnqScenario | EnumMnqScenarioFieldRefInput<$PrismaModel> | null
+    in?: $Enums.MnqScenario[] | null
+    notIn?: $Enums.MnqScenario[] | null
+    not?: NestedEnumMnqScenarioNullableFilter<$PrismaModel> | $Enums.MnqScenario | null
+  }
+
+  export type MnqDailyPlanCountOrderByAggregateInput = {
+    id?: SortOrder
+    sessionDate?: SortOrder
+    scenario?: SortOrder
+    sweepUpBand?: SortOrder
+    sweepDownBand?: SortOrder
+    hasNewsGap?: SortOrder
+    gapCanHold?: SortOrder
+    condRangeMovingOver1h?: SortOrder
+    condRangeVwapFlat?: SortOrder
+    condRangeNoMajorNews?: SortOrder
+    condRangePrevTrend?: SortOrder
+    condTrendSingleDir?: SortOrder
+    condTrendVwapTilted?: SortOrder
+    condFadeNewsWeak?: SortOrder
+    condHoldNewsReal?: SortOrder
+    evalRangeMovingOver1h?: SortOrder
+    evalRangeVwapFlat?: SortOrder
+    evalRangeNoMajorNews?: SortOrder
+    evalRangePrevTrend?: SortOrder
+    evalTrendSingleDir?: SortOrder
+    evalTrendVwapTilted?: SortOrder
+    evalFadeNewsWeak?: SortOrder
+    evalHoldNewsReal?: SortOrder
+    evalUpBand?: SortOrder
+    evalDownBand?: SortOrder
+    evalNotesJson?: SortOrder
+    customConditionsJson?: SortOrder
+    customBandsJson?: SortOrder
+    actCheckpointsJson?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MnqDailyPlanMaxOrderByAggregateInput = {
+    id?: SortOrder
+    sessionDate?: SortOrder
+    scenario?: SortOrder
+    sweepUpBand?: SortOrder
+    sweepDownBand?: SortOrder
+    hasNewsGap?: SortOrder
+    gapCanHold?: SortOrder
+    condRangeMovingOver1h?: SortOrder
+    condRangeVwapFlat?: SortOrder
+    condRangeNoMajorNews?: SortOrder
+    condRangePrevTrend?: SortOrder
+    condTrendSingleDir?: SortOrder
+    condTrendVwapTilted?: SortOrder
+    condFadeNewsWeak?: SortOrder
+    condHoldNewsReal?: SortOrder
+    evalRangeMovingOver1h?: SortOrder
+    evalRangeVwapFlat?: SortOrder
+    evalRangeNoMajorNews?: SortOrder
+    evalRangePrevTrend?: SortOrder
+    evalTrendSingleDir?: SortOrder
+    evalTrendVwapTilted?: SortOrder
+    evalFadeNewsWeak?: SortOrder
+    evalHoldNewsReal?: SortOrder
+    evalUpBand?: SortOrder
+    evalDownBand?: SortOrder
+    evalNotesJson?: SortOrder
+    customConditionsJson?: SortOrder
+    customBandsJson?: SortOrder
+    actCheckpointsJson?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MnqDailyPlanMinOrderByAggregateInput = {
+    id?: SortOrder
+    sessionDate?: SortOrder
+    scenario?: SortOrder
+    sweepUpBand?: SortOrder
+    sweepDownBand?: SortOrder
+    hasNewsGap?: SortOrder
+    gapCanHold?: SortOrder
+    condRangeMovingOver1h?: SortOrder
+    condRangeVwapFlat?: SortOrder
+    condRangeNoMajorNews?: SortOrder
+    condRangePrevTrend?: SortOrder
+    condTrendSingleDir?: SortOrder
+    condTrendVwapTilted?: SortOrder
+    condFadeNewsWeak?: SortOrder
+    condHoldNewsReal?: SortOrder
+    evalRangeMovingOver1h?: SortOrder
+    evalRangeVwapFlat?: SortOrder
+    evalRangeNoMajorNews?: SortOrder
+    evalRangePrevTrend?: SortOrder
+    evalTrendSingleDir?: SortOrder
+    evalTrendVwapTilted?: SortOrder
+    evalFadeNewsWeak?: SortOrder
+    evalHoldNewsReal?: SortOrder
+    evalUpBand?: SortOrder
+    evalDownBand?: SortOrder
+    evalNotesJson?: SortOrder
+    customConditionsJson?: SortOrder
+    customBandsJson?: SortOrder
+    actCheckpointsJson?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumMnqScenarioNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MnqScenario | EnumMnqScenarioFieldRefInput<$PrismaModel> | null
+    in?: $Enums.MnqScenario[] | null
+    notIn?: $Enums.MnqScenario[] | null
+    not?: NestedEnumMnqScenarioNullableWithAggregatesFilter<$PrismaModel> | $Enums.MnqScenario | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumMnqScenarioNullableFilter<$PrismaModel>
+    _max?: NestedEnumMnqScenarioNullableFilter<$PrismaModel>
+  }
+
   export type TradeSetupCreateNestedManyWithoutNewsCatalogRefInput = {
     create?: XOR<TradeSetupCreateWithoutNewsCatalogRefInput, TradeSetupUncheckedCreateWithoutNewsCatalogRefInput> | TradeSetupCreateWithoutNewsCatalogRefInput[] | TradeSetupUncheckedCreateWithoutNewsCatalogRefInput[]
     connectOrCreate?: TradeSetupCreateOrConnectWithoutNewsCatalogRefInput | TradeSetupCreateOrConnectWithoutNewsCatalogRefInput[]
@@ -18336,6 +20484,12 @@ export namespace Prisma {
     connect?: ScreenshotWhereUniqueInput | ScreenshotWhereUniqueInput[]
   }
 
+  export type MnqDailyPlanCreateNestedOneWithoutSessionInput = {
+    create?: XOR<MnqDailyPlanCreateWithoutSessionInput, MnqDailyPlanUncheckedCreateWithoutSessionInput>
+    connectOrCreate?: MnqDailyPlanCreateOrConnectWithoutSessionInput
+    connect?: MnqDailyPlanWhereUniqueInput
+  }
+
   export type NewsEventUncheckedCreateNestedManyWithoutSessionInput = {
     create?: XOR<NewsEventCreateWithoutSessionInput, NewsEventUncheckedCreateWithoutSessionInput> | NewsEventCreateWithoutSessionInput[] | NewsEventUncheckedCreateWithoutSessionInput[]
     connectOrCreate?: NewsEventCreateOrConnectWithoutSessionInput | NewsEventCreateOrConnectWithoutSessionInput[]
@@ -18355,6 +20509,12 @@ export namespace Prisma {
     connectOrCreate?: ScreenshotCreateOrConnectWithoutSessionInput | ScreenshotCreateOrConnectWithoutSessionInput[]
     createMany?: ScreenshotCreateManySessionInputEnvelope
     connect?: ScreenshotWhereUniqueInput | ScreenshotWhereUniqueInput[]
+  }
+
+  export type MnqDailyPlanUncheckedCreateNestedOneWithoutSessionInput = {
+    create?: XOR<MnqDailyPlanCreateWithoutSessionInput, MnqDailyPlanUncheckedCreateWithoutSessionInput>
+    connectOrCreate?: MnqDailyPlanCreateOrConnectWithoutSessionInput
+    connect?: MnqDailyPlanWhereUniqueInput
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -18407,6 +20567,16 @@ export namespace Prisma {
     deleteMany?: ScreenshotScalarWhereInput | ScreenshotScalarWhereInput[]
   }
 
+  export type MnqDailyPlanUpdateOneWithoutSessionNestedInput = {
+    create?: XOR<MnqDailyPlanCreateWithoutSessionInput, MnqDailyPlanUncheckedCreateWithoutSessionInput>
+    connectOrCreate?: MnqDailyPlanCreateOrConnectWithoutSessionInput
+    upsert?: MnqDailyPlanUpsertWithoutSessionInput
+    disconnect?: MnqDailyPlanWhereInput | boolean
+    delete?: MnqDailyPlanWhereInput | boolean
+    connect?: MnqDailyPlanWhereUniqueInput
+    update?: XOR<XOR<MnqDailyPlanUpdateToOneWithWhereWithoutSessionInput, MnqDailyPlanUpdateWithoutSessionInput>, MnqDailyPlanUncheckedUpdateWithoutSessionInput>
+  }
+
   export type NewsEventUncheckedUpdateManyWithoutSessionNestedInput = {
     create?: XOR<NewsEventCreateWithoutSessionInput, NewsEventUncheckedCreateWithoutSessionInput> | NewsEventCreateWithoutSessionInput[] | NewsEventUncheckedCreateWithoutSessionInput[]
     connectOrCreate?: NewsEventCreateOrConnectWithoutSessionInput | NewsEventCreateOrConnectWithoutSessionInput[]
@@ -18447,6 +20617,16 @@ export namespace Prisma {
     update?: ScreenshotUpdateWithWhereUniqueWithoutSessionInput | ScreenshotUpdateWithWhereUniqueWithoutSessionInput[]
     updateMany?: ScreenshotUpdateManyWithWhereWithoutSessionInput | ScreenshotUpdateManyWithWhereWithoutSessionInput[]
     deleteMany?: ScreenshotScalarWhereInput | ScreenshotScalarWhereInput[]
+  }
+
+  export type MnqDailyPlanUncheckedUpdateOneWithoutSessionNestedInput = {
+    create?: XOR<MnqDailyPlanCreateWithoutSessionInput, MnqDailyPlanUncheckedCreateWithoutSessionInput>
+    connectOrCreate?: MnqDailyPlanCreateOrConnectWithoutSessionInput
+    upsert?: MnqDailyPlanUpsertWithoutSessionInput
+    disconnect?: MnqDailyPlanWhereInput | boolean
+    delete?: MnqDailyPlanWhereInput | boolean
+    connect?: MnqDailyPlanWhereUniqueInput
+    update?: XOR<XOR<MnqDailyPlanUpdateToOneWithWhereWithoutSessionInput, MnqDailyPlanUpdateWithoutSessionInput>, MnqDailyPlanUncheckedUpdateWithoutSessionInput>
   }
 
   export type DailySessionCreateNestedOneWithoutNewsEventsInput = {
@@ -18855,6 +21035,24 @@ export namespace Prisma {
     delete?: DailySessionWhereInput | boolean
     connect?: DailySessionWhereUniqueInput
     update?: XOR<XOR<DailySessionUpdateToOneWithWhereWithoutScreenshotsInput, DailySessionUpdateWithoutScreenshotsInput>, DailySessionUncheckedUpdateWithoutScreenshotsInput>
+  }
+
+  export type DailySessionCreateNestedOneWithoutMnqPlanInput = {
+    create?: XOR<DailySessionCreateWithoutMnqPlanInput, DailySessionUncheckedCreateWithoutMnqPlanInput>
+    connectOrCreate?: DailySessionCreateOrConnectWithoutMnqPlanInput
+    connect?: DailySessionWhereUniqueInput
+  }
+
+  export type NullableEnumMnqScenarioFieldUpdateOperationsInput = {
+    set?: $Enums.MnqScenario | null
+  }
+
+  export type DailySessionUpdateOneRequiredWithoutMnqPlanNestedInput = {
+    create?: XOR<DailySessionCreateWithoutMnqPlanInput, DailySessionUncheckedCreateWithoutMnqPlanInput>
+    connectOrCreate?: DailySessionCreateOrConnectWithoutMnqPlanInput
+    upsert?: DailySessionUpsertWithoutMnqPlanInput
+    connect?: DailySessionWhereUniqueInput
+    update?: XOR<XOR<DailySessionUpdateToOneWithWhereWithoutMnqPlanInput, DailySessionUpdateWithoutMnqPlanInput>, DailySessionUncheckedUpdateWithoutMnqPlanInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -19339,6 +21537,23 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumChartTagNullableFilter<$PrismaModel>
     _max?: NestedEnumChartTagNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMnqScenarioNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.MnqScenario | EnumMnqScenarioFieldRefInput<$PrismaModel> | null
+    in?: $Enums.MnqScenario[] | null
+    notIn?: $Enums.MnqScenario[] | null
+    not?: NestedEnumMnqScenarioNullableFilter<$PrismaModel> | $Enums.MnqScenario | null
+  }
+
+  export type NestedEnumMnqScenarioNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MnqScenario | EnumMnqScenarioFieldRefInput<$PrismaModel> | null
+    in?: $Enums.MnqScenario[] | null
+    notIn?: $Enums.MnqScenario[] | null
+    not?: NestedEnumMnqScenarioNullableWithAggregatesFilter<$PrismaModel> | $Enums.MnqScenario | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumMnqScenarioNullableFilter<$PrismaModel>
+    _max?: NestedEnumMnqScenarioNullableFilter<$PrismaModel>
   }
 
   export type TradeSetupCreateWithoutNewsCatalogRefInput = {
@@ -19992,6 +22207,79 @@ export namespace Prisma {
     data: ScreenshotCreateManySessionInput | ScreenshotCreateManySessionInput[]
   }
 
+  export type MnqDailyPlanCreateWithoutSessionInput = {
+    id?: string
+    scenario?: $Enums.MnqScenario | null
+    sweepUpBand?: string | null
+    sweepDownBand?: string | null
+    hasNewsGap?: boolean
+    gapCanHold?: boolean
+    condRangeMovingOver1h?: boolean
+    condRangeVwapFlat?: boolean
+    condRangeNoMajorNews?: boolean
+    condRangePrevTrend?: boolean
+    condTrendSingleDir?: boolean
+    condTrendVwapTilted?: boolean
+    condFadeNewsWeak?: boolean
+    condHoldNewsReal?: boolean
+    evalRangeMovingOver1h?: boolean | null
+    evalRangeVwapFlat?: boolean | null
+    evalRangeNoMajorNews?: boolean | null
+    evalRangePrevTrend?: boolean | null
+    evalTrendSingleDir?: boolean | null
+    evalTrendVwapTilted?: boolean | null
+    evalFadeNewsWeak?: boolean | null
+    evalHoldNewsReal?: boolean | null
+    evalUpBand?: boolean | null
+    evalDownBand?: boolean | null
+    evalNotesJson?: string | null
+    customConditionsJson?: string | null
+    customBandsJson?: string | null
+    actCheckpointsJson?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MnqDailyPlanUncheckedCreateWithoutSessionInput = {
+    id?: string
+    scenario?: $Enums.MnqScenario | null
+    sweepUpBand?: string | null
+    sweepDownBand?: string | null
+    hasNewsGap?: boolean
+    gapCanHold?: boolean
+    condRangeMovingOver1h?: boolean
+    condRangeVwapFlat?: boolean
+    condRangeNoMajorNews?: boolean
+    condRangePrevTrend?: boolean
+    condTrendSingleDir?: boolean
+    condTrendVwapTilted?: boolean
+    condFadeNewsWeak?: boolean
+    condHoldNewsReal?: boolean
+    evalRangeMovingOver1h?: boolean | null
+    evalRangeVwapFlat?: boolean | null
+    evalRangeNoMajorNews?: boolean | null
+    evalRangePrevTrend?: boolean | null
+    evalTrendSingleDir?: boolean | null
+    evalTrendVwapTilted?: boolean | null
+    evalFadeNewsWeak?: boolean | null
+    evalHoldNewsReal?: boolean | null
+    evalUpBand?: boolean | null
+    evalDownBand?: boolean | null
+    evalNotesJson?: string | null
+    customConditionsJson?: string | null
+    customBandsJson?: string | null
+    actCheckpointsJson?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MnqDailyPlanCreateOrConnectWithoutSessionInput = {
+    where: MnqDailyPlanWhereUniqueInput
+    create: XOR<MnqDailyPlanCreateWithoutSessionInput, MnqDailyPlanUncheckedCreateWithoutSessionInput>
+  }
+
   export type NewsEventUpsertWithWhereUniqueWithoutSessionInput = {
     where: NewsEventWhereUniqueInput
     update: XOR<NewsEventUpdateWithoutSessionInput, NewsEventUncheckedUpdateWithoutSessionInput>
@@ -20075,6 +22363,85 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Screenshot"> | Date | string
   }
 
+  export type MnqDailyPlanUpsertWithoutSessionInput = {
+    update: XOR<MnqDailyPlanUpdateWithoutSessionInput, MnqDailyPlanUncheckedUpdateWithoutSessionInput>
+    create: XOR<MnqDailyPlanCreateWithoutSessionInput, MnqDailyPlanUncheckedCreateWithoutSessionInput>
+    where?: MnqDailyPlanWhereInput
+  }
+
+  export type MnqDailyPlanUpdateToOneWithWhereWithoutSessionInput = {
+    where?: MnqDailyPlanWhereInput
+    data: XOR<MnqDailyPlanUpdateWithoutSessionInput, MnqDailyPlanUncheckedUpdateWithoutSessionInput>
+  }
+
+  export type MnqDailyPlanUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scenario?: NullableEnumMnqScenarioFieldUpdateOperationsInput | $Enums.MnqScenario | null
+    sweepUpBand?: NullableStringFieldUpdateOperationsInput | string | null
+    sweepDownBand?: NullableStringFieldUpdateOperationsInput | string | null
+    hasNewsGap?: BoolFieldUpdateOperationsInput | boolean
+    gapCanHold?: BoolFieldUpdateOperationsInput | boolean
+    condRangeMovingOver1h?: BoolFieldUpdateOperationsInput | boolean
+    condRangeVwapFlat?: BoolFieldUpdateOperationsInput | boolean
+    condRangeNoMajorNews?: BoolFieldUpdateOperationsInput | boolean
+    condRangePrevTrend?: BoolFieldUpdateOperationsInput | boolean
+    condTrendSingleDir?: BoolFieldUpdateOperationsInput | boolean
+    condTrendVwapTilted?: BoolFieldUpdateOperationsInput | boolean
+    condFadeNewsWeak?: BoolFieldUpdateOperationsInput | boolean
+    condHoldNewsReal?: BoolFieldUpdateOperationsInput | boolean
+    evalRangeMovingOver1h?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangeVwapFlat?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangeNoMajorNews?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangePrevTrend?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalTrendSingleDir?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalTrendVwapTilted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalFadeNewsWeak?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalHoldNewsReal?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalUpBand?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalDownBand?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalNotesJson?: NullableStringFieldUpdateOperationsInput | string | null
+    customConditionsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    customBandsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    actCheckpointsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MnqDailyPlanUncheckedUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    scenario?: NullableEnumMnqScenarioFieldUpdateOperationsInput | $Enums.MnqScenario | null
+    sweepUpBand?: NullableStringFieldUpdateOperationsInput | string | null
+    sweepDownBand?: NullableStringFieldUpdateOperationsInput | string | null
+    hasNewsGap?: BoolFieldUpdateOperationsInput | boolean
+    gapCanHold?: BoolFieldUpdateOperationsInput | boolean
+    condRangeMovingOver1h?: BoolFieldUpdateOperationsInput | boolean
+    condRangeVwapFlat?: BoolFieldUpdateOperationsInput | boolean
+    condRangeNoMajorNews?: BoolFieldUpdateOperationsInput | boolean
+    condRangePrevTrend?: BoolFieldUpdateOperationsInput | boolean
+    condTrendSingleDir?: BoolFieldUpdateOperationsInput | boolean
+    condTrendVwapTilted?: BoolFieldUpdateOperationsInput | boolean
+    condFadeNewsWeak?: BoolFieldUpdateOperationsInput | boolean
+    condHoldNewsReal?: BoolFieldUpdateOperationsInput | boolean
+    evalRangeMovingOver1h?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangeVwapFlat?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangeNoMajorNews?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalRangePrevTrend?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalTrendSingleDir?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalTrendVwapTilted?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalFadeNewsWeak?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalHoldNewsReal?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalUpBand?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalDownBand?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    evalNotesJson?: NullableStringFieldUpdateOperationsInput | string | null
+    customConditionsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    customBandsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    actCheckpointsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type DailySessionCreateWithoutNewsEventsInput = {
     date: Date | string
     marketContext?: string | null
@@ -20090,6 +22457,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     setups?: TradeSetupCreateNestedManyWithoutSessionInput
     screenshots?: ScreenshotCreateNestedManyWithoutSessionInput
+    mnqPlan?: MnqDailyPlanCreateNestedOneWithoutSessionInput
   }
 
   export type DailySessionUncheckedCreateWithoutNewsEventsInput = {
@@ -20107,6 +22475,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     setups?: TradeSetupUncheckedCreateNestedManyWithoutSessionInput
     screenshots?: ScreenshotUncheckedCreateNestedManyWithoutSessionInput
+    mnqPlan?: MnqDailyPlanUncheckedCreateNestedOneWithoutSessionInput
   }
 
   export type DailySessionCreateOrConnectWithoutNewsEventsInput = {
@@ -20261,6 +22630,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     setups?: TradeSetupUpdateManyWithoutSessionNestedInput
     screenshots?: ScreenshotUpdateManyWithoutSessionNestedInput
+    mnqPlan?: MnqDailyPlanUpdateOneWithoutSessionNestedInput
   }
 
   export type DailySessionUncheckedUpdateWithoutNewsEventsInput = {
@@ -20278,6 +22648,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     setups?: TradeSetupUncheckedUpdateManyWithoutSessionNestedInput
     screenshots?: ScreenshotUncheckedUpdateManyWithoutSessionNestedInput
+    mnqPlan?: MnqDailyPlanUncheckedUpdateOneWithoutSessionNestedInput
   }
 
   export type TradeSetupUpsertWithWhereUniqueWithoutNewsEventsInput = {
@@ -20311,6 +22682,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     newsEvents?: NewsEventCreateNestedManyWithoutSessionInput
     screenshots?: ScreenshotCreateNestedManyWithoutSessionInput
+    mnqPlan?: MnqDailyPlanCreateNestedOneWithoutSessionInput
   }
 
   export type DailySessionUncheckedCreateWithoutSetupsInput = {
@@ -20328,6 +22700,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     newsEvents?: NewsEventUncheckedCreateNestedManyWithoutSessionInput
     screenshots?: ScreenshotUncheckedCreateNestedManyWithoutSessionInput
+    mnqPlan?: MnqDailyPlanUncheckedCreateNestedOneWithoutSessionInput
   }
 
   export type DailySessionCreateOrConnectWithoutSetupsInput = {
@@ -20542,6 +22915,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     newsEvents?: NewsEventUpdateManyWithoutSessionNestedInput
     screenshots?: ScreenshotUpdateManyWithoutSessionNestedInput
+    mnqPlan?: MnqDailyPlanUpdateOneWithoutSessionNestedInput
   }
 
   export type DailySessionUncheckedUpdateWithoutSetupsInput = {
@@ -20559,6 +22933,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     newsEvents?: NewsEventUncheckedUpdateManyWithoutSessionNestedInput
     screenshots?: ScreenshotUncheckedUpdateManyWithoutSessionNestedInput
+    mnqPlan?: MnqDailyPlanUncheckedUpdateOneWithoutSessionNestedInput
   }
 
   export type StrategyUpsertWithoutSetupsInput = {
@@ -21192,6 +23567,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     newsEvents?: NewsEventCreateNestedManyWithoutSessionInput
     setups?: TradeSetupCreateNestedManyWithoutSessionInput
+    mnqPlan?: MnqDailyPlanCreateNestedOneWithoutSessionInput
   }
 
   export type DailySessionUncheckedCreateWithoutScreenshotsInput = {
@@ -21209,6 +23585,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     newsEvents?: NewsEventUncheckedCreateNestedManyWithoutSessionInput
     setups?: TradeSetupUncheckedCreateNestedManyWithoutSessionInput
+    mnqPlan?: MnqDailyPlanUncheckedCreateNestedOneWithoutSessionInput
   }
 
   export type DailySessionCreateOrConnectWithoutScreenshotsInput = {
@@ -21420,6 +23797,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     newsEvents?: NewsEventUpdateManyWithoutSessionNestedInput
     setups?: TradeSetupUpdateManyWithoutSessionNestedInput
+    mnqPlan?: MnqDailyPlanUpdateOneWithoutSessionNestedInput
   }
 
   export type DailySessionUncheckedUpdateWithoutScreenshotsInput = {
@@ -21437,6 +23815,95 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     newsEvents?: NewsEventUncheckedUpdateManyWithoutSessionNestedInput
     setups?: TradeSetupUncheckedUpdateManyWithoutSessionNestedInput
+    mnqPlan?: MnqDailyPlanUncheckedUpdateOneWithoutSessionNestedInput
+  }
+
+  export type DailySessionCreateWithoutMnqPlanInput = {
+    date: Date | string
+    marketContext?: string | null
+    preMarketPlan?: string | null
+    selectedStrategy?: string
+    postReview?: string | null
+    lessonsLearned?: string | null
+    whatWentWell?: string | null
+    planFollowed?: number | null
+    emotionRating?: number | null
+    focusRating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    newsEvents?: NewsEventCreateNestedManyWithoutSessionInput
+    setups?: TradeSetupCreateNestedManyWithoutSessionInput
+    screenshots?: ScreenshotCreateNestedManyWithoutSessionInput
+  }
+
+  export type DailySessionUncheckedCreateWithoutMnqPlanInput = {
+    date: Date | string
+    marketContext?: string | null
+    preMarketPlan?: string | null
+    selectedStrategy?: string
+    postReview?: string | null
+    lessonsLearned?: string | null
+    whatWentWell?: string | null
+    planFollowed?: number | null
+    emotionRating?: number | null
+    focusRating?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    newsEvents?: NewsEventUncheckedCreateNestedManyWithoutSessionInput
+    setups?: TradeSetupUncheckedCreateNestedManyWithoutSessionInput
+    screenshots?: ScreenshotUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type DailySessionCreateOrConnectWithoutMnqPlanInput = {
+    where: DailySessionWhereUniqueInput
+    create: XOR<DailySessionCreateWithoutMnqPlanInput, DailySessionUncheckedCreateWithoutMnqPlanInput>
+  }
+
+  export type DailySessionUpsertWithoutMnqPlanInput = {
+    update: XOR<DailySessionUpdateWithoutMnqPlanInput, DailySessionUncheckedUpdateWithoutMnqPlanInput>
+    create: XOR<DailySessionCreateWithoutMnqPlanInput, DailySessionUncheckedCreateWithoutMnqPlanInput>
+    where?: DailySessionWhereInput
+  }
+
+  export type DailySessionUpdateToOneWithWhereWithoutMnqPlanInput = {
+    where?: DailySessionWhereInput
+    data: XOR<DailySessionUpdateWithoutMnqPlanInput, DailySessionUncheckedUpdateWithoutMnqPlanInput>
+  }
+
+  export type DailySessionUpdateWithoutMnqPlanInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    marketContext?: NullableStringFieldUpdateOperationsInput | string | null
+    preMarketPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedStrategy?: StringFieldUpdateOperationsInput | string
+    postReview?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonsLearned?: NullableStringFieldUpdateOperationsInput | string | null
+    whatWentWell?: NullableStringFieldUpdateOperationsInput | string | null
+    planFollowed?: NullableIntFieldUpdateOperationsInput | number | null
+    emotionRating?: NullableIntFieldUpdateOperationsInput | number | null
+    focusRating?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    newsEvents?: NewsEventUpdateManyWithoutSessionNestedInput
+    setups?: TradeSetupUpdateManyWithoutSessionNestedInput
+    screenshots?: ScreenshotUpdateManyWithoutSessionNestedInput
+  }
+
+  export type DailySessionUncheckedUpdateWithoutMnqPlanInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    marketContext?: NullableStringFieldUpdateOperationsInput | string | null
+    preMarketPlan?: NullableStringFieldUpdateOperationsInput | string | null
+    selectedStrategy?: StringFieldUpdateOperationsInput | string
+    postReview?: NullableStringFieldUpdateOperationsInput | string | null
+    lessonsLearned?: NullableStringFieldUpdateOperationsInput | string | null
+    whatWentWell?: NullableStringFieldUpdateOperationsInput | string | null
+    planFollowed?: NullableIntFieldUpdateOperationsInput | number | null
+    emotionRating?: NullableIntFieldUpdateOperationsInput | number | null
+    focusRating?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    newsEvents?: NewsEventUncheckedUpdateManyWithoutSessionNestedInput
+    setups?: TradeSetupUncheckedUpdateManyWithoutSessionNestedInput
+    screenshots?: ScreenshotUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type TradeSetupCreateManyNewsCatalogRefInput = {

@@ -188,3 +188,31 @@ export interface UploadedScreenshot {
   fileSize: number
   mimeType: string
 }
+
+// ─── MNQ 情景相关 ─────────────────────────────────────────────────────
+
+export type MnqScenario = "RANGE_SWEEP" | "TREND_REGULAR" | "TREND_GAP_FADE" | "TREND_GAP_HOLD"
+
+export const MNQ_SCENARIO_LABELS: Record<MnqScenario, string> = {
+  RANGE_SWEEP: "震荡日 Sweep 反转",
+  TREND_REGULAR: "常规趋势日 (A)",
+  TREND_GAP_FADE: "Gap & Fade (B)",
+  TREND_GAP_HOLD: "Gap & Hold (C)",
+}
+
+// 关键价位标签（仅文字引用，无数值）
+export type MnqKeyLevel = "PDH" | "PDL" | "PDC" | "PMH" | "PML" | "ONH" | "ONL"
+
+export const MNQ_KEY_LEVEL_LABELS: Record<MnqKeyLevel, string> = {
+  PDH: "PDH (前日高)",
+  PDL: "PDL (前日低)",
+  PDC: "PDC (前日收)",
+  PMH: "PMH (盘前高)",
+  PML: "PML (盘前低)",
+  ONH: "ONH (隔夜高)",
+  ONL: "ONL (隔夜低)",
+}
+
+// 震荡日 band 选项
+export const MNQ_UPBAND_OPTIONS: MnqKeyLevel[] = ["PDH", "PMH", "ONH", "ONL", "PDC", "PDL"]
+export const MNQ_DOWNBAND_OPTIONS: MnqKeyLevel[] = ["PDL", "ONL", "PML", "ONH", "PMH", "PDH", "PDC"]

@@ -3,12 +3,15 @@
 import { Card, CardContent } from "~/components/ui/card"
 import { SetupCard } from "~/components/setup/SetupCard"
 import { CreateSetupDialog } from "~/components/setup/CreateSetupDialog"
-import type { DailySession, Execution, TradeSetup } from "../../../generated/prisma"
+import type { DailySession, Execution, MnqDailyPlan, TradeSetup } from "../../../generated/prisma"
 
 type SetupWithExecutions = TradeSetup & { executions: Execution[] }
 
 interface Props {
-  session: DailySession & { setups: SetupWithExecutions[] }
+  session: DailySession & {
+    setups: SetupWithExecutions[]
+    mnqPlan: MnqDailyPlan | null
+  }
   date: string
 }
 
@@ -43,7 +46,12 @@ export function IntraMarketSection({ session, date }: Props) {
         ) : (
           <div className="grid grid-cols-2 gap-3">
             {watching.map((setup) => (
-              <SetupCard key={setup.id} setup={setup} intraMode={true} />
+              <SetupCard
+                key={setup.id}
+                setup={setup}
+                intraMode={true}
+                mnqPlan={setup.symbol === "MNQ" ? session.mnqPlan : null}
+              />
             ))}
           </div>
         )}
@@ -57,7 +65,12 @@ export function IntraMarketSection({ session, date }: Props) {
           </h3>
           <div className="grid grid-cols-2 gap-3">
             {done.map((setup) => (
-              <SetupCard key={setup.id} setup={setup} intraMode={true} />
+              <SetupCard
+                key={setup.id}
+                setup={setup}
+                intraMode={true}
+                mnqPlan={setup.symbol === "MNQ" ? session.mnqPlan : null}
+              />
             ))}
           </div>
         </div>

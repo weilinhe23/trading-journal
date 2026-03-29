@@ -93,6 +93,13 @@ enum ChartTag {
   MARKET_OVERVIEW  // 大盘/指数图
 }
 
+enum MnqScenario {
+  RANGE_SWEEP       // 震荡日 Sweep 反转
+  TREND_REGULAR     // 情景 A: 常规趋势日
+  TREND_GAP_FADE    // 情景 B: Gap & Fade
+  TREND_GAP_HOLD    // 情景 C: Gap & Hold
+}
+
 // ─── 核心模型 ────────────────────────────────────────────────
 
 // 新闻催化剂库（用户自维护）
@@ -157,6 +164,7 @@ model DailySession {
   newsEvents       NewsEvent[]
   setups           TradeSetup[]
   screenshots      Screenshot[]
+  mnqPlan          MnqDailyPlan?
 
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
@@ -352,4 +360,64 @@ model Screenshot {
 
   takenAt      DateTime?  // 截图时间（可选）
   createdAt    DateTime   @default(now())
+}
+
+// MNQ 每日情景计划（1:1 关联 DailySession）
+model MnqDailyPlan {
+  id            String        @id @default(cuid())
+  sessionDate   DateTime      @unique
+  session       DailySession  @relation(fields: [sessionDate], references: [date], onDelete: Cascade)
+
+  // 情景选择（null = 尚未选择）
+  scenario      MnqScenario?
+
+  // 震荡日 Sweep 反转参数（单选）
+  sweepUpBand   String?       // 上边界: "PDH" | "PMH" | "ONH" | "ONL" | "PDC" | "PDL"
+  sweepDownBand String?       // 下边界: "PDL" | "ONL" | "PML" | "ONH" | "PMH" | "PDH" | "PDC"
+
+  // 趋势日决策树
+  hasNewsGap    Boolean       @default(false)  // 盘前有消息驱动 Gap
+  gapCanHold    Boolean       @default(false)  // Gap 能否 Hold
+
+  // ── 震荡日识别条件（可勾选）──
+  condRangeMovingOver1h  Boolean  @default(false)  // PMH–PML 区间内运动 > 1h
+  condRangeVwapFlat      Boolean  @default(false)  // VWAP 斜率接近水平
+  condRangeNoMajorNews   Boolean  @default(false)  // 当日基本面无重大新闻
+  condRangePrevTrend     Boolean  @default(false)  // 前日为强趋势日，今日高位震荡
+
+  // ── 趋势日 A 识别条件（可勾选）──
+  condTrendSingleDir     Boolean  @default(false)  // 盘前单边运动，不回归 VWAP
+  condTrendVwapTilted    Boolean  @default(false)  // VWAP 斜率明显倾斜
+
+  // ── 趋势日 B 识别条件（可勾选）──
+  condFadeNewsWeak       Boolean  @default(false)  // 消息可信度存疑或已被充分定价
+
+  // ── 趋势日 C 识别条件（可勾选）──
+  condHoldNewsReal       Boolean  @default(false)  // 消息面真实且持续
+
+  // ── 盘中评估（null=未评估, true=准确, false=失误）──
+  evalRangeMovingOver1h  Boolean?
+  evalRangeVwapFlat      Boolean?
+  evalRangeNoMajorNews   Boolean?
+  evalRangePrevTrend     Boolean?
+  evalTrendSingleDir     Boolean?
+  evalTrendVwapTilted    Boolean?
+  evalFadeNewsWeak       Boolean?
+  evalHoldNewsReal       Boolean?
+  evalUpBand             Boolean?  // upband 选择是否准确
+  evalDownBand           Boolean?  // downband 选择是否准确
+  evalNotesJson  String?           // JSON: { [evalKey]: noteText }
+
+  // ── 用户自定义（可增减）──
+  customConditionsJson  String?   // JSON: CustomCondition[] — 用户自添加的识别条件
+  customBandsJson       String?   // JSON: { up: string[], down: string[] } — 自定义边界选项
+
+  // ── 盘中决策记录（四幕剧等，结构因 scenario 而异）──
+  actCheckpointsJson  String?   // JSON: 四幕剧决策记录
+
+  // 备注
+  notes         String?
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
