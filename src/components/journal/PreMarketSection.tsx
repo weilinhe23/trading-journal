@@ -8,7 +8,8 @@ import { Button } from "~/components/ui/button"
 import { Label } from "~/components/ui/label"
 import { SetupCard } from "~/components/setup/SetupCard"
 import { CreateSetupDialog } from "~/components/setup/CreateSetupDialog"
-import type { DailySession, Execution, TradeSetup } from "../../../generated/prisma"
+import { MnqScenarioPanel } from "~/components/journal/MnqScenarioPanel"
+import type { DailySession, Execution, TradeSetup, MnqDailyPlan } from "../../../generated/prisma"
 
 type SetupWithExecutions = TradeSetup & { executions: Execution[] }
 
@@ -16,6 +17,7 @@ interface Props {
   session: DailySession & {
     newsEvents: unknown[]
     setups: SetupWithExecutions[]
+    mnqPlan: MnqDailyPlan | null
   }
   date: string
 }
@@ -92,6 +94,15 @@ export function PreMarketSection({ session, date }: Props) {
         </Button>
       </div>
 
+      {/* MNQ 每日情景判断 */}
+      {session.mnqPlan && (
+        <MnqScenarioPanel
+          plan={session.mnqPlan}
+          date={date}
+          mnqSetupId={session.setups.find((s) => s.symbol === "MNQ")?.id ?? null}
+        />
+      )}
+
       {/* 今日 Setup 列表 */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
@@ -115,7 +126,12 @@ export function PreMarketSection({ session, date }: Props) {
         ) : (
           <div className="grid grid-cols-2 gap-3">
             {session.setups.map((setup) => (
-              <SetupCard key={setup.id} setup={setup} intraMode={false} />
+              <SetupCard
+                key={setup.id}
+                setup={setup}
+                intraMode={false}
+                mnqPlan={setup.symbol === "MNQ" ? session.mnqPlan : null}
+              />
             ))}
           </div>
         )}
