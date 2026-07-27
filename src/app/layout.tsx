@@ -66,6 +66,18 @@ export default function RootLayout({
                 >
                   周报
                 </Link>
+                <Link
+                  href="/monthly"
+                  className="hover:text-foreground transition-colors"
+                >
+                  月报
+                </Link>
+                <Link
+                  href="/quarterly"
+                  className="hover:text-foreground transition-colors"
+                >
+                  季报
+                </Link>
               </nav>
             </div>
           </header>
