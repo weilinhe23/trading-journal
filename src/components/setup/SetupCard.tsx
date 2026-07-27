@@ -126,7 +126,7 @@ export function SetupCard({ setup, intraMode = false, summaryMode = false, scree
   const [condsSaving, setCondsSaving] = useState(false)
 
   const statusCfg = STATUS_CONFIG[setup.status as SetupStatus]
-  const dirCfg = DIRECTION_CONFIG[setup.direction] ?? DIRECTION_CONFIG["TBD"]!
+  const dirCfg = DIRECTION_CONFIG[setup.direction] ?? DIRECTION_CONFIG.TBD!
 
   const dateStr = (
     setup.sessionDate instanceof Date
@@ -389,7 +389,15 @@ export function SetupCard({ setup, intraMode = false, summaryMode = false, scree
               { label: "盘中行情", time: "10:00–13:00",   raw: mnqPlan.marketMidJson },
               { label: "午盘行情", time: "13:00–收盘",     raw: mnqPlan.marketAfternoonJson },
             ].map(({ label, time, raw }) => ({ label, time, seg: parseSeg(raw) }))
-             .filter(({ seg }) => seg && (seg.type || seg.note?.trim() || (seg.opportunities?.length ?? 0) > 0 || seg.opportunity?.trim()))
+             .filter(({ seg }) => {
+               if (!seg) return false
+               return Boolean(
+                 seg.type ??
+                   seg.note?.trim() ??
+                   ((seg.opportunities?.length ?? 0) > 0 ? "opportunities" : undefined) ??
+                   seg.opportunity?.trim(),
+               )
+             })
             if (segments.length === 0) return null
             return (
               <div className="space-y-2.5 pt-1.5 border-t border-border/30">

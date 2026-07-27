@@ -54,7 +54,7 @@ export async function POST(req: Request) {
   }
 
   // 实际方向：优先使用 actualDirection，其次使用 setup 方向（TBD 时无法计算盈亏）
-  const effectiveDirection = actualDirection ?? (setup.direction !== "TBD" ? setup.direction as "LONG" | "SHORT" : null)
+  const effectiveDirection = actualDirection ?? (setup.direction !== "TBD" ? setup.direction : null)
 
   // 计算盈亏（若已有出场价且方向确定）
   let pnl: number | null = null

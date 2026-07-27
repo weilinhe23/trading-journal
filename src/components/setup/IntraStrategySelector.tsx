@@ -43,7 +43,7 @@ export function IntraStrategySelector({
       .then(d => {
         if (d.success && d.data) setStrategies(d.data.filter(s => s.isActive))
       })
-      .catch(() => {})
+      .catch(() => undefined)
   }, [open, strategies.length])
 
   const selectedStrategy = strategies.find(s => s.id === selectedId)

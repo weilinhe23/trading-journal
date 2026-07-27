@@ -47,7 +47,7 @@ export async function GET() {
         else cur.losses++
       }
 
-      stratMap.set(setup.strategy!, cur)
+      stratMap.set(setup.strategy, cur)
     }
 
     const strategies = Array.from(stratMap.entries())

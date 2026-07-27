@@ -347,7 +347,7 @@ export default async function QuarterlyDetailPage({ params }: PageProps) {
         text,
         occurredIn: unique,
         occurredLabels: labels,
-        severity: (unique.length >= 3 ? "high" : unique.length >= 2 ? "medium" : "low") as "high" | "medium" | "low",
+        severity: (unique.length >= 3 ? "high" : unique.length >= 2 ? "medium" : "low"),
       }
     })
     .sort((a, b) => b.occurredIn.length - a.occurredIn.length)

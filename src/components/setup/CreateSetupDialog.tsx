@@ -561,9 +561,9 @@ export function CreateSetupDialog({ date }: Props) {
                     <div className="flex items-center gap-2">
                       <Badge
                         variant="outline"
-                        className={`text-xs shrink-0 ${STRENGTH_BADGE_CLASS[selectedCatalog.strength as NewsStrength]}`}
+                        className={`text-xs shrink-0 ${STRENGTH_BADGE_CLASS[selectedCatalog.strength]}`}
                       >
-                        {NEWS_STRENGTH_LABELS[selectedCatalog.strength as NewsStrength]}
+                        {NEWS_STRENGTH_LABELS[selectedCatalog.strength]}
                       </Badge>
                       <span className="text-sm font-medium flex-1 min-w-0 truncate">{selectedCatalog.name}</span>
                       <span className="text-xs text-muted-foreground shrink-0">{selectedCatalog.category}</span>
@@ -585,7 +585,7 @@ export function CreateSetupDialog({ date }: Props) {
                         {(selectedCatalog.entryConditions?.length ?? 0) > 0 && (
                           <div className="flex flex-wrap items-center gap-1">
                             <CheckCircle2 className="h-3 w-3 text-green-500 shrink-0" />
-                            {selectedCatalog.entryConditions!.map((c, i) => (
+                            {selectedCatalog.entryConditions.map((c, i) => (
                               <span key={i} className="text-xs bg-green-500/10 text-green-400 border border-green-500/20 rounded-full px-1.5 py-0.5">
                                 {c}
                               </span>
@@ -595,7 +595,7 @@ export function CreateSetupDialog({ date }: Props) {
                         {(selectedCatalog.riskFactors?.length ?? 0) > 0 && (
                           <div className="flex flex-wrap items-center gap-1">
                             <AlertTriangle className="h-3 w-3 text-red-400 shrink-0" />
-                            {selectedCatalog.riskFactors!.map((r, i) => (
+                            {selectedCatalog.riskFactors.map((r, i) => (
                               <span key={i} className="text-xs bg-red-500/10 text-red-400 border border-red-500/20 rounded-full px-1.5 py-0.5">
                                 {r}
                               </span>
@@ -639,8 +639,8 @@ export function CreateSetupDialog({ date }: Props) {
                           : catalogItems
 
                         const grouped = filtered.reduce<Record<string, NewsCatalogItem[]>>((acc, item) => {
-                          if (!acc[item.category]) acc[item.category] = []
-                          acc[item.category]!.push(item)
+                          acc[item.category] ??= []
+                          acc[item.category].push(item)
                           return acc
                         }, {})
 
@@ -671,9 +671,9 @@ export function CreateSetupDialog({ date }: Props) {
                                 >
                                   <Badge
                                     variant="outline"
-                                    className={`text-xs shrink-0 ${STRENGTH_BADGE_CLASS[item.strength as NewsStrength]}`}
+                                    className={`text-xs shrink-0 ${STRENGTH_BADGE_CLASS[item.strength]}`}
                                   >
-                                    {NEWS_STRENGTH_LABELS[item.strength as NewsStrength]}
+                                    {NEWS_STRENGTH_LABELS[item.strength]}
                                   </Badge>
                                   <div className="min-w-0 flex-1">
                                     <span className="text-sm">{item.name}</span>

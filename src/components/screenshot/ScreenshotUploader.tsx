@@ -86,7 +86,9 @@ export function ScreenshotUploader({ date, initialScreenshots, setups }: Props) 
   )
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
+    onDrop: (acceptedFiles) => {
+      void onDrop(acceptedFiles)
+    },
     accept: { "image/*": [".png", ".jpg", ".jpeg", ".gif", ".webp"] },
     multiple: true,
   })

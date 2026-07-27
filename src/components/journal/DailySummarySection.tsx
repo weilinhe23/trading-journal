@@ -82,9 +82,7 @@ function BandAccuracyRow({
 export function DailySummarySection({ session }: Props) {
   const hasAnyData =
     session.setups.length > 0 ||
-    session.marketContext ||
-    session.preMarketPlan ||
-    session.postReview
+    [session.marketContext, session.preMarketPlan, session.postReview].some(Boolean)
 
   if (!hasAnyData) {
     return (
@@ -163,7 +161,7 @@ export function DailySummarySection({ session }: Props) {
 
       {/* ── MNQ 边界准确性（仅震荡日且已选边界时） ── */}
       {session.mnqPlan?.scenario === "RANGE_SWEEP" &&
-        (session.mnqPlan.sweepUpBand || session.mnqPlan.sweepDownBand) && (
+        [session.mnqPlan.sweepUpBand, session.mnqPlan.sweepDownBand].some(Boolean) && (
           <Card>
             <CardContent className="pt-4 pb-4 space-y-2">
               <div className="flex items-center gap-2">

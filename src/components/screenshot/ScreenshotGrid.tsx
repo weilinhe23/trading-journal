@@ -227,8 +227,8 @@ export function ScreenshotGrid({ screenshots, title }: { screenshots: Screenshot
       </div>
       {lightboxIdx !== null && screenshots[lightboxIdx] != null && (
         <Lightbox
-          src={screenshots[lightboxIdx]!.filePath}
-          alt={screenshots[lightboxIdx]!.caption ?? screenshots[lightboxIdx]!.originalName}
+          src={screenshots[lightboxIdx].filePath}
+          alt={screenshots[lightboxIdx].caption ?? screenshots[lightboxIdx].originalName}
           index={lightboxIdx}
           total={screenshots.length}
           onClose={() => setLightboxIdx(null)}

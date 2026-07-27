@@ -103,7 +103,7 @@ export default async function AnalyticsSummaryPage() {
         <StatCard
           label="Setup 总计"
           value={String(totalSetups)}
-          sub={`执行 ${countByStatus["EXECUTED"] ?? 0} · 错过 ${countByStatus["MISSED"] ?? 0}`}
+          sub={`执行 ${countByStatus.EXECUTED ?? 0} · 错过 ${countByStatus.MISSED ?? 0}`}
         />
       </div>
 

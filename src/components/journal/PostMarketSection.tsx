@@ -96,7 +96,7 @@ function FullReviewRecord({ session, postReview, lessonsLearned, whatWentWell, p
           <div className="space-y-2 mt-1">
             <span className="text-xs font-medium text-muted-foreground">Setup 列表：</span>
             {session.setups.map((s) => {
-              const dir = DIR_LABEL[s.direction] ?? DIR_LABEL["TBD"]!
+              const dir = DIR_LABEL[s.direction] ?? DIR_LABEL.TBD!
               const isExpanded = expandedSetup === s.id
               const totalPnL = s.executions.reduce<number | null>((acc, ex) => {
                 if (ex.pnl === null) return acc

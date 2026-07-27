@@ -59,9 +59,9 @@ export async function GET() {
         profitableExecutions: profitable.length,
         avgPnL: Math.round(avgPnL * 100) / 100,
         totalSetups,
-        executedSetups: countByStatus["EXECUTED"] ?? 0,
-        missedSetups: countByStatus["MISSED"] ?? 0,
-        watchingSetups: countByStatus["WATCHING"] ?? 0,
+        executedSetups: countByStatus.EXECUTED ?? 0,
+        missedSetups: countByStatus.MISSED ?? 0,
+        watchingSetups: countByStatus.WATCHING ?? 0,
         dailyPnL,
       },
     })

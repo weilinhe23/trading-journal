@@ -129,7 +129,7 @@ function BoolBadge({ val, label }: { val: boolean | null; label: string }) {
 function SetupResultCard({ setup }: { setup: SearchSetup }) {
   const [expanded, setExpanded] = useState(false)
   const dateStr = toDateStr(setup.sessionDate)
-  const statusCfg = STATUS_CONFIG[setup.status] ?? STATUS_CONFIG["WATCHING"]!
+  const statusCfg = STATUS_CONFIG[setup.status] ?? STATUS_CONFIG.WATCHING!
   const priority = setup.priority as SetupPriority
   const totalPnL = setup.executions.reduce<number | null>((acc, ex) => {
     if (ex.pnl === null) return acc
@@ -137,7 +137,7 @@ function SetupResultCard({ setup }: { setup: SearchSetup }) {
   }, null)
 
   let tradeTypes: string[] = []
-  try { tradeTypes = JSON.parse(setup.selectedTradeTypes || "[]") as string[] } catch { /* noop */ }
+  try { tradeTypes = JSON.parse(setup.selectedTradeTypes ?? "[]") as string[] } catch { /* noop */ }
 
   const hasEvalData =
     setup.stockSelectionAccurate !== null ||
@@ -145,8 +145,7 @@ function SetupResultCard({ setup }: { setup: SearchSetup }) {
     setup.strategySelectionAccurate !== null ||
     setup.entryOpportunityAccurate !== null ||
     setup.exitOpportunityAccurate !== null ||
-    setup.actualEntryOpportunity ||
-    setup.actualExitOpportunity ||
+    Boolean(setup.actualEntryOpportunity ?? setup.actualExitOpportunity) ||
     setup.dailySummary
 
   return (
@@ -219,7 +218,7 @@ function SetupResultCard({ setup }: { setup: SearchSetup }) {
       {/* 核心信息（始终显示）*/}
       <div className="px-3 pb-2 space-y-1 text-xs">
         {/* 策略 */}
-        {(setup.strategy || tradeTypes.length > 0) && (
+        {(setup.strategy != null || tradeTypes.length > 0) && (
           <div className="flex gap-1.5">
             <span className="text-violet-400 font-medium w-8 shrink-0">策略</span>
             <span className="text-foreground/80 leading-tight">

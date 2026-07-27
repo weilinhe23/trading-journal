@@ -61,9 +61,9 @@ export async function POST(req: Request) {
       data: {
         name: name.trim(),
         category: category.trim(),
-        subCategory: subCategory?.trim() || null,
+        subCategory: subCategory?.trim() ? subCategory.trim() : null,
         strength: strength as "STRONG" | "MEDIUM" | "WEAK",
-        description: description?.trim() || null,
+        description: description?.trim() ? description.trim() : null,
         entryConditions: serializeArray(entryConditions),
         riskFactors: serializeArray(riskFactors),
       },

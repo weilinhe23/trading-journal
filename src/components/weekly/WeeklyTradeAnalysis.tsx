@@ -164,7 +164,7 @@ function buildUnifiedStrategyTree(
     const r = calcR(t)
     const node = get(sk)
     const subNode = getOrCreateSub(node, sub)
-    for (const n of [node as UnifiedStratNode, subNode]) {
+    for (const n of [node, subNode]) {
       n.exCount++
       if (t.pnl !== null && t.pnl > 0) n.exWins++
       if (t.pnl !== null) n.exTotalPnl += t.pnl

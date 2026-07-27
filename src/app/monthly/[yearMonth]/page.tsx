@@ -380,7 +380,7 @@ export default async function MonthlyDetailPage({ params }: PageProps) {
       return {
         text,
         occurredIn: unique,
-        severity: (unique.length >= 3 ? "high" : unique.length >= 2 ? "medium" : "low") as "high" | "medium" | "low",
+        severity: (unique.length >= 3 ? "high" : unique.length >= 2 ? "medium" : "low"),
       }
     })
     .sort((a, b) => b.occurredIn.length - a.occurredIn.length)

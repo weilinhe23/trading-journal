@@ -32,8 +32,8 @@ export default async function NewsCatalogPage() {
 
   // Group by category
   const grouped = items.reduce<Record<string, NewsCatalogItem[]>>((acc, item) => {
-    if (!acc[item.category]) acc[item.category] = []
-    acc[item.category]!.push(item)
+    acc[item.category] ??= []
+    acc[item.category].push(item)
     return acc
   }, {})
 
@@ -64,8 +64,8 @@ export default async function NewsCatalogPage() {
             const catItems = grouped[cat]!
             const subGroups = catItems.reduce<Record<string, NewsCatalogItem[]>>((acc, item) => {
               const sub = item.subCategory ?? "__none__"
-              if (!acc[sub]) acc[sub] = []
-              acc[sub]!.push(item)
+              acc[sub] ??= []
+              acc[sub].push(item)
               return acc
             }, {})
             const subKeys = Object.keys(subGroups).sort((a, b) => {
