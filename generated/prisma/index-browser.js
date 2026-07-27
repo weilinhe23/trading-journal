@@ -265,6 +265,20 @@ exports.Prisma.WeeklyReportScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.MonthlyReportScalarFieldEnum = {
+  yearMonth: 'yearMonth',
+  monthInsight: 'monthInsight',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QuarterlyReportScalarFieldEnum = {
+  yearQuarter: 'yearQuarter',
+  quarterInsight: 'quarterInsight',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.MissedReasonOptionScalarFieldEnum = {
   id: 'id',
   label: 'label',
@@ -320,6 +334,13 @@ exports.Prisma.MnqDailyPlanScalarFieldEnum = {
   customConditionsJson: 'customConditionsJson',
   customBandsJson: 'customBandsJson',
   actCheckpointsJson: 'actCheckpointsJson',
+  weeklyMarketJson: 'weeklyMarketJson',
+  marketPreJson: 'marketPreJson',
+  marketOpenJson: 'marketOpenJson',
+  marketMidJson: 'marketMidJson',
+  marketAfternoonJson: 'marketAfternoonJson',
+  heldOvernight: 'heldOvernight',
+  overnightNote: 'overnightNote',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -431,6 +452,8 @@ exports.Prisma.ModelName = {
   TradeSetup: 'TradeSetup',
   Execution: 'Execution',
   WeeklyReport: 'WeeklyReport',
+  MonthlyReport: 'MonthlyReport',
+  QuarterlyReport: 'QuarterlyReport',
   MissedReasonOption: 'MissedReasonOption',
   Screenshot: 'Screenshot',
   MnqDailyPlan: 'MnqDailyPlan'

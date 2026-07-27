@@ -298,6 +298,12 @@ model Execution {
   commission Float     @default(0)
   pnl        Float? // 自动计算后存储
 
+  // ── 交易回报指标（点位为单位，适用于 MNQ/NQ 等期货）──
+  plannedRiskPts           Float? // 计划风险（入场到止损点位距离）
+  maxAdverseExcursionPts   Float? // MAE 最大不利变动（盘中最大回撤点位）
+  maxFavorableExcursionPts Float? // MFE 最大有利变动（盘中最高盈利空间点位）
+  rMultiple                Float? // R 倍数（实际盈亏点位 / 计划风险，自动计算）
+
   // 执行纪律评估（定性为主）
   actualDirection Direction? // 实际执行方向（可与计划方向不同）
 
@@ -325,6 +331,22 @@ model WeeklyReport {
   overallRating Int? // 整体评分 1-5
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+// 每月月报
+model MonthlyReport {
+  yearMonth    String   @id // "2026-04"
+  monthInsight String? // 月度复盘文字
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// 每季季报
+model QuarterlyReport {
+  yearQuarter    String   @id // "2026-Q2"
+  quarterInsight String? // 季度复盘文字
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 // 错过原因选项（用户自定义）
@@ -414,6 +436,19 @@ model MnqDailyPlan {
 
   // ── 盘中决策记录（四幕剧等，结构因 scenario 而异）──
   actCheckpointsJson String? // JSON: 四幕剧决策记录
+
+  // ── 周行情记录（JSON: { mon,tue,wed,thu,fri: 'UP'|'DOWN'|'RANGE'|null }）──
+  weeklyMarketJson String? // 周一到周五每日行情趋势
+
+  // ── 行情记录（四个时段，JSON: { type:'RANGE'|'TREND'|null, note:string, opportunity:string }）──
+  marketPreJson       String? // 盘前行情
+  marketOpenJson      String? // 开盘行情（09:30-10:00）
+  marketMidJson       String? // 盘中行情（10:00-13:00）
+  marketAfternoonJson String? // 午盘行情（13:00-收盘）
+
+  // ── 持仓过夜记录 ──
+  heldOvernight Boolean? // null=未标记, true=持仓过夜, false=当日平仓
+  overnightNote String? // 持仓原因或备注
 
   // 备注
   notes String?

@@ -327,6 +327,21 @@ model WeeklyReport {
   updatedAt     DateTime @updatedAt
 }
 
+model MonthlyReport {
+  yearMonth    String   @id  // "2026-04"
+  monthInsight String?       // 月度复盘文字
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// 每季季报
+model QuarterlyReport {
+  yearQuarter    String   @id  // "2026-Q2"
+  quarterInsight String?       // 季度复盘文字
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
 // 错过原因选项（用户自定义）
 model MissedReasonOption {
   id        String   @id @default(cuid())
@@ -414,6 +429,19 @@ model MnqDailyPlan {
 
   // ── 盘中决策记录（四幕剧等，结构因 scenario 而异）──
   actCheckpointsJson  String?   // JSON: 四幕剧决策记录
+
+  // ── 周行情记录（JSON: { mon,tue,wed,thu,fri: 'UP'|'DOWN'|'RANGE'|null }）──
+  weeklyMarketJson     String?   // 周一到周五每日行情趋势
+
+  // ── 行情记录（四个时段，JSON: { type:'RANGE'|'TREND'|null, note:string, opportunity:string }）──
+  marketPreJson        String?   // 盘前行情
+  marketOpenJson       String?   // 开盘行情（09:30-10:00）
+  marketMidJson        String?   // 盘中行情（10:00-13:00）
+  marketAfternoonJson  String?   // 午盘行情（13:00-收盘）
+
+  // ── 持仓过夜记录 ──
+  heldOvernight   Boolean?    // null=未标记, true=持仓过夜, false=当日平仓
+  overnightNote   String?     // 持仓原因或备注
 
   // 备注
   notes         String?

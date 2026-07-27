@@ -54,6 +54,16 @@ export type Execution = $Result.DefaultSelection<Prisma.$ExecutionPayload>
  */
 export type WeeklyReport = $Result.DefaultSelection<Prisma.$WeeklyReportPayload>
 /**
+ * Model MonthlyReport
+ * 
+ */
+export type MonthlyReport = $Result.DefaultSelection<Prisma.$MonthlyReportPayload>
+/**
+ * Model QuarterlyReport
+ * 
+ */
+export type QuarterlyReport = $Result.DefaultSelection<Prisma.$QuarterlyReportPayload>
+/**
  * Model MissedReasonOption
  * 
  */
@@ -443,6 +453,26 @@ export class PrismaClient<
     * ```
     */
   get weeklyReport(): Prisma.WeeklyReportDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.monthlyReport`: Exposes CRUD operations for the **MonthlyReport** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MonthlyReports
+    * const monthlyReports = await prisma.monthlyReport.findMany()
+    * ```
+    */
+  get monthlyReport(): Prisma.MonthlyReportDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.quarterlyReport`: Exposes CRUD operations for the **QuarterlyReport** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QuarterlyReports
+    * const quarterlyReports = await prisma.quarterlyReport.findMany()
+    * ```
+    */
+  get quarterlyReport(): Prisma.QuarterlyReportDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.missedReasonOption`: Exposes CRUD operations for the **MissedReasonOption** model.
@@ -922,6 +952,8 @@ export namespace Prisma {
     TradeSetup: 'TradeSetup',
     Execution: 'Execution',
     WeeklyReport: 'WeeklyReport',
+    MonthlyReport: 'MonthlyReport',
+    QuarterlyReport: 'QuarterlyReport',
     MissedReasonOption: 'MissedReasonOption',
     Screenshot: 'Screenshot',
     MnqDailyPlan: 'MnqDailyPlan'
@@ -943,7 +975,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "newsCatalog" | "strategy" | "tradeType" | "dailySession" | "newsEvent" | "tradeSetup" | "execution" | "weeklyReport" | "missedReasonOption" | "screenshot" | "mnqDailyPlan"
+      modelProps: "newsCatalog" | "strategy" | "tradeType" | "dailySession" | "newsEvent" | "tradeSetup" | "execution" | "weeklyReport" | "monthlyReport" | "quarterlyReport" | "missedReasonOption" | "screenshot" | "mnqDailyPlan"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1539,6 +1571,154 @@ export namespace Prisma {
           }
         }
       }
+      MonthlyReport: {
+        payload: Prisma.$MonthlyReportPayload<ExtArgs>
+        fields: Prisma.MonthlyReportFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MonthlyReportFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyReportPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MonthlyReportFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyReportPayload>
+          }
+          findFirst: {
+            args: Prisma.MonthlyReportFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyReportPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MonthlyReportFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyReportPayload>
+          }
+          findMany: {
+            args: Prisma.MonthlyReportFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyReportPayload>[]
+          }
+          create: {
+            args: Prisma.MonthlyReportCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyReportPayload>
+          }
+          createMany: {
+            args: Prisma.MonthlyReportCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MonthlyReportCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyReportPayload>[]
+          }
+          delete: {
+            args: Prisma.MonthlyReportDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyReportPayload>
+          }
+          update: {
+            args: Prisma.MonthlyReportUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyReportPayload>
+          }
+          deleteMany: {
+            args: Prisma.MonthlyReportDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MonthlyReportUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MonthlyReportUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyReportPayload>[]
+          }
+          upsert: {
+            args: Prisma.MonthlyReportUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyReportPayload>
+          }
+          aggregate: {
+            args: Prisma.MonthlyReportAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMonthlyReport>
+          }
+          groupBy: {
+            args: Prisma.MonthlyReportGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyReportGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MonthlyReportCountArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyReportCountAggregateOutputType> | number
+          }
+        }
+      }
+      QuarterlyReport: {
+        payload: Prisma.$QuarterlyReportPayload<ExtArgs>
+        fields: Prisma.QuarterlyReportFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QuarterlyReportFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarterlyReportPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QuarterlyReportFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarterlyReportPayload>
+          }
+          findFirst: {
+            args: Prisma.QuarterlyReportFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarterlyReportPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QuarterlyReportFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarterlyReportPayload>
+          }
+          findMany: {
+            args: Prisma.QuarterlyReportFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarterlyReportPayload>[]
+          }
+          create: {
+            args: Prisma.QuarterlyReportCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarterlyReportPayload>
+          }
+          createMany: {
+            args: Prisma.QuarterlyReportCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.QuarterlyReportCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarterlyReportPayload>[]
+          }
+          delete: {
+            args: Prisma.QuarterlyReportDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarterlyReportPayload>
+          }
+          update: {
+            args: Prisma.QuarterlyReportUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarterlyReportPayload>
+          }
+          deleteMany: {
+            args: Prisma.QuarterlyReportDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QuarterlyReportUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.QuarterlyReportUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarterlyReportPayload>[]
+          }
+          upsert: {
+            args: Prisma.QuarterlyReportUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QuarterlyReportPayload>
+          }
+          aggregate: {
+            args: Prisma.QuarterlyReportAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQuarterlyReport>
+          }
+          groupBy: {
+            args: Prisma.QuarterlyReportGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QuarterlyReportGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.QuarterlyReportCountArgs<ExtArgs>
+            result: $Utils.Optional<QuarterlyReportCountAggregateOutputType> | number
+          }
+        }
+      }
       MissedReasonOption: {
         payload: Prisma.$MissedReasonOptionPayload<ExtArgs>
         fields: Prisma.MissedReasonOptionFieldRefs
@@ -1865,6 +2045,8 @@ export namespace Prisma {
     tradeSetup?: TradeSetupOmit
     execution?: ExecutionOmit
     weeklyReport?: WeeklyReportOmit
+    monthlyReport?: MonthlyReportOmit
+    quarterlyReport?: QuarterlyReportOmit
     missedReasonOption?: MissedReasonOptionOmit
     screenshot?: ScreenshotOmit
     mnqDailyPlan?: MnqDailyPlanOmit
@@ -12170,6 +12352,1966 @@ export namespace Prisma {
 
 
   /**
+   * Model MonthlyReport
+   */
+
+  export type AggregateMonthlyReport = {
+    _count: MonthlyReportCountAggregateOutputType | null
+    _min: MonthlyReportMinAggregateOutputType | null
+    _max: MonthlyReportMaxAggregateOutputType | null
+  }
+
+  export type MonthlyReportMinAggregateOutputType = {
+    yearMonth: string | null
+    monthInsight: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MonthlyReportMaxAggregateOutputType = {
+    yearMonth: string | null
+    monthInsight: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MonthlyReportCountAggregateOutputType = {
+    yearMonth: number
+    monthInsight: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MonthlyReportMinAggregateInputType = {
+    yearMonth?: true
+    monthInsight?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MonthlyReportMaxAggregateInputType = {
+    yearMonth?: true
+    monthInsight?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MonthlyReportCountAggregateInputType = {
+    yearMonth?: true
+    monthInsight?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MonthlyReportAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyReport to aggregate.
+     */
+    where?: MonthlyReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyReports to fetch.
+     */
+    orderBy?: MonthlyReportOrderByWithRelationInput | MonthlyReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MonthlyReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MonthlyReports
+    **/
+    _count?: true | MonthlyReportCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MonthlyReportMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MonthlyReportMaxAggregateInputType
+  }
+
+  export type GetMonthlyReportAggregateType<T extends MonthlyReportAggregateArgs> = {
+        [P in keyof T & keyof AggregateMonthlyReport]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMonthlyReport[P]>
+      : GetScalarType<T[P], AggregateMonthlyReport[P]>
+  }
+
+
+
+
+  export type MonthlyReportGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyReportWhereInput
+    orderBy?: MonthlyReportOrderByWithAggregationInput | MonthlyReportOrderByWithAggregationInput[]
+    by: MonthlyReportScalarFieldEnum[] | MonthlyReportScalarFieldEnum
+    having?: MonthlyReportScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MonthlyReportCountAggregateInputType | true
+    _min?: MonthlyReportMinAggregateInputType
+    _max?: MonthlyReportMaxAggregateInputType
+  }
+
+  export type MonthlyReportGroupByOutputType = {
+    yearMonth: string
+    monthInsight: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: MonthlyReportCountAggregateOutputType | null
+    _min: MonthlyReportMinAggregateOutputType | null
+    _max: MonthlyReportMaxAggregateOutputType | null
+  }
+
+  type GetMonthlyReportGroupByPayload<T extends MonthlyReportGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MonthlyReportGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MonthlyReportGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MonthlyReportGroupByOutputType[P]>
+            : GetScalarType<T[P], MonthlyReportGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MonthlyReportSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    yearMonth?: boolean
+    monthInsight?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["monthlyReport"]>
+
+  export type MonthlyReportSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    yearMonth?: boolean
+    monthInsight?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["monthlyReport"]>
+
+  export type MonthlyReportSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    yearMonth?: boolean
+    monthInsight?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["monthlyReport"]>
+
+  export type MonthlyReportSelectScalar = {
+    yearMonth?: boolean
+    monthInsight?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MonthlyReportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"yearMonth" | "monthInsight" | "createdAt" | "updatedAt", ExtArgs["result"]["monthlyReport"]>
+
+  export type $MonthlyReportPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MonthlyReport"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      yearMonth: string
+      monthInsight: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["monthlyReport"]>
+    composites: {}
+  }
+
+  type MonthlyReportGetPayload<S extends boolean | null | undefined | MonthlyReportDefaultArgs> = $Result.GetResult<Prisma.$MonthlyReportPayload, S>
+
+  type MonthlyReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MonthlyReportFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MonthlyReportCountAggregateInputType | true
+    }
+
+  export interface MonthlyReportDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MonthlyReport'], meta: { name: 'MonthlyReport' } }
+    /**
+     * Find zero or one MonthlyReport that matches the filter.
+     * @param {MonthlyReportFindUniqueArgs} args - Arguments to find a MonthlyReport
+     * @example
+     * // Get one MonthlyReport
+     * const monthlyReport = await prisma.monthlyReport.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MonthlyReportFindUniqueArgs>(args: SelectSubset<T, MonthlyReportFindUniqueArgs<ExtArgs>>): Prisma__MonthlyReportClient<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MonthlyReport that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MonthlyReportFindUniqueOrThrowArgs} args - Arguments to find a MonthlyReport
+     * @example
+     * // Get one MonthlyReport
+     * const monthlyReport = await prisma.monthlyReport.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MonthlyReportFindUniqueOrThrowArgs>(args: SelectSubset<T, MonthlyReportFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MonthlyReportClient<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MonthlyReport that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyReportFindFirstArgs} args - Arguments to find a MonthlyReport
+     * @example
+     * // Get one MonthlyReport
+     * const monthlyReport = await prisma.monthlyReport.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MonthlyReportFindFirstArgs>(args?: SelectSubset<T, MonthlyReportFindFirstArgs<ExtArgs>>): Prisma__MonthlyReportClient<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MonthlyReport that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyReportFindFirstOrThrowArgs} args - Arguments to find a MonthlyReport
+     * @example
+     * // Get one MonthlyReport
+     * const monthlyReport = await prisma.monthlyReport.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MonthlyReportFindFirstOrThrowArgs>(args?: SelectSubset<T, MonthlyReportFindFirstOrThrowArgs<ExtArgs>>): Prisma__MonthlyReportClient<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MonthlyReports that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyReportFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MonthlyReports
+     * const monthlyReports = await prisma.monthlyReport.findMany()
+     * 
+     * // Get first 10 MonthlyReports
+     * const monthlyReports = await prisma.monthlyReport.findMany({ take: 10 })
+     * 
+     * // Only select the `yearMonth`
+     * const monthlyReportWithYearMonthOnly = await prisma.monthlyReport.findMany({ select: { yearMonth: true } })
+     * 
+     */
+    findMany<T extends MonthlyReportFindManyArgs>(args?: SelectSubset<T, MonthlyReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MonthlyReport.
+     * @param {MonthlyReportCreateArgs} args - Arguments to create a MonthlyReport.
+     * @example
+     * // Create one MonthlyReport
+     * const MonthlyReport = await prisma.monthlyReport.create({
+     *   data: {
+     *     // ... data to create a MonthlyReport
+     *   }
+     * })
+     * 
+     */
+    create<T extends MonthlyReportCreateArgs>(args: SelectSubset<T, MonthlyReportCreateArgs<ExtArgs>>): Prisma__MonthlyReportClient<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MonthlyReports.
+     * @param {MonthlyReportCreateManyArgs} args - Arguments to create many MonthlyReports.
+     * @example
+     * // Create many MonthlyReports
+     * const monthlyReport = await prisma.monthlyReport.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MonthlyReportCreateManyArgs>(args?: SelectSubset<T, MonthlyReportCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MonthlyReports and returns the data saved in the database.
+     * @param {MonthlyReportCreateManyAndReturnArgs} args - Arguments to create many MonthlyReports.
+     * @example
+     * // Create many MonthlyReports
+     * const monthlyReport = await prisma.monthlyReport.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MonthlyReports and only return the `yearMonth`
+     * const monthlyReportWithYearMonthOnly = await prisma.monthlyReport.createManyAndReturn({
+     *   select: { yearMonth: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MonthlyReportCreateManyAndReturnArgs>(args?: SelectSubset<T, MonthlyReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MonthlyReport.
+     * @param {MonthlyReportDeleteArgs} args - Arguments to delete one MonthlyReport.
+     * @example
+     * // Delete one MonthlyReport
+     * const MonthlyReport = await prisma.monthlyReport.delete({
+     *   where: {
+     *     // ... filter to delete one MonthlyReport
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MonthlyReportDeleteArgs>(args: SelectSubset<T, MonthlyReportDeleteArgs<ExtArgs>>): Prisma__MonthlyReportClient<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MonthlyReport.
+     * @param {MonthlyReportUpdateArgs} args - Arguments to update one MonthlyReport.
+     * @example
+     * // Update one MonthlyReport
+     * const monthlyReport = await prisma.monthlyReport.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MonthlyReportUpdateArgs>(args: SelectSubset<T, MonthlyReportUpdateArgs<ExtArgs>>): Prisma__MonthlyReportClient<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MonthlyReports.
+     * @param {MonthlyReportDeleteManyArgs} args - Arguments to filter MonthlyReports to delete.
+     * @example
+     * // Delete a few MonthlyReports
+     * const { count } = await prisma.monthlyReport.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MonthlyReportDeleteManyArgs>(args?: SelectSubset<T, MonthlyReportDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyReportUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MonthlyReports
+     * const monthlyReport = await prisma.monthlyReport.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MonthlyReportUpdateManyArgs>(args: SelectSubset<T, MonthlyReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyReports and returns the data updated in the database.
+     * @param {MonthlyReportUpdateManyAndReturnArgs} args - Arguments to update many MonthlyReports.
+     * @example
+     * // Update many MonthlyReports
+     * const monthlyReport = await prisma.monthlyReport.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MonthlyReports and only return the `yearMonth`
+     * const monthlyReportWithYearMonthOnly = await prisma.monthlyReport.updateManyAndReturn({
+     *   select: { yearMonth: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MonthlyReportUpdateManyAndReturnArgs>(args: SelectSubset<T, MonthlyReportUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MonthlyReport.
+     * @param {MonthlyReportUpsertArgs} args - Arguments to update or create a MonthlyReport.
+     * @example
+     * // Update or create a MonthlyReport
+     * const monthlyReport = await prisma.monthlyReport.upsert({
+     *   create: {
+     *     // ... data to create a MonthlyReport
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MonthlyReport we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MonthlyReportUpsertArgs>(args: SelectSubset<T, MonthlyReportUpsertArgs<ExtArgs>>): Prisma__MonthlyReportClient<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MonthlyReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyReportCountArgs} args - Arguments to filter MonthlyReports to count.
+     * @example
+     * // Count the number of MonthlyReports
+     * const count = await prisma.monthlyReport.count({
+     *   where: {
+     *     // ... the filter for the MonthlyReports we want to count
+     *   }
+     * })
+    **/
+    count<T extends MonthlyReportCountArgs>(
+      args?: Subset<T, MonthlyReportCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MonthlyReportCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MonthlyReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyReportAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MonthlyReportAggregateArgs>(args: Subset<T, MonthlyReportAggregateArgs>): Prisma.PrismaPromise<GetMonthlyReportAggregateType<T>>
+
+    /**
+     * Group by MonthlyReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyReportGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MonthlyReportGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MonthlyReportGroupByArgs['orderBy'] }
+        : { orderBy?: MonthlyReportGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MonthlyReportGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMonthlyReportGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MonthlyReport model
+   */
+  readonly fields: MonthlyReportFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MonthlyReport.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MonthlyReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MonthlyReport model
+   */
+  interface MonthlyReportFieldRefs {
+    readonly yearMonth: FieldRef<"MonthlyReport", 'String'>
+    readonly monthInsight: FieldRef<"MonthlyReport", 'String'>
+    readonly createdAt: FieldRef<"MonthlyReport", 'DateTime'>
+    readonly updatedAt: FieldRef<"MonthlyReport", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MonthlyReport findUnique
+   */
+  export type MonthlyReportFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyReport
+     */
+    select?: MonthlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyReport
+     */
+    omit?: MonthlyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which MonthlyReport to fetch.
+     */
+    where: MonthlyReportWhereUniqueInput
+  }
+
+  /**
+   * MonthlyReport findUniqueOrThrow
+   */
+  export type MonthlyReportFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyReport
+     */
+    select?: MonthlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyReport
+     */
+    omit?: MonthlyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which MonthlyReport to fetch.
+     */
+    where: MonthlyReportWhereUniqueInput
+  }
+
+  /**
+   * MonthlyReport findFirst
+   */
+  export type MonthlyReportFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyReport
+     */
+    select?: MonthlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyReport
+     */
+    omit?: MonthlyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which MonthlyReport to fetch.
+     */
+    where?: MonthlyReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyReports to fetch.
+     */
+    orderBy?: MonthlyReportOrderByWithRelationInput | MonthlyReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyReports.
+     */
+    cursor?: MonthlyReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyReports.
+     */
+    distinct?: MonthlyReportScalarFieldEnum | MonthlyReportScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyReport findFirstOrThrow
+   */
+  export type MonthlyReportFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyReport
+     */
+    select?: MonthlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyReport
+     */
+    omit?: MonthlyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which MonthlyReport to fetch.
+     */
+    where?: MonthlyReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyReports to fetch.
+     */
+    orderBy?: MonthlyReportOrderByWithRelationInput | MonthlyReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyReports.
+     */
+    cursor?: MonthlyReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyReports.
+     */
+    distinct?: MonthlyReportScalarFieldEnum | MonthlyReportScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyReport findMany
+   */
+  export type MonthlyReportFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyReport
+     */
+    select?: MonthlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyReport
+     */
+    omit?: MonthlyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which MonthlyReports to fetch.
+     */
+    where?: MonthlyReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyReports to fetch.
+     */
+    orderBy?: MonthlyReportOrderByWithRelationInput | MonthlyReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MonthlyReports.
+     */
+    cursor?: MonthlyReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyReports.
+     */
+    skip?: number
+    distinct?: MonthlyReportScalarFieldEnum | MonthlyReportScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyReport create
+   */
+  export type MonthlyReportCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyReport
+     */
+    select?: MonthlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyReport
+     */
+    omit?: MonthlyReportOmit<ExtArgs> | null
+    /**
+     * The data needed to create a MonthlyReport.
+     */
+    data: XOR<MonthlyReportCreateInput, MonthlyReportUncheckedCreateInput>
+  }
+
+  /**
+   * MonthlyReport createMany
+   */
+  export type MonthlyReportCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MonthlyReports.
+     */
+    data: MonthlyReportCreateManyInput | MonthlyReportCreateManyInput[]
+  }
+
+  /**
+   * MonthlyReport createManyAndReturn
+   */
+  export type MonthlyReportCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyReport
+     */
+    select?: MonthlyReportSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyReport
+     */
+    omit?: MonthlyReportOmit<ExtArgs> | null
+    /**
+     * The data used to create many MonthlyReports.
+     */
+    data: MonthlyReportCreateManyInput | MonthlyReportCreateManyInput[]
+  }
+
+  /**
+   * MonthlyReport update
+   */
+  export type MonthlyReportUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyReport
+     */
+    select?: MonthlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyReport
+     */
+    omit?: MonthlyReportOmit<ExtArgs> | null
+    /**
+     * The data needed to update a MonthlyReport.
+     */
+    data: XOR<MonthlyReportUpdateInput, MonthlyReportUncheckedUpdateInput>
+    /**
+     * Choose, which MonthlyReport to update.
+     */
+    where: MonthlyReportWhereUniqueInput
+  }
+
+  /**
+   * MonthlyReport updateMany
+   */
+  export type MonthlyReportUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MonthlyReports.
+     */
+    data: XOR<MonthlyReportUpdateManyMutationInput, MonthlyReportUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyReports to update
+     */
+    where?: MonthlyReportWhereInput
+    /**
+     * Limit how many MonthlyReports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonthlyReport updateManyAndReturn
+   */
+  export type MonthlyReportUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyReport
+     */
+    select?: MonthlyReportSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyReport
+     */
+    omit?: MonthlyReportOmit<ExtArgs> | null
+    /**
+     * The data used to update MonthlyReports.
+     */
+    data: XOR<MonthlyReportUpdateManyMutationInput, MonthlyReportUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyReports to update
+     */
+    where?: MonthlyReportWhereInput
+    /**
+     * Limit how many MonthlyReports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonthlyReport upsert
+   */
+  export type MonthlyReportUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyReport
+     */
+    select?: MonthlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyReport
+     */
+    omit?: MonthlyReportOmit<ExtArgs> | null
+    /**
+     * The filter to search for the MonthlyReport to update in case it exists.
+     */
+    where: MonthlyReportWhereUniqueInput
+    /**
+     * In case the MonthlyReport found by the `where` argument doesn't exist, create a new MonthlyReport with this data.
+     */
+    create: XOR<MonthlyReportCreateInput, MonthlyReportUncheckedCreateInput>
+    /**
+     * In case the MonthlyReport was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MonthlyReportUpdateInput, MonthlyReportUncheckedUpdateInput>
+  }
+
+  /**
+   * MonthlyReport delete
+   */
+  export type MonthlyReportDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyReport
+     */
+    select?: MonthlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyReport
+     */
+    omit?: MonthlyReportOmit<ExtArgs> | null
+    /**
+     * Filter which MonthlyReport to delete.
+     */
+    where: MonthlyReportWhereUniqueInput
+  }
+
+  /**
+   * MonthlyReport deleteMany
+   */
+  export type MonthlyReportDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyReports to delete
+     */
+    where?: MonthlyReportWhereInput
+    /**
+     * Limit how many MonthlyReports to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MonthlyReport without action
+   */
+  export type MonthlyReportDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyReport
+     */
+    select?: MonthlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MonthlyReport
+     */
+    omit?: MonthlyReportOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model QuarterlyReport
+   */
+
+  export type AggregateQuarterlyReport = {
+    _count: QuarterlyReportCountAggregateOutputType | null
+    _min: QuarterlyReportMinAggregateOutputType | null
+    _max: QuarterlyReportMaxAggregateOutputType | null
+  }
+
+  export type QuarterlyReportMinAggregateOutputType = {
+    yearQuarter: string | null
+    quarterInsight: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QuarterlyReportMaxAggregateOutputType = {
+    yearQuarter: string | null
+    quarterInsight: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QuarterlyReportCountAggregateOutputType = {
+    yearQuarter: number
+    quarterInsight: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type QuarterlyReportMinAggregateInputType = {
+    yearQuarter?: true
+    quarterInsight?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QuarterlyReportMaxAggregateInputType = {
+    yearQuarter?: true
+    quarterInsight?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QuarterlyReportCountAggregateInputType = {
+    yearQuarter?: true
+    quarterInsight?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type QuarterlyReportAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QuarterlyReport to aggregate.
+     */
+    where?: QuarterlyReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QuarterlyReports to fetch.
+     */
+    orderBy?: QuarterlyReportOrderByWithRelationInput | QuarterlyReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QuarterlyReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QuarterlyReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QuarterlyReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QuarterlyReports
+    **/
+    _count?: true | QuarterlyReportCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QuarterlyReportMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QuarterlyReportMaxAggregateInputType
+  }
+
+  export type GetQuarterlyReportAggregateType<T extends QuarterlyReportAggregateArgs> = {
+        [P in keyof T & keyof AggregateQuarterlyReport]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQuarterlyReport[P]>
+      : GetScalarType<T[P], AggregateQuarterlyReport[P]>
+  }
+
+
+
+
+  export type QuarterlyReportGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuarterlyReportWhereInput
+    orderBy?: QuarterlyReportOrderByWithAggregationInput | QuarterlyReportOrderByWithAggregationInput[]
+    by: QuarterlyReportScalarFieldEnum[] | QuarterlyReportScalarFieldEnum
+    having?: QuarterlyReportScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QuarterlyReportCountAggregateInputType | true
+    _min?: QuarterlyReportMinAggregateInputType
+    _max?: QuarterlyReportMaxAggregateInputType
+  }
+
+  export type QuarterlyReportGroupByOutputType = {
+    yearQuarter: string
+    quarterInsight: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: QuarterlyReportCountAggregateOutputType | null
+    _min: QuarterlyReportMinAggregateOutputType | null
+    _max: QuarterlyReportMaxAggregateOutputType | null
+  }
+
+  type GetQuarterlyReportGroupByPayload<T extends QuarterlyReportGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QuarterlyReportGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QuarterlyReportGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QuarterlyReportGroupByOutputType[P]>
+            : GetScalarType<T[P], QuarterlyReportGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QuarterlyReportSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    yearQuarter?: boolean
+    quarterInsight?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["quarterlyReport"]>
+
+  export type QuarterlyReportSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    yearQuarter?: boolean
+    quarterInsight?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["quarterlyReport"]>
+
+  export type QuarterlyReportSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    yearQuarter?: boolean
+    quarterInsight?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["quarterlyReport"]>
+
+  export type QuarterlyReportSelectScalar = {
+    yearQuarter?: boolean
+    quarterInsight?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type QuarterlyReportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"yearQuarter" | "quarterInsight" | "createdAt" | "updatedAt", ExtArgs["result"]["quarterlyReport"]>
+
+  export type $QuarterlyReportPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QuarterlyReport"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      yearQuarter: string
+      quarterInsight: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["quarterlyReport"]>
+    composites: {}
+  }
+
+  type QuarterlyReportGetPayload<S extends boolean | null | undefined | QuarterlyReportDefaultArgs> = $Result.GetResult<Prisma.$QuarterlyReportPayload, S>
+
+  type QuarterlyReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<QuarterlyReportFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: QuarterlyReportCountAggregateInputType | true
+    }
+
+  export interface QuarterlyReportDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QuarterlyReport'], meta: { name: 'QuarterlyReport' } }
+    /**
+     * Find zero or one QuarterlyReport that matches the filter.
+     * @param {QuarterlyReportFindUniqueArgs} args - Arguments to find a QuarterlyReport
+     * @example
+     * // Get one QuarterlyReport
+     * const quarterlyReport = await prisma.quarterlyReport.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QuarterlyReportFindUniqueArgs>(args: SelectSubset<T, QuarterlyReportFindUniqueArgs<ExtArgs>>): Prisma__QuarterlyReportClient<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one QuarterlyReport that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {QuarterlyReportFindUniqueOrThrowArgs} args - Arguments to find a QuarterlyReport
+     * @example
+     * // Get one QuarterlyReport
+     * const quarterlyReport = await prisma.quarterlyReport.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QuarterlyReportFindUniqueOrThrowArgs>(args: SelectSubset<T, QuarterlyReportFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QuarterlyReportClient<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first QuarterlyReport that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarterlyReportFindFirstArgs} args - Arguments to find a QuarterlyReport
+     * @example
+     * // Get one QuarterlyReport
+     * const quarterlyReport = await prisma.quarterlyReport.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QuarterlyReportFindFirstArgs>(args?: SelectSubset<T, QuarterlyReportFindFirstArgs<ExtArgs>>): Prisma__QuarterlyReportClient<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first QuarterlyReport that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarterlyReportFindFirstOrThrowArgs} args - Arguments to find a QuarterlyReport
+     * @example
+     * // Get one QuarterlyReport
+     * const quarterlyReport = await prisma.quarterlyReport.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QuarterlyReportFindFirstOrThrowArgs>(args?: SelectSubset<T, QuarterlyReportFindFirstOrThrowArgs<ExtArgs>>): Prisma__QuarterlyReportClient<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more QuarterlyReports that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarterlyReportFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QuarterlyReports
+     * const quarterlyReports = await prisma.quarterlyReport.findMany()
+     * 
+     * // Get first 10 QuarterlyReports
+     * const quarterlyReports = await prisma.quarterlyReport.findMany({ take: 10 })
+     * 
+     * // Only select the `yearQuarter`
+     * const quarterlyReportWithYearQuarterOnly = await prisma.quarterlyReport.findMany({ select: { yearQuarter: true } })
+     * 
+     */
+    findMany<T extends QuarterlyReportFindManyArgs>(args?: SelectSubset<T, QuarterlyReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a QuarterlyReport.
+     * @param {QuarterlyReportCreateArgs} args - Arguments to create a QuarterlyReport.
+     * @example
+     * // Create one QuarterlyReport
+     * const QuarterlyReport = await prisma.quarterlyReport.create({
+     *   data: {
+     *     // ... data to create a QuarterlyReport
+     *   }
+     * })
+     * 
+     */
+    create<T extends QuarterlyReportCreateArgs>(args: SelectSubset<T, QuarterlyReportCreateArgs<ExtArgs>>): Prisma__QuarterlyReportClient<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many QuarterlyReports.
+     * @param {QuarterlyReportCreateManyArgs} args - Arguments to create many QuarterlyReports.
+     * @example
+     * // Create many QuarterlyReports
+     * const quarterlyReport = await prisma.quarterlyReport.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QuarterlyReportCreateManyArgs>(args?: SelectSubset<T, QuarterlyReportCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many QuarterlyReports and returns the data saved in the database.
+     * @param {QuarterlyReportCreateManyAndReturnArgs} args - Arguments to create many QuarterlyReports.
+     * @example
+     * // Create many QuarterlyReports
+     * const quarterlyReport = await prisma.quarterlyReport.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many QuarterlyReports and only return the `yearQuarter`
+     * const quarterlyReportWithYearQuarterOnly = await prisma.quarterlyReport.createManyAndReturn({
+     *   select: { yearQuarter: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends QuarterlyReportCreateManyAndReturnArgs>(args?: SelectSubset<T, QuarterlyReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a QuarterlyReport.
+     * @param {QuarterlyReportDeleteArgs} args - Arguments to delete one QuarterlyReport.
+     * @example
+     * // Delete one QuarterlyReport
+     * const QuarterlyReport = await prisma.quarterlyReport.delete({
+     *   where: {
+     *     // ... filter to delete one QuarterlyReport
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QuarterlyReportDeleteArgs>(args: SelectSubset<T, QuarterlyReportDeleteArgs<ExtArgs>>): Prisma__QuarterlyReportClient<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one QuarterlyReport.
+     * @param {QuarterlyReportUpdateArgs} args - Arguments to update one QuarterlyReport.
+     * @example
+     * // Update one QuarterlyReport
+     * const quarterlyReport = await prisma.quarterlyReport.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QuarterlyReportUpdateArgs>(args: SelectSubset<T, QuarterlyReportUpdateArgs<ExtArgs>>): Prisma__QuarterlyReportClient<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more QuarterlyReports.
+     * @param {QuarterlyReportDeleteManyArgs} args - Arguments to filter QuarterlyReports to delete.
+     * @example
+     * // Delete a few QuarterlyReports
+     * const { count } = await prisma.quarterlyReport.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QuarterlyReportDeleteManyArgs>(args?: SelectSubset<T, QuarterlyReportDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QuarterlyReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarterlyReportUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QuarterlyReports
+     * const quarterlyReport = await prisma.quarterlyReport.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QuarterlyReportUpdateManyArgs>(args: SelectSubset<T, QuarterlyReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QuarterlyReports and returns the data updated in the database.
+     * @param {QuarterlyReportUpdateManyAndReturnArgs} args - Arguments to update many QuarterlyReports.
+     * @example
+     * // Update many QuarterlyReports
+     * const quarterlyReport = await prisma.quarterlyReport.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more QuarterlyReports and only return the `yearQuarter`
+     * const quarterlyReportWithYearQuarterOnly = await prisma.quarterlyReport.updateManyAndReturn({
+     *   select: { yearQuarter: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends QuarterlyReportUpdateManyAndReturnArgs>(args: SelectSubset<T, QuarterlyReportUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one QuarterlyReport.
+     * @param {QuarterlyReportUpsertArgs} args - Arguments to update or create a QuarterlyReport.
+     * @example
+     * // Update or create a QuarterlyReport
+     * const quarterlyReport = await prisma.quarterlyReport.upsert({
+     *   create: {
+     *     // ... data to create a QuarterlyReport
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QuarterlyReport we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QuarterlyReportUpsertArgs>(args: SelectSubset<T, QuarterlyReportUpsertArgs<ExtArgs>>): Prisma__QuarterlyReportClient<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of QuarterlyReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarterlyReportCountArgs} args - Arguments to filter QuarterlyReports to count.
+     * @example
+     * // Count the number of QuarterlyReports
+     * const count = await prisma.quarterlyReport.count({
+     *   where: {
+     *     // ... the filter for the QuarterlyReports we want to count
+     *   }
+     * })
+    **/
+    count<T extends QuarterlyReportCountArgs>(
+      args?: Subset<T, QuarterlyReportCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QuarterlyReportCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QuarterlyReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarterlyReportAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QuarterlyReportAggregateArgs>(args: Subset<T, QuarterlyReportAggregateArgs>): Prisma.PrismaPromise<GetQuarterlyReportAggregateType<T>>
+
+    /**
+     * Group by QuarterlyReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QuarterlyReportGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QuarterlyReportGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QuarterlyReportGroupByArgs['orderBy'] }
+        : { orderBy?: QuarterlyReportGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QuarterlyReportGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQuarterlyReportGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QuarterlyReport model
+   */
+  readonly fields: QuarterlyReportFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QuarterlyReport.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QuarterlyReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QuarterlyReport model
+   */
+  interface QuarterlyReportFieldRefs {
+    readonly yearQuarter: FieldRef<"QuarterlyReport", 'String'>
+    readonly quarterInsight: FieldRef<"QuarterlyReport", 'String'>
+    readonly createdAt: FieldRef<"QuarterlyReport", 'DateTime'>
+    readonly updatedAt: FieldRef<"QuarterlyReport", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QuarterlyReport findUnique
+   */
+  export type QuarterlyReportFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarterlyReport
+     */
+    select?: QuarterlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuarterlyReport
+     */
+    omit?: QuarterlyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which QuarterlyReport to fetch.
+     */
+    where: QuarterlyReportWhereUniqueInput
+  }
+
+  /**
+   * QuarterlyReport findUniqueOrThrow
+   */
+  export type QuarterlyReportFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarterlyReport
+     */
+    select?: QuarterlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuarterlyReport
+     */
+    omit?: QuarterlyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which QuarterlyReport to fetch.
+     */
+    where: QuarterlyReportWhereUniqueInput
+  }
+
+  /**
+   * QuarterlyReport findFirst
+   */
+  export type QuarterlyReportFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarterlyReport
+     */
+    select?: QuarterlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuarterlyReport
+     */
+    omit?: QuarterlyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which QuarterlyReport to fetch.
+     */
+    where?: QuarterlyReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QuarterlyReports to fetch.
+     */
+    orderBy?: QuarterlyReportOrderByWithRelationInput | QuarterlyReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QuarterlyReports.
+     */
+    cursor?: QuarterlyReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QuarterlyReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QuarterlyReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QuarterlyReports.
+     */
+    distinct?: QuarterlyReportScalarFieldEnum | QuarterlyReportScalarFieldEnum[]
+  }
+
+  /**
+   * QuarterlyReport findFirstOrThrow
+   */
+  export type QuarterlyReportFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarterlyReport
+     */
+    select?: QuarterlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuarterlyReport
+     */
+    omit?: QuarterlyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which QuarterlyReport to fetch.
+     */
+    where?: QuarterlyReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QuarterlyReports to fetch.
+     */
+    orderBy?: QuarterlyReportOrderByWithRelationInput | QuarterlyReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QuarterlyReports.
+     */
+    cursor?: QuarterlyReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QuarterlyReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QuarterlyReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QuarterlyReports.
+     */
+    distinct?: QuarterlyReportScalarFieldEnum | QuarterlyReportScalarFieldEnum[]
+  }
+
+  /**
+   * QuarterlyReport findMany
+   */
+  export type QuarterlyReportFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarterlyReport
+     */
+    select?: QuarterlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuarterlyReport
+     */
+    omit?: QuarterlyReportOmit<ExtArgs> | null
+    /**
+     * Filter, which QuarterlyReports to fetch.
+     */
+    where?: QuarterlyReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QuarterlyReports to fetch.
+     */
+    orderBy?: QuarterlyReportOrderByWithRelationInput | QuarterlyReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QuarterlyReports.
+     */
+    cursor?: QuarterlyReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QuarterlyReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QuarterlyReports.
+     */
+    skip?: number
+    distinct?: QuarterlyReportScalarFieldEnum | QuarterlyReportScalarFieldEnum[]
+  }
+
+  /**
+   * QuarterlyReport create
+   */
+  export type QuarterlyReportCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarterlyReport
+     */
+    select?: QuarterlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuarterlyReport
+     */
+    omit?: QuarterlyReportOmit<ExtArgs> | null
+    /**
+     * The data needed to create a QuarterlyReport.
+     */
+    data: XOR<QuarterlyReportCreateInput, QuarterlyReportUncheckedCreateInput>
+  }
+
+  /**
+   * QuarterlyReport createMany
+   */
+  export type QuarterlyReportCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QuarterlyReports.
+     */
+    data: QuarterlyReportCreateManyInput | QuarterlyReportCreateManyInput[]
+  }
+
+  /**
+   * QuarterlyReport createManyAndReturn
+   */
+  export type QuarterlyReportCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarterlyReport
+     */
+    select?: QuarterlyReportSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuarterlyReport
+     */
+    omit?: QuarterlyReportOmit<ExtArgs> | null
+    /**
+     * The data used to create many QuarterlyReports.
+     */
+    data: QuarterlyReportCreateManyInput | QuarterlyReportCreateManyInput[]
+  }
+
+  /**
+   * QuarterlyReport update
+   */
+  export type QuarterlyReportUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarterlyReport
+     */
+    select?: QuarterlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuarterlyReport
+     */
+    omit?: QuarterlyReportOmit<ExtArgs> | null
+    /**
+     * The data needed to update a QuarterlyReport.
+     */
+    data: XOR<QuarterlyReportUpdateInput, QuarterlyReportUncheckedUpdateInput>
+    /**
+     * Choose, which QuarterlyReport to update.
+     */
+    where: QuarterlyReportWhereUniqueInput
+  }
+
+  /**
+   * QuarterlyReport updateMany
+   */
+  export type QuarterlyReportUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QuarterlyReports.
+     */
+    data: XOR<QuarterlyReportUpdateManyMutationInput, QuarterlyReportUncheckedUpdateManyInput>
+    /**
+     * Filter which QuarterlyReports to update
+     */
+    where?: QuarterlyReportWhereInput
+    /**
+     * Limit how many QuarterlyReports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * QuarterlyReport updateManyAndReturn
+   */
+  export type QuarterlyReportUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarterlyReport
+     */
+    select?: QuarterlyReportSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuarterlyReport
+     */
+    omit?: QuarterlyReportOmit<ExtArgs> | null
+    /**
+     * The data used to update QuarterlyReports.
+     */
+    data: XOR<QuarterlyReportUpdateManyMutationInput, QuarterlyReportUncheckedUpdateManyInput>
+    /**
+     * Filter which QuarterlyReports to update
+     */
+    where?: QuarterlyReportWhereInput
+    /**
+     * Limit how many QuarterlyReports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * QuarterlyReport upsert
+   */
+  export type QuarterlyReportUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarterlyReport
+     */
+    select?: QuarterlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuarterlyReport
+     */
+    omit?: QuarterlyReportOmit<ExtArgs> | null
+    /**
+     * The filter to search for the QuarterlyReport to update in case it exists.
+     */
+    where: QuarterlyReportWhereUniqueInput
+    /**
+     * In case the QuarterlyReport found by the `where` argument doesn't exist, create a new QuarterlyReport with this data.
+     */
+    create: XOR<QuarterlyReportCreateInput, QuarterlyReportUncheckedCreateInput>
+    /**
+     * In case the QuarterlyReport was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QuarterlyReportUpdateInput, QuarterlyReportUncheckedUpdateInput>
+  }
+
+  /**
+   * QuarterlyReport delete
+   */
+  export type QuarterlyReportDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarterlyReport
+     */
+    select?: QuarterlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuarterlyReport
+     */
+    omit?: QuarterlyReportOmit<ExtArgs> | null
+    /**
+     * Filter which QuarterlyReport to delete.
+     */
+    where: QuarterlyReportWhereUniqueInput
+  }
+
+  /**
+   * QuarterlyReport deleteMany
+   */
+  export type QuarterlyReportDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QuarterlyReports to delete
+     */
+    where?: QuarterlyReportWhereInput
+    /**
+     * Limit how many QuarterlyReports to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * QuarterlyReport without action
+   */
+  export type QuarterlyReportDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QuarterlyReport
+     */
+    select?: QuarterlyReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QuarterlyReport
+     */
+    omit?: QuarterlyReportOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model MissedReasonOption
    */
 
@@ -14516,6 +16658,13 @@ export namespace Prisma {
     customConditionsJson: string | null
     customBandsJson: string | null
     actCheckpointsJson: string | null
+    weeklyMarketJson: string | null
+    marketPreJson: string | null
+    marketOpenJson: string | null
+    marketMidJson: string | null
+    marketAfternoonJson: string | null
+    heldOvernight: boolean | null
+    overnightNote: string | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -14551,6 +16700,13 @@ export namespace Prisma {
     customConditionsJson: string | null
     customBandsJson: string | null
     actCheckpointsJson: string | null
+    weeklyMarketJson: string | null
+    marketPreJson: string | null
+    marketOpenJson: string | null
+    marketMidJson: string | null
+    marketAfternoonJson: string | null
+    heldOvernight: boolean | null
+    overnightNote: string | null
     notes: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -14586,6 +16742,13 @@ export namespace Prisma {
     customConditionsJson: number
     customBandsJson: number
     actCheckpointsJson: number
+    weeklyMarketJson: number
+    marketPreJson: number
+    marketOpenJson: number
+    marketMidJson: number
+    marketAfternoonJson: number
+    heldOvernight: number
+    overnightNote: number
     notes: number
     createdAt: number
     updatedAt: number
@@ -14623,6 +16786,13 @@ export namespace Prisma {
     customConditionsJson?: true
     customBandsJson?: true
     actCheckpointsJson?: true
+    weeklyMarketJson?: true
+    marketPreJson?: true
+    marketOpenJson?: true
+    marketMidJson?: true
+    marketAfternoonJson?: true
+    heldOvernight?: true
+    overnightNote?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -14658,6 +16828,13 @@ export namespace Prisma {
     customConditionsJson?: true
     customBandsJson?: true
     actCheckpointsJson?: true
+    weeklyMarketJson?: true
+    marketPreJson?: true
+    marketOpenJson?: true
+    marketMidJson?: true
+    marketAfternoonJson?: true
+    heldOvernight?: true
+    overnightNote?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -14693,6 +16870,13 @@ export namespace Prisma {
     customConditionsJson?: true
     customBandsJson?: true
     actCheckpointsJson?: true
+    weeklyMarketJson?: true
+    marketPreJson?: true
+    marketOpenJson?: true
+    marketMidJson?: true
+    marketAfternoonJson?: true
+    heldOvernight?: true
+    overnightNote?: true
     notes?: true
     createdAt?: true
     updatedAt?: true
@@ -14801,6 +16985,13 @@ export namespace Prisma {
     customConditionsJson: string | null
     customBandsJson: string | null
     actCheckpointsJson: string | null
+    weeklyMarketJson: string | null
+    marketPreJson: string | null
+    marketOpenJson: string | null
+    marketMidJson: string | null
+    marketAfternoonJson: string | null
+    heldOvernight: boolean | null
+    overnightNote: string | null
     notes: string | null
     createdAt: Date
     updatedAt: Date
@@ -14853,6 +17044,13 @@ export namespace Prisma {
     customConditionsJson?: boolean
     customBandsJson?: boolean
     actCheckpointsJson?: boolean
+    weeklyMarketJson?: boolean
+    marketPreJson?: boolean
+    marketOpenJson?: boolean
+    marketMidJson?: boolean
+    marketAfternoonJson?: boolean
+    heldOvernight?: boolean
+    overnightNote?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -14889,6 +17087,13 @@ export namespace Prisma {
     customConditionsJson?: boolean
     customBandsJson?: boolean
     actCheckpointsJson?: boolean
+    weeklyMarketJson?: boolean
+    marketPreJson?: boolean
+    marketOpenJson?: boolean
+    marketMidJson?: boolean
+    marketAfternoonJson?: boolean
+    heldOvernight?: boolean
+    overnightNote?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -14925,6 +17130,13 @@ export namespace Prisma {
     customConditionsJson?: boolean
     customBandsJson?: boolean
     actCheckpointsJson?: boolean
+    weeklyMarketJson?: boolean
+    marketPreJson?: boolean
+    marketOpenJson?: boolean
+    marketMidJson?: boolean
+    marketAfternoonJson?: boolean
+    heldOvernight?: boolean
+    overnightNote?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -14961,12 +17173,19 @@ export namespace Prisma {
     customConditionsJson?: boolean
     customBandsJson?: boolean
     actCheckpointsJson?: boolean
+    weeklyMarketJson?: boolean
+    marketPreJson?: boolean
+    marketOpenJson?: boolean
+    marketMidJson?: boolean
+    marketAfternoonJson?: boolean
+    heldOvernight?: boolean
+    overnightNote?: boolean
     notes?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type MnqDailyPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionDate" | "scenario" | "sweepUpBand" | "sweepDownBand" | "hasNewsGap" | "gapCanHold" | "condRangeMovingOver1h" | "condRangeVwapFlat" | "condRangeNoMajorNews" | "condRangePrevTrend" | "condTrendSingleDir" | "condTrendVwapTilted" | "condFadeNewsWeak" | "condHoldNewsReal" | "evalRangeMovingOver1h" | "evalRangeVwapFlat" | "evalRangeNoMajorNews" | "evalRangePrevTrend" | "evalTrendSingleDir" | "evalTrendVwapTilted" | "evalFadeNewsWeak" | "evalHoldNewsReal" | "evalUpBand" | "evalDownBand" | "evalNotesJson" | "customConditionsJson" | "customBandsJson" | "actCheckpointsJson" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["mnqDailyPlan"]>
+  export type MnqDailyPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionDate" | "scenario" | "sweepUpBand" | "sweepDownBand" | "hasNewsGap" | "gapCanHold" | "condRangeMovingOver1h" | "condRangeVwapFlat" | "condRangeNoMajorNews" | "condRangePrevTrend" | "condTrendSingleDir" | "condTrendVwapTilted" | "condFadeNewsWeak" | "condHoldNewsReal" | "evalRangeMovingOver1h" | "evalRangeVwapFlat" | "evalRangeNoMajorNews" | "evalRangePrevTrend" | "evalTrendSingleDir" | "evalTrendVwapTilted" | "evalFadeNewsWeak" | "evalHoldNewsReal" | "evalUpBand" | "evalDownBand" | "evalNotesJson" | "customConditionsJson" | "customBandsJson" | "actCheckpointsJson" | "weeklyMarketJson" | "marketPreJson" | "marketOpenJson" | "marketMidJson" | "marketAfternoonJson" | "heldOvernight" | "overnightNote" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["mnqDailyPlan"]>
   export type MnqDailyPlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     session?: boolean | DailySessionDefaultArgs<ExtArgs>
   }
@@ -15012,6 +17231,13 @@ export namespace Prisma {
       customConditionsJson: string | null
       customBandsJson: string | null
       actCheckpointsJson: string | null
+      weeklyMarketJson: string | null
+      marketPreJson: string | null
+      marketOpenJson: string | null
+      marketMidJson: string | null
+      marketAfternoonJson: string | null
+      heldOvernight: boolean | null
+      overnightNote: string | null
       notes: string | null
       createdAt: Date
       updatedAt: Date
@@ -15468,6 +17694,13 @@ export namespace Prisma {
     readonly customConditionsJson: FieldRef<"MnqDailyPlan", 'String'>
     readonly customBandsJson: FieldRef<"MnqDailyPlan", 'String'>
     readonly actCheckpointsJson: FieldRef<"MnqDailyPlan", 'String'>
+    readonly weeklyMarketJson: FieldRef<"MnqDailyPlan", 'String'>
+    readonly marketPreJson: FieldRef<"MnqDailyPlan", 'String'>
+    readonly marketOpenJson: FieldRef<"MnqDailyPlan", 'String'>
+    readonly marketMidJson: FieldRef<"MnqDailyPlan", 'String'>
+    readonly marketAfternoonJson: FieldRef<"MnqDailyPlan", 'String'>
+    readonly heldOvernight: FieldRef<"MnqDailyPlan", 'Boolean'>
+    readonly overnightNote: FieldRef<"MnqDailyPlan", 'String'>
     readonly notes: FieldRef<"MnqDailyPlan", 'String'>
     readonly createdAt: FieldRef<"MnqDailyPlan", 'DateTime'>
     readonly updatedAt: FieldRef<"MnqDailyPlan", 'DateTime'>
@@ -16065,6 +18298,26 @@ export namespace Prisma {
   export type WeeklyReportScalarFieldEnum = (typeof WeeklyReportScalarFieldEnum)[keyof typeof WeeklyReportScalarFieldEnum]
 
 
+  export const MonthlyReportScalarFieldEnum: {
+    yearMonth: 'yearMonth',
+    monthInsight: 'monthInsight',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MonthlyReportScalarFieldEnum = (typeof MonthlyReportScalarFieldEnum)[keyof typeof MonthlyReportScalarFieldEnum]
+
+
+  export const QuarterlyReportScalarFieldEnum: {
+    yearQuarter: 'yearQuarter',
+    quarterInsight: 'quarterInsight',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type QuarterlyReportScalarFieldEnum = (typeof QuarterlyReportScalarFieldEnum)[keyof typeof QuarterlyReportScalarFieldEnum]
+
+
   export const MissedReasonOptionScalarFieldEnum: {
     id: 'id',
     label: 'label',
@@ -16126,6 +18379,13 @@ export namespace Prisma {
     customConditionsJson: 'customConditionsJson',
     customBandsJson: 'customBandsJson',
     actCheckpointsJson: 'actCheckpointsJson',
+    weeklyMarketJson: 'weeklyMarketJson',
+    marketPreJson: 'marketPreJson',
+    marketOpenJson: 'marketOpenJson',
+    marketMidJson: 'marketMidJson',
+    marketAfternoonJson: 'marketAfternoonJson',
+    heldOvernight: 'heldOvernight',
+    overnightNote: 'overnightNote',
     notes: 'notes',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -17170,6 +19430,100 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"WeeklyReport"> | Date | string
   }
 
+  export type MonthlyReportWhereInput = {
+    AND?: MonthlyReportWhereInput | MonthlyReportWhereInput[]
+    OR?: MonthlyReportWhereInput[]
+    NOT?: MonthlyReportWhereInput | MonthlyReportWhereInput[]
+    yearMonth?: StringFilter<"MonthlyReport"> | string
+    monthInsight?: StringNullableFilter<"MonthlyReport"> | string | null
+    createdAt?: DateTimeFilter<"MonthlyReport"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyReport"> | Date | string
+  }
+
+  export type MonthlyReportOrderByWithRelationInput = {
+    yearMonth?: SortOrder
+    monthInsight?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MonthlyReportWhereUniqueInput = Prisma.AtLeast<{
+    yearMonth?: string
+    AND?: MonthlyReportWhereInput | MonthlyReportWhereInput[]
+    OR?: MonthlyReportWhereInput[]
+    NOT?: MonthlyReportWhereInput | MonthlyReportWhereInput[]
+    monthInsight?: StringNullableFilter<"MonthlyReport"> | string | null
+    createdAt?: DateTimeFilter<"MonthlyReport"> | Date | string
+    updatedAt?: DateTimeFilter<"MonthlyReport"> | Date | string
+  }, "yearMonth">
+
+  export type MonthlyReportOrderByWithAggregationInput = {
+    yearMonth?: SortOrder
+    monthInsight?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MonthlyReportCountOrderByAggregateInput
+    _max?: MonthlyReportMaxOrderByAggregateInput
+    _min?: MonthlyReportMinOrderByAggregateInput
+  }
+
+  export type MonthlyReportScalarWhereWithAggregatesInput = {
+    AND?: MonthlyReportScalarWhereWithAggregatesInput | MonthlyReportScalarWhereWithAggregatesInput[]
+    OR?: MonthlyReportScalarWhereWithAggregatesInput[]
+    NOT?: MonthlyReportScalarWhereWithAggregatesInput | MonthlyReportScalarWhereWithAggregatesInput[]
+    yearMonth?: StringWithAggregatesFilter<"MonthlyReport"> | string
+    monthInsight?: StringNullableWithAggregatesFilter<"MonthlyReport"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"MonthlyReport"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MonthlyReport"> | Date | string
+  }
+
+  export type QuarterlyReportWhereInput = {
+    AND?: QuarterlyReportWhereInput | QuarterlyReportWhereInput[]
+    OR?: QuarterlyReportWhereInput[]
+    NOT?: QuarterlyReportWhereInput | QuarterlyReportWhereInput[]
+    yearQuarter?: StringFilter<"QuarterlyReport"> | string
+    quarterInsight?: StringNullableFilter<"QuarterlyReport"> | string | null
+    createdAt?: DateTimeFilter<"QuarterlyReport"> | Date | string
+    updatedAt?: DateTimeFilter<"QuarterlyReport"> | Date | string
+  }
+
+  export type QuarterlyReportOrderByWithRelationInput = {
+    yearQuarter?: SortOrder
+    quarterInsight?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QuarterlyReportWhereUniqueInput = Prisma.AtLeast<{
+    yearQuarter?: string
+    AND?: QuarterlyReportWhereInput | QuarterlyReportWhereInput[]
+    OR?: QuarterlyReportWhereInput[]
+    NOT?: QuarterlyReportWhereInput | QuarterlyReportWhereInput[]
+    quarterInsight?: StringNullableFilter<"QuarterlyReport"> | string | null
+    createdAt?: DateTimeFilter<"QuarterlyReport"> | Date | string
+    updatedAt?: DateTimeFilter<"QuarterlyReport"> | Date | string
+  }, "yearQuarter">
+
+  export type QuarterlyReportOrderByWithAggregationInput = {
+    yearQuarter?: SortOrder
+    quarterInsight?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: QuarterlyReportCountOrderByAggregateInput
+    _max?: QuarterlyReportMaxOrderByAggregateInput
+    _min?: QuarterlyReportMinOrderByAggregateInput
+  }
+
+  export type QuarterlyReportScalarWhereWithAggregatesInput = {
+    AND?: QuarterlyReportScalarWhereWithAggregatesInput | QuarterlyReportScalarWhereWithAggregatesInput[]
+    OR?: QuarterlyReportScalarWhereWithAggregatesInput[]
+    NOT?: QuarterlyReportScalarWhereWithAggregatesInput | QuarterlyReportScalarWhereWithAggregatesInput[]
+    yearQuarter?: StringWithAggregatesFilter<"QuarterlyReport"> | string
+    quarterInsight?: StringNullableWithAggregatesFilter<"QuarterlyReport"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"QuarterlyReport"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"QuarterlyReport"> | Date | string
+  }
+
   export type MissedReasonOptionWhereInput = {
     AND?: MissedReasonOptionWhereInput | MissedReasonOptionWhereInput[]
     OR?: MissedReasonOptionWhereInput[]
@@ -17365,6 +19719,13 @@ export namespace Prisma {
     customConditionsJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
     customBandsJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
     actCheckpointsJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    weeklyMarketJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    marketPreJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    marketOpenJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    marketMidJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    marketAfternoonJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    heldOvernight?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    overnightNote?: StringNullableFilter<"MnqDailyPlan"> | string | null
     notes?: StringNullableFilter<"MnqDailyPlan"> | string | null
     createdAt?: DateTimeFilter<"MnqDailyPlan"> | Date | string
     updatedAt?: DateTimeFilter<"MnqDailyPlan"> | Date | string
@@ -17401,6 +19762,13 @@ export namespace Prisma {
     customConditionsJson?: SortOrderInput | SortOrder
     customBandsJson?: SortOrderInput | SortOrder
     actCheckpointsJson?: SortOrderInput | SortOrder
+    weeklyMarketJson?: SortOrderInput | SortOrder
+    marketPreJson?: SortOrderInput | SortOrder
+    marketOpenJson?: SortOrderInput | SortOrder
+    marketMidJson?: SortOrderInput | SortOrder
+    marketAfternoonJson?: SortOrderInput | SortOrder
+    heldOvernight?: SortOrderInput | SortOrder
+    overnightNote?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -17440,6 +19808,13 @@ export namespace Prisma {
     customConditionsJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
     customBandsJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
     actCheckpointsJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    weeklyMarketJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    marketPreJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    marketOpenJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    marketMidJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    marketAfternoonJson?: StringNullableFilter<"MnqDailyPlan"> | string | null
+    heldOvernight?: BoolNullableFilter<"MnqDailyPlan"> | boolean | null
+    overnightNote?: StringNullableFilter<"MnqDailyPlan"> | string | null
     notes?: StringNullableFilter<"MnqDailyPlan"> | string | null
     createdAt?: DateTimeFilter<"MnqDailyPlan"> | Date | string
     updatedAt?: DateTimeFilter<"MnqDailyPlan"> | Date | string
@@ -17476,6 +19851,13 @@ export namespace Prisma {
     customConditionsJson?: SortOrderInput | SortOrder
     customBandsJson?: SortOrderInput | SortOrder
     actCheckpointsJson?: SortOrderInput | SortOrder
+    weeklyMarketJson?: SortOrderInput | SortOrder
+    marketPreJson?: SortOrderInput | SortOrder
+    marketOpenJson?: SortOrderInput | SortOrder
+    marketMidJson?: SortOrderInput | SortOrder
+    marketAfternoonJson?: SortOrderInput | SortOrder
+    heldOvernight?: SortOrderInput | SortOrder
+    overnightNote?: SortOrderInput | SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -17517,6 +19899,13 @@ export namespace Prisma {
     customConditionsJson?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
     customBandsJson?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
     actCheckpointsJson?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    weeklyMarketJson?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    marketPreJson?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    marketOpenJson?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    marketMidJson?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    marketAfternoonJson?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
+    heldOvernight?: BoolNullableWithAggregatesFilter<"MnqDailyPlan"> | boolean | null
+    overnightNote?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
     notes?: StringNullableWithAggregatesFilter<"MnqDailyPlan"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"MnqDailyPlan"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"MnqDailyPlan"> | Date | string
@@ -18593,6 +20982,104 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MonthlyReportCreateInput = {
+    yearMonth: string
+    monthInsight?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyReportUncheckedCreateInput = {
+    yearMonth: string
+    monthInsight?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyReportUpdateInput = {
+    yearMonth?: StringFieldUpdateOperationsInput | string
+    monthInsight?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyReportUncheckedUpdateInput = {
+    yearMonth?: StringFieldUpdateOperationsInput | string
+    monthInsight?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyReportCreateManyInput = {
+    yearMonth: string
+    monthInsight?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MonthlyReportUpdateManyMutationInput = {
+    yearMonth?: StringFieldUpdateOperationsInput | string
+    monthInsight?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyReportUncheckedUpdateManyInput = {
+    yearMonth?: StringFieldUpdateOperationsInput | string
+    monthInsight?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuarterlyReportCreateInput = {
+    yearQuarter: string
+    quarterInsight?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QuarterlyReportUncheckedCreateInput = {
+    yearQuarter: string
+    quarterInsight?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QuarterlyReportUpdateInput = {
+    yearQuarter?: StringFieldUpdateOperationsInput | string
+    quarterInsight?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuarterlyReportUncheckedUpdateInput = {
+    yearQuarter?: StringFieldUpdateOperationsInput | string
+    quarterInsight?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuarterlyReportCreateManyInput = {
+    yearQuarter: string
+    quarterInsight?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QuarterlyReportUpdateManyMutationInput = {
+    yearQuarter?: StringFieldUpdateOperationsInput | string
+    quarterInsight?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuarterlyReportUncheckedUpdateManyInput = {
+    yearQuarter?: StringFieldUpdateOperationsInput | string
+    quarterInsight?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type MissedReasonOptionCreateInput = {
     id?: string
     label: string
@@ -18794,6 +21281,13 @@ export namespace Prisma {
     customConditionsJson?: string | null
     customBandsJson?: string | null
     actCheckpointsJson?: string | null
+    weeklyMarketJson?: string | null
+    marketPreJson?: string | null
+    marketOpenJson?: string | null
+    marketMidJson?: string | null
+    marketAfternoonJson?: string | null
+    heldOvernight?: boolean | null
+    overnightNote?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18830,6 +21324,13 @@ export namespace Prisma {
     customConditionsJson?: string | null
     customBandsJson?: string | null
     actCheckpointsJson?: string | null
+    weeklyMarketJson?: string | null
+    marketPreJson?: string | null
+    marketOpenJson?: string | null
+    marketMidJson?: string | null
+    marketAfternoonJson?: string | null
+    heldOvernight?: boolean | null
+    overnightNote?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18864,6 +21365,13 @@ export namespace Prisma {
     customConditionsJson?: NullableStringFieldUpdateOperationsInput | string | null
     customBandsJson?: NullableStringFieldUpdateOperationsInput | string | null
     actCheckpointsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    weeklyMarketJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketPreJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketOpenJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketMidJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketAfternoonJson?: NullableStringFieldUpdateOperationsInput | string | null
+    heldOvernight?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    overnightNote?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18900,6 +21408,13 @@ export namespace Prisma {
     customConditionsJson?: NullableStringFieldUpdateOperationsInput | string | null
     customBandsJson?: NullableStringFieldUpdateOperationsInput | string | null
     actCheckpointsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    weeklyMarketJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketPreJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketOpenJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketMidJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketAfternoonJson?: NullableStringFieldUpdateOperationsInput | string | null
+    heldOvernight?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    overnightNote?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18935,6 +21450,13 @@ export namespace Prisma {
     customConditionsJson?: string | null
     customBandsJson?: string | null
     actCheckpointsJson?: string | null
+    weeklyMarketJson?: string | null
+    marketPreJson?: string | null
+    marketOpenJson?: string | null
+    marketMidJson?: string | null
+    marketAfternoonJson?: string | null
+    heldOvernight?: boolean | null
+    overnightNote?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18969,6 +21491,13 @@ export namespace Prisma {
     customConditionsJson?: NullableStringFieldUpdateOperationsInput | string | null
     customBandsJson?: NullableStringFieldUpdateOperationsInput | string | null
     actCheckpointsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    weeklyMarketJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketPreJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketOpenJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketMidJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketAfternoonJson?: NullableStringFieldUpdateOperationsInput | string | null
+    heldOvernight?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    overnightNote?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19004,6 +21533,13 @@ export namespace Prisma {
     customConditionsJson?: NullableStringFieldUpdateOperationsInput | string | null
     customBandsJson?: NullableStringFieldUpdateOperationsInput | string | null
     actCheckpointsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    weeklyMarketJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketPreJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketOpenJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketMidJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketAfternoonJson?: NullableStringFieldUpdateOperationsInput | string | null
+    heldOvernight?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    overnightNote?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20058,6 +22594,48 @@ export namespace Prisma {
     overallRating?: SortOrder
   }
 
+  export type MonthlyReportCountOrderByAggregateInput = {
+    yearMonth?: SortOrder
+    monthInsight?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MonthlyReportMaxOrderByAggregateInput = {
+    yearMonth?: SortOrder
+    monthInsight?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MonthlyReportMinOrderByAggregateInput = {
+    yearMonth?: SortOrder
+    monthInsight?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QuarterlyReportCountOrderByAggregateInput = {
+    yearQuarter?: SortOrder
+    quarterInsight?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QuarterlyReportMaxOrderByAggregateInput = {
+    yearQuarter?: SortOrder
+    quarterInsight?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QuarterlyReportMinOrderByAggregateInput = {
+    yearQuarter?: SortOrder
+    quarterInsight?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type MissedReasonOptionCountOrderByAggregateInput = {
     id?: SortOrder
     label?: SortOrder
@@ -20218,6 +22796,13 @@ export namespace Prisma {
     customConditionsJson?: SortOrder
     customBandsJson?: SortOrder
     actCheckpointsJson?: SortOrder
+    weeklyMarketJson?: SortOrder
+    marketPreJson?: SortOrder
+    marketOpenJson?: SortOrder
+    marketMidJson?: SortOrder
+    marketAfternoonJson?: SortOrder
+    heldOvernight?: SortOrder
+    overnightNote?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -20253,6 +22838,13 @@ export namespace Prisma {
     customConditionsJson?: SortOrder
     customBandsJson?: SortOrder
     actCheckpointsJson?: SortOrder
+    weeklyMarketJson?: SortOrder
+    marketPreJson?: SortOrder
+    marketOpenJson?: SortOrder
+    marketMidJson?: SortOrder
+    marketAfternoonJson?: SortOrder
+    heldOvernight?: SortOrder
+    overnightNote?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -20288,6 +22880,13 @@ export namespace Prisma {
     customConditionsJson?: SortOrder
     customBandsJson?: SortOrder
     actCheckpointsJson?: SortOrder
+    weeklyMarketJson?: SortOrder
+    marketPreJson?: SortOrder
+    marketOpenJson?: SortOrder
+    marketMidJson?: SortOrder
+    marketAfternoonJson?: SortOrder
+    heldOvernight?: SortOrder
+    overnightNote?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -22236,6 +24835,13 @@ export namespace Prisma {
     customConditionsJson?: string | null
     customBandsJson?: string | null
     actCheckpointsJson?: string | null
+    weeklyMarketJson?: string | null
+    marketPreJson?: string | null
+    marketOpenJson?: string | null
+    marketMidJson?: string | null
+    marketAfternoonJson?: string | null
+    heldOvernight?: boolean | null
+    overnightNote?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22270,6 +24876,13 @@ export namespace Prisma {
     customConditionsJson?: string | null
     customBandsJson?: string | null
     actCheckpointsJson?: string | null
+    weeklyMarketJson?: string | null
+    marketPreJson?: string | null
+    marketOpenJson?: string | null
+    marketMidJson?: string | null
+    marketAfternoonJson?: string | null
+    heldOvernight?: boolean | null
+    overnightNote?: string | null
     notes?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22403,6 +25016,13 @@ export namespace Prisma {
     customConditionsJson?: NullableStringFieldUpdateOperationsInput | string | null
     customBandsJson?: NullableStringFieldUpdateOperationsInput | string | null
     actCheckpointsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    weeklyMarketJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketPreJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketOpenJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketMidJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketAfternoonJson?: NullableStringFieldUpdateOperationsInput | string | null
+    heldOvernight?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    overnightNote?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22437,6 +25057,13 @@ export namespace Prisma {
     customConditionsJson?: NullableStringFieldUpdateOperationsInput | string | null
     customBandsJson?: NullableStringFieldUpdateOperationsInput | string | null
     actCheckpointsJson?: NullableStringFieldUpdateOperationsInput | string | null
+    weeklyMarketJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketPreJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketOpenJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketMidJson?: NullableStringFieldUpdateOperationsInput | string | null
+    marketAfternoonJson?: NullableStringFieldUpdateOperationsInput | string | null
+    heldOvernight?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    overnightNote?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
