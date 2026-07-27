@@ -9,6 +9,7 @@ const NAV = [
   { href: "/analytics/missed", label: "错过分析" },
   { href: "/analytics/execution", label: "执行纪律" },
   { href: "/analytics/strategies", label: "策略效果" },
+  { href: "/analytics/executions", label: "成交明细" },
 ]
 
 export function AnalyticsNav() {
