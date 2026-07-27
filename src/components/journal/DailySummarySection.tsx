@@ -1,11 +1,14 @@
 "use client"
 
-import { useState, useRef, useCallback, useEffect } from "react"
-import { Card, CardContent, CardHeader } from "~/components/ui/card"
+import { Moon, ThumbsUp, ThumbsDown } from "lucide-react"
+import { Card, CardContent } from "~/components/ui/card"
+import { Badge } from "~/components/ui/badge"
 import { Separator } from "~/components/ui/separator"
-import { Dialog, DialogContent, DialogTitle } from "~/components/ui/dialog"
+import { cn } from "~/lib/utils"
 import type { DailySession, MnqDailyPlan, Screenshot, TradeSetup, Execution } from "../../../generated/prisma"
 import { SetupCard } from "~/components/setup/SetupCard"
+import { ScreenshotGrid } from "~/components/screenshot/ScreenshotGrid"
+import { MNQ_KEY_LEVEL_LABELS, type MnqKeyLevel } from "~/types"
 
 type SetupFull = TradeSetup & {
   executions: Execution[]
@@ -22,181 +25,58 @@ interface Props {
   session: SessionFull
 }
 
-// ── 图片灯箱（支持滚轮缩放 + 拖拽平移）──────────────────────────────
-function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
-  const [{ scale, tx, ty }, setView] = useState({ scale: 1, tx: 0, ty: 0 })
-  const [dragging, setDragging] = useState(false)
-  const dragRef = useRef<{ mx: number; my: number; tx0: number; ty0: number } | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+// ── 辅助函数 ──────────────────────────────────────────────────────────
 
-  const zoom = useCallback((delta: number) => {
-    setView(prev => {
-      const next = Math.min(Math.max(prev.scale + delta, 1), 8)
-      if (next <= 1) return { scale: 1, tx: 0, ty: 0 }
-      return { ...prev, scale: next }
-    })
-  }, [])
-
-  const reset = useCallback(() => setView({ scale: 1, tx: 0, ty: 0 }), [])
-
-  // 非被动滚轮事件（防止浏览器默认滚动）
-  useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
-    const handler = (e: WheelEvent) => {
-      e.preventDefault()
-      zoom(e.deltaY < 0 ? 0.3 : -0.3)
-    }
-    el.addEventListener("wheel", handler, { passive: false })
-    return () => el.removeEventListener("wheel", handler)
-  }, [zoom])
-
-  // 键盘快捷键
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "=" || e.key === "+") zoom(0.5)
-      else if (e.key === "-") zoom(-0.5)
-      else if (e.key === "0") reset()
-      else if (e.key === "ArrowLeft") setView(v => v.scale > 1 ? { ...v, tx: v.tx - 40 } : v)
-      else if (e.key === "ArrowRight") setView(v => v.scale > 1 ? { ...v, tx: v.tx + 40 } : v)
-      else if (e.key === "ArrowUp") setView(v => v.scale > 1 ? { ...v, ty: v.ty - 40 } : v)
-      else if (e.key === "ArrowDown") setView(v => v.scale > 1 ? { ...v, ty: v.ty + 40 } : v)
-    }
-    window.addEventListener("keydown", handler)
-    return () => window.removeEventListener("keydown", handler)
-  }, [zoom, reset])
-
-  const onMouseDown = (e: React.MouseEvent) => {
-    if (scale <= 1) return
-    dragRef.current = { mx: e.clientX, my: e.clientY, tx0: tx, ty0: ty }
-    setDragging(true)
-    e.preventDefault()
-  }
-
-  const onMouseMove = (e: React.MouseEvent) => {
-    if (!dragRef.current) return
-    setView(v => ({
-      ...v,
-      tx: dragRef.current!.tx0 + (e.clientX - dragRef.current!.mx),
-      ty: dragRef.current!.ty0 + (e.clientY - dragRef.current!.my),
-    }))
-  }
-
-  const stopDrag = () => {
-    dragRef.current = null
-    setDragging(false)
-  }
-
-  return (
-    <Dialog open onOpenChange={(v) => { if (!v) onClose() }}>
-      <DialogContent className="!top-0 !left-0 !translate-x-0 !translate-y-0 !max-w-none w-screen h-screen rounded-none border-0 p-0 bg-black select-none overflow-hidden flex flex-col gap-0">
-        <DialogTitle className="sr-only">截图预览</DialogTitle>
-
-        {/* ── 缩放工具栏 ── */}
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-black/70 backdrop-blur-sm rounded-full px-3 py-1 shadow-lg pointer-events-auto">
-          <button
-            onClick={() => zoom(-0.5)}
-            className="text-white/80 hover:text-white w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 text-lg font-bold"
-            title="缩小 (−)"
-          >−</button>
-          <span className="text-white/60 text-xs w-12 text-center tabular-nums">
-            {Math.round(scale * 100)}%
-          </span>
-          <button
-            onClick={() => zoom(0.5)}
-            className="text-white/80 hover:text-white w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 text-lg font-bold"
-            title="放大 (+)"
-          >+</button>
-          {scale !== 1 && (
-            <>
-              <div className="w-px h-4 bg-white/20 mx-0.5" />
-              <button
-                onClick={reset}
-                className="text-white/60 hover:text-white text-xs px-2 py-0.5 rounded-full hover:bg-white/10"
-                title="重置 (0)"
-              >重置</button>
-            </>
-          )}
-        </div>
-
-        {/* ── 图片视口（占满剩余空间）── */}
-        <div
-          ref={containerRef}
-          className="flex-1 overflow-hidden flex items-center justify-center"
-          style={{ cursor: scale > 1 ? (dragging ? "grabbing" : "grab") : "default" }}
-          onMouseDown={onMouseDown}
-          onMouseMove={onMouseMove}
-          onMouseUp={stopDrag}
-          onMouseLeave={stopDrag}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={src}
-            alt={alt}
-            draggable={false}
-            className="max-w-full max-h-full object-contain pointer-events-none"
-            style={{
-              transform: `translate(${tx}px, ${ty}px) scale(${scale})`,
-              transformOrigin: "center center",
-              transition: dragging ? "none" : "transform 0.15s ease",
-            }}
-          />
-        </div>
-
-        {/* ── 底部说明栏 ── */}
-        <div className="shrink-0 flex items-center justify-between px-4 py-1.5 bg-black/60">
-          <p className="text-[11px] text-white/40 truncate flex-1">{alt}</p>
-          <p className="text-[10px] text-white/25 shrink-0 ml-2">滚轮缩放 · 拖拽移动 · ← → ↑ ↓ 平移</p>
-        </div>
-      </DialogContent>
-    </Dialog>
-  )
+function parseEvalNote(plan: MnqDailyPlan, key: string): string {
+  try {
+    const raw = (plan as unknown as { evalNotesJson?: string | null }).evalNotesJson
+    if (!raw) return ""
+    const notes = JSON.parse(raw) as Record<string, string>
+    return notes[key] ?? ""
+  } catch { return "" }
 }
 
-// ── 截图网格 ──────────────────────────────────────────────────────────
-function ScreenshotGrid({ screenshots, title }: { screenshots: Screenshot[]; title?: string }) {
-  const [lightbox, setLightbox] = useState<Screenshot | null>(null)
-  if (screenshots.length === 0) return null
+// ── 边界准确性只读行 ──────────────────────────────────────────────────
+
+function BandAccuracyRow({
+  label,
+  evalValue,
+  note,
+}: {
+  label: string
+  evalValue: boolean | null | undefined
+  note: string
+}) {
   return (
-    <div className="space-y-1.5">
-      {title && <p className="text-xs font-medium text-muted-foreground">{title}</p>}
-      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-        {screenshots.map((sc) => (
-          <button
-            key={sc.id}
-            onClick={() => setLightbox(sc)}
-            className="group relative overflow-hidden rounded border border-border/50 aspect-video bg-muted hover:border-primary/50 transition-colors"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={sc.filePath}
-              alt={sc.caption ?? sc.originalName}
-              className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
-            />
-            {sc.caption && (
-              <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-[10px] px-1 py-0.5 truncate opacity-0 group-hover:opacity-100 transition-opacity">
-                {sc.caption}
-              </div>
-            )}
-            {sc.timeframe && (
-              <div className="absolute top-1 right-1 bg-black/60 text-white text-[10px] px-1 rounded">
-                {sc.timeframe}
-              </div>
-            )}
-          </button>
-        ))}
+    <div className="space-y-0.5">
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="text-xs text-foreground/80 flex-1 min-w-0">{label}</span>
+        {evalValue === true && (
+          <span className={cn(
+            "flex items-center gap-0.5 text-[11px] px-1.5 py-0.5 rounded",
+            "bg-green-700 text-white",
+          )}>
+            <ThumbsUp className="h-2.5 w-2.5" />准
+          </span>
+        )}
+        {evalValue === false && (
+          <span className={cn(
+            "flex items-center gap-0.5 text-[11px] px-1.5 py-0.5 rounded",
+            "bg-red-700 text-white",
+          )}>
+            <ThumbsDown className="h-2.5 w-2.5" />误
+          </span>
+        )}
+        {evalValue == null && (
+          <span className="text-[11px] text-muted-foreground">未评估</span>
+        )}
       </div>
-      {lightbox && (
-        <Lightbox
-          src={lightbox.filePath}
-          alt={lightbox.caption ?? lightbox.originalName}
-          onClose={() => setLightbox(null)}
-        />
+      {evalValue === false && note && (
+        <p className="text-xs text-foreground/60 leading-relaxed pl-2 whitespace-pre-wrap">{note}</p>
       )}
     </div>
   )
 }
-
 
 // ── 主组件 ────────────────────────────────────────────────────────────
 export function DailySummarySection({ session }: Props) {
@@ -270,21 +150,77 @@ export function DailySummarySection({ session }: Props) {
             </span>
           </div>
           {session.setups.map((setup) => (
-            <div key={setup.id} className="space-y-0">
-              <SetupCard
-                setup={setup}
-                intraMode={true}
-                mnqPlan={setup.symbol === "MNQ" ? session.mnqPlan : null}
-              />
-              {setup.screenshots.length > 0 && (
-                <div className="px-4 pb-3 -mt-1">
-                  <ScreenshotGrid screenshots={setup.screenshots} title="Setup 截图" />
-                </div>
-              )}
-            </div>
+            <SetupCard
+              key={setup.id}
+              setup={setup}
+              summaryMode={true}
+              screenshots={setup.screenshots.length > 0 ? setup.screenshots : undefined}
+              mnqPlan={setup.symbol === "MNQ" ? session.mnqPlan : null}
+            />
           ))}
         </div>
       )}
+
+      {/* ── MNQ 边界准确性（仅震荡日且已选边界时） ── */}
+      {session.mnqPlan?.scenario === "RANGE_SWEEP" &&
+        (session.mnqPlan.sweepUpBand || session.mnqPlan.sweepDownBand) && (
+          <Card>
+            <CardContent className="pt-4 pb-4 space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-amber-500/90 uppercase tracking-wide">MNQ 边界评估</span>
+                <Badge variant="outline" className="text-xs py-0 border-amber-600/50 text-amber-400">
+                  震荡日
+                </Badge>
+              </div>
+              <div className="space-y-1.5">
+                {session.mnqPlan.sweepUpBand && (
+                  <BandAccuracyRow
+                    label={`上边界: ${MNQ_KEY_LEVEL_LABELS[session.mnqPlan.sweepUpBand as MnqKeyLevel] ?? session.mnqPlan.sweepUpBand}`}
+                    evalValue={session.mnqPlan.evalUpBand}
+                    note={parseEvalNote(session.mnqPlan, "evalUpBand")}
+                  />
+                )}
+                {session.mnqPlan.sweepDownBand && (
+                  <BandAccuracyRow
+                    label={`下边界: ${MNQ_KEY_LEVEL_LABELS[session.mnqPlan.sweepDownBand as MnqKeyLevel] ?? session.mnqPlan.sweepDownBand}`}
+                    evalValue={session.mnqPlan.evalDownBand}
+                    note={parseEvalNote(session.mnqPlan, "evalDownBand")}
+                  />
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+      {/* ── MNQ 持仓过夜 ── */}
+      {session.mnqPlan?.heldOvernight !== null &&
+        session.mnqPlan?.heldOvernight !== undefined && (
+          <Card>
+            <CardContent className="pt-4 pb-4">
+              <div className="flex items-center gap-2">
+                <Moon className="h-3.5 w-3.5 text-indigo-400 shrink-0" />
+                <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wide">
+                  MNQ 持仓过夜
+                </span>
+                <span
+                  className={cn(
+                    "text-xs px-2 py-0.5 rounded-full font-medium",
+                    session.mnqPlan.heldOvernight
+                      ? "bg-indigo-900/40 text-indigo-300"
+                      : "bg-green-900/40 text-green-300",
+                  )}
+                >
+                  {session.mnqPlan.heldOvernight ? "是" : "否 · 当日平仓"}
+                </span>
+              </div>
+              {session.mnqPlan.heldOvernight && session.mnqPlan.overnightNote && (
+                <p className="mt-2 text-xs text-foreground/75 leading-relaxed whitespace-pre-wrap pl-5">
+                  {session.mnqPlan.overnightNote}
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
       {/* ── 盘后复盘 ── */}
       {(session.postReview ?? session.whatWentWell ?? session.lessonsLearned ?? session.planFollowed) && (

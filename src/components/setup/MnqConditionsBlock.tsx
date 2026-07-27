@@ -24,6 +24,7 @@ import {
   type MnqEvalKey,
   type CustomCondition,
 } from "~/lib/mnq-conditions"
+import { MnqWeeklyMarket } from "./MnqWeeklyMarket"
 
 interface Props {
   plan: MnqDailyPlan
@@ -58,6 +59,13 @@ function initEvalNotes(plan: MnqDailyPlan): EvalNotes {
 
 export function MnqConditionsBlock({ plan, date, intraMode = false }: Props) {
   const router = useRouter()
+
+  // All hooks must be called unconditionally before any early return
+  const [evals, setEvals] = useState<EvalState>(() => initEvalState(plan))
+  const [evalNotes, setEvalNotes] = useState<EvalNotes>(() => initEvalNotes(plan))
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+
   const scenario = plan.scenario as MnqScenario | null
   const checkedDefs = getCheckedCondDefs(plan, scenario)
 
@@ -65,33 +73,29 @@ export function MnqConditionsBlock({ plan, date, intraMode = false }: Props) {
   const hasDownBand = !!plan.sweepDownBand
   const isRange     = scenario === "RANGE_SWEEP"
 
-  // 自定义条件：只显示当前情景下已勾选的
   const allCustomConds = parseCustomConditions(
     (plan as unknown as { customConditionsJson?: string }).customConditionsJson
   )
-  const checkedCustomConds = scenario
-    ? allCustomConds.filter(
-        (c) => c.checked && c.scenario === mnqScenarioToKey(scenario)
-      )
-    : []
 
-  // 如果没有任何已选条件，也没有 band，则不渲染
-  const hasAnything =
-    checkedDefs.length > 0 ||
-    checkedCustomConds.length > 0 ||
-    (isRange && (hasUpBand || hasDownBand))
-  if (!scenario && !hasAnything) return null
-
-  const [evals, setEvals] = useState<EvalState>(() => initEvalState(plan))
-  const [evalNotes, setEvalNotes] = useState<EvalNotes>(() => initEvalNotes(plan))
   // 自定义条件的评估状态（id → { evalValue, evalNote }）
   const [customEvals, setCustomEvals] = useState<Record<string, { evalValue: boolean | null; evalNote: string }>>(
     () => Object.fromEntries(
       allCustomConds.map((c) => [c.id, { evalValue: c.evalValue, evalNote: c.evalNote }])
     )
   )
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
+
+  const checkedCustomConds = scenario
+    ? allCustomConds.filter(
+        (c) => c.checked && c.scenario === mnqScenarioToKey(scenario)
+      )
+    : []
+
+  // 如果没有任何已选条件，也没有 band，则不渲染（早返回必须在所有 hook 之后）
+  const hasAnything =
+    checkedDefs.length > 0 ||
+    checkedCustomConds.length > 0 ||
+    (isRange && (hasUpBand || hasDownBand))
+  if (!scenario && !hasAnything) return null
 
   function toggleEval(key: MnqEvalKey, value: boolean) {
     setEvals((prev) => ({ ...prev, [key]: prev[key] === value ? null : value }))
@@ -254,6 +258,9 @@ export function MnqConditionsBlock({ plan, date, intraMode = false }: Props) {
           )}
         </div>
       )}
+
+      {/* 本周行情模块 */}
+      <MnqWeeklyMarket plan={plan} date={date} />
     </div>
   )
 }

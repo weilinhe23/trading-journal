@@ -73,6 +73,16 @@ const UpdateMnqPlanSchema = z.object({
   customConditionsJson:  z.string().nullable().optional(),
   customBandsJson:       z.string().nullable().optional(),
   actCheckpointsJson:    z.string().nullable().optional(),
+  // 周行情记录（JSON 字符串）
+  weeklyMarketJson:     z.string().nullable().optional(),
+  // 行情记录（JSON 字符串）
+  marketPreJson:        z.string().nullable().optional(),
+  marketOpenJson:       z.string().nullable().optional(),
+  marketMidJson:        z.string().nullable().optional(),
+  marketAfternoonJson:  z.string().nullable().optional(),
+  // 持仓过夜
+  heldOvernight:        z.boolean().nullable().optional(),
+  overnightNote:        z.string().nullable().optional(),
   notes: z.string().nullable().optional(),
 })
 
