@@ -18,6 +18,9 @@ db.sqlite
 # uploads (user-generated content, not in version control)
 /public/uploads/
 
+# local database backups
+/backups/
+
 # prisma query engine temp files
 *.tmp
 *.node.tmp*
