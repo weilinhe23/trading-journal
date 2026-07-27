@@ -343,11 +343,13 @@ export default async function QuarterlyDetailPage({ params }: PageProps) {
         const mNum = parseInt(ym.split("-")[1] ?? "1")
         return MONTH_SHORT[mNum - 1] ?? ym
       })
+      const severity: "high" | "medium" | "low" =
+        unique.length >= 3 ? "high" : unique.length >= 2 ? "medium" : "low"
       return {
         text,
         occurredIn: unique,
         occurredLabels: labels,
-        severity: (unique.length >= 3 ? "high" : unique.length >= 2 ? "medium" : "low"),
+        severity,
       }
     })
     .sort((a, b) => b.occurredIn.length - a.occurredIn.length)

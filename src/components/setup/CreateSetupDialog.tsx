@@ -639,8 +639,7 @@ export function CreateSetupDialog({ date }: Props) {
                           : catalogItems
 
                         const grouped = filtered.reduce<Record<string, NewsCatalogItem[]>>((acc, item) => {
-                          acc[item.category] ??= []
-                          acc[item.category].push(item)
+                          ;(acc[item.category] ??= []).push(item)
                           return acc
                         }, {})
 

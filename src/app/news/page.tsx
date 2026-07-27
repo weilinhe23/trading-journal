@@ -32,8 +32,7 @@ export default async function NewsCatalogPage() {
 
   // Group by category
   const grouped = items.reduce<Record<string, NewsCatalogItem[]>>((acc, item) => {
-    acc[item.category] ??= []
-    acc[item.category].push(item)
+    ;(acc[item.category] ??= []).push(item)
     return acc
   }, {})
 

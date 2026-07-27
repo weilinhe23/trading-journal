@@ -377,10 +377,12 @@ export default async function MonthlyDetailPage({ params }: PageProps) {
     .filter(({ weekNums }) => new Set(weekNums).size >= 2)
     .map(({ text, weekNums }) => {
       const unique = [...new Set(weekNums)].sort()
+      const severity: "high" | "medium" | "low" =
+        unique.length >= 3 ? "high" : unique.length >= 2 ? "medium" : "low"
       return {
         text,
         occurredIn: unique,
-        severity: (unique.length >= 3 ? "high" : unique.length >= 2 ? "medium" : "low"),
+        severity,
       }
     })
     .sort((a, b) => b.occurredIn.length - a.occurredIn.length)
