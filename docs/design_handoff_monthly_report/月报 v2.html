@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交易系统月报 · 4周汇总</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 14px; }
+  body {
+    min-height: 100vh;
+    background: oklch(0.10 0.015 240);
+    color: oklch(0.88 0.008 240);
+    font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-thumb { background: oklch(0.22 0.02 240); border-radius: 2px; }
+  .mono { font-family: 'DM Mono', monospace; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const C = {
+  bg:'oklch(0.10 0.015 240)', surface:'oklch(0.145 0.018 240)',
+  surface2:'oklch(0.175 0.02 240)', border:'oklch(0.22 0.022 240)',
+  borderHi:'oklch(0.32 0.035 240)',
+  amber:'oklch(0.78 0.15 72)', green:'oklch(0.72 0.18 145)',
+  red:'oklch(0.65 0.18 15)', blue:'oklch(0.7 0.14 240)',
+  text:'oklch(0.88 0.008 240)', textMid:'oklch(0.62 0.012 240)',
+  textDim:'oklch(0.42 0.015 240)',
+};
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "amber"
+}/*EDITMODE-END*/;
+
+// ── 4 周原始数据 ──────────────────────────────────────────────────────────────
+const weeks = [
+  {
+    w: 14, range: 'Mar 31 – Apr 03',
+    pnl: +520, trades: 3, wins: 2, winRate: 67, score: 72,
+    summary: '震荡市中谨慎参与，选择性进入有效。',
+    highlight: '周三准确识别震荡日，避免无效交易',
+    weakness: '周一 ATR 止损过紧，被噪音扫损',
+    lesson: '震荡日的止损应使用 1.5×ATR 而非 1×ATR',
+    bestTrade: { date:'04/02', inst:'NQ', dir:'Long',  r:+1.8 },
+    worstTrade:{ date:'04/01', inst:'ES', dir:'Short', r:-0.6 },
+    regimes: { TREND: 1, CHOP: 3, RANGE: 1 },
+    equity: [10000, 10080, 9920, 10240, 10520],
+  },
+  {
+    w: 15, range: 'Apr 06 – Apr 10',
+    pnl: +380, trades: 4, wins: 2, winRate: 50, score: 70,
+    summary: '趋势日开始增多，但执行尚不稳定。',
+    highlight: '周四完整持有趋势单至目标位',
+    weakness: '周二、周三连续两笔行情中间进入',
+    lesson: '行情中间不进入是一票否决规则',
+    bestTrade: { date:'04/09', inst:'NQ', dir:'Long',  r:+2.4 },
+    worstTrade:{ date:'04/07', inst:'ES', dir:'Long',  r:-1.2 },
+    regimes: { TREND: 3, CHOP: 1, RANGE: 1 },
+    equity: [10520, 10380, 10180, 10620, 10900],
+  },
+  {
+    w: 16, range: 'Apr 13 – Apr 17',
+    pnl: -180, trades: 3, wins: 1, winRate: 33, score: 65,
+    summary: '本月唯一亏损周，纪律松动是主因。',
+    highlight: '周五止损后冷静下来，没有情绪化加码',
+    weakness: '周一 FOMO 进入，违反"不在行情中间进入"',
+    lesson: '亏损后情绪管理：先离场观察 30 分钟',
+    bestTrade: { date:'04/17', inst:'NQ', dir:'Long',  r:+1.4 },
+    worstTrade:{ date:'04/14', inst:'ES', dir:'Long',  r:-1.8 },
+    regimes: { TREND: 2, CHOP: 2, RANGE: 1 },
+    equity: [10900, 10620, 10480, 10720, 10720],
+  },
+  {
+    w: 17, range: 'Apr 20 – Apr 24',
+    pnl: +857, trades: 1, wins: 1, winRate: 100, score: 80,
+    summary: '强势 bull trend，准确识别并执行。',
+    highlight: '周一识别趋势日并完美执行 PDH 突破',
+    weakness: '周四出场略早，少抓 0.6R',
+    lesson: '趋势够强时可调高进入价',
+    bestTrade: { date:'04/21', inst:'NQ', dir:'Long',  r:+3.2 },
+    worstTrade:null,
+    regimes: { TREND: 4, CHOP: 0, RANGE: 1 },
+    equity: [10720, 11340, 11340, 11580, 11577],
+  },
+];
+
+// ── 全月交易明细（聚合 4 周所有交易）─────────────────────────────────────────
+const allTrades = [
+  // W14
+  { id:'T01', w:14, date:'04/01', time:'10:15', inst:'ES', dir:'Short', entry:5210, exit:5217, r:-0.6, setup:'布林带反转',     score:'B', regime:'CHOP',  note:'止损过紧被噪音扫损' },
+  { id:'T02', w:14, date:'04/02', time:'09:42', inst:'NQ', dir:'Long',  entry:17380,exit:17456,r:+1.8, setup:'PDH突破回踩',   score:'A', regime:'TREND', note:'完美执行，标准案例' },
+  { id:'T03', w:14, date:'04/03', time:'14:20', inst:'NQ', dir:'Long',  entry:17420,exit:17448,r:+0.9, setup:'EMA回踩',       score:'B', regime:'TREND', note:'获利合理' },
+  // W15
+  { id:'T04', w:15, date:'04/07', time:'10:48', inst:'ES', dir:'Long',  entry:5235, exit:5223, r:-1.2, setup:'行情中间进入',  score:'D', regime:'CHOP',  note:'违规进入，应回避' },
+  { id:'T05', w:15, date:'04/08', time:'10:30', inst:'ES', dir:'Long',  entry:5245, exit:5238, r:-0.8, setup:'行情中间进入',  score:'D', regime:'CHOP',  note:'连续违规' },
+  { id:'T06', w:15, date:'04/09', time:'09:38', inst:'NQ', dir:'Long',  entry:17520,exit:17636,r:+2.4, setup:'PDH突破回踩',   score:'A', regime:'TREND', note:'教科书级执行' },
+  { id:'T07', w:15, date:'04/10', time:'13:55', inst:'NQ', dir:'Long',  entry:17580,exit:17628,r:+1.2, setup:'PM高点突破',    score:'B', regime:'TREND', note:'良好' },
+  // W16
+  { id:'T08', w:16, date:'04/14', time:'10:22', inst:'ES', dir:'Long',  entry:5258, exit:5240, r:-1.8, setup:'行情中间进入',  score:'D', regime:'CHOP',  note:'FOMO进入，最差交易' },
+  { id:'T09', w:16, date:'04/16', time:'09:46', inst:'NQ', dir:'Short', entry:17680,exit:17668,r:+0.4, setup:'EMA回踩',       score:'C', regime:'CHOP',  note:'方向对但出场略早' },
+  { id:'T10', w:16, date:'04/17', time:'09:50', inst:'NQ', dir:'Long',  entry:17640,exit:17708,r:+1.4, setup:'趋势回踩',      score:'B', regime:'TREND', note:'合规执行' },
+  // W17
+  { id:'T11', w:17, date:'04/21', time:'09:36', inst:'NQ', dir:'Long',  entry:17720,exit:17912,r:+3.2, setup:'PDH突破回踩',   score:'A', regime:'TREND', note:'本月最佳交易' },
+];
+
+const MONTH = {
+  monthLabel: 'April 2026', range: 'Mar 31 – Apr 24',
+  // 跨周聚合的洞察
+  recurringLessons: [
+    { text:'行情中间不进入', occurredIn:[15, 16], severity:'high' },
+    { text:'让利润奔跑，避免过早出场', occurredIn:[17], severity:'medium' },
+    { text:'震荡日止损应放宽至 1.5×ATR', occurredIn:[14], severity:'low' },
+  ],
+  persistentIssues: [
+    { issue:'行情中间进入', weeksAffected:[15, 16], totalLoss:-3.0 },
+    { issue:'过早出场', weeksAffected:[17], totalLoss:-0.6 },
+  ],
+  // 月度提炼出的总结
+  monthInsight: '本月在趋势日表现优秀（W17），但震荡市中（W14、W16）暴露出"行情中间进入"的纪律问题。下月重点：在前两周观察期保持 ≤2 笔交易，强化 setup 识别。',
+};
+
+// ── 衍生 ──────────────────────────────────────────────────────────────────────
+const totalPnl = weeks.reduce((s,w)=>s+w.pnl, 0);
+const totalTrades = weeks.reduce((s,w)=>s+w.trades, 0);
+const totalWins = weeks.reduce((s,w)=>s+w.wins, 0);
+const monthWinRate = Math.round(totalWins / totalTrades * 100);
+const monthScore = Math.round(weeks.reduce((s,w)=>s+w.score, 0) / weeks.length);
+const profitableWeeks = weeks.filter(w => w.pnl > 0).length;
+const monthEquity = weeks.flatMap((w, i) => i === 0 ? w.equity : w.equity.slice(1));
+
+const fmt = n => (n >= 0 ? '+' : '-') + '$' + Math.abs(n).toLocaleString();
+const fmtR = n => (n >= 0 ? '+' : '') + n.toFixed(1) + 'R';
+
+// ── shared ────────────────────────────────────────────────────────────────────
+function Sec({ children, accent, sub }) {
+  return (
+    <div style={{display:'flex', alignItems:'center', gap:10, marginBottom:14}}>
+      <div style={{width:3, height:14, background:accent, borderRadius:2, flexShrink:0}}/>
+      <span style={{fontSize:11.5, fontWeight:600, color:C.textMid, letterSpacing:'0.07em'}}>{children}</span>
+      {sub && <span style={{fontSize:11, color:C.textDim, marginLeft:6}}>{sub}</span>}
+    </div>
+  );
+}
+
+function Card({ children, style }) {
+  return (
+    <div style={{
+      background:C.surface, border:`1px solid ${C.border}`,
+      borderRadius:12, padding:'20px 22px', ...style,
+    }}>{children}</div>
+  );
+}
+
+// ── month equity curve (full month, week-segmented) ──────────────────────────
+function MonthEquity({ data, accent }) {
+  const W = 1100, H = 160, PAD = { t:16, r:24, b:30, l:60 };
+  const iW = W - PAD.l - PAD.r, iH = H - PAD.t - PAD.b;
+  const min = Math.min(...data) - 80, max = Math.max(...data) + 80;
+  const xScale = i => PAD.l + (i / (data.length - 1)) * iW;
+  const yScale = v => PAD.t + iH - ((v - min) / (max - min)) * iH;
+  const pts = data.map((v, i) => [xScale(i), yScale(v)]);
+
+  const pathD = pts.map((p, i) => {
+    if (i === 0) return `M${p[0]},${p[1]}`;
+    const prev = pts[i-1];
+    const cpx = (prev[0] + p[0]) / 2;
+    return `C${cpx},${prev[1]} ${cpx},${p[1]} ${p[0]},${p[1]}`;
+  }).join(' ');
+  const areaD = pathD + ` L${pts[pts.length-1][0]},${PAD.t+iH} L${pts[0][0]},${PAD.t+iH} Z`;
+
+  // 4 周边界
+  const weekBoundaries = [0, 4, 8, 12, 16];
+  const baseY = yScale(10000);
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{width:'100%',height:H,display:'block'}}>
+      <defs>
+        <linearGradient id="moEq" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={accent} stopOpacity="0.22"/>
+          <stop offset="100%" stopColor={accent} stopOpacity="0"/>
+        </linearGradient>
+      </defs>
+
+      {/* week separators */}
+      {weekBoundaries.slice(1, -1).map((i, idx) => (
+        <line key={idx} x1={xScale(i)} y1={PAD.t} x2={xScale(i)} y2={H-PAD.b}
+          stroke={C.border} strokeWidth="1" strokeDasharray="2 4" opacity="0.6"/>
+      ))}
+
+      {/* baseline */}
+      <line x1={PAD.l} y1={baseY} x2={W-PAD.r} y2={baseY} stroke={C.textDim} strokeWidth="0.5" strokeDasharray="1 3" opacity="0.5"/>
+      <text x={PAD.l-8} y={baseY+4} textAnchor="end" fontSize="9.5" fill={C.textDim} fontFamily="DM Mono">$10k</text>
+
+      {[10500, 11000, 11500].map(v => {
+        const y = yScale(v);
+        return (
+          <g key={v}>
+            <line x1={PAD.l} y1={y} x2={W-PAD.r} y2={y} stroke={C.border} strokeWidth="0.5" strokeDasharray="2 4" opacity="0.4"/>
+            <text x={PAD.l-8} y={y+4} textAnchor="end" fontSize="9.5" fill={C.textDim} fontFamily="DM Mono">${(v/1000).toFixed(1)}k</text>
+          </g>
+        );
+      })}
+
+      <path d={areaD} fill="url(#moEq)"/>
+      <path d={pathD} fill="none" stroke={accent} strokeWidth="1.75"/>
+
+      {/* week labels in middle of each week segment */}
+      {weeks.map((w, i) => {
+        const start = xScale(i * 4);
+        const end = xScale((i + 1) * 4);
+        return (
+          <text key={w.w} x={(start+end)/2} y={H-8} textAnchor="middle"
+            fontSize="10.5" fill={C.textMid} fontFamily="DM Mono" fontWeight="500">
+            W{w.w}
+          </text>
+        );
+      })}
+
+      {/* end point */}
+      <circle cx={pts[pts.length-1][0]} cy={pts[pts.length-1][1]} r="4" fill={accent} stroke={C.bg} strokeWidth="2"/>
+      <circle cx={pts[pts.length-1][0]} cy={pts[pts.length-1][1]} r="9" fill={accent} opacity="0.18"/>
+    </svg>
+  );
+}
+
+// ── week sparkline ───────────────────────────────────────────────────────────
+function WeekSpark({ data, color }) {
+  const W = 200, H = 36;
+  const min = Math.min(...data), max = Math.max(...data);
+  const range = Math.max(max - min, 1);
+  const pts = data.map((v, i) => [
+    (i / (data.length - 1)) * W,
+    H - 4 - ((v - min) / range) * (H - 8),
+  ]);
+  const pathD = pts.map((p, i) => i === 0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`).join(' ');
+  const areaD = pathD + ` L${W},${H} L0,${H} Z`;
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{width:'100%', height:H, display:'block'}}>
+      <path d={areaD} fill={color} opacity="0.15"/>
+      <path d={pathD} fill="none" stroke={color} strokeWidth="1.5"/>
+    </svg>
+  );
+}
+
+// ── week card ─────────────────────────────────────────────────────────────────
+const regimeColors = { TREND: C.green, CHOP: C.red, RANGE: C.amber };
+const regimeLabels = { TREND: '趋势', CHOP: '震荡', RANGE: '区间' };
+
+function WeekCard({ w, accent, expanded, onToggle }) {
+  const pnlColor = w.pnl >= 0 ? C.green : C.red;
+  return (
+    <div style={{
+      background:C.surface, border:`1px solid ${C.border}`,
+      borderRadius:12, overflow:'hidden',
+      transition:'border-color 0.2s',
+    }}
+    onMouseEnter={e=>e.currentTarget.style.borderColor=C.borderHi}
+    onMouseLeave={e=>e.currentTarget.style.borderColor=C.border}
+    >
+      {/* header */}
+      <div style={{padding:'14px 16px 12px', borderBottom:`1px solid ${C.border}`}}>
+        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:4}}>
+          <span className="mono" style={{fontSize:10.5, color:C.textDim, letterSpacing:'0.06em', fontWeight:500}}>WEEK {w.w}</span>
+          <span style={{fontSize:9.5, color:C.textDim, padding:'2px 6px', background:C.surface2, borderRadius:4}}>系统分 {w.score}</span>
+        </div>
+        <div className="mono" style={{fontSize:22, fontWeight:500, letterSpacing:'-0.02em', color:pnlColor, lineHeight:1.1}}>
+          {fmt(w.pnl)}
+        </div>
+        <div className="mono" style={{fontSize:10, color:C.textDim, marginTop:3}}>{w.range}</div>
+      </div>
+
+      {/* sparkline */}
+      <div style={{padding:'8px 8px 0'}}>
+        <WeekSpark data={w.equity} color={pnlColor}/>
+      </div>
+
+      {/* metrics row */}
+      <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:0, padding:'4px 8px 12px', borderBottom:`1px solid ${C.border}`}}>
+        {[
+          { l:'交易', v:w.trades, c:C.text },
+          { l:'胜率', v:w.winRate+'%', c: w.winRate >= 60 ? C.green : C.text },
+          { l:'盈/亏', v:`${w.wins}/${w.trades-w.wins}`, c:C.text },
+        ].map(s => (
+          <div key={s.l} style={{textAlign:'center', padding:'4px 0'}}>
+            <div className="mono" style={{fontSize:13, fontWeight:500, color:s.c, lineHeight:1.1}}>{s.v}</div>
+            <div style={{fontSize:9.5, color:C.textDim, marginTop:2}}>{s.l}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* regimes */}
+      <div style={{padding:'10px 16px', borderBottom:`1px solid ${C.border}`}}>
+        <div style={{fontSize:9.5, color:C.textDim, letterSpacing:'0.05em', marginBottom:6}}>市场环境</div>
+        <div style={{display:'flex', height:6, borderRadius:3, overflow:'hidden', background:C.border}}>
+          {Object.entries(w.regimes).map(([type, count]) => count > 0 && (
+            <div key={type} style={{flex:count, background:regimeColors[type]}} title={`${regimeLabels[type]} ${count}天`}/>
+          ))}
+        </div>
+        <div style={{display:'flex', gap:10, marginTop:6}}>
+          {Object.entries(w.regimes).map(([type, count]) => count > 0 && (
+            <span key={type} style={{fontSize:9.5, color:regimeColors[type], display:'flex', alignItems:'center', gap:3}}>
+              <span style={{width:6, height:6, background:regimeColors[type], borderRadius:1}}/>
+              <span className="mono">{count}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* summary */}
+      <div style={{padding:'12px 16px', borderBottom:`1px solid ${C.border}`}}>
+        <p style={{fontSize:11.5, lineHeight:1.6, color:C.textMid}}>{w.summary}</p>
+      </div>
+
+      {/* highlight + weakness */}
+      <div style={{padding:'10px 16px', display:'flex', flexDirection:'column', gap:8, borderBottom:`1px solid ${C.border}`}}>
+        <div style={{display:'flex', gap:8, alignItems:'flex-start'}}>
+          <span style={{color:C.green, fontSize:11, marginTop:1, flexShrink:0}}>↑</span>
+          <span style={{fontSize:11, lineHeight:1.5, color:C.textMid}}>{w.highlight}</span>
+        </div>
+        <div style={{display:'flex', gap:8, alignItems:'flex-start'}}>
+          <span style={{color:C.red, fontSize:11, marginTop:1, flexShrink:0}}>↓</span>
+          <span style={{fontSize:11, lineHeight:1.5, color:C.textMid}}>{w.weakness}</span>
+        </div>
+      </div>
+
+      {/* lesson */}
+      <div style={{padding:'10px 16px', background:`${accent}08`, borderBottom:`1px solid ${C.border}`}}>
+        <div style={{fontSize:9.5, color:accent, letterSpacing:'0.05em', marginBottom:4, fontWeight:600}}>核心教训</div>
+        <p style={{fontSize:11.5, lineHeight:1.5, color:C.text}}>{w.lesson}</p>
+      </div>
+
+      {/* link to full report */}
+      <button
+        onClick={onToggle}
+        style={{
+          width:'100%', padding:'10px 16px', background:'none', border:'none',
+          color:C.textDim, fontSize:11, fontFamily:'inherit', cursor:'pointer',
+          display:'flex', alignItems:'center', justifyContent:'center', gap:6,
+          transition:'color 0.15s',
+        }}
+        onMouseEnter={e => e.currentTarget.style.color = C.text}
+        onMouseLeave={e => e.currentTarget.style.color = C.textDim}
+      >
+        查看完整周报 →
+      </button>
+    </div>
+  );
+}
+
+// ── main ─────────────────────────────────────────────────────────────────────
+function App() {
+  const { TweaksPanel, TweakSection, TweakRadio, useTweaks } = window;
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const accent = tweaks.accent === 'amber' ? C.amber : C.green;
+  const [expandedWeek, setExpandedWeek] = useState(null);
+
+  // 找到最佳/最差交易
+  const allBest = weeks.map(w => w.bestTrade).filter(Boolean);
+  const monthBest = allBest.reduce((b, t) => t.r > (b?.r || -Infinity) ? t : b, null);
+  const allWorst = weeks.map(w => w.worstTrade).filter(Boolean);
+  const monthWorst = allWorst.reduce((w, t) => t.r < (w?.r || Infinity) ? t : w, null);
+
+  return (
+    <div style={{minHeight:'100vh'}}>
+
+      {/* ── top bar ── */}
+      <div style={{
+        position:'sticky', top:0, zIndex:10,
+        background:'oklch(0.10 0.015 240 / 0.9)',
+        backdropFilter:'blur(12px)',
+        borderBottom:`1px solid ${C.border}`,
+        padding:'0 32px',
+      }}>
+        <div style={{maxWidth:1280, margin:'0 auto', height:52, display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+          <div style={{display:'flex', alignItems:'center', gap:18}}>
+            <span className="mono" style={{fontSize:11, color:accent, letterSpacing:'0.1em', fontWeight:500}}>MONTHLY DIGEST</span>
+            <span style={{width:1, height:14, background:C.border, display:'block'}}/>
+            <span style={{fontSize:13, color:C.textMid}}>
+              {MONTH.monthLabel}
+              <span className="mono" style={{color:C.textDim, marginLeft:10, fontSize:11}}>{MONTH.range} · 4周</span>
+            </span>
+          </div>
+          <div style={{display:'flex', alignItems:'center', gap:20}}>
+            <div style={{display:'flex', alignItems:'center', gap:6}}>
+              <div style={{width:6, height:6, borderRadius:'50%', background: totalPnl >= 0 ? C.green : C.red, boxShadow:`0 0 6px ${totalPnl >= 0 ? C.green : C.red}`}}/>
+              <span className="mono" style={{fontSize:13, color: totalPnl >= 0 ? C.green : C.red, fontWeight:500}}>{fmt(totalPnl)}</span>
+            </div>
+            <span style={{width:1, height:14, background:C.border, display:'block'}}/>
+            <div style={{display:'flex', gap:6}}>
+              {['‹','›'].map((a,i) => (
+                <button key={i} style={{width:28, height:28, borderRadius:6, border:`1px solid ${C.border}`, background:'none', color:C.textDim, cursor:'pointer', fontSize:14, transition:'all 0.15s'}}
+                  onMouseEnter={e=>{e.currentTarget.style.color=C.text; e.currentTarget.style.borderColor=C.borderHi;}}
+                  onMouseLeave={e=>{e.currentTarget.style.color=C.textDim; e.currentTarget.style.borderColor=C.border;}}
+                >{a}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── body ── */}
+      <div style={{maxWidth:1280, margin:'0 auto', padding:'32px 32px 80px'}}>
+
+        {/* hero */}
+        <div style={{marginBottom:20}}>
+          <div style={{display:'flex', alignItems:'baseline', justifyContent:'space-between', marginBottom:18}}>
+            <div>
+              <div style={{fontSize:11.5, color:C.textDim, letterSpacing:'0.08em', marginBottom:6}}>4 周累计净盈亏</div>
+              <div style={{display:'flex', alignItems:'baseline', gap:14}}>
+                <span className="mono" style={{fontSize:48, fontWeight:500, letterSpacing:'-0.03em', color: totalPnl >= 0 ? C.green : C.red, lineHeight:1}}>{fmt(totalPnl)}</span>
+                <span className="mono" style={{fontSize:14, color:C.textDim}}>· {((totalPnl/10000)*100).toFixed(1)}%</span>
+              </div>
+            </div>
+            <div style={{display:'flex', gap:24}}>
+              {[
+                { l:'交易', v:totalTrades, c:C.text },
+                { l:'胜率', v:monthWinRate+'%', c: monthWinRate >= 60 ? C.green : C.text },
+                { l:'盈利周', v:`${profitableWeeks}/${weeks.length}`, c: profitableWeeks >= 3 ? C.green : C.amber },
+                { l:'平均系统分', v:monthScore, c:accent },
+              ].map(s => (
+                <div key={s.l} style={{textAlign:'right'}}>
+                  <div className="mono" style={{fontSize:20, fontWeight:500, color:s.c, lineHeight:1.1}}>{s.v}</div>
+                  <div style={{fontSize:10, color:C.textDim, marginTop:3}}>{s.l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <Card>
+            <MonthEquity data={monthEquity} accent={accent}/>
+          </Card>
+        </div>
+
+        {/* ── 4 周卡片（核心区） ── */}
+        <Sec accent={accent} sub="点击卡片查看完整周报">本月四周</Sec>
+        <div style={{display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:12, marginBottom:24}}>
+          {weeks.map(w => (
+            <WeekCard key={w.w} w={w} accent={accent}
+              expanded={expandedWeek === w.w}
+              onToggle={() => setExpandedWeek(expandedWeek === w.w ? null : w.w)}
+            />
+          ))}
+        </div>
+
+        {/* ── 跨周聚合区 ── */}
+        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom:16}}>
+
+          {/* recurring lessons */}
+          <Card>
+            <Sec accent={accent} sub="跨周出现的高频教训">重复教训追踪</Sec>
+            <div style={{display:'flex', flexDirection:'column', gap:10}}>
+              {MONTH.recurringLessons.map((l, i) => {
+                const sevColor = l.severity === 'high' ? C.red : l.severity === 'medium' ? C.amber : C.textMid;
+                const recurring = l.occurredIn.length > 1;
+                return (
+                  <div key={i} style={{
+                    padding:'12px 14px', background:C.surface2, borderRadius:10,
+                    border:`1px solid ${C.border}`,
+                    borderLeft: recurring ? `3px solid ${sevColor}` : `1px solid ${C.border}`,
+                  }}>
+                    <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:10}}>
+                      <span style={{fontSize:12.5, color:C.text, lineHeight:1.5, flex:1}}>{l.text}</span>
+                      <div style={{display:'flex', gap:4, flexShrink:0}}>
+                        {l.occurredIn.map(wn => (
+                          <span key={wn} className="mono" style={{
+                            fontSize:9.5, padding:'2px 6px',
+                            background: sevColor + '22', color: sevColor,
+                            borderRadius:3, fontWeight:600,
+                          }}>W{wn}</span>
+                        ))}
+                      </div>
+                    </div>
+                    {recurring && (
+                      <div style={{marginTop:6, fontSize:10, color:sevColor, display:'flex', alignItems:'center', gap:4}}>
+                        <span>⚠</span>
+                        <span>已重复出现 {l.occurredIn.length} 次，需重点强化</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
+
+          {/* persistent issues */}
+          <Card>
+            <Sec accent={accent} sub="跨周持续存在的问题">持续性问题</Sec>
+            <div style={{display:'flex', flexDirection:'column', gap:10}}>
+              {MONTH.persistentIssues.map((p, i) => (
+                <div key={i} style={{padding:'12px 14px', background:C.surface2, borderRadius:10, border:`1px solid ${C.border}`}}>
+                  <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8}}>
+                    <span style={{fontSize:12.5, color:C.text, fontWeight:500}}>{p.issue}</span>
+                    <span className="mono" style={{fontSize:13, fontWeight:600, color:C.red}}>{fmtR(p.totalLoss)}</span>
+                  </div>
+                  {/* timeline indicator */}
+                  <div style={{display:'flex', alignItems:'center', gap:8}}>
+                    <span style={{fontSize:10, color:C.textDim, width:50}}>影响周</span>
+                    <div style={{display:'flex', gap:4, flex:1}}>
+                      {weeks.map(w => {
+                        const affected = p.weeksAffected.includes(w.w);
+                        return (
+                          <div key={w.w} style={{
+                            flex:1, height:6, borderRadius:2,
+                            background: affected ? C.red : C.border,
+                            opacity: affected ? 1 : 0.5,
+                          }} title={`W${w.w}`}/>
+                        );
+                      })}
+                    </div>
+                    <span className="mono" style={{fontSize:10, color:C.red, width:30, textAlign:'right'}}>{p.weeksAffected.length}/4</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+        </div>
+
+        {/* ── 4 周交易明细聚合 ── */}
+        <Card style={{marginBottom:16}}>
+          <Sec accent={accent} sub={`${allTrades.length} 笔 · 按周分组`}>本月交易明细</Sec>
+
+          {/* summary strip */}
+          <div style={{
+            display:'grid', gridTemplateColumns:'repeat(6, 1fr)', gap:0,
+            background:C.surface2, borderRadius:8, marginBottom:14,
+            border:`1px solid ${C.border}`,
+          }}>
+            {(() => {
+              const wins = allTrades.filter(t => t.r > 0);
+              const losses = allTrades.filter(t => t.r < 0);
+              const totalR = allTrades.reduce((s,t) => s + t.r, 0);
+              const avgWin = wins.length ? wins.reduce((s,t) => s + t.r, 0) / wins.length : 0;
+              const avgLoss = losses.length ? Math.abs(losses.reduce((s,t) => s + t.r, 0) / losses.length) : 0;
+              const pf = avgLoss ? (avgWin * wins.length) / (avgLoss * losses.length) : 0;
+              const aGrade = allTrades.filter(t => t.score === 'A').length;
+              const dGrade = allTrades.filter(t => t.score === 'D').length;
+              return [
+                { l:'累计盈亏', v:fmtR(totalR), c: totalR >= 0 ? C.green : C.red },
+                { l:'胜/负',   v:`${wins.length}/${losses.length}`, c:C.text },
+                { l:'平均盈利', v:fmtR(avgWin), c:C.green },
+                { l:'平均亏损', v:fmtR(-avgLoss), c:C.red },
+                { l:'盈亏比',   v:pf.toFixed(2), c: pf >= 2 ? C.green : C.amber },
+                { l:'A级 / D级', v:`${aGrade} / ${dGrade}`, c: aGrade > dGrade ? C.green : C.amber },
+              ].map((s, i, arr) => (
+                <div key={s.l} style={{
+                  padding:'12px 14px', textAlign:'center',
+                  borderRight: i < arr.length - 1 ? `1px solid ${C.border}` : 'none',
+                }}>
+                  <div className="mono" style={{fontSize:15, fontWeight:500, color:s.c, lineHeight:1.1}}>{s.v}</div>
+                  <div style={{fontSize:10, color:C.textDim, marginTop:4}}>{s.l}</div>
+                </div>
+              ));
+            })()}
+          </div>
+
+          {/* trade table grouped by week */}
+          <div style={{overflowX:'auto'}}>
+            <table style={{width:'100%', borderCollapse:'collapse', fontSize:12}}>
+              <thead>
+                <tr style={{borderBottom:`1px solid ${C.border}`}}>
+                  {['#','日期/时间','品种','方向','进入','出场','Setup','环境','盈亏','执行','备注'].map(h => (
+                    <th key={h} style={{padding:'8px 10px', textAlign:'left', color:C.textDim, fontWeight:500, letterSpacing:'0.04em', fontSize:10}}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {weeks.map(week => {
+                  const weekTrades = allTrades.filter(t => t.w === week.w);
+                  if (weekTrades.length === 0) return null;
+                  const weekR = weekTrades.reduce((s,t) => s + t.r, 0);
+                  return (
+                    <React.Fragment key={week.w}>
+                      {/* week separator row */}
+                      <tr style={{background:`${accent}0d`}}>
+                        <td colSpan="11" style={{padding:'8px 10px'}}>
+                          <div style={{display:'flex', alignItems:'center', gap:12, fontSize:11}}>
+                            <span className="mono" style={{color:accent, fontWeight:600, letterSpacing:'0.06em'}}>WEEK {week.w}</span>
+                            <span style={{color:C.textDim}}>{week.range}</span>
+                            <span style={{flex:1}}/>
+                            <span className="mono" style={{color:C.textDim}}>{weekTrades.length} 笔</span>
+                            <span className="mono" style={{color: weekR >= 0 ? C.green : C.red, fontWeight:600}}>{fmtR(weekR)}</span>
+                            <span className="mono" style={{color: week.pnl >= 0 ? C.green : C.red, fontWeight:500, minWidth:64, textAlign:'right'}}>{fmt(week.pnl)}</span>
+                          </div>
+                        </td>
+                      </tr>
+                      {weekTrades.map((t, i) => {
+                        const rColor = t.r > 0 ? C.green : t.r < 0 ? C.red : C.textDim;
+                        const dirColor = t.dir === 'Long' ? C.green : C.red;
+                        const gradeColor = { A:C.green, B:'oklch(0.72 0.15 145)', C:C.amber, D:C.red }[t.score] || C.textDim;
+                        const regimeColor = { TREND:C.green, CHOP:C.red, RANGE:C.amber }[t.regime];
+                        const regimeLabel = { TREND:'趋势', CHOP:'震荡', RANGE:'区间' }[t.regime];
+                        return (
+                          <tr key={t.id} style={{
+                            borderBottom: `1px solid ${C.border}`,
+                            transition: 'background 0.15s',
+                          }}
+                            onMouseEnter={e => e.currentTarget.style.background = C.surface2}
+                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                          >
+                            <td className="mono" style={{padding:'10px', color:C.textDim, fontSize:10.5}}>{t.id}</td>
+                            <td className="mono" style={{padding:'10px', color:C.textMid}}>{t.date}<span style={{color:C.textDim, marginLeft:6, fontSize:10.5}}>{t.time}</span></td>
+                            <td className="mono" style={{padding:'10px', color:C.text, fontWeight:500}}>{t.inst}</td>
+                            <td style={{padding:'10px', color:dirColor, fontWeight:500, fontSize:11.5}}>{t.dir === 'Long' ? '↑ 多' : '↓ 空'}</td>
+                            <td className="mono" style={{padding:'10px', color:C.textMid, fontSize:11}}>{t.entry.toLocaleString()}</td>
+                            <td className="mono" style={{padding:'10px', color:C.textMid, fontSize:11}}>{t.exit.toLocaleString()}</td>
+                            <td style={{padding:'10px', color:C.textMid, fontSize:11}}>{t.setup}</td>
+                            <td style={{padding:'10px'}}>
+                              <span style={{
+                                fontSize:10, padding:'2px 7px', borderRadius:4,
+                                background: regimeColor + '22', color: regimeColor,
+                                fontWeight:500,
+                              }}>{regimeLabel}</span>
+                            </td>
+                            <td className="mono" style={{
+                              padding:'10px', color:rColor, fontWeight:600, fontSize:14,
+                              textShadow: Math.abs(t.r) >= 2 ? `0 0 10px ${rColor}88` : 'none',
+                            }}>{fmtR(t.r)}</td>
+                            <td style={{padding:'10px'}}>
+                              <span style={{
+                                display:'inline-flex', alignItems:'center', justifyContent:'center',
+                                width:20, height:20, borderRadius:5,
+                                background: gradeColor + '22', color: gradeColor,
+                                fontSize:10.5, fontWeight:700, fontFamily:'DM Mono',
+                              }}>{t.score}</span>
+                            </td>
+                            <td style={{padding:'10px', fontSize:11, color:C.textDim, maxWidth:180}}>{t.note}</td>
+                          </tr>
+                        );
+                      })}
+                    </React.Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+
+        {/* ── 月度最佳/最差 ── */}
+        <Card style={{marginBottom:16}}>
+          <Sec accent={accent}>本月之最</Sec>
+          <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12}}>
+            {[
+              { tag:'最佳交易', t:monthBest, color:C.green },
+              { tag:'最差交易', t:monthWorst, color:C.red },
+            ].map(({ tag, t, color }) => t && (
+              <div key={tag} style={{
+                padding:'14px 18px', background:C.surface2, borderRadius:10,
+                border:`1px solid ${C.border}`, borderLeft:`3px solid ${color}`,
+                display:'flex', alignItems:'center', gap:18,
+              }}>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:10, color, fontWeight:600, letterSpacing:'0.06em', marginBottom:6}}>{tag}</div>
+                  <div style={{display:'flex', alignItems:'baseline', gap:10}}>
+                    <span className="mono" style={{fontSize:13, color:C.text, fontWeight:500}}>{t.inst}</span>
+                    <span style={{fontSize:11, color: t.dir === 'Long' ? C.green : C.red}}>
+                      {t.dir === 'Long' ? '↑ 做多' : '↓ 做空'}
+                    </span>
+                    <span className="mono" style={{fontSize:10.5, color:C.textDim, marginLeft:'auto'}}>{t.date}</span>
+                  </div>
+                </div>
+                <span className="mono" style={{
+                  fontSize:28, fontWeight:600, color, lineHeight:1,
+                  textShadow:`0 0 12px ${color}55`,
+                }}>{fmtR(t.r)}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* ── 月度提炼 ── */}
+        <Card style={{marginBottom:16, borderLeft:`3px solid ${accent}`}}>
+          <Sec accent={accent} sub="基于 4 周观察提炼">月度复盘</Sec>
+          <p style={{fontSize:14, lineHeight:1.85, color:C.text}}>
+            {MONTH.monthInsight}
+          </p>
+        </Card>
+
+        {/* footer */}
+        <div style={{marginTop:32, paddingTop:20, borderTop:`1px solid ${C.border}`, display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+          <span className="mono" style={{fontSize:10, color:C.textDim}}>
+            {MONTH.monthLabel} · 月度汇总（聚合 W{weeks[0].w}–W{weeks[weeks.length-1].w}）
+          </span>
+          <span className="mono" style={{fontSize:10, color:C.textDim}}>{MONTH.range}</span>
+        </div>
+
+      </div>
+
+      <TweaksPanel>
+        <TweakSection label="强调色">
+          <TweakRadio id="accent" options={[{label:'琥珀',value:'amber'},{label:'绿色',value:'green'}]}/>
+        </TweakSection>
+      </TweaksPanel>
+
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
