@@ -1,28 +1,101 @@
 "use client"
 
-import { useState, useCallback, useMemo } from "react"
+import React, { useState, useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { toast } from "sonner"
-import { Save, ChevronLeft, ChevronRight } from "lucide-react"
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine, Cell,
-} from "recharts"
-import { Button } from "~/components/ui/button"
-import { Textarea } from "~/components/ui/textarea"
-import { Label } from "~/components/ui/label"
-import { Separator } from "~/components/ui/separator"
-import { cn } from "~/lib/utils"
-import { formatPnL } from "~/lib/pnl"
+import { Save } from "lucide-react"
+import { WeeklyTradeAnalysis } from "./WeeklyTradeAnalysis"
 
-// ─── 类型 ────────────────────────────────────────────────────────────────────
+// ── Design tokens ─────────────────────────────────────────────────────────────
+const C = {
+  bg:       "oklch(0.10 0.015 240)",
+  surface:  "oklch(0.145 0.018 240)",
+  surface2: "oklch(0.175 0.02 240)",
+  border:   "oklch(0.22 0.022 240)",
+  borderHi: "oklch(0.32 0.035 240)",
+  amber:    "oklch(0.78 0.15 72)",
+  green:    "oklch(0.72 0.18 145)",
+  red:      "oklch(0.65 0.18 15)",
+  text:     "oklch(0.88 0.008 240)",
+  textMid:  "oklch(0.62 0.012 240)",
+  textDim:  "oklch(0.42 0.015 240)",
+} as const
 
-export interface DayData {
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+export interface DayRecord {
   date: string
+  dayLabel: string
+  regime: "TREND" | "CHOP" | null
   pnl: number
-  executed: number
-  missed: number
+  tradeCount: number
+  missedCount: number
+  note: string | null
+  planFollowed: number | null
+  emotionRating: number | null
+  focusRating: number | null
+}
+
+export interface TradeRecord {
+  id: string
+  day: string
+  time: string
+  symbol: string
+  direction: "LONG" | "SHORT"
+  entryPrice: number
+  exitPrice: number | null
+  pnl: number | null
+  executionGrade: "A" | "B" | "C" | "D" | null
+  strategy: string | null
+  notes: string | null
+  stopPrice: number | null
+  targetPrice: number | null
+  tradeResult: string | null
+  tradeResultNote: string | null
+  plannedRiskPts: number | null
+  maxDrawdownPts: number | null
+  maxFavorablePts: number | null
+  heldOvernight: boolean
+  overnightReason: string | null
+  tradeTypeName: string | null
+  entryApproach: "DIRECT" | "PULLBACK" | null
+  // 执行评估
+  entryAccuracy: "CORRECT" | "WRONG" | null
+  entryAccuracyNote: string | null
+  exitAccuracy: "CORRECT" | "WRONG" | null
+  exitAccuracyNote: string | null
+  segment: string | null
+}
+
+export interface SegmentAccuracyRecord {
+  segment: string
+  totalDays: number
+  correctDays: number
+  wrongDays: number
+}
+
+export interface MissedRecord {
+  day: string
+  symbol: string
+  direction: "LONG" | "SHORT"
+  reason: string | null
+  hypoPnl: number | null
+  strategy: string | null
+  tradeTypeName: string | null
+}
+
+export interface MnqMissedRecord {
+  id: string
+  day: string
+  segment: string
+  description: string
+  missedProcess: string
+  riskPts: number | null
+  returnPts: number | null
+  tradeDirection: "LONG" | "SHORT" | null
+  strategyName: string | null
+  tradeTypeName: string | null
+  entryApproach: "DIRECT" | "PULLBACK" | null
 }
 
 export interface WeeklyStats {
@@ -34,103 +107,346 @@ export interface WeeklyStats {
 }
 
 export interface WeeklyReportData {
-  summary:       string | null
-  strengths:     string | null
-  weaknesses:    string | null
-  keyLessons:    string | null
-  nextWeekPlan:  string | null
+  summary: string | null
+  strengths: string | null
+  weaknesses: string | null
+  keyLessons: string | null
+  nextWeekPlan: string | null
   overallRating: number | null
 }
 
 interface Props {
-  weekStart:      string
-  prevWeek:       string | null
-  nextWeek:       string | null
-  weekLabel:      string
-  initialReport:  WeeklyReportData | null
-  stats:          WeeklyStats
-  dailyBreakdown: DayData[]
+  weekStart: string
+  prevWeek: string | null
+  nextWeek: string | null
+  weekLabel: string
+  weekNum: number
+  year: number
+  dateRange: string
+  initialReport: WeeklyReportData | null
+  stats: WeeklyStats
+  days: DayRecord[]
+  trades: TradeRecord[]
+  missed: MissedRecord[]
+  mnqMissed: MnqMissedRecord[]
+  equity: number[]
+  systemScore: { total: number; dims: { label: string; score: number }[] } | null
+  segmentAccuracy: SegmentAccuracyRecord[]
 }
 
-// ─── 子组件 ───────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
-function StarRating({ value, onChange }: { value: number | null; onChange: (v: number) => void }) {
+function fmtPnl(v: number, compact = false): string {
+  if (v === 0) return "—"
+  const sign = v > 0 ? "+" : ""
+  return compact
+    ? `${sign}$${Math.abs(v).toFixed(0)}`
+    : `${sign}$${Math.abs(v).toLocaleString()}`
+}
+
+// ── Sub-components ────────────────────────────────────────────────────────────
+
+function Sec({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex gap-0.5">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          onClick={() => onChange(star)}
-          className={cn(
-            "text-2xl transition-colors hover:scale-110",
-            (value ?? 0) >= star ? "text-yellow-400" : "text-muted-foreground/30",
-          )}
-        >
-          ★
-        </button>
-      ))}
+    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+      <div style={{ width: 3, height: 14, background: C.amber, borderRadius: 2, flexShrink: 0 }} />
+      <span style={{ fontSize: 11.5, fontWeight: 600, color: C.textMid, letterSpacing: "0.07em" }}>
+        {children}
+      </span>
     </div>
   )
 }
 
-function DayPnLChart({ data }: { data: DayData[] }) {
-  if (data.length === 0) return null
-
-  const chartData = data.map((d) => ({
-    date: d.date.slice(5),
-    pnl: d.pnl,
-  }))
-
+function Card({
+  children,
+  style,
+}: {
+  children: React.ReactNode
+  style?: React.CSSProperties
+}) {
   return (
-    <ResponsiveContainer width="100%" height={100}>
-      <BarChart data={chartData} margin={{ top: 4, right: 4, bottom: 0, left: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-        <XAxis dataKey="date" tick={{ fontSize: 10, fill: "#888" }} axisLine={false} tickLine={false} />
-        <YAxis hide />
-        <Tooltip
-          formatter={(v: number | undefined) => [
-            v === undefined ? "—" : v >= 0 ? `+$${v.toFixed(2)}` : `-$${Math.abs(v).toFixed(2)}`,
-            "PnL",
-          ]}
-          contentStyle={{
-            background: "hsl(var(--popover))",
-            border: "1px solid hsl(var(--border))",
-            borderRadius: 6,
-            fontSize: 11,
-          }}
-          labelStyle={{ color: "hsl(var(--muted-foreground))" }}
-        />
-        <ReferenceLine y={0} stroke="rgba(255,255,255,0.15)" />
-        <Bar dataKey="pnl" radius={[3, 3, 0, 0]}>
-          {chartData.map((entry, i) => (
-            <Cell key={`cell-${i}`} fill={entry.pnl >= 0 ? "#16a34a" : "#dc2626"} />
-          ))}
-        </Bar>
-      </BarChart>
-    </ResponsiveContainer>
+    <div
+      style={{
+        background: C.surface,
+        border: `1px solid ${C.border}`,
+        borderRadius: 12,
+        padding: "20px 22px",
+        ...style,
+      }}
+    >
+      {children}
+    </div>
   )
 }
 
-// ─── 主组件 ───────────────────────────────────────────────────────────────────
+// Equity curve SVG
+function EquityCurve({ equity }: { equity: number[] }) {
+  const W = 900, H = 140
+  const PAD = { t: 16, r: 24, b: 28, l: 64 }
+  const iW = W - PAD.l - PAD.r
+  const iH = H - PAD.t - PAD.b
+
+  if (equity.length < 2) {
+    return (
+      <div style={{ height: H, display: "flex", alignItems: "center", justifyContent: "center", color: C.textDim, fontSize: 12 }}>
+        暂无数据
+      </div>
+    )
+  }
+
+  const min = Math.min(...equity)
+  const max = Math.max(...equity)
+  const range = max - min || 1
+  const xScale = (i: number) => PAD.l + (i / (equity.length - 1)) * iW
+  const yScale = (v: number) => PAD.t + iH - ((v - min) / range) * iH
+
+  const pts = equity.map((v, i) => [xScale(i), yScale(v)] as [number, number])
+  const pathD = pts
+    .map((p, i) => {
+      if (i === 0) return `M${p[0]},${p[1]}`
+      const prev = pts[i - 1]!
+      const cpx = (prev[0] + p[0]) / 2
+      return `C${cpx},${prev[1]} ${cpx},${p[1]} ${p[0]},${p[1]}`
+    })
+    .join(" ")
+  const areaD =
+    pathD +
+    ` L${pts[pts.length - 1]![0]},${PAD.t + iH} L${pts[0]![0]},${PAD.t + iH} Z`
+
+  const baselineY = yScale(0)
+  const gridVals = [
+    min + range * 0.25,
+    min + range * 0.5,
+    min + range * 0.75,
+    max,
+  ].map(Math.round)
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: H, display: "block" }}>
+      <defs>
+        <linearGradient id="eqGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={C.amber} stopOpacity="0.18" />
+          <stop offset="100%" stopColor={C.amber} stopOpacity="0" />
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      {gridVals.map((v, i) => {
+        const y = yScale(v)
+        return (
+          <g key={i}>
+            <line x1={PAD.l} y1={y} x2={W - PAD.r} y2={y} stroke={C.border} strokeWidth="0.75" strokeDasharray="3 4" />
+            <text x={PAD.l - 8} y={y + 4} textAnchor="end" fontSize="9.5" fill={C.textDim} fontFamily="DM Mono, monospace">
+              {v > 0 ? "+" : ""}{v}
+            </text>
+          </g>
+        )
+      })}
+
+      {baselineY >= PAD.t && baselineY <= PAD.t + iH && (
+        <line x1={PAD.l} y1={baselineY} x2={W - PAD.r} y2={baselineY} stroke={C.textDim} strokeWidth="0.5" strokeDasharray="1 3" />
+      )}
+
+      <path d={areaD} fill="url(#eqGrad)" />
+      <path d={pathD} fill="none" stroke={C.amber} strokeWidth="1.75" filter="url(#glow)" />
+
+      {pts.map((p, i) => (
+        <circle key={i} cx={p[0]} cy={p[1]} r={3} fill={C.amber} stroke={C.surface} strokeWidth="1.5" />
+      ))}
+    </svg>
+  )
+}
+
+// Day card
+const REGIME_STYLES = {
+  TREND: { bg: "oklch(0.72 0.18 145 / 0.12)", color: "oklch(0.72 0.18 145)", label: "趋势" },
+  CHOP:  { bg: "oklch(0.65 0.18 15 / 0.12)", color: "oklch(0.65 0.18 15)", label: "震荡" },
+}
+
+function DayCard({ d }: { d: DayRecord }) {
+  const [hovered, setHovered] = useState(false)
+  const rs = d.regime ? REGIME_STYLES[d.regime] : null
+  const pnlColor = d.pnl > 0 ? C.green : d.pnl < 0 ? C.red : C.textDim
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        flex: 1,
+        background: C.surface,
+        border: `1px solid ${hovered ? C.borderHi : C.border}`,
+        borderRadius: 10,
+        padding: "14px 14px 12px",
+        display: "flex",
+        flexDirection: "column",
+        gap: 8,
+        transition: "border-color 0.18s",
+        minWidth: 0,
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span style={{ fontSize: 11, fontWeight: 500, color: C.textMid, letterSpacing: "0.06em", fontFamily: "DM Mono, monospace" }}>
+          {d.dayLabel}
+        </span>
+        {rs ? (
+          <span style={{ fontSize: 10, padding: "2px 7px", borderRadius: 4, background: rs.bg, color: rs.color, fontWeight: 500 }}>
+            {rs.label}
+          </span>
+        ) : (
+          <span style={{ fontSize: 10, color: C.textDim }}>—</span>
+        )}
+      </div>
+      <div style={{ fontSize: 22, fontWeight: 500, letterSpacing: "-0.02em", color: pnlColor, fontFamily: "DM Mono, monospace" }}>
+        {fmtPnl(d.pnl)}
+      </div>
+      {d.note && (
+        <div style={{ fontSize: 11, color: C.textDim, lineHeight: 1.5, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+          {d.note}
+        </div>
+      )}
+      <div style={{ fontSize: 10, color: C.textDim, marginTop: "auto", fontFamily: "DM Mono, monospace" }}>
+        {d.tradeCount === 0 ? "无交易" : `${d.tradeCount} 笔`}
+        {d.missedCount > 0 && ` · 错过 ${d.missedCount}`}
+      </div>
+    </div>
+  )
+}
+
+// Score ring
+function ScoreRing({ score }: { score: number }) {
+  const r = 38
+  const circ = 2 * Math.PI * r
+  const dash = circ * (score / 100)
+  return (
+    <div style={{ position: "relative", width: 96, height: 96 }}>
+      <svg viewBox="0 0 96 96" style={{ width: 96, height: 96, transform: "rotate(-90deg)" }}>
+        <circle cx="48" cy="48" r={r} fill="none" stroke={C.border} strokeWidth="8" />
+        <circle
+          cx="48" cy="48" r={r} fill="none"
+          stroke={C.amber} strokeWidth="8"
+          strokeDasharray={`${dash} ${circ}`}
+          strokeLinecap="round"
+          style={{ transition: "stroke-dasharray 0.8s cubic-bezier(0.2,1,0.3,1)" }}
+        />
+      </svg>
+      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+        <span style={{ fontSize: 22, fontWeight: 500, color: C.amber, lineHeight: 1, fontFamily: "DM Mono, monospace" }}>{score}</span>
+        <span style={{ fontSize: 9, color: C.textDim }}>/ 100</span>
+      </div>
+    </div>
+  )
+}
+
+// Score bar
+function ScoreBar({ label, score }: { label: string; score: number }) {
+  const [animated, setAnimated] = useState(false)
+  const color = score >= 80 ? C.green : score >= 60 ? C.amber : C.red
+  useEffect(() => {
+    const t = setTimeout(() => setAnimated(true), 200)
+    return () => clearTimeout(t)
+  }, [])
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span style={{ fontSize: 12, color: C.textMid, width: 72, flexShrink: 0, textAlign: "right" }}>{label}</span>
+      <div style={{ flex: 1, height: 6, background: C.border, borderRadius: 3, overflow: "hidden" }}>
+        <div style={{
+          height: "100%", borderRadius: 3, background: color,
+          width: animated ? `${score}%` : "0%",
+          transition: "width 0.8s cubic-bezier(0.2,1,0.3,1)",
+          boxShadow: `0 0 8px ${color}66`,
+        }} />
+      </div>
+      <span style={{ fontSize: 12, color, width: 28, textAlign: "right", fontFamily: "DM Mono, monospace" }}>{score}</span>
+    </div>
+  )
+}
+
+// Rating stars (1-5)
+function RatingStars({ v }: { v: number | null }) {
+  if (v === null) return <span style={{ color: C.textDim, fontSize: 10 }}>—</span>
+  const filled = Math.max(0, Math.min(5, v))
+  return (
+    <span style={{ color: C.amber, fontSize: 10, letterSpacing: 0.5 }}>
+      {"★".repeat(filled)}{"☆".repeat(5 - filled)}
+    </span>
+  )
+}
+
+// Grade badge
+const GRADE_COLOR = {
+  A: "oklch(0.72 0.18 145)",
+  B: "oklch(0.72 0.15 145)",
+  C: "oklch(0.78 0.15 72)",
+  D: "oklch(0.65 0.18 15)",
+} as const
+
+function GradeBadge({ grade }: { grade: "A" | "B" | "C" | "D" }) {
+  const color = GRADE_COLOR[grade]
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center", justifyContent: "center",
+      width: 22, height: 22, borderRadius: 5,
+      background: color + "22", color, fontSize: 11, fontWeight: 700, fontFamily: "DM Mono, monospace",
+    }}>{grade}</span>
+  )
+}
+
+// Inline editable textarea (used directly in content cards)
+function InlineField({
+  value,
+  onChange,
+  placeholder,
+  rows = 4,
+}: {
+  value: string
+  onChange: (v: string) => void
+  placeholder?: string
+  rows?: number
+}) {
+  return (
+    <textarea
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      rows={rows}
+      style={{
+        width: "100%", background: C.surface2, border: `1px solid ${C.border}`,
+        borderRadius: 8, padding: "10px 12px", color: C.text, fontSize: 12.5,
+        lineHeight: 1.7, resize: "vertical", fontFamily: "inherit", outline: "none",
+        boxSizing: "border-box",
+      }}
+      onFocus={(e) => { e.currentTarget.style.borderColor = C.borderHi }}
+      onBlur={(e) => { e.currentTarget.style.borderColor = C.border }}
+    />
+  )
+}
+
+// ── Main component ────────────────────────────────────────────────────────────
 
 export function WeeklyReportClient({
   weekStart, prevWeek, nextWeek, weekLabel,
-  initialReport, stats, dailyBreakdown,
+  weekNum, year, dateRange,
+  initialReport, stats, days, trades, missed, mnqMissed, equity, systemScore, segmentAccuracy,
 }: Props) {
   const router = useRouter()
-
-  const [form, setForm] = useState({
-    summary:       initialReport?.summary       ?? "",
-    strengths:     initialReport?.strengths     ?? "",
-    weaknesses:    initialReport?.weaknesses    ?? "",
-    keyLessons:    initialReport?.keyLessons    ?? "",
-    nextWeekPlan:  initialReport?.nextWeekPlan  ?? "",
-    overallRating: initialReport?.overallRating ?? null as number | null,
-  })
   const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [expandedTradeId, setExpandedTradeId] = useState<string | null>(null)
+  const [form, setForm] = useState({
+    summary:      initialReport?.summary      ?? "",
+    strengths:    initialReport?.strengths    ?? "",
+    weaknesses:   initialReport?.weaknesses   ?? "",
+    keyLessons:   initialReport?.keyLessons   ?? "",
+    nextWeekPlan: initialReport?.nextWeekPlan ?? "",
+  })
 
-  const set = useCallback(<K extends keyof typeof form>(k: K, v: (typeof form)[K]) => {
+  const set = useCallback(<K extends keyof typeof form>(k: K, v: string) => {
     setForm((prev) => ({ ...prev, [k]: v }))
   }, [])
 
@@ -141,17 +457,17 @@ export function WeeklyReportClient({
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          summary:       form.summary       || undefined,
-          strengths:     form.strengths     || undefined,
-          weaknesses:    form.weaknesses    || undefined,
-          keyLessons:    form.keyLessons    || undefined,
-          nextWeekPlan:  form.nextWeekPlan  || undefined,
-          overallRating: form.overallRating,
+          summary:      form.summary      || undefined,
+          strengths:    form.strengths    || undefined,
+          weaknesses:   form.weaknesses   || undefined,
+          keyLessons:   form.keyLessons   || undefined,
+          nextWeekPlan: form.nextWeekPlan || undefined,
         }),
       })
       const json = (await res.json()) as { success: boolean; error?: string }
       if (json.success) {
-        toast.success("周报已保存")
+        setSaved(true)
+        setTimeout(() => setSaved(false), 2500)
         router.refresh()
       } else {
         toast.error(json.error ?? "保存失败")
@@ -168,153 +484,628 @@ export function WeeklyReportClient({
       ? Math.round((stats.winCount / stats.executedCount) * 100)
       : null
 
-  // 用于跳转批量查询的 URL 参数
-  const weekEnd = useMemo(() => {
+  const weekEnd = (() => {
     const d = new Date(`${weekStart}T00:00:00.000Z`)
     d.setUTCDate(d.getUTCDate() + 6)
     return d.toISOString().split("T")[0]!
-  }, [weekStart])
+  })()
 
   const executedLink = `/journal/search?status=EXECUTED&dateFrom=${weekStart}&dateTo=${weekEnd}`
   const missedLink   = `/journal/search?status=MISSED&dateFrom=${weekStart}&dateTo=${weekEnd}`
 
+  const TD: React.CSSProperties = {
+    padding: "11px 10px",
+    borderBottom: `1px solid ${C.border}`,
+  }
+
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      {/* 页头 */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Link href="/weekly" className="text-muted-foreground hover:text-foreground text-sm">
-            ← 周报
-          </Link>
-          <h1 className="text-xl font-bold">{weekLabel}</h1>
-        </div>
-        <div className="flex items-center gap-1">
-          {prevWeek && (
-            <Button variant="ghost" size="icon" onClick={() => router.push(`/weekly/${prevWeek}`)}>
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-          )}
-          {nextWeek && (
-            <Button variant="ghost" size="icon" onClick={() => router.push(`/weekly/${nextWeek}`)}>
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          )}
+    <div style={{ minHeight: "100vh", background: C.bg, margin: "0 -16px" }}>
+      {/* ── sticky top bar ── */}
+      <div style={{
+        position: "sticky", top: 56, zIndex: 40,
+        background: "oklch(0.10 0.015 240 / 0.92)",
+        backdropFilter: "blur(12px)",
+        borderBottom: `1px solid ${C.border}`,
+        padding: "0 32px",
+      }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", height: 52, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+            <span style={{ fontSize: 11, color: C.amber, letterSpacing: "0.1em", fontWeight: 500, fontFamily: "DM Mono, monospace" }}>
+              WEEKLY REPORT
+            </span>
+            <span style={{ width: 1, height: 14, background: C.border, display: "block" }} />
+            <span style={{ fontSize: 13, color: C.textMid }}>
+              {year} · W{weekNum}
+              <span style={{ color: C.textDim, marginLeft: 10, fontSize: 11, fontFamily: "DM Mono, monospace" }}>{dateRange}</span>
+            </span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <div style={{ width: 6, height: 6, borderRadius: "50%", background: stats.totalPnL >= 0 ? C.green : C.red, boxShadow: `0 0 6px ${stats.totalPnL >= 0 ? C.green : C.red}` }} />
+              <span style={{ fontSize: 13, color: stats.totalPnL >= 0 ? C.green : C.red, fontWeight: 500, fontFamily: "DM Mono, monospace" }}>
+                {fmtPnl(stats.totalPnL)}
+              </span>
+            </div>
+            <span style={{ width: 1, height: 14, background: C.border, display: "block" }} />
+            {/* save button */}
+            <button
+              onClick={() => void handleSave()}
+              disabled={saving}
+              style={{
+                display: "flex", alignItems: "center", gap: 5,
+                padding: "0 12px", height: 28, borderRadius: 6,
+                border: `1px solid ${saved ? C.green : C.border}`,
+                background: saved ? `${C.green}18` : "none",
+                color: saved ? C.green : C.textMid,
+                fontSize: 12, cursor: saving ? "not-allowed" : "pointer",
+                transition: "all 0.2s", opacity: saving ? 0.7 : 1,
+              }}
+            >
+              <Save size={13} />
+              {saving ? "保存中..." : saved ? "已保存" : "保存周报"}
+            </button>
+            {/* nav */}
+            <div style={{ display: "flex", gap: 6 }}>
+              <NavBtn onClick={() => prevWeek && router.push(`/weekly/${prevWeek}`)} disabled={!prevWeek}>‹</NavBtn>
+              <NavBtn onClick={() => nextWeek && router.push(`/weekly/${nextWeek}`)} disabled={!nextWeek}>›</NavBtn>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* 统计数字（可点击跳转批量查询） */}
-      <div className="grid grid-cols-4 gap-3">
-        <Link href={executedLink} className="rounded-lg border p-3 text-center hover:border-primary/50 transition-colors block">
-          <p className="text-xs text-muted-foreground mb-1">本周盈亏</p>
-          <p className={cn("text-lg font-bold", stats.totalPnL >= 0 ? "text-green-400" : "text-red-400")}>
-            {formatPnL(stats.totalPnL)}
-          </p>
-        </Link>
-        <Link href={executedLink} className="rounded-lg border p-3 text-center hover:border-primary/50 transition-colors block">
-          <p className="text-xs text-muted-foreground mb-1">执行次数</p>
-          <p className="text-lg font-bold">{stats.executedCount}</p>
-        </Link>
-        <Link href={executedLink} className="rounded-lg border p-3 text-center hover:border-primary/50 transition-colors block">
-          <p className="text-xs text-muted-foreground mb-1">胜率</p>
-          <p className="text-lg font-bold">
-            {winRate !== null ? `${winRate}%` : "—"}
-          </p>
-          <p className="text-[10px] text-muted-foreground">
-            {stats.winCount}W / {stats.executedCount - stats.winCount}L
-          </p>
-        </Link>
-        <Link href={missedLink} className="rounded-lg border p-3 text-center hover:border-orange-700/50 transition-colors block">
-          <p className="text-xs text-muted-foreground mb-1">错过机会</p>
-          <p className={cn("text-lg font-bold", stats.missedCount > 0 ? "text-orange-400" : "text-foreground")}>
-            {stats.missedCount}
-          </p>
-        </Link>
-      </div>
+      {/* ── body ── */}
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "28px 32px 80px" }}>
 
-      {/* 每日盈亏柱状图 */}
-      {dailyBreakdown.length > 0 && (
-        <div className="rounded-lg border p-4">
-          <p className="text-xs text-muted-foreground mb-3">本周每日盈亏</p>
-          <DayPnLChart data={dailyBreakdown} />
-        </div>
-      )}
+        {/* hero: equity + metrics */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 260px", gap: 16, marginBottom: 16 }}>
 
-      {/* 文字区块 */}
-      <div className="space-y-4">
-        {/* 本周总结 */}
-        <div className="space-y-2">
-          <Label className="text-sm font-medium">本周总结</Label>
-          <Textarea
-            placeholder="本周整体行情环境如何？主要交易哪些类型的机会？整体执行感受..."
-            value={form.summary}
-            onChange={(e) => set("summary", e.target.value)}
-            rows={4}
-            className="resize-none text-sm"
-          />
-        </div>
+          {/* equity curve card */}
+          <Card>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+              <div>
+                <Sec>权益曲线</Sec>
+                <div style={{ fontSize: 32, fontWeight: 500, letterSpacing: "-0.03em", color: stats.totalPnL >= 0 ? C.green : C.red, lineHeight: 1, fontFamily: "DM Mono, monospace" }}>
+                  {fmtPnl(stats.totalPnL)}
+                </div>
+                <div style={{ fontSize: 11, color: C.textDim, marginTop: 4 }}>
+                  本周累计 · {dateRange}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 20 }}>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontSize: 16, fontWeight: 500, color: winRate !== null && winRate >= 50 ? C.green : C.textMid, fontFamily: "DM Mono, monospace" }}>
+                    {winRate !== null ? `${winRate}%` : "—"}
+                  </div>
+                  <div style={{ fontSize: 10, color: C.textDim, marginTop: 2 }}>胜率</div>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontSize: 16, fontWeight: 500, color: stats.missedCount > 0 ? C.red : C.textDim, fontFamily: "DM Mono, monospace" }}>
+                    {stats.missedCount}
+                  </div>
+                  <div style={{ fontSize: 10, color: C.textDim, marginTop: 2 }}>错过机会</div>
+                </div>
+              </div>
+            </div>
+            <EquityCurve equity={equity} />
+          </Card>
 
-        {/* 亮点 / 不足 并排 */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label className="text-sm font-medium text-green-400">✓ 本周亮点</Label>
-            <Textarea
-              placeholder="什么执行做对了？哪些判断准确？"
-              value={form.strengths}
-              onChange={(e) => set("strengths", e.target.value)}
-              rows={5}
-              className="resize-none text-sm"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label className="text-sm font-medium text-red-400">✗ 本周不足</Label>
-            <Textarea
-              placeholder="哪些地方执行不到位？哪些判断失误？"
-              value={form.weaknesses}
-              onChange={(e) => set("weaknesses", e.target.value)}
-              rows={5}
-              className="resize-none text-sm"
-            />
+          {/* key metric cards */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {[
+              { label: "执行次数", value: stats.executedCount, href: executedLink },
+              { label: "胜率", value: winRate !== null ? `${winRate}%` : "—", color: winRate !== null && winRate >= 60 ? C.green : C.textMid, href: executedLink },
+              { label: "盈 / 亏", value: `${stats.winCount} / ${stats.executedCount - stats.winCount}`, href: executedLink },
+              { label: "错过机会", value: stats.missedCount, color: stats.missedCount > 0 ? C.red : C.textDim, href: missedLink },
+              ...(systemScore ? [{ label: "系统评分", value: `${systemScore.total}`, color: systemScore.total >= 80 ? C.green : systemScore.total >= 60 ? C.amber : C.red }] : []),
+            ].map((m) => {
+              const inner = (
+                <div key={m.label} style={{
+                  background: C.surface, border: `1px solid ${C.border}`, borderRadius: 10,
+                  padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center",
+                  flex: 1, cursor: m.href ? "pointer" : "default",
+                  transition: "border-color 0.18s",
+                }}
+                  onMouseEnter={(e) => { if (m.href) e.currentTarget.style.borderColor = C.borderHi }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.border }}
+                >
+                  <span style={{ fontSize: 11.5, color: C.textDim }}>{m.label}</span>
+                  <span style={{ fontSize: 16, fontWeight: 500, color: m.color ?? C.text, fontFamily: "DM Mono, monospace" }}>
+                    {String(m.value)}
+                  </span>
+                </div>
+              )
+              return m.href
+                ? <a key={m.label} href={m.href} style={{ display: "contents" }}>{inner}</a>
+                : inner
+            })}
           </div>
         </div>
 
-        {/* 核心经验教训 */}
-        <div className="space-y-2">
-          <Label className="text-sm font-medium text-yellow-400">◆ 核心经验教训</Label>
-          <Textarea
-            placeholder="本周最重要的 2-3 条交易教训，可以指导下周行动的具体规则或洞察..."
+        {/* day strip */}
+        {days.length > 0 && (
+          <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
+            {days.map((d) => <DayCard key={d.date} d={d} />)}
+          </div>
+        )}
+
+        {/* trade log */}
+        {(trades.length > 0 || missed.length > 0) && (
+          <Card style={{ marginBottom: 16 }}>
+            <Sec>逐笔交易记录</Sec>
+            {trades.length > 0 && (
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${C.border}` }}>
+                      {["编号", "时间", "方向", "入场 / 出场", "止损 / 目标", "盈亏 / 点数", "风险 / R", "MAE / MFE", "结果", "策略", "子策略", "进入方式", "执行评估", "备注"].map((h) => (
+                        <th key={h} style={{ padding: "8px 10px", textAlign: "left", color: C.textDim, fontWeight: 500, letterSpacing: "0.04em", fontSize: 10, whiteSpace: "nowrap" }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {trades.map((t, i) => {
+                      const isExpanded = expandedTradeId === t.id
+                      const hasAccuracyNote = !!(t.entryAccuracyNote ?? t.exitAccuracyNote ?? t.tradeResultNote)
+                      const pnlColor = t.pnl !== null ? (t.pnl > 0 ? C.green : t.pnl < 0 ? C.red : C.textDim) : C.textDim
+                      const isLast = i === trades.length - 1
+                      const tdStyle: React.CSSProperties = { ...TD, borderBottomColor: isLast && !isExpanded ? "transparent" : C.border, verticalAlign: "top" }
+                      const entryN = t.entryPrice
+                      const exitN = t.exitPrice
+                      let pnlPts: number | null = null
+                      let rMultiple: number | null = null
+                      if (exitN !== null && entryN > 0) {
+                        pnlPts = t.direction === "LONG" ? exitN - entryN : entryN - exitN
+                        if (t.plannedRiskPts && t.plannedRiskPts > 0) {
+                          rMultiple = pnlPts / t.plannedRiskPts
+                        }
+                      }
+                      const resultLabel: Record<string, { text: string; color: string }> = {
+                        PROFIT_MET:     { text: "达目标", color: C.green },
+                        PROFIT_PARTIAL: { text: "部分盈", color: "oklch(0.68 0.15 145)" },
+                        BREAKEVEN:      { text: "保本",   color: C.textDim },
+                        LOSS:           { text: "亏损",   color: C.red },
+                      }
+                      const result = t.tradeResult ? (resultLabel[t.tradeResult] ?? null) : null
+                      // 执行评估徽章
+                      function AccBadge({ acc }: { acc: "CORRECT" | "WRONG" | null }) {
+                        if (acc === null) return <span style={{ color: C.textDim, fontSize: 10 }}>—</span>
+                        return (
+                          <span style={{
+                            fontSize: 9.5, padding: "1px 5px", borderRadius: 3, fontWeight: 600,
+                            background: acc === "CORRECT" ? "oklch(0.72 0.18 145 / 0.18)" : "oklch(0.65 0.18 15 / 0.18)",
+                            color: acc === "CORRECT" ? C.green : C.red,
+                          }}>
+                            {acc === "CORRECT" ? "✓" : "✗"}
+                          </span>
+                        )
+                      }
+                      const hasAnyAccuracy = t.entryAccuracy !== null || t.exitAccuracy !== null
+                      return (
+                        <React.Fragment key={t.id}>
+                          <tr
+                            style={{ transition: "background 0.15s", cursor: hasAccuracyNote || hasAnyAccuracy ? "pointer" : "default" }}
+                            onClick={() => {
+                              if (hasAccuracyNote || hasAnyAccuracy) {
+                                setExpandedTradeId(isExpanded ? null : t.id)
+                              }
+                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.background = C.surface2 }}
+                            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent" }}
+                          >
+                            {/* 编号 */}
+                            <td style={{ ...tdStyle, color: C.textDim, fontSize: 10.5, fontFamily: "DM Mono, monospace" }}>
+                              <span>{t.id}</span>
+                              {(hasAccuracyNote || hasAnyAccuracy) && (
+                                <span style={{ marginLeft: 3, fontSize: 9, color: isExpanded ? C.amber : C.textDim }}>
+                                  {isExpanded ? "▲" : "▼"}
+                                </span>
+                              )}
+                            </td>
+                            {/* 时间 */}
+                            <td style={{ ...tdStyle, color: C.textMid, fontFamily: "DM Mono, monospace", whiteSpace: "nowrap" }}>
+                              <div>{t.day}</div>
+                              <div style={{ fontSize: 10, color: C.textDim }}>{t.time}</div>
+                            </td>
+                            {/* 方向 */}
+                            <td style={{ ...tdStyle, color: t.direction === "LONG" ? C.green : C.red, fontWeight: 500, whiteSpace: "nowrap" }}>
+                              {t.direction === "LONG" ? "↑ 多" : "↓ 空"}
+                              {t.heldOvernight && (
+                                <span title={t.overnightReason ?? "持仓过夜"} style={{ marginLeft: 4, fontSize: 10, color: "oklch(0.72 0.15 280)", cursor: "default" }}>🌙</span>
+                              )}
+                            </td>
+                            {/* 入场 / 出场 */}
+                            <td style={{ ...tdStyle, fontFamily: "DM Mono, monospace", fontSize: 11 }}>
+                              <div style={{ color: C.green }}>↗ {entryN.toLocaleString()}</div>
+                              <div style={{ color: exitN !== null ? C.red : C.textDim }}>
+                                {exitN !== null ? `↙ ${exitN.toLocaleString()}` : "—"}
+                              </div>
+                            </td>
+                            {/* 止损 / 目标 */}
+                            <td style={{ ...tdStyle, fontFamily: "DM Mono, monospace", fontSize: 11 }}>
+                              <div style={{ color: C.red }}>{t.stopPrice != null ? `✕ ${t.stopPrice.toLocaleString()}` : "—"}</div>
+                              <div style={{ color: C.green }}>{t.targetPrice != null ? `✓ ${t.targetPrice.toLocaleString()}` : "—"}</div>
+                            </td>
+                            {/* 盈亏 / 点数 */}
+                            <td style={{ ...tdStyle }}>
+                              <div style={{ color: pnlColor, fontWeight: 600, fontSize: 13, fontFamily: "DM Mono, monospace", textShadow: t.pnl !== null && Math.abs(t.pnl) > 500 ? `0 0 10px ${pnlColor}88` : "none" }}>
+                                {t.pnl !== null ? fmtPnl(t.pnl, true) : "—"}
+                              </div>
+                              {pnlPts !== null && (
+                                <div style={{ fontSize: 10, color: pnlColor, fontFamily: "DM Mono, monospace" }}>
+                                  {pnlPts >= 0 ? "+" : ""}{pnlPts.toFixed(2)} pts
+                                </div>
+                              )}
+                            </td>
+                            {/* 风险 / R */}
+                            <td style={{ ...tdStyle, fontFamily: "DM Mono, monospace", fontSize: 11 }}>
+                              <div style={{ color: C.textMid }}>{t.plannedRiskPts != null ? `${t.plannedRiskPts} pts` : "—"}</div>
+                              {rMultiple !== null && (
+                                <div style={{ color: rMultiple >= 0 ? C.green : C.red, fontWeight: 500 }}>
+                                  {rMultiple >= 0 ? "+" : ""}{rMultiple.toFixed(2)}R
+                                </div>
+                              )}
+                            </td>
+                            {/* MAE / MFE */}
+                            <td style={{ ...tdStyle, fontFamily: "DM Mono, monospace", fontSize: 11 }}>
+                              <div style={{ color: t.maxDrawdownPts != null ? C.red : C.textDim }}>
+                                {t.maxDrawdownPts != null ? `-${t.maxDrawdownPts} pts` : "—"}
+                              </div>
+                              <div style={{ color: t.maxFavorablePts != null ? C.green : C.textDim }}>
+                                {t.maxFavorablePts != null ? `+${t.maxFavorablePts} pts` : "—"}
+                              </div>
+                            </td>
+                            {/* 结果 */}
+                            <td style={{ ...tdStyle }}>
+                              {result ? (
+                                <span style={{
+                                  fontSize: 10, padding: "2px 6px", borderRadius: 4,
+                                  background: result.color + "22", color: result.color,
+                                  fontWeight: 500, whiteSpace: "nowrap",
+                                }}>{result.text}</span>
+                              ) : (
+                                <span style={{ color: C.textDim }}>—</span>
+                              )}
+                            </td>
+                            {/* 策略 */}
+                            <td style={{ ...tdStyle, fontSize: 11, color: "oklch(0.72 0.15 240)", maxWidth: 140, whiteSpace: "nowrap" }}>
+                              {t.strategy ?? <span style={{ color: C.textDim }}>—</span>}
+                            </td>
+                            {/* 子策略 */}
+                            <td style={{ ...tdStyle, fontSize: 11, color: C.textDim, maxWidth: 140, whiteSpace: "nowrap" }}>
+                              {t.tradeTypeName ?? "—"}
+                            </td>
+                            {/* 进入方式 */}
+                            <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
+                              {t.entryApproach ? (
+                                <span style={{ fontSize: 10, padding: "2px 6px", borderRadius: 4,
+                                  background: t.entryApproach === "DIRECT" ? "oklch(0.72 0.18 145 / 0.15)" : "oklch(0.78 0.15 72 / 0.15)",
+                                  color: t.entryApproach === "DIRECT" ? C.green : C.amber, fontWeight: 500 }}>
+                                  {t.entryApproach === "DIRECT" ? "直接" : "回调"}
+                                </span>
+                              ) : <span style={{ color: C.textDim, fontSize: 11 }}>—</span>}
+                            </td>
+                            {/* 执行评估 */}
+                            <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
+                              <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                  <span style={{ fontSize: 9.5, color: C.textDim, width: 14 }}>进</span>
+                                  <AccBadge acc={t.entryAccuracy} />
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                                  <span style={{ fontSize: 9.5, color: C.textDim, width: 14 }}>出</span>
+                                  <AccBadge acc={t.exitAccuracy} />
+                                </div>
+                              </div>
+                            </td>
+                            {/* 备注 */}
+                            <td style={{ ...tdStyle, fontSize: 11, color: C.textDim, maxWidth: 180 }}>
+                              {[t.notes, t.heldOvernight ? ("📌" + (t.overnightReason ? `：${t.overnightReason}` : "持仓过夜")) : null].filter(Boolean).join(" · ") || ""}
+                            </td>
+                          </tr>
+                          {/* 展开详情行 */}
+                          {isExpanded && (
+                            <tr key={`${t.id}-detail`} style={{ background: C.surface2 + "60" }}>
+                              <td colSpan={14} style={{ padding: "10px 14px 12px 32px", borderBottom: `1px solid ${C.border}` }}>
+                                <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                                  {t.entryAccuracy !== null && (
+                                    <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                                      <span style={{ fontSize: 10, color: C.textDim, minWidth: 56, paddingTop: 1 }}>进入评估</span>
+                                      <span style={{
+                                        fontSize: 9.5, padding: "1px 6px", borderRadius: 3, fontWeight: 600, flexShrink: 0,
+                                        background: t.entryAccuracy === "CORRECT" ? "oklch(0.72 0.18 145 / 0.18)" : "oklch(0.65 0.18 15 / 0.18)",
+                                        color: t.entryAccuracy === "CORRECT" ? C.green : C.red,
+                                      }}>
+                                        {t.entryAccuracy === "CORRECT" ? "准确" : "有误"}
+                                      </span>
+                                      {t.entryAccuracyNote && (
+                                        <span style={{ fontSize: 11, color: C.textMid, lineHeight: 1.5 }}>{t.entryAccuracyNote}</span>
+                                      )}
+                                    </div>
+                                  )}
+                                  {t.exitAccuracy !== null && (
+                                    <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                                      <span style={{ fontSize: 10, color: C.textDim, minWidth: 56, paddingTop: 1 }}>退出评估</span>
+                                      <span style={{
+                                        fontSize: 9.5, padding: "1px 6px", borderRadius: 3, fontWeight: 600, flexShrink: 0,
+                                        background: t.exitAccuracy === "CORRECT" ? "oklch(0.72 0.18 145 / 0.18)" : "oklch(0.65 0.18 15 / 0.18)",
+                                        color: t.exitAccuracy === "CORRECT" ? C.green : C.red,
+                                      }}>
+                                        {t.exitAccuracy === "CORRECT" ? "准确" : "有误"}
+                                      </span>
+                                      {t.exitAccuracyNote && (
+                                        <span style={{ fontSize: 11, color: C.textMid, lineHeight: 1.5 }}>{t.exitAccuracyNote}</span>
+                                      )}
+                                    </div>
+                                  )}
+                                  {t.tradeResultNote && (
+                                    <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                                      <span style={{ fontSize: 10, color: C.textDim, minWidth: 56, paddingTop: 1 }}>交易说明</span>
+                                      <span style={{ fontSize: 11, color: C.textMid, lineHeight: 1.5 }}>{t.tradeResultNote}</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* missed opportunities (TradeSetup level) */}
+            {missed.length > 0 && (
+              <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px dashed ${C.border}` }}>
+                <span style={{ fontSize: 10.5, color: C.textDim, letterSpacing: "0.05em", marginBottom: 10, display: "block" }}>错过的 Setup</span>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {missed.map((m, i) => (
+                    <div key={i} style={{ display: "flex", gap: 12, alignItems: "center", fontSize: 12 }}>
+                      <span style={{ color: C.textDim, fontFamily: "DM Mono, monospace" }}>{m.day}</span>
+                      <span style={{ color: C.text, fontWeight: 500, fontFamily: "DM Mono, monospace" }}>{m.symbol}</span>
+                      <span style={{ color: m.direction === "LONG" ? C.green : C.red }}>{m.direction === "LONG" ? "↑" : "↓"}</span>
+                      {m.hypoPnl != null && (
+                        <span style={{ color: C.red, fontFamily: "DM Mono, monospace" }}>~{fmtPnl(m.hypoPnl, true)}</span>
+                      )}
+                      <span style={{ color: C.textDim, flex: 1 }}>{m.reason ?? "—"}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* MNQ missed opportunities table */}
+            {mnqMissed.length > 0 && (
+              <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px dashed ${C.border}` }}>
+                <span style={{ fontSize: 10.5, color: C.textDim, letterSpacing: "0.05em", marginBottom: 10, display: "block" }}>
+                  错过的 MNQ 机会（{mnqMissed.length} 笔）
+                </span>
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11.5 }}>
+                    <thead>
+                      <tr style={{ borderBottom: `1px solid ${C.border}` }}>
+                        {["编号", "时间 / 时段", "方向", "策略", "子策略", "进入方式", "机会描述", "错过经过", "假设风险", "假设回报", "假设R"].map((h) => (
+                          <th key={h} style={{ padding: "7px 10px", textAlign: "left", color: C.textDim, fontWeight: 500, fontSize: 10, whiteSpace: "nowrap" }}>{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {mnqMissed.map((m) => {
+                        const r = m.riskPts !== null && m.returnPts !== null && m.riskPts > 0
+                          ? m.returnPts / m.riskPts
+                          : null
+                        return (
+                          <tr key={m.id}
+                            style={{ borderBottom: `1px solid ${C.border}30`, transition: "background 0.15s" }}
+                            onMouseEnter={(e) => { e.currentTarget.style.background = C.surface2 }}
+                            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent" }}
+                          >
+                            <td style={{ padding: "9px 10px", color: C.textDim, fontSize: 10.5, fontFamily: "DM Mono, monospace", verticalAlign: "top" }}>{m.id}</td>
+                            <td style={{ padding: "9px 10px", verticalAlign: "top", whiteSpace: "nowrap" }}>
+                              <div style={{ color: C.textMid, fontFamily: "DM Mono, monospace" }}>{m.day}</div>
+                              <div style={{ fontSize: 10, color: C.textDim }}>{m.segment}</div>
+                            </td>
+                            <td style={{ padding: "9px 10px", verticalAlign: "top", whiteSpace: "nowrap" }}>
+                              {m.tradeDirection ? (
+                                <span style={{ fontSize: 11, fontWeight: 500, color: m.tradeDirection === "LONG" ? C.green : C.red }}>
+                                  {m.tradeDirection === "LONG" ? "↑ 多" : "↓ 空"}
+                                </span>
+                              ) : <span style={{ color: C.textDim }}>—</span>}
+                            </td>
+                            <td style={{ padding: "9px 10px", verticalAlign: "top", maxWidth: 140 }}>
+                              {m.strategyName
+                                ? <span style={{ fontSize: 11, color: "oklch(0.72 0.15 240)" }}>{m.strategyName}</span>
+                                : <span style={{ color: C.textDim }}>—</span>}
+                            </td>
+                            <td style={{ padding: "9px 10px", verticalAlign: "top", maxWidth: 140 }}>
+                              {m.tradeTypeName
+                                ? <span style={{ fontSize: 11, color: C.textDim }}>{m.tradeTypeName}</span>
+                                : <span style={{ color: C.textDim }}>—</span>}
+                            </td>
+                            <td style={{ padding: "9px 10px", verticalAlign: "top", whiteSpace: "nowrap" }}>
+                              {m.entryApproach ? (
+                                <span style={{ fontSize: 10, padding: "2px 6px", borderRadius: 4,
+                                  background: m.entryApproach === "DIRECT" ? "oklch(0.72 0.18 145 / 0.15)" : "oklch(0.78 0.15 72 / 0.15)",
+                                  color: m.entryApproach === "DIRECT" ? C.green : C.amber,
+                                  fontWeight: 500 }}>
+                                  {m.entryApproach === "DIRECT" ? "直接" : "回调"}
+                                </span>
+                              ) : <span style={{ color: C.textDim }}>—</span>}
+                            </td>
+                            <td style={{ padding: "9px 10px", color: C.text, maxWidth: 220, verticalAlign: "top" }}>
+                              {m.description || <span style={{ color: C.textDim }}>—</span>}
+                            </td>
+                            <td style={{ padding: "9px 10px", color: C.textDim, maxWidth: 200, verticalAlign: "top", lineHeight: 1.5 }}>
+                              {m.missedProcess || "—"}
+                            </td>
+                            <td style={{ padding: "9px 10px", color: m.riskPts !== null ? C.red : C.textDim, fontFamily: "DM Mono, monospace", verticalAlign: "top" }}>
+                              {m.riskPts !== null ? `${m.riskPts} pts` : "—"}
+                            </td>
+                            <td style={{ padding: "9px 10px", color: m.returnPts !== null ? C.green : C.textDim, fontFamily: "DM Mono, monospace", verticalAlign: "top" }}>
+                              {m.returnPts !== null ? `${m.returnPts} pts` : "—"}
+                            </td>
+                            <td style={{ padding: "9px 10px", fontFamily: "DM Mono, monospace", fontWeight: 600, verticalAlign: "top",
+                              color: r !== null ? C.amber : C.textDim }}>
+                              {r !== null ? `${r.toFixed(2)} R` : "—"}
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </Card>
+        )}
+
+        {/* trade analysis module */}
+        {(trades.length > 0 || missed.length > 0 || mnqMissed.length > 0) && (
+          <WeeklyTradeAnalysis trades={trades} missed={missed} mnqMissed={mnqMissed} segmentAccuracy={segmentAccuracy} />
+        )}
+
+        {/* system score + highlights/weaknesses */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+
+          {/* system score */}
+          <Card>
+            <Sec>系统遵守度</Sec>
+            {systemScore ? (
+              <>
+                <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 16 }}>
+                  <ScoreRing score={systemScore.total} />
+                  <div style={{ fontSize: 10.5, color: C.textDim, lineHeight: 1.6 }}>
+                    来源：每日盘后复盘「今日评分」<br />遵守计划 · 情绪管理 · 专注度
+                  </div>
+                </div>
+                {/* per-day rating table */}
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11, marginBottom: 14 }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${C.border}` }}>
+                      <th style={{ textAlign: "left", color: C.textDim, fontWeight: 500, padding: "3px 10px 6px 0", fontSize: 10 }}>日</th>
+                      <th style={{ textAlign: "center", color: C.textDim, fontWeight: 500, padding: "3px 4px 6px", fontSize: 10 }}>遵守计划</th>
+                      <th style={{ textAlign: "center", color: C.textDim, fontWeight: 500, padding: "3px 4px 6px", fontSize: 10 }}>情绪</th>
+                      <th style={{ textAlign: "center", color: C.textDim, fontWeight: 500, padding: "3px 4px 6px", fontSize: 10 }}>专注度</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {days.map((d) => (
+                      <tr key={d.date} style={{ borderBottom: `1px solid ${C.border}30` }}>
+                        <td style={{ color: C.textMid, padding: "5px 10px 5px 0", fontFamily: "DM Mono, monospace" }}>{d.dayLabel}</td>
+                        <td style={{ textAlign: "center", padding: "5px 4px" }}><RatingStars v={d.planFollowed} /></td>
+                        <td style={{ textAlign: "center", padding: "5px 4px" }}><RatingStars v={d.emotionRating} /></td>
+                        <td style={{ textAlign: "center", padding: "5px 4px" }}><RatingStars v={d.focusRating} /></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {/* weekly averages */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  {systemScore.dims.map((d) => <ScoreBar key={d.label} label={d.label} score={d.score} />)}
+                </div>
+              </>
+            ) : (
+              <div style={{ textAlign: "center", color: C.textDim, fontSize: 12, padding: "20px 0" }}>
+                填写每日评分后自动计算
+              </div>
+            )}
+          </Card>
+
+          {/* highlights + weaknesses */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <Card style={{ flex: 1 }}>
+              <Sec>本周亮点</Sec>
+              <InlineField
+                value={form.strengths}
+                onChange={(v) => set("strengths", v)}
+                placeholder={"准确识别趋势日\n出场纪律严格\n（每行一条）"}
+                rows={5}
+              />
+            </Card>
+            <Card style={{ flex: 1 }}>
+              <Sec>本周不足</Sec>
+              <InlineField
+                value={form.weaknesses}
+                onChange={(v) => set("weaknesses", v)}
+                placeholder={"行情中间违规进入\n持仓时间过短\n（每行一条）"}
+                rows={5}
+              />
+            </Card>
+          </div>
+        </div>
+
+        {/* 本周总结 + 核心经验教训 */}
+        <Card style={{ marginBottom: 16 }}>
+          <div style={{ marginBottom: 20 }}>
+            <Sec>本周总结</Sec>
+            <InlineField
+              value={form.summary}
+              onChange={(v) => set("summary", v)}
+              placeholder="本周整体行情环境、状态、重要事项..."
+              rows={3}
+            />
+          </div>
+          <Sec>核心经验教训</Sec>
+          <InlineField
             value={form.keyLessons}
-            onChange={(e) => set("keyLessons", e.target.value)}
-            rows={4}
-            className="resize-none text-sm"
+            onChange={(v) => set("keyLessons", v)}
+            placeholder={"开盘阶段禁止行情中间进入\nBig engulfing candle 后的再次进入规则\n（每行一条）"}
+            rows={5}
           />
-        </div>
+        </Card>
 
-        {/* 下周展望 */}
-        <div className="space-y-2">
-          <Label className="text-sm font-medium text-blue-400">→ 下周展望与计划</Label>
-          <Textarea
-            placeholder="下周关注哪些宏观事件？计划重点练习什么？有哪些需要特别注意的点？"
+        {/* next week plan */}
+        <Card style={{ marginBottom: 16 }}>
+          <Sec>下周计划</Sec>
+          <InlineField
             value={form.nextWeekPlan}
-            onChange={(e) => set("nextWeekPlan", e.target.value)}
+            onChange={(v) => set("nextWeekPlan", v)}
+            placeholder={"周三 FOMC 会议纪要\n强化不在行情中间进入的执行\n（每行一条）"}
             rows={4}
-            className="resize-none text-sm"
           />
+        </Card>
+
+        {/* footer */}
+        <div style={{ marginTop: 24, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: 10, color: C.textDim, fontFamily: "DM Mono, monospace" }}>
+            W{weekNum} · {year} · 系统周报
+          </span>
+          <span style={{ fontSize: 10, color: C.textDim, fontFamily: "DM Mono, monospace" }}>{dateRange}</span>
         </div>
       </div>
 
-      <Separator />
-
-      {/* 整体评分 + 保存 */}
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <Label className="text-sm font-medium text-muted-foreground">本周整体评分</Label>
-          <StarRating value={form.overallRating} onChange={(v) => set("overallRating", v)} />
-        </div>
-        <Button onClick={() => void handleSave()} disabled={saving} className="gap-2">
-          <Save className="h-4 w-4" />
-          {saving ? "保存中..." : "保存周报"}
-        </Button>
-      </div>
     </div>
+  )
+}
+
+// small nav button
+function NavBtn({
+  children, onClick, disabled = false, title,
+}: {
+  children: React.ReactNode
+  onClick?: () => void
+  disabled?: boolean
+  title?: string
+}) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      title={title}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        width: 28, height: 28, borderRadius: 6,
+        border: `1px solid ${hovered && !disabled ? "oklch(0.32 0.035 240)" : "oklch(0.22 0.022 240)"}`,
+        background: "none", color: hovered && !disabled ? "oklch(0.88 0.008 240)" : "oklch(0.42 0.015 240)",
+        cursor: disabled ? "not-allowed" : "pointer",
+        fontSize: 14, transition: "all 0.15s", opacity: disabled ? 0.35 : 1,
+        display: "flex", alignItems: "center", justifyContent: "center",
+      }}
+    >
+      {children}
+    </button>
   )
 }

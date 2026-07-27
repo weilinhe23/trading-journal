@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>交易系统周报</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 14px; }
+  body {
+    min-height: 100vh;
+    background: oklch(0.10 0.015 240);
+    color: oklch(0.88 0.008 240);
+    font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-thumb { background: oklch(0.22 0.02 240); border-radius: 2px; }
+  .mono { font-family: 'DM Mono', monospace; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+// ── palette ──────────────────────────────────────────────────────────────────
+const C = {
+  bg:        'oklch(0.10 0.015 240)',
+  surface:   'oklch(0.145 0.018 240)',
+  surface2:  'oklch(0.175 0.02 240)',
+  border:    'oklch(0.22 0.022 240)',
+  borderHi:  'oklch(0.32 0.035 240)',
+  amber:     'oklch(0.78 0.15 72)',
+  amberDim:  'oklch(0.78 0.15 72)',
+  green:     'oklch(0.72 0.18 145)',
+  red:       'oklch(0.65 0.18 15)',
+  text:      'oklch(0.88 0.008 240)',
+  textMid:   'oklch(0.62 0.012 240)',
+  textDim:   'oklch(0.42 0.015 240)',
+};
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "amber",
+  "density": "normal",
+  "showTradeNotes": true
+}/*EDITMODE-END*/;
+
+// ── mock data ─────────────────────────────────────────────────────────────────
+const data = {
+  week: 17, year: 2026, range: 'Apr 20 – Apr 24',
+  accountBase: 10000,
+  equity: [10000, 10000, 10620, 10420, 10420, 10857, 10857],
+  labels:  ['开始','周一','周一下','周二','周三','周四','周五'],
+  days: [
+    { day:'MON', date:'04/20', regime:'趋势日', regimeEn:'TREND', pnl: +620, trades:1, note:'强势bull trend，准确识别并执行' },
+    { day:'TUE', date:'04/21', regime:'震荡日', regimeEn:'CHOP',  pnl: -200, trades:1, note:'行情中间进入，执行纪律不足' },
+    { day:'WED', date:'04/22', regime:'区间日', regimeEn:'RANGE', pnl:    0, trades:0, note:'无清晰setup，正确放弃' },
+    { day:'THU', date:'04/23', regime:'趋势日', regimeEn:'TREND', pnl: +437, trades:1, note:'突破PDH进入，持有至目标位' },
+    { day:'FRI', date:'04/24', regime:'震荡日', regimeEn:'CHOP',  pnl:    0, trades:0, note:'开盘无方向，等待后无机会' },
+  ],
+  trades: [
+    { id:'T01', day:'MON', time:'09:45', inst:'NQ', dir:'Long',  entry:17420, exit:17498, size:1, r:+2.3, execScore:'A', setup:'PDH突破回踩', note:'完美执行' },
+    { id:'T02', day:'TUE', time:'10:22', inst:'ES', dir:'Short', entry:5218,  exit:5232,  size:1, r:-0.7, execScore:'C', setup:'行情中间进入', note:'违规进入，应回避' },
+    { id:'T03', day:'THU', time:'09:35', inst:'NQ', dir:'Long',  entry:17550, exit:17612, size:1, r:+1.8, execScore:'B', setup:'趋势回踩EMA', note:'出场略早' },
+    { id:'T04', day:'THU', time:'14:10', inst:'ES', dir:'Long',  entry:5241,  exit:5258,  size:1, r:+1.2, execScore:'A', setup:'PM高点突破', note:'教科书级别' },
+  ],
+  missed: [
+    { day:'WED', time:'11:00', inst:'NQ', dir:'Long', reason:'没有持续观察，错过回踩进入点', estR:+2.1 },
+  ],
+  systemScore: {
+    total: 74,
+    dims: [
+      { label:'Setup 识别',  score: 85 },
+      { label:'进入纪律',    score: 55 },
+      { label:'持仓管理',    score: 72 },
+      { label:'风险管理',    score: 90 },
+      { label:'心理执行',    score: 68 },
+    ]
+  },
+  summary: '本周市场延续上周 bull trend，连续突破 PDH 创新高。在趋势日执行质量高，但周二在震荡日出现纪律违规，行情中间进入，是本周最需要改进的地方。',
+  highlights: [
+    '周一准确识别趋势日，完整执行计划内交易',
+    '周三、周五在模糊市场环境下正确选择不交易',
+    '本周最大单笔亏损控制在计划亏损的 70% 以内',
+  ],
+  weaknesses: [
+    '周二违反"不在行情中间进入"规则，导致本可避免的亏损',
+    '周四 T03 出场过早，少盈约 0.6R',
+  ],
+  lessons: [
+    { title:'开盘阶段禁止行情中间进入', body:'无论方向判断是否正确，行情中间进入意味着 big dragdown 风险过大，R/R 不成立。周二案例是最好的反面教材。' },
+    { title:'Big engulfing candle 后的再次进入规则', body:'趋势中出现 big engulfing candle，反向大K线并不代表趋势反转；只要不跌破 engulfing candle 低点，仍是有效进入信号。趋势足够强时可适当上调进入价。' },
+    { title:'5M/15M 布林带边界作为辅助进入', body:'5M 与 15M 的 2stdev 上下轨是潜在的 PA 进入点，可纳入日内 setup 筛选清单。' },
+    { title:'趋势日判断标准量化', body:'是否为趋势日的核心判断依据：能否持续突破 PDH 或 PDL，而非仅凭开盘方向推断。' },
+  ],
+  nextWeek: {
+    macro: ['周三 FOMC 会议纪要', '周四 GDP 初值'],
+    practice: ['强化"不在行情中间进入"规则的执行', '练习 PDH/PDL 突破后的回踩进入'],
+    watch: ['若连续突破 PDH，关注可能出现的大趋势日', '注意 FOMC 前后波动率变化'],
+  },
+};
+
+// ── equity curve ──────────────────────────────────────────────────────────────
+function EquityCurve({ equity, accent }) {
+  const W = 900, H = 140, PAD = { t:16, r:24, b:28, l:60 };
+  const iW = W - PAD.l - PAD.r, iH = H - PAD.t - PAD.b;
+  const min = Math.min(...equity) - 50, max = Math.max(...equity) + 50;
+  const xScale = i => PAD.l + (i / (equity.length - 1)) * iW;
+  const yScale = v => PAD.t + iH - ((v - min) / (max - min)) * iH;
+
+  const pts = equity.map((v, i) => [xScale(i), yScale(v)]);
+  const pathD = pts.map((p, i) => {
+    if (i === 0) return `M${p[0]},${p[1]}`;
+    const prev = pts[i-1];
+    const cpx = (prev[0] + p[0]) / 2;
+    return `C${cpx},${prev[1]} ${cpx},${p[1]} ${p[0]},${p[1]}`;
+  }).join(' ');
+  const areaD = pathD + ` L${pts[pts.length-1][0]},${PAD.t+iH} L${pts[0][0]},${PAD.t+iH} Z`;
+
+  const accentOkl = accent === 'amber' ? 'oklch(0.78 0.15 72)' : 'oklch(0.72 0.18 145)';
+  const gridVals = [min + (max-min)*0.25, min + (max-min)*0.5, min + (max-min)*0.75, max-50].map(Math.round);
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{width:'100%',height:H,display:'block'}}>
+      <defs>
+        <linearGradient id="equityGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={accentOkl} stopOpacity="0.18"/>
+          <stop offset="100%" stopColor={accentOkl} stopOpacity="0"/>
+        </linearGradient>
+        <filter id="glow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+
+      {/* grid */}
+      {gridVals.map((v,i) => {
+        const y = yScale(v);
+        return (
+          <g key={i}>
+            <line x1={PAD.l} y1={y} x2={W-PAD.r} y2={y} stroke={C.border} strokeWidth="0.75" strokeDasharray="3 4"/>
+            <text x={PAD.l-8} y={y+4} textAnchor="end" fontSize="9.5" fill={C.textDim} fontFamily="DM Mono">{v.toLocaleString()}</text>
+          </g>
+        );
+      })}
+
+      {/* baseline */}
+      <line x1={PAD.l} y1={yScale(10000)} x2={W-PAD.r} y2={yScale(10000)} stroke={C.textDim} strokeWidth="0.5" strokeDasharray="1 3"/>
+
+      {/* area + line */}
+      <path d={areaD} fill="url(#equityGrad)"/>
+      <path d={pathD} fill="none" stroke={accentOkl} strokeWidth="1.75" filter="url(#glow)"/>
+
+      {/* dots */}
+      {pts.map((p, i) => (
+        <circle key={i} cx={p[0]} cy={p[1]} r={3} fill={accentOkl} stroke={C.surface} strokeWidth="1.5"/>
+      ))}
+
+      {/* x labels */}
+      {data.days.map((d,i) => {
+        const x = xScale(i+1);
+        return <text key={i} x={x} y={H-4} textAnchor="middle" fontSize="9" fill={C.textDim} fontFamily="DM Mono">{d.day}</text>;
+      })}
+    </svg>
+  );
+}
+
+// ── day card ──────────────────────────────────────────────────────────────────
+const regimeStyles = {
+  TREND: { bg:'oklch(0.72 0.18 145 / 0.12)', color:'oklch(0.72 0.18 145)', label:'趋势' },
+  CHOP:  { bg:'oklch(0.65 0.18 15 / 0.12)',  color:'oklch(0.65 0.18 15)',  label:'震荡' },
+  RANGE: { bg:'oklch(0.72 0.14 72 / 0.12)',  color:'oklch(0.78 0.15 72)',  label:'区间' },
+};
+
+function DayCard({ d }) {
+  const rs = regimeStyles[d.regimeEn];
+  const pnlColor = d.pnl > 0 ? C.green : d.pnl < 0 ? C.red : C.textDim;
+  return (
+    <div style={{
+      flex:1, background: C.surface, border:`1px solid ${C.border}`,
+      borderRadius:10, padding:'14px 14px 12px', display:'flex', flexDirection:'column', gap:10,
+      transition:'border-color 0.18s',
+    }}
+    onMouseEnter={e=>e.currentTarget.style.borderColor=C.borderHi}
+    onMouseLeave={e=>e.currentTarget.style.borderColor=C.border}
+    >
+      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+        <span className="mono" style={{fontSize:11, fontWeight:500, color:C.textMid, letterSpacing:'0.06em'}}>{d.day}</span>
+        <span style={{
+          fontSize:10, padding:'2px 7px', borderRadius:4,
+          background:rs.bg, color:rs.color, fontWeight:500, letterSpacing:'0.04em',
+        }}>{rs.label}</span>
+      </div>
+      <div className="mono" style={{fontSize:22, fontWeight:500, letterSpacing:'-0.02em', color:pnlColor}}>
+        {d.pnl === 0 ? '—' : (d.pnl > 0 ? '+' : '') + '$' + Math.abs(d.pnl)}
+      </div>
+      <div style={{fontSize:11, color:C.textDim, lineHeight:1.5}}>{d.note}</div>
+      <div className="mono" style={{fontSize:10, color:C.textDim, marginTop:'auto'}}>
+        {d.trades === 0 ? '无交易' : `${d.trades} 笔`}
+      </div>
+    </div>
+  );
+}
+
+// ── score bar ─────────────────────────────────────────────────────────────────
+function ScoreBar({ label, score, accent }) {
+  const accentColor = accent === 'amber' ? 'oklch(0.78 0.15 72)' : 'oklch(0.72 0.18 145)';
+  const color = score >= 80 ? C.green : score >= 60 ? accentColor : C.red;
+  const [animated, setAnimated] = useState(false);
+  useEffect(() => { const t = setTimeout(()=>setAnimated(true), 200); return ()=>clearTimeout(t); }, []);
+  return (
+    <div style={{display:'flex', alignItems:'center', gap:12}}>
+      <span style={{fontSize:12, color:C.textMid, width:72, flexShrink:0, textAlign:'right'}}>{label}</span>
+      <div style={{flex:1, height:6, background:C.border, borderRadius:3, overflow:'hidden'}}>
+        <div style={{
+          height:'100%', borderRadius:3, background:color,
+          width: animated ? score+'%' : '0%', transition:'width 0.8s cubic-bezier(0.2,1,0.3,1)',
+          boxShadow:`0 0 8px ${color}66`,
+        }}/>
+      </div>
+      <span className="mono" style={{fontSize:12, color, width:28, textAlign:'right'}}>{score}</span>
+    </div>
+  );
+}
+
+// ── trade row ─────────────────────────────────────────────────────────────────
+const gradeColor = { A: C.green, B: 'oklch(0.72 0.15 145)', C: 'oklch(0.78 0.15 72)', D: C.red };
+
+function TradeRow({ t, showNotes }) {
+  const rColor = t.r > 0 ? C.green : t.r < 0 ? C.red : C.textDim;
+  const dirColor = t.dir === 'Long' ? C.green : C.red;
+  return (
+    <tr>
+      <td className="mono" style={{color:C.textDim}}>{t.id}</td>
+      <td className="mono" style={{color:C.textMid}}>{t.day} {t.time}</td>
+      <td className="mono" style={{color:C.text, fontWeight:500}}>{t.inst}</td>
+      <td style={{color:dirColor, fontWeight:500}}>{t.dir === 'Long' ? '↑ 做多' : '↓ 做空'}</td>
+      <td className="mono" style={{color:C.textMid}}>{t.entry}</td>
+      <td className="mono" style={{color:C.textMid}}>{t.exit}</td>
+      <td className="mono" style={{
+        color:rColor, fontWeight:600, fontSize:15,
+        textShadow: t.r > 1 ? `0 0 10px ${rColor}99` : 'none',
+      }}>
+        {t.r > 0 ? '+' : ''}{t.r.toFixed(1)}R
+      </td>
+      <td>
+        <span style={{
+          display:'inline-flex', alignItems:'center', justifyContent:'center',
+          width:22, height:22, borderRadius:5,
+          background: (gradeColor[t.execScore] || C.textDim) + '22',
+          color: gradeColor[t.execScore] || C.textDim,
+          fontSize:12, fontWeight:700, fontFamily:'DM Mono',
+        }}>{t.execScore}</span>
+      </td>
+      {showNotes && <td style={{fontSize:11.5, color:C.textDim, maxWidth:180}}>{t.note}</td>}
+    </tr>
+  );
+}
+
+// ── section label ─────────────────────────────────────────────────────────────
+function Sec({ children, accent }) {
+  const accentColor = accent === 'amber' ? 'oklch(0.78 0.15 72)' : 'oklch(0.72 0.18 145)';
+  return (
+    <div style={{display:'flex', alignItems:'center', gap:10, marginBottom:14}}>
+      <div style={{width:3, height:14, background:accentColor, borderRadius:2, flexShrink:0}}/>
+      <span style={{fontSize:11.5, fontWeight:600, color:C.textMid, letterSpacing:'0.07em'}}>{children}</span>
+    </div>
+  );
+}
+
+function Card({ children, style }) {
+  return (
+    <div style={{background:C.surface, border:`1px solid ${C.border}`, borderRadius:12, padding:'20px 22px', ...style}}>
+      {children}
+    </div>
+  );
+}
+
+// ── main ──────────────────────────────────────────────────────────────────────
+function App() {
+  const { TweaksPanel, TweakSection, TweakRadio, TweakToggle, useTweaks } = window;
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const { accent, showTradeNotes } = tweaks;
+  const accentColor = accent === 'amber' ? 'oklch(0.78 0.15 72)' : 'oklch(0.72 0.18 145)';
+
+  const netPnl = data.days.reduce((s, d) => s + d.pnl, 0);
+  const totalTrades = data.trades.length;
+  const wins = data.trades.filter(t => t.r > 0).length;
+  const winRate = Math.round(wins / totalTrades * 100);
+  const totalR = data.trades.reduce((s, t) => s + t.r, 0);
+  const maxDrawdown = -200;
+
+  return (
+    <div style={{minHeight:'100vh'}}>
+
+      {/* ── top bar ── */}
+      <div style={{
+        position:'sticky', top:0, zIndex:10,
+        background:'oklch(0.10 0.015 240 / 0.9)',
+        backdropFilter:'blur(12px)',
+        borderBottom:`1px solid ${C.border}`,
+        padding:'0 32px',
+      }}>
+        <div style={{maxWidth:1100, margin:'0 auto', height:52, display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+          <div style={{display:'flex', alignItems:'center', gap:18}}>
+            <span className="mono" style={{fontSize:11, color:accentColor, letterSpacing:'0.1em', fontWeight:500}}>WEEKLY REPORT</span>
+            <span style={{width:1, height:14, background:C.border, display:'block'}}/>
+            <span style={{fontSize:13, color:C.textMid}}>
+              {data.year} · W{data.week}
+              <span className="mono" style={{color:C.textDim, marginLeft:10, fontSize:11}}>{data.range}</span>
+            </span>
+          </div>
+          <div style={{display:'flex', alignItems:'center', gap:20}}>
+            <div style={{display:'flex', alignItems:'center', gap:6}}>
+              <div style={{width:6, height:6, borderRadius:'50%', background: netPnl >= 0 ? C.green : C.red, boxShadow:`0 0 6px ${netPnl >= 0 ? C.green : C.red}`}}/>
+              <span className="mono" style={{fontSize:13, color: netPnl >= 0 ? C.green : C.red, fontWeight:500}}>
+                {netPnl >= 0 ? '+' : ''}${netPnl.toLocaleString()}
+              </span>
+            </div>
+            <span style={{width:1, height:14, background:C.border, display:'block'}}/>
+            <div style={{display:'flex', gap:6}}>
+              {['‹','›'].map((a,i) => (
+                <button key={i} style={{width:28, height:28, borderRadius:6, border:`1px solid ${C.border}`, background:'none', color:C.textDim, cursor:'pointer', fontSize:14, transition:'all 0.15s'}}
+                  onMouseEnter={e=>{e.currentTarget.style.color=C.text; e.currentTarget.style.borderColor=C.borderHi;}}
+                  onMouseLeave={e=>{e.currentTarget.style.color=C.textDim; e.currentTarget.style.borderColor=C.border;}}
+                >{a}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── body ── */}
+      <div style={{maxWidth:1100, margin:'0 auto', padding:'32px 32px 80px'}}>
+
+        {/* hero row: equity + key metrics */}
+        <div style={{display:'grid', gridTemplateColumns:'1fr 260px', gap:16, marginBottom:16}}>
+
+          {/* equity curve */}
+          <Card>
+            <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:16}}>
+              <div>
+                <Sec accent={accent}>权益曲线</Sec>
+                <div className="mono" style={{fontSize:32, fontWeight:500, letterSpacing:'-0.03em', color: netPnl >= 0 ? C.green : C.red, lineHeight:1}}>
+                  {netPnl >= 0 ? '+' : ''}${netPnl.toLocaleString()}
+                </div>
+                <div className="mono" style={{fontSize:11, color:C.textDim, marginTop:4}}>
+                  期初 $10,000 · 期末 ${(10000+netPnl).toLocaleString()}
+                </div>
+              </div>
+              <div style={{display:'flex', gap:16}}>
+                {[
+                  { label:'总R值', value: (totalR > 0 ? '+' : '') + totalR.toFixed(1) + 'R', color: totalR >= 0 ? C.green : C.red },
+                  { label:'最大回撤', value: '$'+Math.abs(maxDrawdown), color: C.red },
+                ].map(m => (
+                  <div key={m.label} style={{textAlign:'right'}}>
+                    <div className="mono" style={{fontSize:16, fontWeight:500, color:m.color}}>{m.value}</div>
+                    <div style={{fontSize:10, color:C.textDim, marginTop:2}}>{m.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <EquityCurve equity={data.equity} accent={accent}/>
+          </Card>
+
+          {/* stats */}
+          <div style={{display:'flex', flexDirection:'column', gap:10}}>
+            {[
+              { label:'执行次数', value: totalTrades, mono: true },
+              { label:'胜率', value: winRate+'%', color: winRate >= 60 ? C.green : C.textMid, mono: true },
+              { label:'盈利笔数', value: wins+' / '+totalTrades, mono: true },
+              { label:'错过机会', value: data.missed.length, color: data.missed.length > 0 ? C.red : C.textDim, mono: true },
+              { label:'系统评分', value: data.systemScore.total+' / 100', color: data.systemScore.total >= 80 ? C.green : data.systemScore.total >= 60 ? accentColor : C.red, mono: true },
+            ].map(m => (
+              <div key={m.label} style={{
+                background:C.surface, border:`1px solid ${C.border}`, borderRadius:10,
+                padding:'12px 16px', display:'flex', justifyContent:'space-between', alignItems:'center',
+                flex:1,
+              }}>
+                <span style={{fontSize:11.5, color:C.textDim}}>{m.label}</span>
+                <span className={m.mono ? 'mono' : ''} style={{fontSize:16, fontWeight:500, color:m.color || C.text}}>{m.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* day strip */}
+        <div style={{display:'flex', gap:10, marginBottom:16}}>
+          {data.days.map(d => <DayCard key={d.day} d={d}/>)}
+        </div>
+
+        {/* trade log */}
+        <Card style={{marginBottom:16}}>
+          <Sec accent={accent}>逐笔交易记录</Sec>
+          <div style={{overflowX:'auto'}}>
+            <table style={{width:'100%', borderCollapse:'collapse', fontSize:12.5}}>
+              <thead>
+                <tr style={{borderBottom:`1px solid ${C.border}`}}>
+                  {['编号','时间','品种','方向','进入','出场','盈亏','执行', ...(showTradeNotes ? ['备注'] : [])].map(h => (
+                    <th key={h} style={{padding:'8px 10px', textAlign:'left', color:C.textDim, fontWeight:500, letterSpacing:'0.04em', fontSize:10.5}}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {data.trades.map((t, i) => (
+                  <tr key={t.id} style={{borderBottom:`1px solid ${i < data.trades.length-1 ? C.border : 'transparent'}`, transition:'background 0.15s'}}
+                    onMouseEnter={e=>e.currentTarget.style.background=C.surface2}
+                    onMouseLeave={e=>e.currentTarget.style.background='transparent'}
+                  >
+                    <td className="mono" style={{padding:'11px 10px', color:C.textDim, fontSize:11}}>{t.id}</td>
+                    <td className="mono" style={{padding:'11px 10px', color:C.textMid}}>{t.day} {t.time}</td>
+                    <td className="mono" style={{padding:'11px 10px', color:C.text, fontWeight:500}}>{t.inst}</td>
+                    <td style={{padding:'11px 10px', color: t.dir === 'Long' ? C.green : C.red, fontWeight:500, fontSize:12}}>
+                      {t.dir === 'Long' ? '↑ 做多' : '↓ 做空'}
+                    </td>
+                    <td className="mono" style={{padding:'11px 10px', color:C.textMid}}>{t.entry.toLocaleString()}</td>
+                    <td className="mono" style={{padding:'11px 10px', color:C.textMid}}>{t.exit.toLocaleString()}</td>
+                    <td className="mono" style={{padding:'11px 10px', color: t.r > 0 ? C.green : t.r < 0 ? C.red : C.textDim, fontWeight:600, fontSize:15,
+                      textShadow: t.r > 1.5 ? `0 0 10px ${t.r > 0 ? C.green : C.red}88` : 'none',
+                    }}>
+                      {t.r > 0 ? '+' : ''}{t.r.toFixed(1)}R
+                    </td>
+                    <td style={{padding:'11px 10px'}}>
+                      <span style={{
+                        display:'inline-flex', alignItems:'center', justifyContent:'center',
+                        width:22, height:22, borderRadius:5,
+                        background:(gradeColor[t.execScore] || C.textDim)+'22',
+                        color: gradeColor[t.execScore] || C.textDim,
+                        fontSize:11, fontWeight:700, fontFamily:'DM Mono',
+                      }}>{t.execScore}</span>
+                    </td>
+                    {showTradeNotes && (
+                      <td style={{padding:'11px 10px', fontSize:11.5, color:C.textDim, maxWidth:200}}>{t.note}</td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* missed opportunities */}
+          {data.missed.length > 0 && (
+            <div style={{marginTop:14, paddingTop:14, borderTop:`1px dashed ${C.border}`}}>
+              <span style={{fontSize:10.5, color:C.textDim, letterSpacing:'0.05em', marginBottom:8, display:'block'}}>错过的机会</span>
+              {data.missed.map((m, i) => (
+                <div key={i} style={{display:'flex', gap:12, alignItems:'center', fontSize:12}}>
+                  <span className="mono" style={{color:C.textDim}}>{m.day} {m.time}</span>
+                  <span className="mono" style={{color:C.text}}>{m.inst}</span>
+                  <span style={{color: m.dir === 'Long' ? C.green : C.red}}>{m.dir === 'Long' ? '↑' : '↓'}</span>
+                  <span className="mono" style={{color:C.red}}>~+{m.estR}R</span>
+                  <span style={{color:C.textDim, flex:1}}>{m.reason}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+
+        {/* system score + highlights/weaknesses */}
+        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom:16}}>
+
+          {/* system score */}
+          <Card>
+            <Sec accent={accent}>系统遵守度</Sec>
+            <div style={{display:'flex', alignItems:'center', justifyContent:'center', marginBottom:20}}>
+              <div style={{position:'relative', width:96, height:96}}>
+                <svg viewBox="0 0 96 96" style={{width:96, height:96, transform:'rotate(-90deg)'}}>
+                  <circle cx="48" cy="48" r="38" fill="none" stroke={C.border} strokeWidth="8"/>
+                  <circle cx="48" cy="48" r="38" fill="none" stroke={accentColor} strokeWidth="8"
+                    strokeDasharray={`${2*Math.PI*38 * data.systemScore.total/100} ${2*Math.PI*38}`}
+                    strokeLinecap="round" style={{transition:'stroke-dasharray 1s cubic-bezier(0.2,1,0.3,1)'}}
+                  />
+                </svg>
+                <div style={{position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
+                  <span className="mono" style={{fontSize:22, fontWeight:500, color:accentColor, lineHeight:1}}>{data.systemScore.total}</span>
+                  <span style={{fontSize:9, color:C.textDim}}>/ 100</span>
+                </div>
+              </div>
+            </div>
+            <div style={{display:'flex', flexDirection:'column', gap:10}}>
+              {data.systemScore.dims.map(d => <ScoreBar key={d.label} label={d.label} score={d.score} accent={accent}/>)}
+            </div>
+          </Card>
+
+          {/* highlights + weaknesses */}
+          <div style={{display:'flex', flexDirection:'column', gap:10}}>
+            <Card style={{flex:1}}>
+              <Sec accent={accent}>本周亮点</Sec>
+              <div style={{display:'flex', flexDirection:'column', gap:8}}>
+                {data.highlights.map((h, i) => (
+                  <div key={i} style={{display:'flex', gap:10, alignItems:'flex-start', fontSize:12.5, lineHeight:1.6, color:C.textMid}}>
+                    <span style={{color:C.green, flexShrink:0, marginTop:1}}>↑</span>{h}
+                  </div>
+                ))}
+              </div>
+            </Card>
+            <Card style={{flex:1}}>
+              <Sec accent={accent}>本周不足</Sec>
+              <div style={{display:'flex', flexDirection:'column', gap:8}}>
+                {data.weaknesses.map((w, i) => (
+                  <div key={i} style={{display:'flex', gap:10, alignItems:'flex-start', fontSize:12.5, lineHeight:1.6, color:C.textMid}}>
+                    <span style={{color:C.red, flexShrink:0, marginTop:1}}>↓</span>{w}
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
+        </div>
+
+        {/* lessons */}
+        <Card style={{marginBottom:16}}>
+          <Sec accent={accent}>核心经验教训</Sec>
+          <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12}}>
+            {data.lessons.map((l, i) => (
+              <div key={i} style={{display:'flex', gap:14, padding:'14px 16px', background:C.surface2, borderRadius:10, border:`1px solid ${C.border}`}}>
+                <span className="mono" style={{
+                  fontSize:11, fontWeight:700, color:accentColor,
+                  background:accentColor+'18', width:24, height:24, borderRadius:6,
+                  display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0,
+                }}>{i+1}</span>
+                <div>
+                  <div style={{fontSize:13, fontWeight:500, color:C.text, marginBottom:5, lineHeight:1.4}}>{l.title}</div>
+                  <div style={{fontSize:12, lineHeight:1.7, color:C.textDim}}>{l.body}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* next week */}
+        <Card>
+          <Sec accent={accent}>下周计划</Sec>
+          <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:16}}>
+            {[
+              { icon:'◎', label:'宏观关注', items: data.nextWeek.macro },
+              { icon:'◆', label:'重点练习', items: data.nextWeek.practice },
+              { icon:'→', label:'特别注意', items: data.nextWeek.watch },
+            ].map(col => (
+              <div key={col.label}>
+                <div style={{display:'flex', alignItems:'center', gap:7, marginBottom:10}}>
+                  <span style={{fontSize:10, color:accentColor}}>{col.icon}</span>
+                  <span style={{fontSize:11, color:C.textDim, fontWeight:500, letterSpacing:'0.04em'}}>{col.label}</span>
+                </div>
+                <div style={{display:'flex', flexDirection:'column', gap:8}}>
+                  {col.items.map((item, i) => (
+                    <div key={i} style={{display:'flex', gap:8, alignItems:'flex-start', fontSize:12.5, lineHeight:1.6, color:C.textMid}}>
+                      <span className="mono" style={{color:C.border, flexShrink:0}}>—</span>{item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* footer */}
+        <div style={{marginTop:32, display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+          <span className="mono" style={{fontSize:10, color:C.textDim}}>W{data.week} · {data.year} · 系统周报</span>
+          <span className="mono" style={{fontSize:10, color:C.textDim}}>{data.range}</span>
+        </div>
+
+      </div>
+
+      <TweaksPanel>
+        <TweakSection label="强调色">
+          <TweakRadio id="accent" options={[{label:'琥珀',value:'amber'},{label:'绿色',value:'green'}]}/>
+        </TweakSection>
+        <TweakSection label="备注列">
+          <TweakToggle id="showTradeNotes" label="显示交易备注"/>
+        </TweakSection>
+      </TweaksPanel>
+
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
