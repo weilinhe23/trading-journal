@@ -1,6 +1,11 @@
 "use client"
 
-import type { TradeRecord, MissedRecord, MnqMissedRecord, SegmentAccuracyRecord } from "./WeeklyReportClient"
+import type { TradeRecord, MissedRecord, MnqMissedRecord, MnqTimeframeStat, SegmentAccuracyRecord } from "./WeeklyReportClient"
+import {
+  MNQ_DECISION_TIMEFRAME_LABELS,
+  MNQ_DECISION_TIMEFRAME_OPTIONS,
+  type MnqDecisionTimeframe,
+} from "~/types"
 
 // ── Design tokens (mirrors WeeklyReportClient) ────────────────────────────────
 const C = {
@@ -120,6 +125,63 @@ function calcR(t: TradeRecord): number | null {
     ? (t.exitPrice - t.entryPrice)
     : (t.entryPrice - t.exitPrice)
   return pts / t.plannedRiskPts
+}
+
+type TimeframeKey = MnqDecisionTimeframe | "UNSPECIFIED"
+
+interface TimeframeRow {
+  key: TimeframeKey
+  captured: number
+  missed: number
+  pnl: number
+}
+
+function TimeframeOpportunityAnalysis({ timeframeStats }: { timeframeStats: MnqTimeframeStat[] }) {
+  const orderedKeys: TimeframeKey[] = [...MNQ_DECISION_TIMEFRAME_OPTIONS, "UNSPECIFIED"]
+  const data = orderedKeys
+    .map((key): TimeframeRow | null => {
+      const timeframe = key === "UNSPECIFIED" ? null : key
+      const stat = timeframeStats.find((item) => item.timeframe === timeframe)
+      return stat ? { key, captured: stat.captured, missed: stat.missed, pnl: stat.pnl } : null
+    })
+    .filter((row): row is TimeframeRow => row !== null)
+
+  if (data.length === 0) {
+    return <div style={{ color: C.textDim, fontSize: 12 }}>本周暂无 MNQ 交易机会记录</div>
+  }
+
+  return (
+    <div style={{ overflowX: "auto" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11.5 }}>
+        <thead>
+          <tr style={{ borderBottom: `1px solid ${C.border}` }}>
+            {["决策周期", "总机会", "把握", "错失", "把握率", "已把握盈亏"].map((label) => (
+              <th key={label} style={{ padding: "7px 10px", textAlign: "left", color: C.textDim, fontWeight: 500, fontSize: 10, whiteSpace: "nowrap" }}>{label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row) => {
+            const total = row.captured + row.missed
+            const captureRate = total > 0 ? Math.round((row.captured / total) * 100) : 0
+            const timeframeLabel = row.key === "UNSPECIFIED" ? "未选择" : MNQ_DECISION_TIMEFRAME_LABELS[row.key]
+            return (
+              <tr key={row.key} style={{ borderBottom: `1px solid ${C.border}30` }}>
+                <td style={{ padding: "9px 10px", color: row.key === "UNSPECIFIED" ? C.textDim : C.amber, fontFamily: "DM Mono, monospace", fontWeight: 500 }}>{timeframeLabel}</td>
+                <td style={{ padding: "9px 10px", color: C.text, fontFamily: "DM Mono, monospace" }}>{total}</td>
+                <td style={{ padding: "9px 10px", color: C.green, fontFamily: "DM Mono, monospace" }}>{row.captured}</td>
+                <td style={{ padding: "9px 10px", color: row.missed > 0 ? C.red : C.textDim, fontFamily: "DM Mono, monospace" }}>{row.missed}</td>
+                <td style={{ padding: "9px 10px", color: captureRate >= 60 ? C.green : captureRate >= 40 ? C.amber : C.red, fontFamily: "DM Mono, monospace", fontWeight: 500 }}>{captureRate}%</td>
+                <td style={{ padding: "9px 10px", color: row.pnl > 0 ? C.green : row.pnl < 0 ? C.red : C.textDim, fontFamily: "DM Mono, monospace" }}>
+                  {row.pnl >= 0 ? "+" : "-"}${Math.abs(row.pnl).toFixed(2)}
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
 }
 
 // ── Unified strategy tree (executed + missed combined) ─────────────────────
@@ -853,10 +915,11 @@ interface Props {
   trades: TradeRecord[]
   missed: MissedRecord[]
   mnqMissed: MnqMissedRecord[]
+  timeframeStats: MnqTimeframeStat[]
   segmentAccuracy: SegmentAccuracyRecord[]
 }
 
-export function WeeklyTradeAnalysis({ trades, missed, mnqMissed, segmentAccuracy }: Props) {
+export function WeeklyTradeAnalysis({ trades, missed, mnqMissed, timeframeStats, segmentAccuracy }: Props) {
   const hasMissed = missed.length > 0 || mnqMissed.length > 0
 
   return (
@@ -864,6 +927,11 @@ export function WeeklyTradeAnalysis({ trades, missed, mnqMissed, segmentAccuracy
       {/* ── 综合策略分析（成交 + 错过合并） ── */}
       <Sec>综合策略分析</Sec>
       <UnifiedStrategyTable trades={trades} missed={missed} mnqMissed={mnqMissed} />
+
+      {/* ── MNQ 决策周期汇总 ── */}
+      <div style={{ borderTop: `1px dashed ${C.border}`, margin: "22px 0 18px" }} />
+      <Sec>MNQ 决策周期汇总</Sec>
+      <TimeframeOpportunityAnalysis timeframeStats={timeframeStats} />
 
       {/* ── 成交交易分析 ── */}
       <div style={{ borderTop: `1px dashed ${C.border}`, margin: "22px 0 18px" }} />

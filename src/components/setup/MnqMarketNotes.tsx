@@ -7,6 +7,12 @@ import { Save, Check, TrendingUp, Plus, X, CheckCircle2, XCircle, Moon, ThumbsUp
 import { Button } from "~/components/ui/button"
 import { Textarea } from "~/components/ui/textarea"
 import { cn } from "~/lib/utils"
+import {
+  MNQ_DECISION_TIMEFRAME_LABELS,
+  MNQ_DECISION_TIMEFRAME_OPTIONS,
+  isMnqDecisionTimeframe,
+  type MnqDecisionTimeframe,
+} from "~/types"
 import type { MnqDailyPlan } from "../../../generated/prisma"
 
 interface TradeTypeOption {
@@ -30,6 +36,7 @@ export type EntryApproach = "DIRECT" | "PULLBACK"
 export interface TradeOpportunity {
   id: string
   description: string
+  decisionTimeframe: MnqDecisionTimeframe | null
   entryApproach: EntryApproach | null  // 直接进入 or 等回调进入
   captured: boolean | null  // null = 未标记, true = 把握住, false = 错过
   missedProcess: string     // 仅当 captured === false 时使用
@@ -82,7 +89,7 @@ function genId(): string {
 
 function createOpportunity(): TradeOpportunity {
   return {
-    id: genId(), description: "", entryApproach: null, captured: null, missedProcess: "",
+    id: genId(), description: "", decisionTimeframe: null, entryApproach: null, captured: null, missedProcess: "",
     tradeResult: null, tradeResultNote: "",
     tradeDirection: null,
     entryTime: "", exitTime: "", entryPrice: "", exitPrice: "",
@@ -110,13 +117,14 @@ function parseSegment(raw: string | null | undefined): MarketSegmentData {
         note: (parsed.note as string) ?? "",
         accuracy: (parsed.accuracy as MarketAccuracy) ?? null,
         opportunities: opp
-          ? [{ id: genId(), description: opp, entryApproach: null, captured: null, missedProcess: "", tradeResult: null, tradeResultNote: "", tradeDirection: null, entryTime: "", exitTime: "", entryPrice: "", exitPrice: "", contracts: "", stopPrice: "", targetPrice: "", strategyId: null, strategyName: null, tradeTypeId: null, tradeTypeName: null, plannedRiskPts: "", maxDrawdownPts: "", maxFavorablePts: "", heldOvernight: false, overnightReason: "", entryAccuracy: null, entryAccuracyNote: "", exitAccuracy: null, exitAccuracyNote: "", missedRiskPts: "", missedReturnPts: "" }]
+          ? [{ id: genId(), description: opp, decisionTimeframe: null, entryApproach: null, captured: null, missedProcess: "", tradeResult: null, tradeResultNote: "", tradeDirection: null, entryTime: "", exitTime: "", entryPrice: "", exitPrice: "", contracts: "", stopPrice: "", targetPrice: "", strategyId: null, strategyName: null, tradeTypeId: null, tradeTypeName: null, plannedRiskPts: "", maxDrawdownPts: "", maxFavorablePts: "", heldOvernight: false, overnightReason: "", entryAccuracy: null, entryAccuracyNote: "", exitAccuracy: null, exitAccuracyNote: "", missedRiskPts: "", missedReturnPts: "" }]
           : [],
       }
     }
     const opps = Array.isArray(parsed.opportunities)
       ? (parsed.opportunities as TradeOpportunity[]).map((o) => ({
           ...o,
+          decisionTimeframe: isMnqDecisionTimeframe(o.decisionTimeframe) ? o.decisionTimeframe : null,
           entryApproach: o.entryApproach ?? null,
           tradeResult: o.tradeResult ?? null,
           tradeResultNote: o.tradeResultNote ?? "",
@@ -244,6 +252,25 @@ function OpportunityCard({ opp, index, placeholder, segmentType, onChange, onRem
         rows={2}
         className="text-xs resize-none"
       />
+
+      <div className="flex items-center gap-2 flex-wrap">
+        <span className="text-[10px] text-muted-foreground shrink-0">决策周期：</span>
+        {MNQ_DECISION_TIMEFRAME_OPTIONS.map((timeframe) => (
+          <button
+            key={timeframe}
+            type="button"
+            onClick={() => onChange({ decisionTimeframe: opp.decisionTimeframe === timeframe ? null : timeframe })}
+            className={cn(
+              "text-xs px-2.5 py-0.5 rounded border transition-colors",
+              opp.decisionTimeframe === timeframe
+                ? "bg-cyan-700/80 border-cyan-600 text-white"
+                : "border-muted-foreground/30 text-muted-foreground hover:border-cyan-600 hover:text-cyan-400",
+            )}
+          >
+            {MNQ_DECISION_TIMEFRAME_LABELS[timeframe]}
+          </button>
+        ))}
+      </div>
 
       {/* 入场方式（仅 RANGE / TREND 时显示） */}
       {segmentType !== null && (

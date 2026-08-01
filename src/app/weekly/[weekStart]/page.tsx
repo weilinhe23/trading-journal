@@ -3,7 +3,8 @@ import { format, getISOWeek, getYear } from "date-fns"
 import { zhCN } from "date-fns/locale"
 import { prisma } from "~/lib/prisma"
 import { WeeklyReportClient } from "~/components/weekly/WeeklyReportClient"
-import type { DayRecord, TradeRecord, MissedRecord, MnqMissedRecord, SegmentAccuracyRecord } from "~/components/weekly/WeeklyReportClient"
+import type { DayRecord, TradeRecord, MissedRecord, MnqMissedRecord, MnqTimeframeStat, SegmentAccuracyRecord } from "~/components/weekly/WeeklyReportClient"
+import { isMnqDecisionTimeframe, type MnqDecisionTimeframe } from "~/types"
 
 const DAY_LABELS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"] as const
 
@@ -35,6 +36,7 @@ function parseMnqOpps(raw: string | null | undefined) {
     const seg = JSON.parse(raw) as {
       opportunities?: Array<{
         captured: boolean | null
+        decisionTimeframe?: MnqDecisionTimeframe | null
         tradeDirection: "LONG" | "SHORT" | null
         entryPrice: string
         exitPrice: string
@@ -148,6 +150,14 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
   const trades: TradeRecord[] = []
   const missed: MissedRecord[] = []
   const mnqMissed: MnqMissedRecord[] = []
+  const timeframeStatsMap = new Map<MnqDecisionTimeframe | null, MnqTimeframeStat>()
+  const getTimeframeStat = (timeframe: MnqDecisionTimeframe | null) => {
+    const existing = timeframeStatsMap.get(timeframe)
+    if (existing) return existing
+    const created = { timeframe, captured: 0, missed: 0, pnl: 0 }
+    timeframeStatsMap.set(timeframe, created)
+    return created
+  }
   let tradeIndex = 1
   let mnqIndex = 1
   let mnqMissedIndex = 1
@@ -223,6 +233,7 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
             overnightReason: null,
             tradeTypeName: parseFirstTradeType(setup.selectedTradeTypes),
             entryApproach: null,
+            decisionTimeframe: null,
             entryAccuracy: null,
             entryAccuracyNote: null,
             exitAccuracy: null,
@@ -255,8 +266,10 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
           else if (segAcc === "WRONG") segEntry.wrongDays++
         }
         for (const opp of parseMnqOpps(raw)) {
+          const decisionTimeframe = isMnqDecisionTimeframe(opp.decisionTimeframe) ? opp.decisionTimeframe : null
           if (opp.captured === false) {
             mnqMissedCount++; mnqDayMissed++
+            getTimeframeStat(decisionTimeframe).missed++
             const riskPts = opp.missedRiskPts ? parseFloat(opp.missedRiskPts) : null
             const returnPts = opp.missedReturnPts ? parseFloat(opp.missedReturnPts) : null
             mnqMissed.push({
@@ -271,12 +284,15 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
               strategyName: opp.strategyName ?? null,
               tradeTypeName: opp.tradeTypeName ?? null,
               entryApproach: opp.entryApproach ?? null,
+              decisionTimeframe,
             })
             continue
           }
           if (opp.captured !== true) continue
           mnqDayTrades++
           mnqTradeCount++
+          const timeframeStat = getTimeframeStat(decisionTimeframe)
+          timeframeStat.captured++
           const entry = parseFloat(opp.entryPrice)
           const exit = parseFloat(opp.exitPrice)
           const qty = parseFloat(opp.contracts || "1")
@@ -287,6 +303,7 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
             mnqDayPnL += oppPnl
             mnqTotalPnL += oppPnl
             if (oppPnl > 0) mnqWinCount++
+            timeframeStat.pnl += oppPnl
           }
           if (opp.tradeDirection !== null) {
             const stopPx = opp.stopPrice ? parseFloat(opp.stopPrice) : null
@@ -308,6 +325,7 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
               notes: opp.description || null,
               tradeTypeName: opp.tradeTypeName ?? null,
               entryApproach: opp.entryApproach ?? null,
+              decisionTimeframe,
               stopPrice: stopPx !== null && !isNaN(stopPx) ? stopPx : null,
               targetPrice: targetPx !== null && !isNaN(targetPx) ? targetPx : null,
               tradeResult: opp.tradeResult ?? null,
@@ -415,6 +433,10 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
       trades={trades}
       missed={missed}
       mnqMissed={mnqMissed}
+      timeframeStats={[...timeframeStatsMap.values()].map((stat) => ({
+        ...stat,
+        pnl: Math.round(stat.pnl * 100) / 100,
+      }))}
       equity={equity}
       systemScore={
         systemScoreTotal !== null

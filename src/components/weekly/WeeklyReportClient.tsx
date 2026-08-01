@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Save } from "lucide-react"
 import { WeeklyTradeAnalysis } from "./WeeklyTradeAnalysis"
+import { MNQ_DECISION_TIMEFRAME_LABELS, type MnqDecisionTimeframe } from "~/types"
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 const C = {
@@ -59,6 +60,7 @@ export interface TradeRecord {
   overnightReason: string | null
   tradeTypeName: string | null
   entryApproach: "DIRECT" | "PULLBACK" | null
+  decisionTimeframe: MnqDecisionTimeframe | null
   // 执行评估
   entryAccuracy: "CORRECT" | "WRONG" | null
   entryAccuracyNote: string | null
@@ -96,6 +98,14 @@ export interface MnqMissedRecord {
   strategyName: string | null
   tradeTypeName: string | null
   entryApproach: "DIRECT" | "PULLBACK" | null
+  decisionTimeframe: MnqDecisionTimeframe | null
+}
+
+export interface MnqTimeframeStat {
+  timeframe: MnqDecisionTimeframe | null
+  captured: number
+  missed: number
+  pnl: number
 }
 
 export interface WeeklyStats {
@@ -129,6 +139,7 @@ interface Props {
   trades: TradeRecord[]
   missed: MissedRecord[]
   mnqMissed: MnqMissedRecord[]
+  timeframeStats: MnqTimeframeStat[]
   equity: number[]
   systemScore: { total: number; dims: { label: string; score: number }[] } | null
   segmentAccuracy: SegmentAccuracyRecord[]
@@ -432,7 +443,7 @@ function InlineField({
 export function WeeklyReportClient({
   weekStart, prevWeek, nextWeek, weekLabel,
   weekNum, year, dateRange,
-  initialReport, stats, days, trades, missed, mnqMissed, equity, systemScore, segmentAccuracy,
+  initialReport, stats, days, trades, missed, mnqMissed, timeframeStats, equity, systemScore, segmentAccuracy,
 }: Props) {
   const router = useRouter()
   const [saving, setSaving] = useState(false)
@@ -629,7 +640,7 @@ export function WeeklyReportClient({
         )}
 
         {/* trade log */}
-        {(trades.length > 0 || missed.length > 0) && (
+        {(trades.length > 0 || missed.length > 0 || mnqMissed.length > 0) && (
           <Card style={{ marginBottom: 16 }}>
             <Sec>逐笔交易记录</Sec>
             {trades.length > 0 && (
@@ -637,7 +648,7 @@ export function WeeklyReportClient({
                 <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
                   <thead>
                     <tr style={{ borderBottom: `1px solid ${C.border}` }}>
-                      {["编号", "时间", "方向", "入场 / 出场", "止损 / 目标", "盈亏 / 点数", "风险 / R", "MAE / MFE", "结果", "策略", "子策略", "进入方式", "执行评估", "备注"].map((h) => (
+                      {["编号", "时间", "方向", "入场 / 出场", "止损 / 目标", "盈亏 / 点数", "风险 / R", "MAE / MFE", "结果", "策略", "子策略", "进入方式", "决策周期", "执行评估", "备注"].map((h) => (
                         <th key={h} style={{ padding: "8px 10px", textAlign: "left", color: C.textDim, fontWeight: 500, letterSpacing: "0.04em", fontSize: 10, whiteSpace: "nowrap" }}>{h}</th>
                       ))}
                     </tr>
@@ -784,6 +795,10 @@ export function WeeklyReportClient({
                                 </span>
                               ) : <span style={{ color: C.textDim, fontSize: 11 }}>—</span>}
                             </td>
+                            {/* 决策周期 */}
+                            <td style={{ ...tdStyle, color: C.textMid, fontFamily: "DM Mono, monospace", whiteSpace: "nowrap" }}>
+                              {t.decisionTimeframe ? MNQ_DECISION_TIMEFRAME_LABELS[t.decisionTimeframe] : "—"}
+                            </td>
                             {/* 执行评估 */}
                             <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
                               <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -885,7 +900,7 @@ export function WeeklyReportClient({
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11.5 }}>
                     <thead>
                       <tr style={{ borderBottom: `1px solid ${C.border}` }}>
-                        {["编号", "时间 / 时段", "方向", "策略", "子策略", "进入方式", "机会描述", "错过经过", "假设风险", "假设回报", "假设R"].map((h) => (
+                        {["编号", "时间 / 时段", "方向", "策略", "子策略", "进入方式", "决策周期", "机会描述", "错过经过", "假设风险", "假设回报", "假设R"].map((h) => (
                           <th key={h} style={{ padding: "7px 10px", textAlign: "left", color: C.textDim, fontWeight: 500, fontSize: 10, whiteSpace: "nowrap" }}>{h}</th>
                         ))}
                       </tr>
@@ -933,6 +948,9 @@ export function WeeklyReportClient({
                                 </span>
                               ) : <span style={{ color: C.textDim }}>—</span>}
                             </td>
+                            <td style={{ padding: "9px 10px", color: C.textMid, fontFamily: "DM Mono, monospace", verticalAlign: "top", whiteSpace: "nowrap" }}>
+                              {m.decisionTimeframe ? MNQ_DECISION_TIMEFRAME_LABELS[m.decisionTimeframe] : "—"}
+                            </td>
                             <td style={{ padding: "9px 10px", color: C.text, maxWidth: 220, verticalAlign: "top" }}>
                               {m.description || <span style={{ color: C.textDim }}>—</span>}
                             </td>
@@ -962,7 +980,7 @@ export function WeeklyReportClient({
 
         {/* trade analysis module */}
         {(trades.length > 0 || missed.length > 0 || mnqMissed.length > 0) && (
-          <WeeklyTradeAnalysis trades={trades} missed={missed} mnqMissed={mnqMissed} segmentAccuracy={segmentAccuracy} />
+          <WeeklyTradeAnalysis trades={trades} missed={missed} mnqMissed={mnqMissed} timeframeStats={timeframeStats} segmentAccuracy={segmentAccuracy} />
         )}
 
         {/* system score + highlights/weaknesses */}

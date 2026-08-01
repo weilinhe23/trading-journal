@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { prisma } from "~/lib/prisma"
+import { MNQ_DECISION_TIMEFRAME_OPTIONS, isMnqDecisionTimeframe, type MnqDecisionTimeframe } from "~/types"
 
 function parseWeekStart(s: string): Date | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null
@@ -16,6 +17,7 @@ interface MnqTradeOpportunity {
   entryPrice: string
   exitPrice: string
   contracts: string
+  decisionTimeframe?: MnqDecisionTimeframe | null
 }
 
 interface MnqSegment {
@@ -27,6 +29,13 @@ interface MnqDayStats {
   tradeCount: number
   winCount: number
   missedCount: number
+  timeframeStats: Record<MnqDecisionTimeframe, { captured: number; missed: number }>
+}
+
+function createEmptyTimeframeStats(): MnqDayStats["timeframeStats"] {
+  return Object.fromEntries(
+    MNQ_DECISION_TIMEFRAME_OPTIONS.map((timeframe) => [timeframe, { captured: 0, missed: 0 }]),
+  ) as MnqDayStats["timeframeStats"]
 }
 
 function parseMnqSegment(raw: string | null | undefined): MnqSegment {
@@ -43,7 +52,13 @@ function calcMnqDayStats(mnqPlan: {
   marketMidJson: string | null
   marketAfternoonJson: string | null
 } | null): MnqDayStats {
-  const result: MnqDayStats = { pnl: 0, tradeCount: 0, winCount: 0, missedCount: 0 }
+  const result: MnqDayStats = {
+    pnl: 0,
+    tradeCount: 0,
+    winCount: 0,
+    missedCount: 0,
+    timeframeStats: createEmptyTimeframeStats(),
+  }
   if (!mnqPlan) return result
 
   const segments = [
@@ -58,11 +73,13 @@ function calcMnqDayStats(mnqPlan: {
     for (const opp of seg.opportunities ?? []) {
       if (opp.captured === false) {
         result.missedCount++
+        if (isMnqDecisionTimeframe(opp.decisionTimeframe)) result.timeframeStats[opp.decisionTimeframe].missed++
         continue
       }
       if (opp.captured !== true) continue
 
       result.tradeCount++
+      if (isMnqDecisionTimeframe(opp.decisionTimeframe)) result.timeframeStats[opp.decisionTimeframe].captured++
       const entry = parseFloat(opp.entryPrice)
       const exit = parseFloat(opp.exitPrice)
       const qty = parseFloat(opp.contracts || "1")
@@ -118,6 +135,7 @@ export async function GET(
   let mnqTradeCount = 0
   let mnqWinCount = 0
   let mnqMissedCount = 0
+  const mnqTimeframeStats = createEmptyTimeframeStats()
 
   const dailyBreakdown = sessions.map((session) => {
     let dayPnL = 0
@@ -143,6 +161,10 @@ export async function GET(
     mnqTradeCount += mnqDay.tradeCount
     mnqWinCount += mnqDay.winCount
     mnqMissedCount += mnqDay.missedCount
+    for (const timeframe of MNQ_DECISION_TIMEFRAME_OPTIONS) {
+      mnqTimeframeStats[timeframe].captured += mnqDay.timeframeStats[timeframe].captured
+      mnqTimeframeStats[timeframe].missed += mnqDay.timeframeStats[timeframe].missed
+    }
 
     return {
       date: session.date.toISOString().split("T")[0]!,
@@ -166,6 +188,7 @@ export async function GET(
         tradeCount: mnqTradeCount,
         winCount: mnqWinCount,
         missedCount: mnqMissedCount,
+        timeframeStats: mnqTimeframeStats,
       },
     },
   })

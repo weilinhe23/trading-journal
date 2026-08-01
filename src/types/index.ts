@@ -34,6 +34,8 @@ export type SetupPriority = "HIGH" | "MEDIUM" | "LOW"
 
 export type ChartTimeframe = "M1" | "M5" | "M15" | "M30" | "H1" | "H4" | "D1"
 
+export type MnqDecisionTimeframe = "M1" | "M5" | "M15" | "M30" | "H1"
+
 export type Grade = "A" | "B" | "C" | "D"
 
 export type NewsType =
@@ -107,6 +109,20 @@ export const CHART_TIMEFRAME_LABELS: Record<ChartTimeframe, string> = {
   H1:  "1h",
   H4:  "4h",
   D1:  "1D",
+}
+
+export const MNQ_DECISION_TIMEFRAME_OPTIONS = ["M1", "M5", "M15", "M30", "H1"] as const
+
+export const MNQ_DECISION_TIMEFRAME_LABELS: Record<MnqDecisionTimeframe, string> = {
+  M1: "1min",
+  M5: "5min",
+  M15: "15min",
+  M30: "30min",
+  H1: "1h",
+}
+
+export function isMnqDecisionTimeframe(value: unknown): value is MnqDecisionTimeframe {
+  return typeof value === "string" && MNQ_DECISION_TIMEFRAME_OPTIONS.some((option) => option === value)
 }
 
 // ─── MissedReasonOption (用户自定义错过原因) ──────────────────────────
