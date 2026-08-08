@@ -76,6 +76,7 @@ export interface SegmentAccuracyRecord {
   segment: string;
   totalDays: number;
   correctDays: number;
+  partialDays: number;
   wrongDays: number;
 }
 

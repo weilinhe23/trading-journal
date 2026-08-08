@@ -1818,7 +1818,11 @@ function SessionPerformanceAnalysis({
               totalPnl > 0 ? C.green : totalPnl < 0 ? C.red : C.textDim;
             const accPct =
               acc && acc.totalDays > 0
-                ? Math.round((acc.correctDays / acc.totalDays) * 100)
+                ? Math.round(
+                    ((acc.correctDays + acc.partialDays * 0.5) /
+                      acc.totalDays) *
+                      100,
+                  )
                 : null;
             const accColor =
               accPct !== null
@@ -1937,7 +1941,8 @@ function SessionPerformanceAnalysis({
                         {accPct}%
                       </span>
                       <span style={{ fontSize: 10, color: C.textDim }}>
-                        ({acc!.correctDays}/{acc!.totalDays}天)
+                        ({acc!.correctDays}准/{acc!.partialDays}部分/
+                        {acc!.wrongDays}错)
                       </span>
                     </div>
                   ) : (

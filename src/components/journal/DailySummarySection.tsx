@@ -14,13 +14,13 @@ import type {
 } from "../../../generated/prisma";
 import { SetupCard } from "~/components/setup/SetupCard";
 import { ScreenshotGrid } from "~/components/screenshot/ScreenshotGrid";
+import { DailyOpportunityAnalysis } from "~/components/journal/DailyOpportunityAnalysis";
 import { MNQ_KEY_LEVEL_LABELS, type MnqKeyLevel } from "~/types";
 
 type SetupFull = TradeSetup & {
   executions: Execution[];
   screenshots: Screenshot[];
 };
-
 type SessionFull = DailySession & {
   screenshots: Screenshot[];
   setups: SetupFull[];
@@ -121,6 +121,9 @@ export function DailySummarySection({ session }: Props) {
 
   return (
     <div className="space-y-4">
+      {/* ── 已成交与已错失机会综合分析 ── */}
+      <DailyOpportunityAnalysis plan={session.mnqPlan} />
+
       {/* ── 大盘环境 & 整体计划 ── */}
       {(session.marketContext ?? session.preMarketPlan) && (
         <Card>

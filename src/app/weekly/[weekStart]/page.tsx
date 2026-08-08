@@ -82,12 +82,14 @@ function parseMnqOpps(raw: string | null | undefined) {
 
 function parseSegmentAccuracy(
   raw: string | null | undefined,
-): "CORRECT" | "WRONG" | null {
+): "CORRECT" | "PARTIAL" | "WRONG" | null {
   if (!raw) return null;
   try {
     const seg = JSON.parse(raw) as { accuracy?: string | null };
     const acc = seg.accuracy;
-    return acc === "CORRECT" || acc === "WRONG" ? acc : null;
+    return acc === "CORRECT" || acc === "PARTIAL" || acc === "WRONG"
+      ? acc
+      : null;
   } catch {
     return null;
   }
@@ -186,12 +188,17 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
 
   const segAccMap: Record<
     string,
-    { totalDays: number; correctDays: number; wrongDays: number }
+    {
+      totalDays: number;
+      correctDays: number;
+      partialDays: number;
+      wrongDays: number;
+    }
   > = {
-    MNQ盘前: { totalDays: 0, correctDays: 0, wrongDays: 0 },
-    MNQ开盘: { totalDays: 0, correctDays: 0, wrongDays: 0 },
-    MNQ盘中: { totalDays: 0, correctDays: 0, wrongDays: 0 },
-    MNQ午盘: { totalDays: 0, correctDays: 0, wrongDays: 0 },
+    MNQ盘前: { totalDays: 0, correctDays: 0, partialDays: 0, wrongDays: 0 },
+    MNQ开盘: { totalDays: 0, correctDays: 0, partialDays: 0, wrongDays: 0 },
+    MNQ盘中: { totalDays: 0, correctDays: 0, partialDays: 0, wrongDays: 0 },
+    MNQ午盘: { totalDays: 0, correctDays: 0, partialDays: 0, wrongDays: 0 },
   };
 
   for (const session of sessions) {
@@ -295,9 +302,10 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
         const segLabel = MNQ_SEGMENT_LABELS[key] ?? "MNQ";
         const segAcc = parseSegmentAccuracy(raw);
         const segEntry = segAccMap[segLabel];
-        if (segEntry && (segAcc !== null || parseMnqOpps(raw).length > 0)) {
+        if (segEntry && segAcc !== null) {
           segEntry.totalDays++;
           if (segAcc === "CORRECT") segEntry.correctDays++;
+          else if (segAcc === "PARTIAL") segEntry.partialDays++;
           else if (segAcc === "WRONG") segEntry.wrongDays++;
         }
         for (const opp of parseMnqOpps(raw)) {
@@ -511,6 +519,7 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
           segment,
           totalDays: v.totalDays,
           correctDays: v.correctDays,
+          partialDays: v.partialDays,
           wrongDays: v.wrongDays,
         })) as SegmentAccuracyRecord[]
       }

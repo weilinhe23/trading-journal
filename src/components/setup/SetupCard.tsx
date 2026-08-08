@@ -40,6 +40,13 @@ import {
   MISSED_REASON_LABELS,
   NEWS_TYPE_LABELS,
   NEWS_IMPACT_LABELS,
+  MNQ_MARKET_ACCURACY_LABELS,
+  MNQ_MARKET_DEVIATION_REASON_LABELS,
+  MNQ_MARKET_DIRECTION_LABELS,
+  MNQ_MARKET_TYPE_LABELS,
+  MNQ_MARKET_IMPACT_TYPE_LABELS,
+  MNQ_MARKET_OPPORTUNITY_IMPACT_LABELS,
+  MNQ_MISSED_REASON_LABELS,
   PRICE_TIER_LABELS,
   MARKET_CAP_TIER_LABELS,
   SETUP_PRIORITY_LABELS,
@@ -52,6 +59,13 @@ import {
   type MarketCapTier,
   type SetupPriority,
   type ChartTimeframe,
+  type MnqMarketAccuracy,
+  type MnqMarketDeviationReason,
+  type MnqMarketDirection,
+  type MnqMarketType,
+  type MnqMarketImpactType,
+  type MnqMarketOpportunityImpact,
+  type MnqMissedReasonCategory,
 } from "~/types";
 import { MissedReasonPanel } from "./MissedReasonPanel";
 import { AddExecutionDialog } from "./AddExecutionDialog";
@@ -475,6 +489,7 @@ export function SetupCard({
                 description: string;
                 captured: boolean | null;
                 missedProcess: string;
+                missedReasonCategory?: MnqMissedReasonCategory | null;
                 entryApproach?: "DIRECT" | "PULLBACK" | null;
                 tradeResult?: string | null;
                 tradeResultNote?: string;
@@ -490,6 +505,10 @@ export function SetupCard({
                 strategyName?: string | null;
                 tradeTypeId?: string | null;
                 tradeTypeName?: string | null;
+                plannedRiskPts?: string;
+                plannedReturnPts?: string;
+                missedPlannedRiskPts?: string;
+                missedPlannedReturnPts?: string;
                 missedRiskPts?: string;
                 missedReturnPts?: string;
               }
@@ -500,8 +519,31 @@ export function SetupCard({
               interface ParsedSeg {
                 type?: string | null;
                 note?: string;
+                expectedType?: MnqMarketType | null;
+                expectedDirection?: MnqMarketDirection | null;
+                expectedNote?: string;
+                actualType?: MnqMarketType | null;
+                actualDirection?: MnqMarketDirection | null;
+                actualNote?: string;
+                accuracy?: MnqMarketAccuracy | null;
+                deviationReason?: MnqMarketDeviationReason | null;
+                secondaryDeviationReasons?: MnqMarketDeviationReason[];
+                deviationNote?: string;
+                opportunityImpact?: MnqMarketOpportunityImpact | null;
+                impactTypes?: MnqMarketImpactType[];
+                impactOpportunityIds?: string[];
+                impactNote?: string;
+                premarketPhases?: {
+                  overnight?: ParsedPremarketPhase;
+                  usPremarket?: ParsedPremarketPhase;
+                };
                 opportunities?: ParsedOpp[];
                 opportunity?: string;
+              }
+              interface ParsedPremarketPhase {
+                type?: MnqMarketType | null;
+                direction?: MnqMarketDirection | null;
+                note?: string;
               }
               function parseSeg(
                 raw: string | null | undefined,
@@ -530,10 +572,6 @@ export function SetupCard({
                   ];
                 return [];
               }
-              const MARKET_TYPE_LABEL: Record<string, string> = {
-                RANGE: "震荡",
-                TREND: "趋势",
-              };
               const MARKET_TYPE_CLASS: Record<string, string> = {
                 RANGE: "text-yellow-400",
                 TREND: "text-blue-400",
@@ -570,6 +608,21 @@ export function SetupCard({
                   return Boolean(
                     seg.type ??
                     seg.note?.trim() ??
+                    seg.expectedType ??
+                    seg.expectedDirection ??
+                    seg.expectedNote?.trim() ??
+                    seg.actualType ??
+                    seg.actualDirection ??
+                    seg.actualNote?.trim() ??
+                    (seg.premarketPhases &&
+                    Object.values(seg.premarketPhases).some(
+                      (phase) =>
+                        phase?.type ?? phase?.direction ?? phase?.note?.trim(),
+                    )
+                      ? "premarketPhases"
+                      : undefined) ??
+                    seg.opportunityImpact ??
+                    seg.impactNote?.trim() ??
                     ((seg.opportunities?.length ?? 0) > 0
                       ? "opportunities"
                       : undefined) ??
@@ -584,6 +637,57 @@ export function SetupCard({
                   </p>
                   {segments.map(({ label, time, seg }) => {
                     const opps = seg ? getOpportunities(seg) : [];
+                    const isPremarket = label === "盘前行情";
+                    const hasStructuredPremarket = Boolean(
+                      seg?.premarketPhases,
+                    );
+                    const premarketPhases = isPremarket
+                      ? [
+                          {
+                            key: "overnight",
+                            label: "隔夜行情",
+                            time: "19:00 之前",
+                            data: seg?.premarketPhases?.overnight,
+                          },
+                          {
+                            key: "usPremarket",
+                            label: "美国盘前行情",
+                            time: "19:00–21:30",
+                            data: hasStructuredPremarket
+                              ? seg?.premarketPhases?.usPremarket
+                              : {
+                                  type: seg?.type as MnqMarketType | null,
+                                  note: seg?.note,
+                                },
+                          },
+                        ].filter(({ data }) =>
+                          Boolean(
+                            data?.type ?? data?.direction ?? data?.note?.trim(),
+                          ),
+                        )
+                      : [];
+                    const expectedNote = seg?.expectedNote?.trim() ?? "";
+                    const actualNote = isPremarket
+                      ? ""
+                      : seg?.actualNote?.trim().length
+                        ? seg.actualNote.trim()
+                        : (seg?.note?.trim() ?? "");
+                    const hasExpectedSummary = [
+                      seg?.expectedType,
+                      seg?.expectedDirection,
+                      expectedNote,
+                    ].some(Boolean);
+                    const hasActualSummary = [
+                      seg?.actualType,
+                      seg?.actualDirection,
+                      actualNote,
+                    ].some(Boolean);
+                    const affectedOpportunityLabels = opps.flatMap(
+                      (opportunity, index) =>
+                        seg?.impactOpportunityIds?.includes(opportunity.id)
+                          ? [`机会${index + 1}`]
+                          : [],
+                    );
                     return (
                       <div key={label} className="space-y-1">
                         {/* 时段标题 + 行情类型 */}
@@ -596,25 +700,171 @@ export function SetupCard({
                               {time}
                             </span>
                           )}
-                          {seg?.type && (
+                          {!isPremarket && (seg?.actualType ?? seg?.type) && (
                             <span
                               className={cn(
                                 "text-[10px] font-medium",
-                                MARKET_TYPE_CLASS[seg.type] ??
-                                  "text-muted-foreground",
+                                MARKET_TYPE_CLASS[
+                                  seg.actualType ?? seg.type ?? ""
+                                ] ?? "text-muted-foreground",
                               )}
                             >
-                              [{MARKET_TYPE_LABEL[seg.type] ?? seg.type}]
+                              [
+                              {MNQ_MARKET_TYPE_LABELS[
+                                (seg.actualType ?? seg.type) as MnqMarketType
+                              ] ??
+                                seg.actualType ??
+                                seg.type}
+                              ]
+                            </span>
+                          )}
+                          {seg?.accuracy && (
+                            <span
+                              className={cn(
+                                "rounded border px-1.5 py-0.5 text-[10px] font-medium",
+                                seg.accuracy === "CORRECT" &&
+                                  "border-green-700 text-green-400",
+                                seg.accuracy === "PARTIAL" &&
+                                  "border-amber-700 text-amber-400",
+                                seg.accuracy === "WRONG" &&
+                                  "border-red-700 text-red-400",
+                              )}
+                            >
+                              判断{MNQ_MARKET_ACCURACY_LABELS[seg.accuracy]}
                             </span>
                           )}
                         </div>
-                        {seg?.note?.trim() && (
+                        {premarketPhases.length > 0 && (
+                          <div className="grid gap-1.5 sm:grid-cols-2">
+                            {premarketPhases.map((phase) => (
+                              <div
+                                key={phase.key}
+                                className="space-y-1 rounded border border-cyan-900/30 bg-cyan-950/10 p-2"
+                              >
+                                <div className="flex items-center justify-between gap-2 text-[10px]">
+                                  <span className="font-medium text-cyan-300">
+                                    {phase.label}
+                                  </span>
+                                  <span className="text-muted-foreground/60">
+                                    {phase.time}
+                                  </span>
+                                </div>
+                                <div className="flex flex-wrap gap-1 text-[10px]">
+                                  {phase.data?.type && (
+                                    <span className="rounded bg-cyan-500/15 px-1.5 py-0.5 text-cyan-200">
+                                      {MNQ_MARKET_TYPE_LABELS[phase.data.type]}
+                                    </span>
+                                  )}
+                                  {phase.data?.direction && (
+                                    <span className="rounded bg-violet-500/15 px-1.5 py-0.5 text-violet-200">
+                                      {
+                                        MNQ_MARKET_DIRECTION_LABELS[
+                                          phase.data.direction
+                                        ]
+                                      }
+                                    </span>
+                                  )}
+                                </div>
+                                {phase.data?.note?.trim() && (
+                                  <p className="text-foreground/65 text-[11px] leading-relaxed whitespace-pre-wrap">
+                                    {phase.data.note.trim()}
+                                  </p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {hasExpectedSummary && (
                           <div className="flex gap-1.5 text-xs">
-                            <span className="text-muted-foreground/60 shrink-0">
-                              行情
+                            <span className="shrink-0 text-cyan-400/80">
+                              预计
                             </span>
                             <span className="text-foreground/80 leading-relaxed whitespace-pre-wrap">
-                              {seg.note}
+                              {[
+                                seg?.expectedType
+                                  ? MNQ_MARKET_TYPE_LABELS[seg.expectedType]
+                                  : null,
+                                seg?.expectedDirection
+                                  ? MNQ_MARKET_DIRECTION_LABELS[
+                                      seg.expectedDirection
+                                    ]
+                                  : null,
+                                expectedNote.length > 0 ? expectedNote : null,
+                              ]
+                                .filter(Boolean)
+                                .join(" · ")}
+                            </span>
+                          </div>
+                        )}
+                        {hasActualSummary && (
+                          <div className="flex gap-1.5 text-xs">
+                            <span className="shrink-0 text-violet-400/80">
+                              实际
+                            </span>
+                            <span className="text-foreground/80 leading-relaxed whitespace-pre-wrap">
+                              {[
+                                seg?.actualType
+                                  ? MNQ_MARKET_TYPE_LABELS[seg.actualType]
+                                  : null,
+                                seg?.actualDirection
+                                  ? MNQ_MARKET_DIRECTION_LABELS[
+                                      seg.actualDirection
+                                    ]
+                                  : null,
+                                actualNote.length > 0 ? actualNote : null,
+                              ]
+                                .filter(Boolean)
+                                .join(" · ")}
+                            </span>
+                          </div>
+                        )}
+                        {seg?.deviationReason && (
+                          <div className="flex gap-1.5 text-[11px]">
+                            <span className="shrink-0 text-orange-400/80">
+                              主要偏差
+                            </span>
+                            <span className="text-foreground/70 leading-relaxed">
+                              {
+                                MNQ_MARKET_DEVIATION_REASON_LABELS[
+                                  seg.deviationReason
+                                ]
+                              }
+                              {seg.deviationNote?.trim()
+                                ? ` · ${seg.deviationNote.trim()}`
+                                : ""}
+                            </span>
+                          </div>
+                        )}
+                        {seg?.opportunityImpact && (
+                          <div className="flex gap-1.5 text-[11px]">
+                            <span
+                              className={cn(
+                                "shrink-0",
+                                seg.opportunityImpact === "POSITIVE" &&
+                                  "text-green-400",
+                                seg.opportunityImpact === "NEGATIVE" &&
+                                  "text-red-400",
+                                seg.opportunityImpact === "NONE" &&
+                                  "text-muted-foreground",
+                              )}
+                            >
+                              机会影响
+                            </span>
+                            <span className="text-foreground/70 leading-relaxed">
+                              {
+                                MNQ_MARKET_OPPORTUNITY_IMPACT_LABELS[
+                                  seg.opportunityImpact
+                                ]
+                              }
+                              {(seg.impactTypes?.length ?? 0) > 0
+                                ? ` · ${seg.impactTypes?.map((type) => MNQ_MARKET_IMPACT_TYPE_LABELS[type]).join("、")}`
+                                : ""}
+                              {affectedOpportunityLabels.length > 0
+                                ? ` · ${affectedOpportunityLabels.join("、")}`
+                                : ""}
+                              {seg.impactNote?.trim()
+                                ? ` · ${seg.impactNote.trim()}`
+                                : ""}
                             </span>
                           </div>
                         )}
@@ -700,6 +950,16 @@ export function SetupCard({
                                     const pnl = hasPrices
                                       ? (exit - entry) * dir * qty * 2
                                       : null;
+                                    const plannedRisk = parseFloat(
+                                      opp.plannedRiskPts ?? "",
+                                    );
+                                    const plannedReturn = parseFloat(
+                                      opp.plannedReturnPts ?? "",
+                                    );
+                                    const plannedTargetR =
+                                      plannedRisk > 0 && plannedReturn >= 0
+                                        ? plannedReturn / plannedRisk
+                                        : null;
                                     return (
                                       <div className="mt-0.5 flex flex-wrap gap-x-3 gap-y-0.5 pl-8 text-xs">
                                         {opp.tradeDirection && (
@@ -786,6 +1046,11 @@ export function SetupCard({
                                             </span>
                                           </span>
                                         )}
+                                        {plannedTargetR !== null && (
+                                          <span className="text-cyan-400/80">
+                                            计划 {plannedTargetR.toFixed(2)}R
+                                          </span>
+                                        )}
                                         {pnl !== null && points !== null && (
                                           <span
                                             className={cn(
@@ -849,6 +1114,18 @@ export function SetupCard({
                                     </div>
                                   )}
                                 {opp.captured === false &&
+                                  opp.missedReasonCategory && (
+                                    <div className="pl-8">
+                                      <span className="rounded border border-orange-800/50 bg-orange-950/30 px-1.5 py-0.5 text-[10px] font-medium text-orange-300">
+                                        {
+                                          MNQ_MISSED_REASON_LABELS[
+                                            opp.missedReasonCategory
+                                          ]
+                                        }
+                                      </span>
+                                    </div>
+                                  )}
+                                {opp.captured === false &&
                                   opp.missedProcess.trim() && (
                                     <div className="flex gap-1.5 pl-8 text-xs">
                                       <span className="shrink-0 text-red-400/60">
@@ -860,38 +1137,63 @@ export function SetupCard({
                                     </div>
                                   )}
                                 {opp.captured === false &&
-                                  (opp.missedRiskPts ?? opp.missedReturnPts) &&
+                                  [
+                                    opp.missedPlannedRiskPts,
+                                    opp.missedPlannedReturnPts,
+                                    opp.missedRiskPts,
+                                    opp.missedReturnPts,
+                                  ].some(Boolean) &&
                                   (() => {
+                                    const plannedRisk = parseFloat(
+                                      opp.missedPlannedRiskPts ?? "",
+                                    );
+                                    const plannedReturn = parseFloat(
+                                      opp.missedPlannedReturnPts ?? "",
+                                    );
                                     const risk = parseFloat(
                                       opp.missedRiskPts ?? "",
                                     );
                                     const ret = parseFloat(
                                       opp.missedReturnPts ?? "",
                                     );
-                                    const hasR = risk > 0 && ret > 0;
+                                    const plannedR =
+                                      plannedRisk > 0 && plannedReturn >= 0
+                                        ? plannedReturn / plannedRisk
+                                        : null;
+                                    const hypotheticalR =
+                                      risk > 0 && ret > 0 ? ret / risk : null;
                                     return (
                                       <div className="flex flex-wrap items-center gap-2 pl-8 text-xs">
-                                        {risk > 0 && (
-                                          <span className="text-muted-foreground/60">
-                                            风险{" "}
-                                            <span className="text-red-400/80">
-                                              {risk} pts
-                                            </span>
+                                        {plannedR !== null && (
+                                          <span className="font-medium text-cyan-400">
+                                            计划 {plannedR.toFixed(2)}R
                                           </span>
                                         )}
-                                        {ret > 0 && (
-                                          <span className="text-muted-foreground/60">
-                                            回报{" "}
-                                            <span className="text-green-400/80">
-                                              {ret} pts
-                                            </span>
-                                          </span>
-                                        )}
-                                        {hasR && (
+                                        {hypotheticalR !== null && (
                                           <span className="font-medium text-amber-400">
-                                            假设 {(ret / risk).toFixed(2)} R
+                                            事后潜力 {hypotheticalR.toFixed(2)}R
                                           </span>
                                         )}
+                                        {plannedR !== null &&
+                                          hypotheticalR !== null && (
+                                            <span
+                                              className={cn(
+                                                "text-[10px] font-medium",
+                                                hypotheticalR >= plannedR
+                                                  ? "text-green-400/80"
+                                                  : "text-red-400/80",
+                                              )}
+                                            >
+                                              潜力差{" "}
+                                              {hypotheticalR - plannedR >= 0
+                                                ? "+"
+                                                : ""}
+                                              {(
+                                                hypotheticalR - plannedR
+                                              ).toFixed(2)}
+                                              R
+                                            </span>
+                                          )}
                                       </div>
                                     );
                                   })()}
