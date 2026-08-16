@@ -1,8 +1,8 @@
 "use client";
 
+import { Fragment } from "react";
 import type {
   TradeRecord,
-  MissedRecord,
   MnqMissedRecord,
   MnqTimeframeStat,
   SegmentAccuracyRecord,
@@ -450,6 +450,7 @@ function TimeframeOpportunityAnalysis({
 interface UnifiedSubNode {
   name: string;
   exCount: number;
+  exSettled: number;
   exWins: number;
   exTotalR: number;
   exRCount: number;
@@ -461,6 +462,7 @@ interface UnifiedSubNode {
 interface UnifiedStratNode {
   name: string;
   exCount: number;
+  exSettled: number;
   exWins: number;
   exTotalR: number;
   exRCount: number;
@@ -474,6 +476,7 @@ function emptyNode(name: string): UnifiedStratNode {
   return {
     name,
     exCount: 0,
+    exSettled: 0,
     exWins: 0,
     exTotalR: 0,
     exRCount: 0,
@@ -487,6 +490,7 @@ function emptySubNode(name: string): UnifiedSubNode {
   return {
     name,
     exCount: 0,
+    exSettled: 0,
     exWins: 0,
     exTotalR: 0,
     exRCount: 0,
@@ -509,7 +513,6 @@ function getOrCreateSub(
 
 function buildUnifiedStrategyTree(
   trades: TradeRecord[],
-  missed: MissedRecord[],
   mnqMissed: MnqMissedRecord[],
 ): UnifiedStratNode[] {
   const map = new Map<string, UnifiedStratNode>();
@@ -527,6 +530,7 @@ function buildUnifiedStrategyTree(
     const subNode = getOrCreateSub(node, sub);
     for (const n of [node, subNode]) {
       n.exCount++;
+      if (t.pnl !== null) n.exSettled++;
       if (t.pnl !== null && t.pnl > 0) n.exWins++;
       if (t.pnl !== null) n.exTotalPnl += t.pnl;
       if (r !== null) {
@@ -534,17 +538,6 @@ function buildUnifiedStrategyTree(
         n.exRCount++;
       }
     }
-  }
-
-  // ── Setup-level missed ──
-  for (const m of missed) {
-    const sk = m.strategy ?? "未分类";
-    const sub = m.tradeTypeName ?? "未标注子策略";
-    const node = get(sk);
-    const subNode = getOrCreateSub(node, sub);
-    node.misCount++;
-    subNode.misCount++;
-    // Setup-level missed has no R info, skip misTotalR
   }
 
   // ── MNQ missed ──
@@ -573,14 +566,12 @@ function buildUnifiedStrategyTree(
 
 function UnifiedStrategyTable({
   trades,
-  missed,
   mnqMissed,
 }: {
   trades: TradeRecord[];
-  missed: MissedRecord[];
   mnqMissed: MnqMissedRecord[];
 }) {
-  const tree = buildUnifiedStrategyTree(trades, missed, mnqMissed);
+  const tree = buildUnifiedStrategyTree(trades, mnqMissed);
   if (tree.length === 0)
     return (
       <div
@@ -626,7 +617,9 @@ function UnifiedStrategyTable({
     const captureRate =
       total > 0 ? Math.round((node.exCount / total) * 100) : null;
     const winRate =
-      node.exCount > 0 ? Math.round((node.exWins / node.exCount) * 100) : null;
+      node.exSettled > 0
+        ? Math.round((node.exWins / node.exSettled) * 100)
+        : null;
     const avgR = node.exRCount > 0 ? node.exTotalR / node.exRCount : null;
     const captureColor =
       captureRate !== null
@@ -648,7 +641,7 @@ function UnifiedStrategyTable({
     if (isParent) {
       const pNode = node as UnifiedStratNode;
       return (
-        <>
+        <Fragment key={pNode.name}>
           <tr
             key={pNode.name}
             style={{
@@ -748,7 +741,7 @@ function UnifiedStrategyTable({
             (pNode.subs.length === 1 &&
               pNode.subs[0]!.name !== "未标注子策略")) &&
             pNode.subs.map((sub) => renderSubRow(sub, pNode.name))}
-        </>
+        </Fragment>
       );
     }
     return null;
@@ -895,7 +888,7 @@ function UnifiedStrategyTable({
           { dot: C.text, label: "总机会 = 成交 + 错过" },
           { dot: C.amber, label: "抓住率 = 成交 / 总机会" },
           { dot: C.green, label: "均R / 盈亏 仅计入已成交" },
-          { dot: C.red, label: "错过R 仅 MNQ 有假设值" },
+          { dot: C.red, label: "错过R 来自错失机会的假设风险回报" },
         ].map(({ dot, label }) => (
           <div
             key={label}
@@ -1013,10 +1006,16 @@ function ExecutedAnalysis({ trades }: { trades: TradeRecord[] }) {
     );
   }
 
-  const totalPnl = trades.reduce((s, t) => s + (t.pnl ?? 0), 0);
-  const wins = trades.filter((t) => (t.pnl ?? 0) > 0).length;
-  const winRate = Math.round((wins / trades.length) * 100);
-  const avgPnl = totalPnl / trades.length;
+  const settledTrades = trades.filter(
+    (trade): trade is TradeRecord & { pnl: number } => trade.pnl !== null,
+  );
+  const totalPnl = settledTrades.reduce((sum, trade) => sum + trade.pnl, 0);
+  const wins = settledTrades.filter((trade) => trade.pnl > 0).length;
+  const losses = settledTrades.filter((trade) => trade.pnl < 0).length;
+  const winRate =
+    wins + losses > 0 ? Math.round((wins / (wins + losses)) * 100) : null;
+  const avgPnl =
+    settledTrades.length > 0 ? totalPnl / settledTrades.length : null;
 
   const rValues = trades
     .filter(
@@ -1034,17 +1033,17 @@ function ExecutedAnalysis({ trades }: { trades: TradeRecord[] }) {
       ? rValues.reduce((a, b) => a + b, 0) / rValues.length
       : null;
 
-  const best = trades.reduce<TradeRecord | null>(
-    (b, t) => ((t.pnl ?? -Infinity) > (b?.pnl ?? -Infinity) ? t : b),
+  const best = settledTrades.reduce<TradeRecord | null>(
+    (b, t) => (t.pnl > (b?.pnl ?? -Infinity) ? t : b),
     null,
   );
-  const worst = trades.reduce<TradeRecord | null>(
-    (b, t) => ((t.pnl ?? Infinity) < (b?.pnl ?? Infinity) ? t : b),
+  const worst = settledTrades.reduce<TradeRecord | null>(
+    (b, t) => (t.pnl < (b?.pnl ?? Infinity) ? t : b),
     null,
   );
 
-  const directionRows = buildDirectionRows(trades);
-  const approachRows = buildApproachRows(trades);
+  const directionRows = buildDirectionRows(settledTrades);
+  const approachRows = buildApproachRows(settledTrades);
   const resultDist = buildResultDist(trades);
   const resultTotal = resultDist.reduce((s, r) => s + r.count, 0);
 
@@ -1073,17 +1072,22 @@ function ExecutedAnalysis({ trades }: { trades: TradeRecord[] }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
       {/* Overview pills */}
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-        <StatPill label="笔数" value={trades.length} />
-        <StatPill
-          label="胜率"
-          value={`${winRate}%`}
-          color={winRate >= 60 ? C.green : winRate >= 40 ? C.amber : C.red}
-        />
-        <StatPill
-          label="平均盈亏"
-          value={fmtPnl(avgPnl)}
-          color={avgPnl >= 0 ? C.green : C.red}
-        />
+        <StatPill label="把握机会" value={trades.length} />
+        <StatPill label="已结算" value={settledTrades.length} />
+        {winRate !== null && (
+          <StatPill
+            label="胜率"
+            value={`${winRate}%`}
+            color={winRate >= 60 ? C.green : winRate >= 40 ? C.amber : C.red}
+          />
+        )}
+        {avgPnl !== null && (
+          <StatPill
+            label="平均盈亏"
+            value={fmtPnl(avgPnl)}
+            color={avgPnl >= 0 ? C.green : C.red}
+          />
+        )}
         {avgR !== null && (
           <StatPill
             label="平均 R"
@@ -1298,14 +1302,8 @@ function ExecutedAnalysis({ trades }: { trades: TradeRecord[] }) {
 
 // ── Section B: Missed opportunities analysis ──────────────────────────────────
 
-function MissedAnalysis({
-  missed,
-  mnqMissed,
-}: {
-  missed: MissedRecord[];
-  mnqMissed: MnqMissedRecord[];
-}) {
-  const totalMissed = missed.length + mnqMissed.length;
+function MissedAnalysis({ mnqMissed }: { mnqMissed: MnqMissedRecord[] }) {
+  const totalMissed = mnqMissed.length;
   if (totalMissed === 0) {
     return (
       <div
@@ -1321,28 +1319,17 @@ function MissedAnalysis({
     );
   }
 
-  // Setup-level hypo pnl
-  const setupHypoPnl = missed.reduce((s, m) => s + (m.hypoPnl ?? 0), 0);
-
   // MNQ aggregates
-  const mnqHypoRTotal = mnqMissed.reduce((s, m) => {
-    if (m.riskPts && m.returnPts && m.riskPts > 0)
-      return s + m.returnPts / m.riskPts;
-    return s;
-  }, 0);
+  const mnqHypoRTotal =
+    Math.round(
+      mnqMissed.reduce((sum, opportunity) => {
+        return sum + (opportunity.hypotheticalR ?? 0);
+      }, 0) * 100,
+    ) / 100;
   const mnqHypoReturnPts = mnqMissed.reduce(
     (s, m) => s + (m.returnPts ?? 0),
     0,
   );
-
-  // Miss reason (Setup level)
-  const reasonMap = new Map<string, number>();
-  for (const m of missed) {
-    const key = m.reason ?? "未填写";
-    reasonMap.set(key, (reasonMap.get(key) ?? 0) + 1);
-  }
-  const reasonRows = [...reasonMap.entries()].sort((a, b) => b[1] - a[1]);
-  const maxReasonCount = Math.max(...reasonRows.map((r) => r[1]), 1);
 
   // MNQ miss by segment
   const segMap = new Map<string, number>();
@@ -1356,13 +1343,6 @@ function MissedAnalysis({
       {/* ── Cost summary ── */}
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
         <StatPill label="错过总数" value={totalMissed} color={C.red} />
-        {setupHypoPnl !== 0 && (
-          <StatPill
-            label="Setup 假设盈亏"
-            value={`${setupHypoPnl >= 0 ? "+" : ""}$${Math.abs(setupHypoPnl).toFixed(0)}`}
-            color={C.textDim}
-          />
-        )}
         {mnqMissed.length > 0 && (
           <>
             <StatPill
@@ -1391,34 +1371,10 @@ function MissedAnalysis({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: missed.length > 0 ? "1fr 1fr" : "1fr",
+          gridTemplateColumns: "1fr",
           gap: 14,
         }}
       >
-        {/* ── Setup miss reason distribution ── */}
-        {missed.length > 0 && (
-          <div
-            style={{
-              background: C.surface2,
-              borderRadius: 10,
-              padding: "14px 16px",
-            }}
-          >
-            <SubLabel>Setup 错过原因分布</SubLabel>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {reasonRows.map(([reason, count]) => (
-                <HBar
-                  key={reason}
-                  label={reason}
-                  count={count}
-                  total={maxReasonCount}
-                  color={C.red}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* MNQ miss: segment only */}
         {mnqMissed.length > 0 && (
           <div
@@ -1453,12 +1409,10 @@ function AccuracyBar({
   label,
   correct,
   total,
-  color,
 }: {
   label: string;
   correct: number;
   total: number;
-  color: string;
 }) {
   const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
   const barColor = pct >= 70 ? C.green : pct >= 50 ? C.amber : C.red;
@@ -1582,7 +1536,6 @@ function ExecutionQualityAnalysis({ trades }: { trades: TradeRecord[] }) {
             label="进入准确率"
             correct={entryCorrect}
             total={withEntry.length}
-            color={C.green}
           />
         )}
         {withExit.length > 0 && (
@@ -1590,7 +1543,6 @@ function ExecutionQualityAnalysis({ trades }: { trades: TradeRecord[] }) {
             label="退出准确率"
             correct={exitCorrect}
             total={withExit.length}
-            color={C.blue}
           />
         )}
       </div>
@@ -1962,7 +1914,6 @@ function SessionPerformanceAnalysis({
 
 interface Props {
   trades: TradeRecord[];
-  missed: MissedRecord[];
   mnqMissed: MnqMissedRecord[];
   timeframeStats: MnqTimeframeStat[];
   segmentAccuracy: SegmentAccuracyRecord[];
@@ -1970,22 +1921,17 @@ interface Props {
 
 export function WeeklyTradeAnalysis({
   trades,
-  missed,
   mnqMissed,
   timeframeStats,
   segmentAccuracy,
 }: Props) {
-  const hasMissed = missed.length > 0 || mnqMissed.length > 0;
+  const hasMissed = mnqMissed.length > 0;
 
   return (
     <Card style={{ marginBottom: 16 }}>
       {/* ── 综合策略分析（成交 + 错过合并） ── */}
       <Sec>综合策略分析</Sec>
-      <UnifiedStrategyTable
-        trades={trades}
-        missed={missed}
-        mnqMissed={mnqMissed}
-      />
+      <UnifiedStrategyTable trades={trades} mnqMissed={mnqMissed} />
 
       {/* ── MNQ 决策周期汇总 ── */}
       <div
@@ -2028,7 +1974,7 @@ export function WeeklyTradeAnalysis({
             }}
           />
           <Sec>错过机会分析</Sec>
-          <MissedAnalysis missed={missed} mnqMissed={mnqMissed} />
+          <MissedAnalysis mnqMissed={mnqMissed} />
         </>
       )}
     </Card>

@@ -5,10 +5,18 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Save } from "lucide-react";
 import { WeeklyTradeAnalysis } from "./WeeklyTradeAnalysis";
-import {
-  MNQ_DECISION_TIMEFRAME_LABELS,
-  type MnqDecisionTimeframe,
-} from "~/types";
+import type {
+  WeeklyMnqCompleteness,
+  WeeklyMnqCountSummary,
+  WeeklyMnqDayRecord,
+  WeeklyMnqMissedReasonSummary,
+  WeeklyMnqMissedRecord,
+  WeeklyMnqSegmentAccuracyRecord,
+  WeeklyMnqStats,
+  WeeklyMnqTimeframeStat,
+  WeeklyMnqTradeRecord,
+} from "~/lib/weekly-mnq-analysis";
+import { MNQ_DECISION_TIMEFRAME_LABELS } from "~/types";
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 const C = {
@@ -27,98 +35,13 @@ const C = {
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-export interface DayRecord {
-  date: string;
-  dayLabel: string;
-  regime: "TREND" | "CHOP" | null;
-  pnl: number;
-  tradeCount: number;
-  missedCount: number;
-  note: string | null;
-  planFollowed: number | null;
-  emotionRating: number | null;
-  focusRating: number | null;
-}
+export type DayRecord = WeeklyMnqDayRecord;
+export type TradeRecord = WeeklyMnqTradeRecord;
+export type SegmentAccuracyRecord = WeeklyMnqSegmentAccuracyRecord;
 
-export interface TradeRecord {
-  id: string;
-  day: string;
-  time: string;
-  symbol: string;
-  direction: "LONG" | "SHORT";
-  entryPrice: number;
-  exitPrice: number | null;
-  pnl: number | null;
-  executionGrade: "A" | "B" | "C" | "D" | null;
-  strategy: string | null;
-  notes: string | null;
-  stopPrice: number | null;
-  targetPrice: number | null;
-  tradeResult: string | null;
-  tradeResultNote: string | null;
-  plannedRiskPts: number | null;
-  maxDrawdownPts: number | null;
-  maxFavorablePts: number | null;
-  heldOvernight: boolean;
-  overnightReason: string | null;
-  tradeTypeName: string | null;
-  entryApproach: "DIRECT" | "PULLBACK" | null;
-  decisionTimeframe: MnqDecisionTimeframe | null;
-  // 执行评估
-  entryAccuracy: "CORRECT" | "WRONG" | null;
-  entryAccuracyNote: string | null;
-  exitAccuracy: "CORRECT" | "WRONG" | null;
-  exitAccuracyNote: string | null;
-  segment: string | null;
-}
-
-export interface SegmentAccuracyRecord {
-  segment: string;
-  totalDays: number;
-  correctDays: number;
-  partialDays: number;
-  wrongDays: number;
-}
-
-export interface MissedRecord {
-  day: string;
-  symbol: string;
-  direction: "LONG" | "SHORT";
-  reason: string | null;
-  hypoPnl: number | null;
-  strategy: string | null;
-  tradeTypeName: string | null;
-}
-
-export interface MnqMissedRecord {
-  id: string;
-  day: string;
-  segment: string;
-  description: string;
-  missedProcess: string;
-  riskPts: number | null;
-  returnPts: number | null;
-  tradeDirection: "LONG" | "SHORT" | null;
-  strategyName: string | null;
-  tradeTypeName: string | null;
-  entryApproach: "DIRECT" | "PULLBACK" | null;
-  decisionTimeframe: MnqDecisionTimeframe | null;
-}
-
-export interface MnqTimeframeStat {
-  timeframe: MnqDecisionTimeframe | null;
-  captured: number;
-  missed: number;
-  pnl: number;
-}
-
-export interface WeeklyStats {
-  totalPnL: number;
-  executedCount: number;
-  winCount: number;
-  missedCount: number;
-  totalSetups: number;
-}
+export type MnqMissedRecord = WeeklyMnqMissedRecord;
+export type MnqTimeframeStat = WeeklyMnqTimeframeStat;
+export type WeeklyStats = WeeklyMnqStats;
 
 export interface WeeklyReportData {
   summary: string | null;
@@ -133,7 +56,6 @@ interface Props {
   weekStart: string;
   prevWeek: string | null;
   nextWeek: string | null;
-  weekLabel: string;
   weekNum: number;
   year: number;
   dateRange: string;
@@ -141,10 +63,14 @@ interface Props {
   stats: WeeklyStats;
   days: DayRecord[];
   trades: TradeRecord[];
-  missed: MissedRecord[];
   mnqMissed: MnqMissedRecord[];
   timeframeStats: MnqTimeframeStat[];
   equity: number[];
+  completeness: WeeklyMnqCompleteness;
+  deviationReasons: WeeklyMnqCountSummary[];
+  opportunityImpacts: WeeklyMnqCountSummary[];
+  impactTypes: WeeklyMnqCountSummary[];
+  missedReasons: WeeklyMnqMissedReasonSummary[];
   systemScore: {
     total: number;
     dims: { label: string; score: number }[];
@@ -435,7 +361,18 @@ function DayCard({ d }: { d: DayRecord }) {
       >
         {fmtPnl(d.pnl)}
       </div>
-      {d.note && (
+      <div
+        style={{
+          fontSize: 11,
+          color: C.amber,
+          fontFamily: "DM Mono, monospace",
+        }}
+      >
+        {d.realizedR === 0
+          ? "— R"
+          : `${d.realizedR > 0 ? "+" : ""}${d.realizedR.toFixed(2)}R`}
+      </div>
+      {(d.whatWentWell ?? d.lessonsLearned) && (
         <div
           style={{
             fontSize: 11,
@@ -447,7 +384,12 @@ function DayCard({ d }: { d: DayRecord }) {
             WebkitBoxOrient: "vertical",
           }}
         >
-          {d.note}
+          {d.whatWentWell && (
+            <div style={{ color: C.green }}>✓ {d.whatWentWell}</div>
+          )}
+          {d.lessonsLearned && (
+            <div style={{ color: C.textDim }}>△ {d.lessonsLearned}</div>
+          )}
         </div>
       )}
       <div
@@ -460,6 +402,7 @@ function DayCard({ d }: { d: DayRecord }) {
       >
         {d.tradeCount === 0 ? "无交易" : `${d.tradeCount} 笔`}
         {d.missedCount > 0 && ` · 错过 ${d.missedCount}`}
+        {d.pendingCount > 0 && ` · 待定 ${d.pendingCount}`}
       </div>
     </div>
   );
@@ -594,37 +537,6 @@ function RatingStars({ v }: { v: number | null }) {
   );
 }
 
-// Grade badge
-const GRADE_COLOR = {
-  A: "oklch(0.72 0.18 145)",
-  B: "oklch(0.72 0.15 145)",
-  C: "oklch(0.78 0.15 72)",
-  D: "oklch(0.65 0.18 15)",
-} as const;
-
-function GradeBadge({ grade }: { grade: "A" | "B" | "C" | "D" }) {
-  const color = GRADE_COLOR[grade];
-  return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: 22,
-        height: 22,
-        borderRadius: 5,
-        background: color + "22",
-        color,
-        fontSize: 11,
-        fontWeight: 700,
-        fontFamily: "DM Mono, monospace",
-      }}
-    >
-      {grade}
-    </span>
-  );
-}
-
 // Inline editable textarea (used directly in content cards)
 function InlineField({
   value,
@@ -673,7 +585,6 @@ export function WeeklyReportClient({
   weekStart,
   prevWeek,
   nextWeek,
-  weekLabel,
   weekNum,
   year,
   dateRange,
@@ -681,10 +592,14 @@ export function WeeklyReportClient({
   stats,
   days,
   trades,
-  missed,
   mnqMissed,
   timeframeStats,
   equity,
+  completeness,
+  deviationReasons,
+  opportunityImpacts,
+  impactTypes,
+  missedReasons,
   systemScore,
   segmentAccuracy,
 }: Props) {
@@ -733,19 +648,7 @@ export function WeeklyReportClient({
     }
   }
 
-  const winRate =
-    stats.executedCount > 0
-      ? Math.round((stats.winCount / stats.executedCount) * 100)
-      : null;
-
-  const weekEnd = (() => {
-    const d = new Date(`${weekStart}T00:00:00.000Z`);
-    d.setUTCDate(d.getUTCDate() + 6);
-    return d.toISOString().split("T")[0]!;
-  })();
-
-  const executedLink = `/journal/search?status=EXECUTED&dateFrom=${weekStart}&dateTo=${weekEnd}`;
-  const missedLink = `/journal/search?status=MISSED&dateFrom=${weekStart}&dateTo=${weekEnd}`;
+  const winRate = stats.winRate === null ? null : Math.round(stats.winRate);
 
   const TD: React.CSSProperties = {
     padding: "11px 10px",
@@ -786,7 +689,7 @@ export function WeeklyReportClient({
                 fontFamily: "DM Mono, monospace",
               }}
             >
-              WEEKLY REPORT
+              MNQ WEEKLY REPORT
             </span>
             <span
               style={{
@@ -964,26 +867,22 @@ export function WeeklyReportClient({
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {[
               {
-                label: "执行次数",
+                label: "把握机会",
                 value: stats.executedCount,
-                href: executedLink,
               },
               {
                 label: "胜率",
                 value: winRate !== null ? `${winRate}%` : "—",
                 color: winRate !== null && winRate >= 60 ? C.green : C.textMid,
-                href: executedLink,
               },
               {
-                label: "盈 / 亏",
-                value: `${stats.winCount} / ${stats.executedCount - stats.winCount}`,
-                href: executedLink,
+                label: "盈 / 亏 / 平",
+                value: `${stats.winCount} / ${stats.lossCount} / ${stats.breakevenCount}`,
               },
               {
                 label: "错过机会",
                 value: stats.missedCount,
                 color: stats.missedCount > 0 ? C.red : C.textDim,
-                href: missedLink,
               },
               ...(systemScore
                 ? [
@@ -1012,14 +911,7 @@ export function WeeklyReportClient({
                     justifyContent: "space-between",
                     alignItems: "center",
                     flex: 1,
-                    cursor: m.href ? "pointer" : "default",
                     transition: "border-color 0.18s",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (m.href) e.currentTarget.style.borderColor = C.borderHi;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = C.border;
                   }}
                 >
                   <span style={{ fontSize: 11.5, color: C.textDim }}>
@@ -1037,15 +929,163 @@ export function WeeklyReportClient({
                   </span>
                 </div>
               );
-              return m.href ? (
-                <a key={m.label} href={m.href} style={{ display: "contents" }}>
-                  {inner}
-                </a>
-              ) : (
-                inner
-              );
+              return inner;
             })}
           </div>
+        </div>
+
+        {/* MNQ opportunity and data quality summary */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.25fr 1fr",
+            gap: 16,
+            marginBottom: 16,
+          }}
+        >
+          <Card>
+            <Sec>MNQ 机会质量</Sec>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+                gap: 10,
+              }}
+            >
+              {[
+                {
+                  label: "实际总 R",
+                  value:
+                    stats.realizedRCount > 0
+                      ? `${stats.totalRealizedR >= 0 ? "+" : ""}${stats.totalRealizedR.toFixed(2)}R`
+                      : "—",
+                  color: stats.totalRealizedR >= 0 ? C.green : C.red,
+                },
+                {
+                  label: "平均 R",
+                  value:
+                    stats.averageRealizedR === null
+                      ? "—"
+                      : `${stats.averageRealizedR >= 0 ? "+" : ""}${stats.averageRealizedR.toFixed(2)}R`,
+                  color:
+                    stats.averageRealizedR !== null &&
+                    stats.averageRealizedR >= 0
+                      ? C.green
+                      : C.red,
+                },
+                {
+                  label: "机会把握率",
+                  value:
+                    stats.captureRate === null
+                      ? "—"
+                      : `${Math.round(stats.captureRate)}%`,
+                  color:
+                    stats.captureRate !== null && stats.captureRate >= 60
+                      ? C.green
+                      : C.amber,
+                },
+                {
+                  label: "错失潜在 R",
+                  value:
+                    stats.missedEvaluatedCount > 0
+                      ? `+${stats.missedPotentialR.toFixed(2)}R`
+                      : "—",
+                  color: C.amber,
+                },
+              ].map((metric) => (
+                <div
+                  key={metric.label}
+                  style={{
+                    background: C.surface2,
+                    borderRadius: 8,
+                    padding: "11px 12px",
+                  }}
+                >
+                  <div style={{ fontSize: 10, color: C.textDim }}>
+                    {metric.label}
+                  </div>
+                  <div
+                    style={{
+                      marginTop: 5,
+                      fontSize: 17,
+                      fontWeight: 600,
+                      color: metric.color,
+                      fontFamily: "DM Mono, monospace",
+                    }}
+                  >
+                    {metric.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <Card>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <Sec>数据完整度</Sec>
+              <span
+                style={{
+                  fontSize: 18,
+                  color:
+                    completeness.score === null
+                      ? C.textDim
+                      : completeness.score >= 80
+                        ? C.green
+                        : completeness.score >= 60
+                          ? C.amber
+                          : C.red,
+                  fontFamily: "DM Mono, monospace",
+                }}
+              >
+                {completeness.score === null ? "—" : `${completeness.score}%`}
+              </span>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+              {[
+                [
+                  "已记录交易日",
+                  completeness.recordedDays,
+                  completeness.availableDays,
+                ],
+                [
+                  "机会状态",
+                  completeness.decidedOpportunities,
+                  completeness.totalOpportunities,
+                ],
+                [
+                  "成交实际 R",
+                  completeness.realizedRTrades,
+                  completeness.capturedTrades,
+                ],
+                [
+                  "错失假设 R",
+                  completeness.missedREvaluated,
+                  completeness.missedTrades,
+                ],
+                [
+                  "行情判断评估",
+                  completeness.evaluatedMarketSegments,
+                  completeness.recordedMarketSegments,
+                ],
+              ].map(([label, value, total]) => (
+                <div
+                  key={String(label)}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    fontSize: 11,
+                  }}
+                >
+                  <span style={{ color: C.textDim }}>{label}</span>
+                  <span
+                    style={{ color: C.text, fontFamily: "DM Mono, monospace" }}
+                  >
+                    {String(value)} / {String(total)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </Card>
         </div>
 
         {/* day strip */}
@@ -1058,7 +1098,7 @@ export function WeeklyReportClient({
         )}
 
         {/* trade log */}
-        {(trades.length > 0 || missed.length > 0 || mnqMissed.length > 0) && (
+        {(trades.length > 0 || mnqMissed.length > 0) && (
           <Card style={{ marginBottom: 16 }}>
             <Sec>逐笔交易记录</Sec>
             {trades.length > 0 && (
@@ -1724,82 +1764,6 @@ export function WeeklyReportClient({
               </div>
             )}
 
-            {/* missed opportunities (TradeSetup level) */}
-            {missed.length > 0 && (
-              <div
-                style={{
-                  marginTop: 14,
-                  paddingTop: 14,
-                  borderTop: `1px dashed ${C.border}`,
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 10.5,
-                    color: C.textDim,
-                    letterSpacing: "0.05em",
-                    marginBottom: 10,
-                    display: "block",
-                  }}
-                >
-                  错过的 Setup
-                </span>
-                <div
-                  style={{ display: "flex", flexDirection: "column", gap: 8 }}
-                >
-                  {missed.map((m, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        display: "flex",
-                        gap: 12,
-                        alignItems: "center",
-                        fontSize: 12,
-                      }}
-                    >
-                      <span
-                        style={{
-                          color: C.textDim,
-                          fontFamily: "DM Mono, monospace",
-                        }}
-                      >
-                        {m.day}
-                      </span>
-                      <span
-                        style={{
-                          color: C.text,
-                          fontWeight: 500,
-                          fontFamily: "DM Mono, monospace",
-                        }}
-                      >
-                        {m.symbol}
-                      </span>
-                      <span
-                        style={{
-                          color: m.direction === "LONG" ? C.green : C.red,
-                        }}
-                      >
-                        {m.direction === "LONG" ? "↑" : "↓"}
-                      </span>
-                      {m.hypoPnl != null && (
-                        <span
-                          style={{
-                            color: C.red,
-                            fontFamily: "DM Mono, monospace",
-                          }}
-                        >
-                          ~{fmtPnl(m.hypoPnl, true)}
-                        </span>
-                      )}
-                      <span style={{ color: C.textDim, flex: 1 }}>
-                        {m.reason ?? "—"}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* MNQ missed opportunities table */}
             {mnqMissed.length > 0 && (
               <div
@@ -1839,6 +1803,7 @@ export function WeeklyReportClient({
                           "进入方式",
                           "决策周期",
                           "机会描述",
+                          "错过原因",
                           "错过经过",
                           "假设风险",
                           "假设回报",
@@ -2037,6 +2002,16 @@ export function WeeklyReportClient({
                             <td
                               style={{
                                 padding: "9px 10px",
+                                color: C.amber,
+                                maxWidth: 140,
+                                verticalAlign: "top",
+                              }}
+                            >
+                              {m.reason}
+                            </td>
+                            <td
+                              style={{
+                                padding: "9px 10px",
                                 color: C.textDim,
                                 maxWidth: 200,
                                 verticalAlign: "top",
@@ -2091,14 +2066,117 @@ export function WeeklyReportClient({
         )}
 
         {/* trade analysis module */}
-        {(trades.length > 0 || missed.length > 0 || mnqMissed.length > 0) && (
+        {(trades.length > 0 || mnqMissed.length > 0) && (
           <WeeklyTradeAnalysis
             trades={trades}
-            missed={missed}
             mnqMissed={mnqMissed}
             timeframeStats={timeframeStats}
             segmentAccuracy={segmentAccuracy}
           />
+        )}
+
+        {(deviationReasons.length > 0 ||
+          opportunityImpacts.length > 0 ||
+          impactTypes.length > 0 ||
+          missedReasons.length > 0) && (
+          <Card style={{ marginBottom: 16 }}>
+            <Sec>MNQ 行情判断与错失诊断</Sec>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                gap: 12,
+              }}
+            >
+              {[
+                {
+                  title: "判断偏差原因",
+                  rows: deviationReasons.map((item) => ({
+                    label: item.label,
+                    value: `${item.count} 次`,
+                  })),
+                },
+                {
+                  title: "机会影响方向",
+                  rows: opportunityImpacts.map((item) => ({
+                    label: item.label,
+                    value: `${item.count} 次`,
+                  })),
+                },
+                {
+                  title: "具体机会影响",
+                  rows: impactTypes.map((item) => ({
+                    label: item.label,
+                    value: `${item.count} 次`,
+                  })),
+                },
+                {
+                  title: "错过原因与机会成本",
+                  rows: missedReasons.map((item) => ({
+                    label: item.label,
+                    value: `${item.count} 次 · ${item.hypotheticalR > 0 ? "+" : ""}${item.hypotheticalR.toFixed(2)}R`,
+                  })),
+                },
+              ].map((group) => (
+                <div
+                  key={group.title}
+                  style={{
+                    minHeight: 110,
+                    padding: "12px 14px",
+                    borderRadius: 9,
+                    background: C.surface2,
+                  }}
+                >
+                  <div
+                    style={{
+                      marginBottom: 8,
+                      fontSize: 10.5,
+                      fontWeight: 600,
+                      color: C.textMid,
+                    }}
+                  >
+                    {group.title}
+                  </div>
+                  {group.rows.length > 0 ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 6,
+                      }}
+                    >
+                      {group.rows.slice(0, 6).map((row) => (
+                        <div
+                          key={row.label}
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            gap: 12,
+                            fontSize: 11,
+                          }}
+                        >
+                          <span style={{ color: C.textDim }}>{row.label}</span>
+                          <span
+                            style={{
+                              color: C.text,
+                              whiteSpace: "nowrap",
+                              fontFamily: "DM Mono, monospace",
+                            }}
+                          >
+                            {row.value}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div style={{ fontSize: 11, color: C.textDim }}>
+                      暂无记录
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </Card>
         )}
 
         {/* system score + highlights/weaknesses */}
@@ -2318,7 +2396,7 @@ export function WeeklyReportClient({
               fontFamily: "DM Mono, monospace",
             }}
           >
-            W{weekNum} · {year} · 系统周报
+            W{weekNum} · {year} · MNQ 系统周报
           </span>
           <span
             style={{

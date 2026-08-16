@@ -55,14 +55,22 @@ interface RawOpportunity {
   entryPrice?: string | null;
   exitPrice?: string | null;
   contracts?: string | null;
+  entryTime?: string | null;
+  exitTime?: string | null;
+  stopPrice?: string | null;
+  targetPrice?: string | null;
   plannedRiskPts?: string | null;
   plannedReturnPts?: string | null;
   maxDrawdownPts?: string | null;
   maxFavorablePts?: string | null;
+  heldOvernight?: boolean | null;
+  overnightReason?: string | null;
   strategyName?: string | null;
   tradeTypeName?: string | null;
   entryAccuracy?: "CORRECT" | "WRONG" | null;
+  entryAccuracyNote?: string | null;
   exitAccuracy?: "CORRECT" | "WRONG" | null;
+  exitAccuracyNote?: string | null;
   missedPlannedRiskPts?: string | null;
   missedPlannedReturnPts?: string | null;
 }
@@ -108,6 +116,22 @@ export interface MnqOpportunityRow {
   strategy: string | null;
   tradeType: string | null;
   decisionTimeframe: MnqDecisionTimeframe | null;
+  entryApproach: "DIRECT" | "PULLBACK" | null;
+  entryPrice: number | null;
+  exitPrice: number | null;
+  contracts: number | null;
+  entryTime: string;
+  exitTime: string;
+  stopPrice: number | null;
+  targetPrice: number | null;
+  tradeResult: string | null;
+  plannedRiskPts: number | null;
+  maxDrawdownPts: number | null;
+  maxFavorablePts: number | null;
+  missedRiskPts: number | null;
+  missedReturnPts: number | null;
+  heldOvernight: boolean;
+  overnightReason: string;
   pnl: number | null;
   realizedR: number | null;
   plannedTargetR: number | null;
@@ -118,7 +142,9 @@ export interface MnqOpportunityRow {
   missedProcess: string;
   resultNote: string;
   entryAccuracy: "CORRECT" | "WRONG" | null;
+  entryAccuracyNote: string;
   exitAccuracy: "CORRECT" | "WRONG" | null;
+  exitAccuracyNote: string;
 }
 
 export interface MnqSegmentSummary {
@@ -1333,6 +1359,8 @@ export function analyzeDailyOpportunities(
         );
         const maxDrawdownPoints = parseNumber(opportunity.maxDrawdownPts);
         const maxFavorablePoints = parseNumber(opportunity.maxFavorablePts);
+        const entryPrice = parseNumber(opportunity.entryPrice);
+        const exitPrice = parseNumber(opportunity.exitPrice);
         const description = opportunity.description?.trim();
         return {
           id: `${segmentDef.key}:${opportunity.id ?? index}`,
@@ -1352,6 +1380,22 @@ export function analyzeDailyOpportunities(
           strategy: opportunity.strategyName ?? null,
           tradeType: opportunity.tradeTypeName ?? null,
           decisionTimeframe: opportunity.decisionTimeframe ?? null,
+          entryApproach: opportunity.entryApproach ?? null,
+          entryPrice,
+          exitPrice,
+          contracts: parseNumber(opportunity.contracts),
+          entryTime: opportunity.entryTime?.trim() ?? "",
+          exitTime: opportunity.exitTime?.trim() ?? "",
+          stopPrice: parseNumber(opportunity.stopPrice),
+          targetPrice: parseNumber(opportunity.targetPrice),
+          tradeResult: opportunity.tradeResult ?? null,
+          plannedRiskPts: plannedRisk,
+          maxDrawdownPts: maxDrawdownPoints,
+          maxFavorablePts: maxFavorablePoints,
+          missedRiskPts: risk,
+          missedReturnPts: returnPoints,
+          heldOvernight: opportunity.heldOvernight ?? false,
+          overnightReason: opportunity.overnightReason?.trim() ?? "",
           pnl: opportunity.captured === true ? calculatePnl(opportunity) : null,
           realizedR:
             opportunity.captured === true
@@ -1393,7 +1437,9 @@ export function analyzeDailyOpportunities(
           missedProcess: opportunity.missedProcess?.trim() ?? "",
           resultNote: opportunity.tradeResultNote?.trim() ?? "",
           entryAccuracy: opportunity.entryAccuracy ?? null,
+          entryAccuracyNote: opportunity.entryAccuracyNote?.trim() ?? "",
           exitAccuracy: opportunity.exitAccuracy ?? null,
+          exitAccuracyNote: opportunity.exitAccuracyNote?.trim() ?? "",
         };
       },
     );
