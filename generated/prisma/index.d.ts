@@ -15,67 +15,77 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 /**
  * Model NewsCatalog
- * 
+ *
  */
 export type NewsCatalog = $Result.DefaultSelection<Prisma.$NewsCatalogPayload>
 /**
  * Model Strategy
- * 
+ *
  */
 export type Strategy = $Result.DefaultSelection<Prisma.$StrategyPayload>
 /**
  * Model TradeType
- * 
+ *
  */
 export type TradeType = $Result.DefaultSelection<Prisma.$TradeTypePayload>
 /**
  * Model DailySession
- * 
+ *
  */
 export type DailySession = $Result.DefaultSelection<Prisma.$DailySessionPayload>
 /**
+ * Model KpiTargetSetting
+ *
+ */
+export type KpiTargetSetting = $Result.DefaultSelection<Prisma.$KpiTargetSettingPayload>
+/**
+ * Model KpiDailyRecord
+ *
+ */
+export type KpiDailyRecord = $Result.DefaultSelection<Prisma.$KpiDailyRecordPayload>
+/**
  * Model NewsEvent
- * 
+ *
  */
 export type NewsEvent = $Result.DefaultSelection<Prisma.$NewsEventPayload>
 /**
  * Model TradeSetup
- * 
+ *
  */
 export type TradeSetup = $Result.DefaultSelection<Prisma.$TradeSetupPayload>
 /**
  * Model Execution
- * 
+ *
  */
 export type Execution = $Result.DefaultSelection<Prisma.$ExecutionPayload>
 /**
  * Model WeeklyReport
- * 
+ *
  */
 export type WeeklyReport = $Result.DefaultSelection<Prisma.$WeeklyReportPayload>
 /**
  * Model MonthlyReport
- * 
+ *
  */
 export type MonthlyReport = $Result.DefaultSelection<Prisma.$MonthlyReportPayload>
 /**
  * Model QuarterlyReport
- * 
+ *
  */
 export type QuarterlyReport = $Result.DefaultSelection<Prisma.$QuarterlyReportPayload>
 /**
  * Model MissedReasonOption
- * 
+ *
  */
 export type MissedReasonOption = $Result.DefaultSelection<Prisma.$MissedReasonOptionPayload>
 /**
  * Model Screenshot
- * 
+ *
  */
 export type Screenshot = $Result.DefaultSelection<Prisma.$ScreenshotPayload>
 /**
  * Model MnqDailyPlan
- * 
+ *
  */
 export type MnqDailyPlan = $Result.DefaultSelection<Prisma.$MnqDailyPlanPayload>
 
@@ -362,7 +372,7 @@ export class PrismaClient<
    *   prisma.user.create({ data: { name: 'Alice' } }),
    * ])
    * ```
-   * 
+   *
    * Read more in our [docs](https://www.prisma.io/docs/concepts/components/prisma-client/transactions).
    */
   $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
@@ -413,6 +423,26 @@ export class PrismaClient<
     * ```
     */
   get dailySession(): Prisma.DailySessionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.kpiTargetSetting`: Exposes CRUD operations for the **KpiTargetSetting** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more KpiTargetSettings
+    * const kpiTargetSettings = await prisma.kpiTargetSetting.findMany()
+    * ```
+    */
+  get kpiTargetSetting(): Prisma.KpiTargetSettingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.kpiDailyRecord`: Exposes CRUD operations for the **KpiDailyRecord** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more KpiDailyRecords
+    * const kpiDailyRecords = await prisma.kpiDailyRecord.findMany()
+    * ```
+    */
+  get kpiDailyRecord(): Prisma.KpiDailyRecordDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.newsEvent`: Exposes CRUD operations for the **NewsEvent** model.
@@ -948,6 +978,8 @@ export namespace Prisma {
     Strategy: 'Strategy',
     TradeType: 'TradeType',
     DailySession: 'DailySession',
+    KpiTargetSetting: 'KpiTargetSetting',
+    KpiDailyRecord: 'KpiDailyRecord',
     NewsEvent: 'NewsEvent',
     TradeSetup: 'TradeSetup',
     Execution: 'Execution',
@@ -975,7 +1007,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "newsCatalog" | "strategy" | "tradeType" | "dailySession" | "newsEvent" | "tradeSetup" | "execution" | "weeklyReport" | "monthlyReport" | "quarterlyReport" | "missedReasonOption" | "screenshot" | "mnqDailyPlan"
+      modelProps: "newsCatalog" | "strategy" | "tradeType" | "dailySession" | "kpiTargetSetting" | "kpiDailyRecord" | "newsEvent" | "tradeSetup" | "execution" | "weeklyReport" | "monthlyReport" | "quarterlyReport" | "missedReasonOption" | "screenshot" | "mnqDailyPlan"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1272,6 +1304,154 @@ export namespace Prisma {
           count: {
             args: Prisma.DailySessionCountArgs<ExtArgs>
             result: $Utils.Optional<DailySessionCountAggregateOutputType> | number
+          }
+        }
+      }
+      KpiTargetSetting: {
+        payload: Prisma.$KpiTargetSettingPayload<ExtArgs>
+        fields: Prisma.KpiTargetSettingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.KpiTargetSettingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiTargetSettingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.KpiTargetSettingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiTargetSettingPayload>
+          }
+          findFirst: {
+            args: Prisma.KpiTargetSettingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiTargetSettingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.KpiTargetSettingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiTargetSettingPayload>
+          }
+          findMany: {
+            args: Prisma.KpiTargetSettingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiTargetSettingPayload>[]
+          }
+          create: {
+            args: Prisma.KpiTargetSettingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiTargetSettingPayload>
+          }
+          createMany: {
+            args: Prisma.KpiTargetSettingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.KpiTargetSettingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiTargetSettingPayload>[]
+          }
+          delete: {
+            args: Prisma.KpiTargetSettingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiTargetSettingPayload>
+          }
+          update: {
+            args: Prisma.KpiTargetSettingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiTargetSettingPayload>
+          }
+          deleteMany: {
+            args: Prisma.KpiTargetSettingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.KpiTargetSettingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.KpiTargetSettingUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiTargetSettingPayload>[]
+          }
+          upsert: {
+            args: Prisma.KpiTargetSettingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiTargetSettingPayload>
+          }
+          aggregate: {
+            args: Prisma.KpiTargetSettingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateKpiTargetSetting>
+          }
+          groupBy: {
+            args: Prisma.KpiTargetSettingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<KpiTargetSettingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.KpiTargetSettingCountArgs<ExtArgs>
+            result: $Utils.Optional<KpiTargetSettingCountAggregateOutputType> | number
+          }
+        }
+      }
+      KpiDailyRecord: {
+        payload: Prisma.$KpiDailyRecordPayload<ExtArgs>
+        fields: Prisma.KpiDailyRecordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.KpiDailyRecordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiDailyRecordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.KpiDailyRecordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiDailyRecordPayload>
+          }
+          findFirst: {
+            args: Prisma.KpiDailyRecordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiDailyRecordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.KpiDailyRecordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiDailyRecordPayload>
+          }
+          findMany: {
+            args: Prisma.KpiDailyRecordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiDailyRecordPayload>[]
+          }
+          create: {
+            args: Prisma.KpiDailyRecordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiDailyRecordPayload>
+          }
+          createMany: {
+            args: Prisma.KpiDailyRecordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.KpiDailyRecordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiDailyRecordPayload>[]
+          }
+          delete: {
+            args: Prisma.KpiDailyRecordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiDailyRecordPayload>
+          }
+          update: {
+            args: Prisma.KpiDailyRecordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiDailyRecordPayload>
+          }
+          deleteMany: {
+            args: Prisma.KpiDailyRecordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.KpiDailyRecordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.KpiDailyRecordUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiDailyRecordPayload>[]
+          }
+          upsert: {
+            args: Prisma.KpiDailyRecordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$KpiDailyRecordPayload>
+          }
+          aggregate: {
+            args: Prisma.KpiDailyRecordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateKpiDailyRecord>
+          }
+          groupBy: {
+            args: Prisma.KpiDailyRecordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<KpiDailyRecordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.KpiDailyRecordCountArgs<ExtArgs>
+            result: $Utils.Optional<KpiDailyRecordCountAggregateOutputType> | number
           }
         }
       }
@@ -1986,7 +2166,7 @@ export namespace Prisma {
      * ```
      * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
-     * 
+     *
      * // Emit as events only
      * log: [
      *   { emit: 'event', level: 'query' },
@@ -1994,14 +2174,14 @@ export namespace Prisma {
      *   { emit: 'event', level: 'warn' }
      *   { emit: 'event', level: 'error' }
      * ]
-     * 
+     *
      * / Emit as events and log to stdout
      * og: [
      *  { emit: 'stdout', level: 'query' },
      *  { emit: 'stdout', level: 'info' },
      *  { emit: 'stdout', level: 'warn' }
      *  { emit: 'stdout', level: 'error' }
-     * 
+     *
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -2022,7 +2202,7 @@ export namespace Prisma {
     adapter?: runtime.SqlDriverAdapterFactory | null
     /**
      * Global configuration for omitting model fields by default.
-     * 
+     *
      * @example
      * ```
      * const prisma = new PrismaClient({
@@ -2041,6 +2221,8 @@ export namespace Prisma {
     strategy?: StrategyOmit
     tradeType?: TradeTypeOmit
     dailySession?: DailySessionOmit
+    kpiTargetSetting?: KpiTargetSettingOmit
+    kpiDailyRecord?: KpiDailyRecordOmit
     newsEvent?: NewsEventOmit
     tradeSetup?: TradeSetupOmit
     execution?: ExecutionOmit
@@ -2464,43 +2646,43 @@ export namespace Prisma {
     where?: NewsCatalogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of NewsCatalogs to fetch.
      */
     orderBy?: NewsCatalogOrderByWithRelationInput | NewsCatalogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: NewsCatalogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` NewsCatalogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` NewsCatalogs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned NewsCatalogs
     **/
     _count?: true | NewsCatalogCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: NewsCatalogMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: NewsCatalogMaxAggregateInputType
@@ -2722,13 +2904,13 @@ export namespace Prisma {
      * @example
      * // Get all NewsCatalogs
      * const newsCatalogs = await prisma.newsCatalog.findMany()
-     * 
+     *
      * // Get first 10 NewsCatalogs
      * const newsCatalogs = await prisma.newsCatalog.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `id`
      * const newsCatalogWithIdOnly = await prisma.newsCatalog.findMany({ select: { id: true } })
-     * 
+     *
      */
     findMany<T extends NewsCatalogFindManyArgs>(args?: SelectSubset<T, NewsCatalogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NewsCatalogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -2742,7 +2924,7 @@ export namespace Prisma {
      *     // ... data to create a NewsCatalog
      *   }
      * })
-     * 
+     *
      */
     create<T extends NewsCatalogCreateArgs>(args: SelectSubset<T, NewsCatalogCreateArgs<ExtArgs>>): Prisma__NewsCatalogClient<$Result.GetResult<Prisma.$NewsCatalogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -2756,7 +2938,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends NewsCatalogCreateManyArgs>(args?: SelectSubset<T, NewsCatalogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -2770,7 +2952,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many NewsCatalogs and only return the `id`
      * const newsCatalogWithIdOnly = await prisma.newsCatalog.createManyAndReturn({
      *   select: { id: true },
@@ -2780,7 +2962,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends NewsCatalogCreateManyAndReturnArgs>(args?: SelectSubset<T, NewsCatalogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NewsCatalogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -2794,7 +2976,7 @@ export namespace Prisma {
      *     // ... filter to delete one NewsCatalog
      *   }
      * })
-     * 
+     *
      */
     delete<T extends NewsCatalogDeleteArgs>(args: SelectSubset<T, NewsCatalogDeleteArgs<ExtArgs>>): Prisma__NewsCatalogClient<$Result.GetResult<Prisma.$NewsCatalogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -2811,7 +2993,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends NewsCatalogUpdateArgs>(args: SelectSubset<T, NewsCatalogUpdateArgs<ExtArgs>>): Prisma__NewsCatalogClient<$Result.GetResult<Prisma.$NewsCatalogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -2825,7 +3007,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends NewsCatalogDeleteManyArgs>(args?: SelectSubset<T, NewsCatalogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -2844,7 +3026,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends NewsCatalogUpdateManyArgs>(args: SelectSubset<T, NewsCatalogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -2861,7 +3043,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more NewsCatalogs and only return the `id`
      * const newsCatalogWithIdOnly = await prisma.newsCatalog.updateManyAndReturn({
      *   select: { id: true },
@@ -2874,7 +3056,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends NewsCatalogUpdateManyAndReturnArgs>(args: SelectSubset<T, NewsCatalogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NewsCatalogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -2963,7 +3145,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends NewsCatalogGroupByArgs,
@@ -3079,7 +3261,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"NewsCatalog", 'DateTime'>
     readonly updatedAt: FieldRef<"NewsCatalog", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -3148,31 +3330,31 @@ export namespace Prisma {
     where?: NewsCatalogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of NewsCatalogs to fetch.
      */
     orderBy?: NewsCatalogOrderByWithRelationInput | NewsCatalogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for NewsCatalogs.
      */
     cursor?: NewsCatalogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` NewsCatalogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` NewsCatalogs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of NewsCatalogs.
      */
     distinct?: NewsCatalogScalarFieldEnum | NewsCatalogScalarFieldEnum[]
@@ -3200,31 +3382,31 @@ export namespace Prisma {
     where?: NewsCatalogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of NewsCatalogs to fetch.
      */
     orderBy?: NewsCatalogOrderByWithRelationInput | NewsCatalogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for NewsCatalogs.
      */
     cursor?: NewsCatalogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` NewsCatalogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` NewsCatalogs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of NewsCatalogs.
      */
     distinct?: NewsCatalogScalarFieldEnum | NewsCatalogScalarFieldEnum[]
@@ -3252,25 +3434,25 @@ export namespace Prisma {
     where?: NewsCatalogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of NewsCatalogs to fetch.
      */
     orderBy?: NewsCatalogOrderByWithRelationInput | NewsCatalogOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing NewsCatalogs.
      */
     cursor?: NewsCatalogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` NewsCatalogs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` NewsCatalogs.
      */
     skip?: number
@@ -3592,43 +3774,43 @@ export namespace Prisma {
     where?: StrategyWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Strategies to fetch.
      */
     orderBy?: StrategyOrderByWithRelationInput | StrategyOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: StrategyWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Strategies from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Strategies.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned Strategies
     **/
     _count?: true | StrategyCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: StrategyMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: StrategyMaxAggregateInputType
@@ -3835,13 +4017,13 @@ export namespace Prisma {
      * @example
      * // Get all Strategies
      * const strategies = await prisma.strategy.findMany()
-     * 
+     *
      * // Get first 10 Strategies
      * const strategies = await prisma.strategy.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `id`
      * const strategyWithIdOnly = await prisma.strategy.findMany({ select: { id: true } })
-     * 
+     *
      */
     findMany<T extends StrategyFindManyArgs>(args?: SelectSubset<T, StrategyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StrategyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -3855,7 +4037,7 @@ export namespace Prisma {
      *     // ... data to create a Strategy
      *   }
      * })
-     * 
+     *
      */
     create<T extends StrategyCreateArgs>(args: SelectSubset<T, StrategyCreateArgs<ExtArgs>>): Prisma__StrategyClient<$Result.GetResult<Prisma.$StrategyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -3869,7 +4051,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends StrategyCreateManyArgs>(args?: SelectSubset<T, StrategyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -3883,7 +4065,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many Strategies and only return the `id`
      * const strategyWithIdOnly = await prisma.strategy.createManyAndReturn({
      *   select: { id: true },
@@ -3893,7 +4075,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends StrategyCreateManyAndReturnArgs>(args?: SelectSubset<T, StrategyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StrategyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -3907,7 +4089,7 @@ export namespace Prisma {
      *     // ... filter to delete one Strategy
      *   }
      * })
-     * 
+     *
      */
     delete<T extends StrategyDeleteArgs>(args: SelectSubset<T, StrategyDeleteArgs<ExtArgs>>): Prisma__StrategyClient<$Result.GetResult<Prisma.$StrategyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -3924,7 +4106,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends StrategyUpdateArgs>(args: SelectSubset<T, StrategyUpdateArgs<ExtArgs>>): Prisma__StrategyClient<$Result.GetResult<Prisma.$StrategyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -3938,7 +4120,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends StrategyDeleteManyArgs>(args?: SelectSubset<T, StrategyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -3957,7 +4139,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends StrategyUpdateManyArgs>(args: SelectSubset<T, StrategyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -3974,7 +4156,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more Strategies and only return the `id`
      * const strategyWithIdOnly = await prisma.strategy.updateManyAndReturn({
      *   select: { id: true },
@@ -3987,7 +4169,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends StrategyUpdateManyAndReturnArgs>(args: SelectSubset<T, StrategyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StrategyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -4076,7 +4258,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends StrategyGroupByArgs,
@@ -4190,7 +4372,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Strategy", 'DateTime'>
     readonly updatedAt: FieldRef<"Strategy", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -4259,31 +4441,31 @@ export namespace Prisma {
     where?: StrategyWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Strategies to fetch.
      */
     orderBy?: StrategyOrderByWithRelationInput | StrategyOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for Strategies.
      */
     cursor?: StrategyWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Strategies from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Strategies.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of Strategies.
      */
     distinct?: StrategyScalarFieldEnum | StrategyScalarFieldEnum[]
@@ -4311,31 +4493,31 @@ export namespace Prisma {
     where?: StrategyWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Strategies to fetch.
      */
     orderBy?: StrategyOrderByWithRelationInput | StrategyOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for Strategies.
      */
     cursor?: StrategyWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Strategies from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Strategies.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of Strategies.
      */
     distinct?: StrategyScalarFieldEnum | StrategyScalarFieldEnum[]
@@ -4363,25 +4545,25 @@ export namespace Prisma {
     where?: StrategyWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Strategies to fetch.
      */
     orderBy?: StrategyOrderByWithRelationInput | StrategyOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing Strategies.
      */
     cursor?: StrategyWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Strategies from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Strategies.
      */
     skip?: number
@@ -4703,43 +4885,43 @@ export namespace Prisma {
     where?: TradeTypeWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of TradeTypes to fetch.
      */
     orderBy?: TradeTypeOrderByWithRelationInput | TradeTypeOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: TradeTypeWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` TradeTypes from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` TradeTypes.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned TradeTypes
     **/
     _count?: true | TradeTypeCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: TradeTypeMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: TradeTypeMaxAggregateInputType
@@ -4923,13 +5105,13 @@ export namespace Prisma {
      * @example
      * // Get all TradeTypes
      * const tradeTypes = await prisma.tradeType.findMany()
-     * 
+     *
      * // Get first 10 TradeTypes
      * const tradeTypes = await prisma.tradeType.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `id`
      * const tradeTypeWithIdOnly = await prisma.tradeType.findMany({ select: { id: true } })
-     * 
+     *
      */
     findMany<T extends TradeTypeFindManyArgs>(args?: SelectSubset<T, TradeTypeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradeTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -4943,7 +5125,7 @@ export namespace Prisma {
      *     // ... data to create a TradeType
      *   }
      * })
-     * 
+     *
      */
     create<T extends TradeTypeCreateArgs>(args: SelectSubset<T, TradeTypeCreateArgs<ExtArgs>>): Prisma__TradeTypeClient<$Result.GetResult<Prisma.$TradeTypePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -4957,7 +5139,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends TradeTypeCreateManyArgs>(args?: SelectSubset<T, TradeTypeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -4971,7 +5153,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many TradeTypes and only return the `id`
      * const tradeTypeWithIdOnly = await prisma.tradeType.createManyAndReturn({
      *   select: { id: true },
@@ -4981,7 +5163,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends TradeTypeCreateManyAndReturnArgs>(args?: SelectSubset<T, TradeTypeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradeTypePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -4995,7 +5177,7 @@ export namespace Prisma {
      *     // ... filter to delete one TradeType
      *   }
      * })
-     * 
+     *
      */
     delete<T extends TradeTypeDeleteArgs>(args: SelectSubset<T, TradeTypeDeleteArgs<ExtArgs>>): Prisma__TradeTypeClient<$Result.GetResult<Prisma.$TradeTypePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -5012,7 +5194,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends TradeTypeUpdateArgs>(args: SelectSubset<T, TradeTypeUpdateArgs<ExtArgs>>): Prisma__TradeTypeClient<$Result.GetResult<Prisma.$TradeTypePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -5026,7 +5208,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends TradeTypeDeleteManyArgs>(args?: SelectSubset<T, TradeTypeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -5045,7 +5227,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends TradeTypeUpdateManyArgs>(args: SelectSubset<T, TradeTypeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -5062,7 +5244,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more TradeTypes and only return the `id`
      * const tradeTypeWithIdOnly = await prisma.tradeType.updateManyAndReturn({
      *   select: { id: true },
@@ -5075,7 +5257,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends TradeTypeUpdateManyAndReturnArgs>(args: SelectSubset<T, TradeTypeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradeTypePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -5164,7 +5346,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends TradeTypeGroupByArgs,
@@ -5273,7 +5455,7 @@ export namespace Prisma {
     readonly strategyId: FieldRef<"TradeType", 'String'>
     readonly createdAt: FieldRef<"TradeType", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -5342,31 +5524,31 @@ export namespace Prisma {
     where?: TradeTypeWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of TradeTypes to fetch.
      */
     orderBy?: TradeTypeOrderByWithRelationInput | TradeTypeOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for TradeTypes.
      */
     cursor?: TradeTypeWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` TradeTypes from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` TradeTypes.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of TradeTypes.
      */
     distinct?: TradeTypeScalarFieldEnum | TradeTypeScalarFieldEnum[]
@@ -5394,31 +5576,31 @@ export namespace Prisma {
     where?: TradeTypeWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of TradeTypes to fetch.
      */
     orderBy?: TradeTypeOrderByWithRelationInput | TradeTypeOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for TradeTypes.
      */
     cursor?: TradeTypeWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` TradeTypes from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` TradeTypes.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of TradeTypes.
      */
     distinct?: TradeTypeScalarFieldEnum | TradeTypeScalarFieldEnum[]
@@ -5446,25 +5628,25 @@ export namespace Prisma {
     where?: TradeTypeWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of TradeTypes to fetch.
      */
     orderBy?: TradeTypeOrderByWithRelationInput | TradeTypeOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing TradeTypes.
      */
     cursor?: TradeTypeWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` TradeTypes from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` TradeTypes.
      */
     skip?: number
@@ -5820,55 +6002,55 @@ export namespace Prisma {
     where?: DailySessionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of DailySessions to fetch.
      */
     orderBy?: DailySessionOrderByWithRelationInput | DailySessionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: DailySessionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` DailySessions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` DailySessions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned DailySessions
     **/
     _count?: true | DailySessionCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to average
     **/
     _avg?: DailySessionAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to sum
     **/
     _sum?: DailySessionSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: DailySessionMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: DailySessionMaxAggregateInputType
@@ -6109,13 +6291,13 @@ export namespace Prisma {
      * @example
      * // Get all DailySessions
      * const dailySessions = await prisma.dailySession.findMany()
-     * 
+     *
      * // Get first 10 DailySessions
      * const dailySessions = await prisma.dailySession.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `date`
      * const dailySessionWithDateOnly = await prisma.dailySession.findMany({ select: { date: true } })
-     * 
+     *
      */
     findMany<T extends DailySessionFindManyArgs>(args?: SelectSubset<T, DailySessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailySessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -6129,7 +6311,7 @@ export namespace Prisma {
      *     // ... data to create a DailySession
      *   }
      * })
-     * 
+     *
      */
     create<T extends DailySessionCreateArgs>(args: SelectSubset<T, DailySessionCreateArgs<ExtArgs>>): Prisma__DailySessionClient<$Result.GetResult<Prisma.$DailySessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -6143,7 +6325,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends DailySessionCreateManyArgs>(args?: SelectSubset<T, DailySessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -6157,7 +6339,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many DailySessions and only return the `date`
      * const dailySessionWithDateOnly = await prisma.dailySession.createManyAndReturn({
      *   select: { date: true },
@@ -6167,7 +6349,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends DailySessionCreateManyAndReturnArgs>(args?: SelectSubset<T, DailySessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailySessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -6181,7 +6363,7 @@ export namespace Prisma {
      *     // ... filter to delete one DailySession
      *   }
      * })
-     * 
+     *
      */
     delete<T extends DailySessionDeleteArgs>(args: SelectSubset<T, DailySessionDeleteArgs<ExtArgs>>): Prisma__DailySessionClient<$Result.GetResult<Prisma.$DailySessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -6198,7 +6380,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends DailySessionUpdateArgs>(args: SelectSubset<T, DailySessionUpdateArgs<ExtArgs>>): Prisma__DailySessionClient<$Result.GetResult<Prisma.$DailySessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -6212,7 +6394,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends DailySessionDeleteManyArgs>(args?: SelectSubset<T, DailySessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -6231,7 +6413,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends DailySessionUpdateManyArgs>(args: SelectSubset<T, DailySessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -6248,7 +6430,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more DailySessions and only return the `date`
      * const dailySessionWithDateOnly = await prisma.dailySession.updateManyAndReturn({
      *   select: { date: true },
@@ -6261,7 +6443,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends DailySessionUpdateManyAndReturnArgs>(args: SelectSubset<T, DailySessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailySessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -6350,7 +6532,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends DailySessionGroupByArgs,
@@ -6470,7 +6652,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"DailySession", 'DateTime'>
     readonly updatedAt: FieldRef<"DailySession", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -6539,31 +6721,31 @@ export namespace Prisma {
     where?: DailySessionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of DailySessions to fetch.
      */
     orderBy?: DailySessionOrderByWithRelationInput | DailySessionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for DailySessions.
      */
     cursor?: DailySessionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` DailySessions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` DailySessions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of DailySessions.
      */
     distinct?: DailySessionScalarFieldEnum | DailySessionScalarFieldEnum[]
@@ -6591,31 +6773,31 @@ export namespace Prisma {
     where?: DailySessionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of DailySessions to fetch.
      */
     orderBy?: DailySessionOrderByWithRelationInput | DailySessionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for DailySessions.
      */
     cursor?: DailySessionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` DailySessions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` DailySessions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of DailySessions.
      */
     distinct?: DailySessionScalarFieldEnum | DailySessionScalarFieldEnum[]
@@ -6643,25 +6825,25 @@ export namespace Prisma {
     where?: DailySessionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of DailySessions to fetch.
      */
     orderBy?: DailySessionOrderByWithRelationInput | DailySessionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing DailySessions.
      */
     cursor?: DailySessionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` DailySessions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` DailySessions.
      */
     skip?: number
@@ -6965,6 +7147,2077 @@ export namespace Prisma {
 
 
   /**
+   * Model KpiTargetSetting
+   */
+
+  export type AggregateKpiTargetSetting = {
+    _count: KpiTargetSettingCountAggregateOutputType | null
+    _avg: KpiTargetSettingAvgAggregateOutputType | null
+    _sum: KpiTargetSettingSumAggregateOutputType | null
+    _min: KpiTargetSettingMinAggregateOutputType | null
+    _max: KpiTargetSettingMaxAggregateOutputType | null
+  }
+
+  export type KpiTargetSettingAvgAggregateOutputType = {
+    dailyBaseline: number | null
+    dailyOptimistic: number | null
+  }
+
+  export type KpiTargetSettingSumAggregateOutputType = {
+    dailyBaseline: number | null
+    dailyOptimistic: number | null
+  }
+
+  export type KpiTargetSettingMinAggregateOutputType = {
+    id: string | null
+    effectiveFrom: Date | null
+    dailyBaseline: number | null
+    dailyOptimistic: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type KpiTargetSettingMaxAggregateOutputType = {
+    id: string | null
+    effectiveFrom: Date | null
+    dailyBaseline: number | null
+    dailyOptimistic: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type KpiTargetSettingCountAggregateOutputType = {
+    id: number
+    effectiveFrom: number
+    dailyBaseline: number
+    dailyOptimistic: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type KpiTargetSettingAvgAggregateInputType = {
+    dailyBaseline?: true
+    dailyOptimistic?: true
+  }
+
+  export type KpiTargetSettingSumAggregateInputType = {
+    dailyBaseline?: true
+    dailyOptimistic?: true
+  }
+
+  export type KpiTargetSettingMinAggregateInputType = {
+    id?: true
+    effectiveFrom?: true
+    dailyBaseline?: true
+    dailyOptimistic?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type KpiTargetSettingMaxAggregateInputType = {
+    id?: true
+    effectiveFrom?: true
+    dailyBaseline?: true
+    dailyOptimistic?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type KpiTargetSettingCountAggregateInputType = {
+    id?: true
+    effectiveFrom?: true
+    dailyBaseline?: true
+    dailyOptimistic?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type KpiTargetSettingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KpiTargetSetting to aggregate.
+     */
+    where?: KpiTargetSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of KpiTargetSettings to fetch.
+     */
+    orderBy?: KpiTargetSettingOrderByWithRelationInput | KpiTargetSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: KpiTargetSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` KpiTargetSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` KpiTargetSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned KpiTargetSettings
+    **/
+    _count?: true | KpiTargetSettingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+    **/
+    _avg?: KpiTargetSettingAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+    **/
+    _sum?: KpiTargetSettingSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+    **/
+    _min?: KpiTargetSettingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+    **/
+    _max?: KpiTargetSettingMaxAggregateInputType
+  }
+
+  export type GetKpiTargetSettingAggregateType<T extends KpiTargetSettingAggregateArgs> = {
+        [P in keyof T & keyof AggregateKpiTargetSetting]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateKpiTargetSetting[P]>
+      : GetScalarType<T[P], AggregateKpiTargetSetting[P]>
+  }
+
+
+
+
+  export type KpiTargetSettingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KpiTargetSettingWhereInput
+    orderBy?: KpiTargetSettingOrderByWithAggregationInput | KpiTargetSettingOrderByWithAggregationInput[]
+    by: KpiTargetSettingScalarFieldEnum[] | KpiTargetSettingScalarFieldEnum
+    having?: KpiTargetSettingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: KpiTargetSettingCountAggregateInputType | true
+    _avg?: KpiTargetSettingAvgAggregateInputType
+    _sum?: KpiTargetSettingSumAggregateInputType
+    _min?: KpiTargetSettingMinAggregateInputType
+    _max?: KpiTargetSettingMaxAggregateInputType
+  }
+
+  export type KpiTargetSettingGroupByOutputType = {
+    id: string
+    effectiveFrom: Date
+    dailyBaseline: number
+    dailyOptimistic: number
+    createdAt: Date
+    updatedAt: Date
+    _count: KpiTargetSettingCountAggregateOutputType | null
+    _avg: KpiTargetSettingAvgAggregateOutputType | null
+    _sum: KpiTargetSettingSumAggregateOutputType | null
+    _min: KpiTargetSettingMinAggregateOutputType | null
+    _max: KpiTargetSettingMaxAggregateOutputType | null
+  }
+
+  type GetKpiTargetSettingGroupByPayload<T extends KpiTargetSettingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<KpiTargetSettingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof KpiTargetSettingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], KpiTargetSettingGroupByOutputType[P]>
+            : GetScalarType<T[P], KpiTargetSettingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type KpiTargetSettingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    effectiveFrom?: boolean
+    dailyBaseline?: boolean
+    dailyOptimistic?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["kpiTargetSetting"]>
+
+  export type KpiTargetSettingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    effectiveFrom?: boolean
+    dailyBaseline?: boolean
+    dailyOptimistic?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["kpiTargetSetting"]>
+
+  export type KpiTargetSettingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    effectiveFrom?: boolean
+    dailyBaseline?: boolean
+    dailyOptimistic?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["kpiTargetSetting"]>
+
+  export type KpiTargetSettingSelectScalar = {
+    id?: boolean
+    effectiveFrom?: boolean
+    dailyBaseline?: boolean
+    dailyOptimistic?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type KpiTargetSettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "effectiveFrom" | "dailyBaseline" | "dailyOptimistic" | "createdAt" | "updatedAt", ExtArgs["result"]["kpiTargetSetting"]>
+
+  export type $KpiTargetSettingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "KpiTargetSetting"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      effectiveFrom: Date
+      dailyBaseline: number
+      dailyOptimistic: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["kpiTargetSetting"]>
+    composites: {}
+  }
+
+  type KpiTargetSettingGetPayload<S extends boolean | null | undefined | KpiTargetSettingDefaultArgs> = $Result.GetResult<Prisma.$KpiTargetSettingPayload, S>
+
+  type KpiTargetSettingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<KpiTargetSettingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: KpiTargetSettingCountAggregateInputType | true
+    }
+
+  export interface KpiTargetSettingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['KpiTargetSetting'], meta: { name: 'KpiTargetSetting' } }
+    /**
+     * Find zero or one KpiTargetSetting that matches the filter.
+     * @param {KpiTargetSettingFindUniqueArgs} args - Arguments to find a KpiTargetSetting
+     * @example
+     * // Get one KpiTargetSetting
+     * const kpiTargetSetting = await prisma.kpiTargetSetting.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends KpiTargetSettingFindUniqueArgs>(args: SelectSubset<T, KpiTargetSettingFindUniqueArgs<ExtArgs>>): Prisma__KpiTargetSettingClient<$Result.GetResult<Prisma.$KpiTargetSettingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one KpiTargetSetting that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {KpiTargetSettingFindUniqueOrThrowArgs} args - Arguments to find a KpiTargetSetting
+     * @example
+     * // Get one KpiTargetSetting
+     * const kpiTargetSetting = await prisma.kpiTargetSetting.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends KpiTargetSettingFindUniqueOrThrowArgs>(args: SelectSubset<T, KpiTargetSettingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__KpiTargetSettingClient<$Result.GetResult<Prisma.$KpiTargetSettingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first KpiTargetSetting that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiTargetSettingFindFirstArgs} args - Arguments to find a KpiTargetSetting
+     * @example
+     * // Get one KpiTargetSetting
+     * const kpiTargetSetting = await prisma.kpiTargetSetting.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends KpiTargetSettingFindFirstArgs>(args?: SelectSubset<T, KpiTargetSettingFindFirstArgs<ExtArgs>>): Prisma__KpiTargetSettingClient<$Result.GetResult<Prisma.$KpiTargetSettingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first KpiTargetSetting that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiTargetSettingFindFirstOrThrowArgs} args - Arguments to find a KpiTargetSetting
+     * @example
+     * // Get one KpiTargetSetting
+     * const kpiTargetSetting = await prisma.kpiTargetSetting.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends KpiTargetSettingFindFirstOrThrowArgs>(args?: SelectSubset<T, KpiTargetSettingFindFirstOrThrowArgs<ExtArgs>>): Prisma__KpiTargetSettingClient<$Result.GetResult<Prisma.$KpiTargetSettingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more KpiTargetSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiTargetSettingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all KpiTargetSettings
+     * const kpiTargetSettings = await prisma.kpiTargetSetting.findMany()
+     *
+     * // Get first 10 KpiTargetSettings
+     * const kpiTargetSettings = await prisma.kpiTargetSetting.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const kpiTargetSettingWithIdOnly = await prisma.kpiTargetSetting.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends KpiTargetSettingFindManyArgs>(args?: SelectSubset<T, KpiTargetSettingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KpiTargetSettingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a KpiTargetSetting.
+     * @param {KpiTargetSettingCreateArgs} args - Arguments to create a KpiTargetSetting.
+     * @example
+     * // Create one KpiTargetSetting
+     * const KpiTargetSetting = await prisma.kpiTargetSetting.create({
+     *   data: {
+     *     // ... data to create a KpiTargetSetting
+     *   }
+     * })
+     *
+     */
+    create<T extends KpiTargetSettingCreateArgs>(args: SelectSubset<T, KpiTargetSettingCreateArgs<ExtArgs>>): Prisma__KpiTargetSettingClient<$Result.GetResult<Prisma.$KpiTargetSettingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many KpiTargetSettings.
+     * @param {KpiTargetSettingCreateManyArgs} args - Arguments to create many KpiTargetSettings.
+     * @example
+     * // Create many KpiTargetSettings
+     * const kpiTargetSetting = await prisma.kpiTargetSetting.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends KpiTargetSettingCreateManyArgs>(args?: SelectSubset<T, KpiTargetSettingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many KpiTargetSettings and returns the data saved in the database.
+     * @param {KpiTargetSettingCreateManyAndReturnArgs} args - Arguments to create many KpiTargetSettings.
+     * @example
+     * // Create many KpiTargetSettings
+     * const kpiTargetSetting = await prisma.kpiTargetSetting.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many KpiTargetSettings and only return the `id`
+     * const kpiTargetSettingWithIdOnly = await prisma.kpiTargetSetting.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends KpiTargetSettingCreateManyAndReturnArgs>(args?: SelectSubset<T, KpiTargetSettingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KpiTargetSettingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a KpiTargetSetting.
+     * @param {KpiTargetSettingDeleteArgs} args - Arguments to delete one KpiTargetSetting.
+     * @example
+     * // Delete one KpiTargetSetting
+     * const KpiTargetSetting = await prisma.kpiTargetSetting.delete({
+     *   where: {
+     *     // ... filter to delete one KpiTargetSetting
+     *   }
+     * })
+     *
+     */
+    delete<T extends KpiTargetSettingDeleteArgs>(args: SelectSubset<T, KpiTargetSettingDeleteArgs<ExtArgs>>): Prisma__KpiTargetSettingClient<$Result.GetResult<Prisma.$KpiTargetSettingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one KpiTargetSetting.
+     * @param {KpiTargetSettingUpdateArgs} args - Arguments to update one KpiTargetSetting.
+     * @example
+     * // Update one KpiTargetSetting
+     * const kpiTargetSetting = await prisma.kpiTargetSetting.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends KpiTargetSettingUpdateArgs>(args: SelectSubset<T, KpiTargetSettingUpdateArgs<ExtArgs>>): Prisma__KpiTargetSettingClient<$Result.GetResult<Prisma.$KpiTargetSettingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more KpiTargetSettings.
+     * @param {KpiTargetSettingDeleteManyArgs} args - Arguments to filter KpiTargetSettings to delete.
+     * @example
+     * // Delete a few KpiTargetSettings
+     * const { count } = await prisma.kpiTargetSetting.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends KpiTargetSettingDeleteManyArgs>(args?: SelectSubset<T, KpiTargetSettingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KpiTargetSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiTargetSettingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many KpiTargetSettings
+     * const kpiTargetSetting = await prisma.kpiTargetSetting.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends KpiTargetSettingUpdateManyArgs>(args: SelectSubset<T, KpiTargetSettingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KpiTargetSettings and returns the data updated in the database.
+     * @param {KpiTargetSettingUpdateManyAndReturnArgs} args - Arguments to update many KpiTargetSettings.
+     * @example
+     * // Update many KpiTargetSettings
+     * const kpiTargetSetting = await prisma.kpiTargetSetting.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more KpiTargetSettings and only return the `id`
+     * const kpiTargetSettingWithIdOnly = await prisma.kpiTargetSetting.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends KpiTargetSettingUpdateManyAndReturnArgs>(args: SelectSubset<T, KpiTargetSettingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KpiTargetSettingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one KpiTargetSetting.
+     * @param {KpiTargetSettingUpsertArgs} args - Arguments to update or create a KpiTargetSetting.
+     * @example
+     * // Update or create a KpiTargetSetting
+     * const kpiTargetSetting = await prisma.kpiTargetSetting.upsert({
+     *   create: {
+     *     // ... data to create a KpiTargetSetting
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the KpiTargetSetting we want to update
+     *   }
+     * })
+     */
+    upsert<T extends KpiTargetSettingUpsertArgs>(args: SelectSubset<T, KpiTargetSettingUpsertArgs<ExtArgs>>): Prisma__KpiTargetSettingClient<$Result.GetResult<Prisma.$KpiTargetSettingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of KpiTargetSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiTargetSettingCountArgs} args - Arguments to filter KpiTargetSettings to count.
+     * @example
+     * // Count the number of KpiTargetSettings
+     * const count = await prisma.kpiTargetSetting.count({
+     *   where: {
+     *     // ... the filter for the KpiTargetSettings we want to count
+     *   }
+     * })
+    **/
+    count<T extends KpiTargetSettingCountArgs>(
+      args?: Subset<T, KpiTargetSettingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], KpiTargetSettingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a KpiTargetSetting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiTargetSettingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends KpiTargetSettingAggregateArgs>(args: Subset<T, KpiTargetSettingAggregateArgs>): Prisma.PrismaPromise<GetKpiTargetSettingAggregateType<T>>
+
+    /**
+     * Group by KpiTargetSetting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiTargetSettingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+    **/
+    groupBy<
+      T extends KpiTargetSettingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: KpiTargetSettingGroupByArgs['orderBy'] }
+        : { orderBy?: KpiTargetSettingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, KpiTargetSettingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetKpiTargetSettingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the KpiTargetSetting model
+   */
+  readonly fields: KpiTargetSettingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for KpiTargetSetting.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__KpiTargetSettingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the KpiTargetSetting model
+   */
+  interface KpiTargetSettingFieldRefs {
+    readonly id: FieldRef<"KpiTargetSetting", 'String'>
+    readonly effectiveFrom: FieldRef<"KpiTargetSetting", 'DateTime'>
+    readonly dailyBaseline: FieldRef<"KpiTargetSetting", 'Float'>
+    readonly dailyOptimistic: FieldRef<"KpiTargetSetting", 'Float'>
+    readonly createdAt: FieldRef<"KpiTargetSetting", 'DateTime'>
+    readonly updatedAt: FieldRef<"KpiTargetSetting", 'DateTime'>
+  }
+
+
+  // Custom InputTypes
+  /**
+   * KpiTargetSetting findUnique
+   */
+  export type KpiTargetSettingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiTargetSetting
+     */
+    select?: KpiTargetSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiTargetSetting
+     */
+    omit?: KpiTargetSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which KpiTargetSetting to fetch.
+     */
+    where: KpiTargetSettingWhereUniqueInput
+  }
+
+  /**
+   * KpiTargetSetting findUniqueOrThrow
+   */
+  export type KpiTargetSettingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiTargetSetting
+     */
+    select?: KpiTargetSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiTargetSetting
+     */
+    omit?: KpiTargetSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which KpiTargetSetting to fetch.
+     */
+    where: KpiTargetSettingWhereUniqueInput
+  }
+
+  /**
+   * KpiTargetSetting findFirst
+   */
+  export type KpiTargetSettingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiTargetSetting
+     */
+    select?: KpiTargetSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiTargetSetting
+     */
+    omit?: KpiTargetSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which KpiTargetSetting to fetch.
+     */
+    where?: KpiTargetSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of KpiTargetSettings to fetch.
+     */
+    orderBy?: KpiTargetSettingOrderByWithRelationInput | KpiTargetSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for KpiTargetSettings.
+     */
+    cursor?: KpiTargetSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` KpiTargetSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` KpiTargetSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of KpiTargetSettings.
+     */
+    distinct?: KpiTargetSettingScalarFieldEnum | KpiTargetSettingScalarFieldEnum[]
+  }
+
+  /**
+   * KpiTargetSetting findFirstOrThrow
+   */
+  export type KpiTargetSettingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiTargetSetting
+     */
+    select?: KpiTargetSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiTargetSetting
+     */
+    omit?: KpiTargetSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which KpiTargetSetting to fetch.
+     */
+    where?: KpiTargetSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of KpiTargetSettings to fetch.
+     */
+    orderBy?: KpiTargetSettingOrderByWithRelationInput | KpiTargetSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for KpiTargetSettings.
+     */
+    cursor?: KpiTargetSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` KpiTargetSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` KpiTargetSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of KpiTargetSettings.
+     */
+    distinct?: KpiTargetSettingScalarFieldEnum | KpiTargetSettingScalarFieldEnum[]
+  }
+
+  /**
+   * KpiTargetSetting findMany
+   */
+  export type KpiTargetSettingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiTargetSetting
+     */
+    select?: KpiTargetSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiTargetSetting
+     */
+    omit?: KpiTargetSettingOmit<ExtArgs> | null
+    /**
+     * Filter, which KpiTargetSettings to fetch.
+     */
+    where?: KpiTargetSettingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of KpiTargetSettings to fetch.
+     */
+    orderBy?: KpiTargetSettingOrderByWithRelationInput | KpiTargetSettingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing KpiTargetSettings.
+     */
+    cursor?: KpiTargetSettingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` KpiTargetSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` KpiTargetSettings.
+     */
+    skip?: number
+    distinct?: KpiTargetSettingScalarFieldEnum | KpiTargetSettingScalarFieldEnum[]
+  }
+
+  /**
+   * KpiTargetSetting create
+   */
+  export type KpiTargetSettingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiTargetSetting
+     */
+    select?: KpiTargetSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiTargetSetting
+     */
+    omit?: KpiTargetSettingOmit<ExtArgs> | null
+    /**
+     * The data needed to create a KpiTargetSetting.
+     */
+    data: XOR<KpiTargetSettingCreateInput, KpiTargetSettingUncheckedCreateInput>
+  }
+
+  /**
+   * KpiTargetSetting createMany
+   */
+  export type KpiTargetSettingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many KpiTargetSettings.
+     */
+    data: KpiTargetSettingCreateManyInput | KpiTargetSettingCreateManyInput[]
+  }
+
+  /**
+   * KpiTargetSetting createManyAndReturn
+   */
+  export type KpiTargetSettingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiTargetSetting
+     */
+    select?: KpiTargetSettingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiTargetSetting
+     */
+    omit?: KpiTargetSettingOmit<ExtArgs> | null
+    /**
+     * The data used to create many KpiTargetSettings.
+     */
+    data: KpiTargetSettingCreateManyInput | KpiTargetSettingCreateManyInput[]
+  }
+
+  /**
+   * KpiTargetSetting update
+   */
+  export type KpiTargetSettingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiTargetSetting
+     */
+    select?: KpiTargetSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiTargetSetting
+     */
+    omit?: KpiTargetSettingOmit<ExtArgs> | null
+    /**
+     * The data needed to update a KpiTargetSetting.
+     */
+    data: XOR<KpiTargetSettingUpdateInput, KpiTargetSettingUncheckedUpdateInput>
+    /**
+     * Choose, which KpiTargetSetting to update.
+     */
+    where: KpiTargetSettingWhereUniqueInput
+  }
+
+  /**
+   * KpiTargetSetting updateMany
+   */
+  export type KpiTargetSettingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update KpiTargetSettings.
+     */
+    data: XOR<KpiTargetSettingUpdateManyMutationInput, KpiTargetSettingUncheckedUpdateManyInput>
+    /**
+     * Filter which KpiTargetSettings to update
+     */
+    where?: KpiTargetSettingWhereInput
+    /**
+     * Limit how many KpiTargetSettings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * KpiTargetSetting updateManyAndReturn
+   */
+  export type KpiTargetSettingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiTargetSetting
+     */
+    select?: KpiTargetSettingSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiTargetSetting
+     */
+    omit?: KpiTargetSettingOmit<ExtArgs> | null
+    /**
+     * The data used to update KpiTargetSettings.
+     */
+    data: XOR<KpiTargetSettingUpdateManyMutationInput, KpiTargetSettingUncheckedUpdateManyInput>
+    /**
+     * Filter which KpiTargetSettings to update
+     */
+    where?: KpiTargetSettingWhereInput
+    /**
+     * Limit how many KpiTargetSettings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * KpiTargetSetting upsert
+   */
+  export type KpiTargetSettingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiTargetSetting
+     */
+    select?: KpiTargetSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiTargetSetting
+     */
+    omit?: KpiTargetSettingOmit<ExtArgs> | null
+    /**
+     * The filter to search for the KpiTargetSetting to update in case it exists.
+     */
+    where: KpiTargetSettingWhereUniqueInput
+    /**
+     * In case the KpiTargetSetting found by the `where` argument doesn't exist, create a new KpiTargetSetting with this data.
+     */
+    create: XOR<KpiTargetSettingCreateInput, KpiTargetSettingUncheckedCreateInput>
+    /**
+     * In case the KpiTargetSetting was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<KpiTargetSettingUpdateInput, KpiTargetSettingUncheckedUpdateInput>
+  }
+
+  /**
+   * KpiTargetSetting delete
+   */
+  export type KpiTargetSettingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiTargetSetting
+     */
+    select?: KpiTargetSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiTargetSetting
+     */
+    omit?: KpiTargetSettingOmit<ExtArgs> | null
+    /**
+     * Filter which KpiTargetSetting to delete.
+     */
+    where: KpiTargetSettingWhereUniqueInput
+  }
+
+  /**
+   * KpiTargetSetting deleteMany
+   */
+  export type KpiTargetSettingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KpiTargetSettings to delete
+     */
+    where?: KpiTargetSettingWhereInput
+    /**
+     * Limit how many KpiTargetSettings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * KpiTargetSetting without action
+   */
+  export type KpiTargetSettingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiTargetSetting
+     */
+    select?: KpiTargetSettingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiTargetSetting
+     */
+    omit?: KpiTargetSettingOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model KpiDailyRecord
+   */
+
+  export type AggregateKpiDailyRecord = {
+    _count: KpiDailyRecordCountAggregateOutputType | null
+    _avg: KpiDailyRecordAvgAggregateOutputType | null
+    _sum: KpiDailyRecordSumAggregateOutputType | null
+    _min: KpiDailyRecordMinAggregateOutputType | null
+    _max: KpiDailyRecordMaxAggregateOutputType | null
+  }
+
+  export type KpiDailyRecordAvgAggregateOutputType = {
+    actualPcts: number | null
+  }
+
+  export type KpiDailyRecordSumAggregateOutputType = {
+    actualPcts: number | null
+  }
+
+  export type KpiDailyRecordMinAggregateOutputType = {
+    date: Date | null
+    actualPcts: number | null
+    note: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type KpiDailyRecordMaxAggregateOutputType = {
+    date: Date | null
+    actualPcts: number | null
+    note: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type KpiDailyRecordCountAggregateOutputType = {
+    date: number
+    actualPcts: number
+    note: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type KpiDailyRecordAvgAggregateInputType = {
+    actualPcts?: true
+  }
+
+  export type KpiDailyRecordSumAggregateInputType = {
+    actualPcts?: true
+  }
+
+  export type KpiDailyRecordMinAggregateInputType = {
+    date?: true
+    actualPcts?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type KpiDailyRecordMaxAggregateInputType = {
+    date?: true
+    actualPcts?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type KpiDailyRecordCountAggregateInputType = {
+    date?: true
+    actualPcts?: true
+    note?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type KpiDailyRecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KpiDailyRecord to aggregate.
+     */
+    where?: KpiDailyRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of KpiDailyRecords to fetch.
+     */
+    orderBy?: KpiDailyRecordOrderByWithRelationInput | KpiDailyRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: KpiDailyRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` KpiDailyRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` KpiDailyRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned KpiDailyRecords
+    **/
+    _count?: true | KpiDailyRecordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+    **/
+    _avg?: KpiDailyRecordAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+    **/
+    _sum?: KpiDailyRecordSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+    **/
+    _min?: KpiDailyRecordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+    **/
+    _max?: KpiDailyRecordMaxAggregateInputType
+  }
+
+  export type GetKpiDailyRecordAggregateType<T extends KpiDailyRecordAggregateArgs> = {
+        [P in keyof T & keyof AggregateKpiDailyRecord]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateKpiDailyRecord[P]>
+      : GetScalarType<T[P], AggregateKpiDailyRecord[P]>
+  }
+
+
+
+
+  export type KpiDailyRecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: KpiDailyRecordWhereInput
+    orderBy?: KpiDailyRecordOrderByWithAggregationInput | KpiDailyRecordOrderByWithAggregationInput[]
+    by: KpiDailyRecordScalarFieldEnum[] | KpiDailyRecordScalarFieldEnum
+    having?: KpiDailyRecordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: KpiDailyRecordCountAggregateInputType | true
+    _avg?: KpiDailyRecordAvgAggregateInputType
+    _sum?: KpiDailyRecordSumAggregateInputType
+    _min?: KpiDailyRecordMinAggregateInputType
+    _max?: KpiDailyRecordMaxAggregateInputType
+  }
+
+  export type KpiDailyRecordGroupByOutputType = {
+    date: Date
+    actualPcts: number
+    note: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: KpiDailyRecordCountAggregateOutputType | null
+    _avg: KpiDailyRecordAvgAggregateOutputType | null
+    _sum: KpiDailyRecordSumAggregateOutputType | null
+    _min: KpiDailyRecordMinAggregateOutputType | null
+    _max: KpiDailyRecordMaxAggregateOutputType | null
+  }
+
+  type GetKpiDailyRecordGroupByPayload<T extends KpiDailyRecordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<KpiDailyRecordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof KpiDailyRecordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], KpiDailyRecordGroupByOutputType[P]>
+            : GetScalarType<T[P], KpiDailyRecordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type KpiDailyRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    date?: boolean
+    actualPcts?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["kpiDailyRecord"]>
+
+  export type KpiDailyRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    date?: boolean
+    actualPcts?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["kpiDailyRecord"]>
+
+  export type KpiDailyRecordSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    date?: boolean
+    actualPcts?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["kpiDailyRecord"]>
+
+  export type KpiDailyRecordSelectScalar = {
+    date?: boolean
+    actualPcts?: boolean
+    note?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type KpiDailyRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"date" | "actualPcts" | "note" | "createdAt" | "updatedAt", ExtArgs["result"]["kpiDailyRecord"]>
+
+  export type $KpiDailyRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "KpiDailyRecord"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      date: Date
+      actualPcts: number
+      note: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["kpiDailyRecord"]>
+    composites: {}
+  }
+
+  type KpiDailyRecordGetPayload<S extends boolean | null | undefined | KpiDailyRecordDefaultArgs> = $Result.GetResult<Prisma.$KpiDailyRecordPayload, S>
+
+  type KpiDailyRecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<KpiDailyRecordFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: KpiDailyRecordCountAggregateInputType | true
+    }
+
+  export interface KpiDailyRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['KpiDailyRecord'], meta: { name: 'KpiDailyRecord' } }
+    /**
+     * Find zero or one KpiDailyRecord that matches the filter.
+     * @param {KpiDailyRecordFindUniqueArgs} args - Arguments to find a KpiDailyRecord
+     * @example
+     * // Get one KpiDailyRecord
+     * const kpiDailyRecord = await prisma.kpiDailyRecord.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends KpiDailyRecordFindUniqueArgs>(args: SelectSubset<T, KpiDailyRecordFindUniqueArgs<ExtArgs>>): Prisma__KpiDailyRecordClient<$Result.GetResult<Prisma.$KpiDailyRecordPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one KpiDailyRecord that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {KpiDailyRecordFindUniqueOrThrowArgs} args - Arguments to find a KpiDailyRecord
+     * @example
+     * // Get one KpiDailyRecord
+     * const kpiDailyRecord = await prisma.kpiDailyRecord.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends KpiDailyRecordFindUniqueOrThrowArgs>(args: SelectSubset<T, KpiDailyRecordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__KpiDailyRecordClient<$Result.GetResult<Prisma.$KpiDailyRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first KpiDailyRecord that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiDailyRecordFindFirstArgs} args - Arguments to find a KpiDailyRecord
+     * @example
+     * // Get one KpiDailyRecord
+     * const kpiDailyRecord = await prisma.kpiDailyRecord.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends KpiDailyRecordFindFirstArgs>(args?: SelectSubset<T, KpiDailyRecordFindFirstArgs<ExtArgs>>): Prisma__KpiDailyRecordClient<$Result.GetResult<Prisma.$KpiDailyRecordPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first KpiDailyRecord that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiDailyRecordFindFirstOrThrowArgs} args - Arguments to find a KpiDailyRecord
+     * @example
+     * // Get one KpiDailyRecord
+     * const kpiDailyRecord = await prisma.kpiDailyRecord.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends KpiDailyRecordFindFirstOrThrowArgs>(args?: SelectSubset<T, KpiDailyRecordFindFirstOrThrowArgs<ExtArgs>>): Prisma__KpiDailyRecordClient<$Result.GetResult<Prisma.$KpiDailyRecordPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more KpiDailyRecords that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiDailyRecordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all KpiDailyRecords
+     * const kpiDailyRecords = await prisma.kpiDailyRecord.findMany()
+     *
+     * // Get first 10 KpiDailyRecords
+     * const kpiDailyRecords = await prisma.kpiDailyRecord.findMany({ take: 10 })
+     *
+     * // Only select the `date`
+     * const kpiDailyRecordWithDateOnly = await prisma.kpiDailyRecord.findMany({ select: { date: true } })
+     *
+     */
+    findMany<T extends KpiDailyRecordFindManyArgs>(args?: SelectSubset<T, KpiDailyRecordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KpiDailyRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a KpiDailyRecord.
+     * @param {KpiDailyRecordCreateArgs} args - Arguments to create a KpiDailyRecord.
+     * @example
+     * // Create one KpiDailyRecord
+     * const KpiDailyRecord = await prisma.kpiDailyRecord.create({
+     *   data: {
+     *     // ... data to create a KpiDailyRecord
+     *   }
+     * })
+     *
+     */
+    create<T extends KpiDailyRecordCreateArgs>(args: SelectSubset<T, KpiDailyRecordCreateArgs<ExtArgs>>): Prisma__KpiDailyRecordClient<$Result.GetResult<Prisma.$KpiDailyRecordPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many KpiDailyRecords.
+     * @param {KpiDailyRecordCreateManyArgs} args - Arguments to create many KpiDailyRecords.
+     * @example
+     * // Create many KpiDailyRecords
+     * const kpiDailyRecord = await prisma.kpiDailyRecord.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends KpiDailyRecordCreateManyArgs>(args?: SelectSubset<T, KpiDailyRecordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many KpiDailyRecords and returns the data saved in the database.
+     * @param {KpiDailyRecordCreateManyAndReturnArgs} args - Arguments to create many KpiDailyRecords.
+     * @example
+     * // Create many KpiDailyRecords
+     * const kpiDailyRecord = await prisma.kpiDailyRecord.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many KpiDailyRecords and only return the `date`
+     * const kpiDailyRecordWithDateOnly = await prisma.kpiDailyRecord.createManyAndReturn({
+     *   select: { date: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends KpiDailyRecordCreateManyAndReturnArgs>(args?: SelectSubset<T, KpiDailyRecordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KpiDailyRecordPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a KpiDailyRecord.
+     * @param {KpiDailyRecordDeleteArgs} args - Arguments to delete one KpiDailyRecord.
+     * @example
+     * // Delete one KpiDailyRecord
+     * const KpiDailyRecord = await prisma.kpiDailyRecord.delete({
+     *   where: {
+     *     // ... filter to delete one KpiDailyRecord
+     *   }
+     * })
+     *
+     */
+    delete<T extends KpiDailyRecordDeleteArgs>(args: SelectSubset<T, KpiDailyRecordDeleteArgs<ExtArgs>>): Prisma__KpiDailyRecordClient<$Result.GetResult<Prisma.$KpiDailyRecordPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one KpiDailyRecord.
+     * @param {KpiDailyRecordUpdateArgs} args - Arguments to update one KpiDailyRecord.
+     * @example
+     * // Update one KpiDailyRecord
+     * const kpiDailyRecord = await prisma.kpiDailyRecord.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends KpiDailyRecordUpdateArgs>(args: SelectSubset<T, KpiDailyRecordUpdateArgs<ExtArgs>>): Prisma__KpiDailyRecordClient<$Result.GetResult<Prisma.$KpiDailyRecordPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more KpiDailyRecords.
+     * @param {KpiDailyRecordDeleteManyArgs} args - Arguments to filter KpiDailyRecords to delete.
+     * @example
+     * // Delete a few KpiDailyRecords
+     * const { count } = await prisma.kpiDailyRecord.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends KpiDailyRecordDeleteManyArgs>(args?: SelectSubset<T, KpiDailyRecordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KpiDailyRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiDailyRecordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many KpiDailyRecords
+     * const kpiDailyRecord = await prisma.kpiDailyRecord.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends KpiDailyRecordUpdateManyArgs>(args: SelectSubset<T, KpiDailyRecordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more KpiDailyRecords and returns the data updated in the database.
+     * @param {KpiDailyRecordUpdateManyAndReturnArgs} args - Arguments to update many KpiDailyRecords.
+     * @example
+     * // Update many KpiDailyRecords
+     * const kpiDailyRecord = await prisma.kpiDailyRecord.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more KpiDailyRecords and only return the `date`
+     * const kpiDailyRecordWithDateOnly = await prisma.kpiDailyRecord.updateManyAndReturn({
+     *   select: { date: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends KpiDailyRecordUpdateManyAndReturnArgs>(args: SelectSubset<T, KpiDailyRecordUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$KpiDailyRecordPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one KpiDailyRecord.
+     * @param {KpiDailyRecordUpsertArgs} args - Arguments to update or create a KpiDailyRecord.
+     * @example
+     * // Update or create a KpiDailyRecord
+     * const kpiDailyRecord = await prisma.kpiDailyRecord.upsert({
+     *   create: {
+     *     // ... data to create a KpiDailyRecord
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the KpiDailyRecord we want to update
+     *   }
+     * })
+     */
+    upsert<T extends KpiDailyRecordUpsertArgs>(args: SelectSubset<T, KpiDailyRecordUpsertArgs<ExtArgs>>): Prisma__KpiDailyRecordClient<$Result.GetResult<Prisma.$KpiDailyRecordPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of KpiDailyRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiDailyRecordCountArgs} args - Arguments to filter KpiDailyRecords to count.
+     * @example
+     * // Count the number of KpiDailyRecords
+     * const count = await prisma.kpiDailyRecord.count({
+     *   where: {
+     *     // ... the filter for the KpiDailyRecords we want to count
+     *   }
+     * })
+    **/
+    count<T extends KpiDailyRecordCountArgs>(
+      args?: Subset<T, KpiDailyRecordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], KpiDailyRecordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a KpiDailyRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiDailyRecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends KpiDailyRecordAggregateArgs>(args: Subset<T, KpiDailyRecordAggregateArgs>): Prisma.PrismaPromise<GetKpiDailyRecordAggregateType<T>>
+
+    /**
+     * Group by KpiDailyRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {KpiDailyRecordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+    **/
+    groupBy<
+      T extends KpiDailyRecordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: KpiDailyRecordGroupByArgs['orderBy'] }
+        : { orderBy?: KpiDailyRecordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, KpiDailyRecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetKpiDailyRecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the KpiDailyRecord model
+   */
+  readonly fields: KpiDailyRecordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for KpiDailyRecord.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__KpiDailyRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the KpiDailyRecord model
+   */
+  interface KpiDailyRecordFieldRefs {
+    readonly date: FieldRef<"KpiDailyRecord", 'DateTime'>
+    readonly actualPcts: FieldRef<"KpiDailyRecord", 'Float'>
+    readonly note: FieldRef<"KpiDailyRecord", 'String'>
+    readonly createdAt: FieldRef<"KpiDailyRecord", 'DateTime'>
+    readonly updatedAt: FieldRef<"KpiDailyRecord", 'DateTime'>
+  }
+
+
+  // Custom InputTypes
+  /**
+   * KpiDailyRecord findUnique
+   */
+  export type KpiDailyRecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiDailyRecord
+     */
+    select?: KpiDailyRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiDailyRecord
+     */
+    omit?: KpiDailyRecordOmit<ExtArgs> | null
+    /**
+     * Filter, which KpiDailyRecord to fetch.
+     */
+    where: KpiDailyRecordWhereUniqueInput
+  }
+
+  /**
+   * KpiDailyRecord findUniqueOrThrow
+   */
+  export type KpiDailyRecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiDailyRecord
+     */
+    select?: KpiDailyRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiDailyRecord
+     */
+    omit?: KpiDailyRecordOmit<ExtArgs> | null
+    /**
+     * Filter, which KpiDailyRecord to fetch.
+     */
+    where: KpiDailyRecordWhereUniqueInput
+  }
+
+  /**
+   * KpiDailyRecord findFirst
+   */
+  export type KpiDailyRecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiDailyRecord
+     */
+    select?: KpiDailyRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiDailyRecord
+     */
+    omit?: KpiDailyRecordOmit<ExtArgs> | null
+    /**
+     * Filter, which KpiDailyRecord to fetch.
+     */
+    where?: KpiDailyRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of KpiDailyRecords to fetch.
+     */
+    orderBy?: KpiDailyRecordOrderByWithRelationInput | KpiDailyRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for KpiDailyRecords.
+     */
+    cursor?: KpiDailyRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` KpiDailyRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` KpiDailyRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of KpiDailyRecords.
+     */
+    distinct?: KpiDailyRecordScalarFieldEnum | KpiDailyRecordScalarFieldEnum[]
+  }
+
+  /**
+   * KpiDailyRecord findFirstOrThrow
+   */
+  export type KpiDailyRecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiDailyRecord
+     */
+    select?: KpiDailyRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiDailyRecord
+     */
+    omit?: KpiDailyRecordOmit<ExtArgs> | null
+    /**
+     * Filter, which KpiDailyRecord to fetch.
+     */
+    where?: KpiDailyRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of KpiDailyRecords to fetch.
+     */
+    orderBy?: KpiDailyRecordOrderByWithRelationInput | KpiDailyRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for KpiDailyRecords.
+     */
+    cursor?: KpiDailyRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` KpiDailyRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` KpiDailyRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of KpiDailyRecords.
+     */
+    distinct?: KpiDailyRecordScalarFieldEnum | KpiDailyRecordScalarFieldEnum[]
+  }
+
+  /**
+   * KpiDailyRecord findMany
+   */
+  export type KpiDailyRecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiDailyRecord
+     */
+    select?: KpiDailyRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiDailyRecord
+     */
+    omit?: KpiDailyRecordOmit<ExtArgs> | null
+    /**
+     * Filter, which KpiDailyRecords to fetch.
+     */
+    where?: KpiDailyRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of KpiDailyRecords to fetch.
+     */
+    orderBy?: KpiDailyRecordOrderByWithRelationInput | KpiDailyRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing KpiDailyRecords.
+     */
+    cursor?: KpiDailyRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` KpiDailyRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` KpiDailyRecords.
+     */
+    skip?: number
+    distinct?: KpiDailyRecordScalarFieldEnum | KpiDailyRecordScalarFieldEnum[]
+  }
+
+  /**
+   * KpiDailyRecord create
+   */
+  export type KpiDailyRecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiDailyRecord
+     */
+    select?: KpiDailyRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiDailyRecord
+     */
+    omit?: KpiDailyRecordOmit<ExtArgs> | null
+    /**
+     * The data needed to create a KpiDailyRecord.
+     */
+    data: XOR<KpiDailyRecordCreateInput, KpiDailyRecordUncheckedCreateInput>
+  }
+
+  /**
+   * KpiDailyRecord createMany
+   */
+  export type KpiDailyRecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many KpiDailyRecords.
+     */
+    data: KpiDailyRecordCreateManyInput | KpiDailyRecordCreateManyInput[]
+  }
+
+  /**
+   * KpiDailyRecord createManyAndReturn
+   */
+  export type KpiDailyRecordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiDailyRecord
+     */
+    select?: KpiDailyRecordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiDailyRecord
+     */
+    omit?: KpiDailyRecordOmit<ExtArgs> | null
+    /**
+     * The data used to create many KpiDailyRecords.
+     */
+    data: KpiDailyRecordCreateManyInput | KpiDailyRecordCreateManyInput[]
+  }
+
+  /**
+   * KpiDailyRecord update
+   */
+  export type KpiDailyRecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiDailyRecord
+     */
+    select?: KpiDailyRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiDailyRecord
+     */
+    omit?: KpiDailyRecordOmit<ExtArgs> | null
+    /**
+     * The data needed to update a KpiDailyRecord.
+     */
+    data: XOR<KpiDailyRecordUpdateInput, KpiDailyRecordUncheckedUpdateInput>
+    /**
+     * Choose, which KpiDailyRecord to update.
+     */
+    where: KpiDailyRecordWhereUniqueInput
+  }
+
+  /**
+   * KpiDailyRecord updateMany
+   */
+  export type KpiDailyRecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update KpiDailyRecords.
+     */
+    data: XOR<KpiDailyRecordUpdateManyMutationInput, KpiDailyRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which KpiDailyRecords to update
+     */
+    where?: KpiDailyRecordWhereInput
+    /**
+     * Limit how many KpiDailyRecords to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * KpiDailyRecord updateManyAndReturn
+   */
+  export type KpiDailyRecordUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiDailyRecord
+     */
+    select?: KpiDailyRecordSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiDailyRecord
+     */
+    omit?: KpiDailyRecordOmit<ExtArgs> | null
+    /**
+     * The data used to update KpiDailyRecords.
+     */
+    data: XOR<KpiDailyRecordUpdateManyMutationInput, KpiDailyRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which KpiDailyRecords to update
+     */
+    where?: KpiDailyRecordWhereInput
+    /**
+     * Limit how many KpiDailyRecords to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * KpiDailyRecord upsert
+   */
+  export type KpiDailyRecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiDailyRecord
+     */
+    select?: KpiDailyRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiDailyRecord
+     */
+    omit?: KpiDailyRecordOmit<ExtArgs> | null
+    /**
+     * The filter to search for the KpiDailyRecord to update in case it exists.
+     */
+    where: KpiDailyRecordWhereUniqueInput
+    /**
+     * In case the KpiDailyRecord found by the `where` argument doesn't exist, create a new KpiDailyRecord with this data.
+     */
+    create: XOR<KpiDailyRecordCreateInput, KpiDailyRecordUncheckedCreateInput>
+    /**
+     * In case the KpiDailyRecord was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<KpiDailyRecordUpdateInput, KpiDailyRecordUncheckedUpdateInput>
+  }
+
+  /**
+   * KpiDailyRecord delete
+   */
+  export type KpiDailyRecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiDailyRecord
+     */
+    select?: KpiDailyRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiDailyRecord
+     */
+    omit?: KpiDailyRecordOmit<ExtArgs> | null
+    /**
+     * Filter which KpiDailyRecord to delete.
+     */
+    where: KpiDailyRecordWhereUniqueInput
+  }
+
+  /**
+   * KpiDailyRecord deleteMany
+   */
+  export type KpiDailyRecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which KpiDailyRecords to delete
+     */
+    where?: KpiDailyRecordWhereInput
+    /**
+     * Limit how many KpiDailyRecords to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * KpiDailyRecord without action
+   */
+  export type KpiDailyRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the KpiDailyRecord
+     */
+    select?: KpiDailyRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the KpiDailyRecord
+     */
+    omit?: KpiDailyRecordOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model NewsEvent
    */
 
@@ -7056,43 +9309,43 @@ export namespace Prisma {
     where?: NewsEventWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of NewsEvents to fetch.
      */
     orderBy?: NewsEventOrderByWithRelationInput | NewsEventOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: NewsEventWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` NewsEvents from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` NewsEvents.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned NewsEvents
     **/
     _count?: true | NewsEventCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: NewsEventMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: NewsEventMaxAggregateInputType
@@ -7311,13 +9564,13 @@ export namespace Prisma {
      * @example
      * // Get all NewsEvents
      * const newsEvents = await prisma.newsEvent.findMany()
-     * 
+     *
      * // Get first 10 NewsEvents
      * const newsEvents = await prisma.newsEvent.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `id`
      * const newsEventWithIdOnly = await prisma.newsEvent.findMany({ select: { id: true } })
-     * 
+     *
      */
     findMany<T extends NewsEventFindManyArgs>(args?: SelectSubset<T, NewsEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NewsEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -7331,7 +9584,7 @@ export namespace Prisma {
      *     // ... data to create a NewsEvent
      *   }
      * })
-     * 
+     *
      */
     create<T extends NewsEventCreateArgs>(args: SelectSubset<T, NewsEventCreateArgs<ExtArgs>>): Prisma__NewsEventClient<$Result.GetResult<Prisma.$NewsEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -7345,7 +9598,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends NewsEventCreateManyArgs>(args?: SelectSubset<T, NewsEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -7359,7 +9612,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many NewsEvents and only return the `id`
      * const newsEventWithIdOnly = await prisma.newsEvent.createManyAndReturn({
      *   select: { id: true },
@@ -7369,7 +9622,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends NewsEventCreateManyAndReturnArgs>(args?: SelectSubset<T, NewsEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NewsEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -7383,7 +9636,7 @@ export namespace Prisma {
      *     // ... filter to delete one NewsEvent
      *   }
      * })
-     * 
+     *
      */
     delete<T extends NewsEventDeleteArgs>(args: SelectSubset<T, NewsEventDeleteArgs<ExtArgs>>): Prisma__NewsEventClient<$Result.GetResult<Prisma.$NewsEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -7400,7 +9653,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends NewsEventUpdateArgs>(args: SelectSubset<T, NewsEventUpdateArgs<ExtArgs>>): Prisma__NewsEventClient<$Result.GetResult<Prisma.$NewsEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -7414,7 +9667,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends NewsEventDeleteManyArgs>(args?: SelectSubset<T, NewsEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -7433,7 +9686,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends NewsEventUpdateManyArgs>(args: SelectSubset<T, NewsEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -7450,7 +9703,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more NewsEvents and only return the `id`
      * const newsEventWithIdOnly = await prisma.newsEvent.updateManyAndReturn({
      *   select: { id: true },
@@ -7463,7 +9716,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends NewsEventUpdateManyAndReturnArgs>(args: SelectSubset<T, NewsEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NewsEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -7552,7 +9805,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends NewsEventGroupByArgs,
@@ -7667,7 +9920,7 @@ export namespace Prisma {
     readonly notes: FieldRef<"NewsEvent", 'String'>
     readonly createdAt: FieldRef<"NewsEvent", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -7736,31 +9989,31 @@ export namespace Prisma {
     where?: NewsEventWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of NewsEvents to fetch.
      */
     orderBy?: NewsEventOrderByWithRelationInput | NewsEventOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for NewsEvents.
      */
     cursor?: NewsEventWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` NewsEvents from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` NewsEvents.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of NewsEvents.
      */
     distinct?: NewsEventScalarFieldEnum | NewsEventScalarFieldEnum[]
@@ -7788,31 +10041,31 @@ export namespace Prisma {
     where?: NewsEventWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of NewsEvents to fetch.
      */
     orderBy?: NewsEventOrderByWithRelationInput | NewsEventOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for NewsEvents.
      */
     cursor?: NewsEventWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` NewsEvents from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` NewsEvents.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of NewsEvents.
      */
     distinct?: NewsEventScalarFieldEnum | NewsEventScalarFieldEnum[]
@@ -7840,25 +10093,25 @@ export namespace Prisma {
     where?: NewsEventWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of NewsEvents to fetch.
      */
     orderBy?: NewsEventOrderByWithRelationInput | NewsEventOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing NewsEvents.
      */
     cursor?: NewsEventWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` NewsEvents from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` NewsEvents.
      */
     skip?: number
@@ -8500,55 +10753,55 @@ export namespace Prisma {
     where?: TradeSetupWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of TradeSetups to fetch.
      */
     orderBy?: TradeSetupOrderByWithRelationInput | TradeSetupOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: TradeSetupWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` TradeSetups from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` TradeSetups.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned TradeSetups
     **/
     _count?: true | TradeSetupCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to average
     **/
     _avg?: TradeSetupAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to sum
     **/
     _sum?: TradeSetupSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: TradeSetupMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: TradeSetupMaxAggregateInputType
@@ -9055,13 +11308,13 @@ export namespace Prisma {
      * @example
      * // Get all TradeSetups
      * const tradeSetups = await prisma.tradeSetup.findMany()
-     * 
+     *
      * // Get first 10 TradeSetups
      * const tradeSetups = await prisma.tradeSetup.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `id`
      * const tradeSetupWithIdOnly = await prisma.tradeSetup.findMany({ select: { id: true } })
-     * 
+     *
      */
     findMany<T extends TradeSetupFindManyArgs>(args?: SelectSubset<T, TradeSetupFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradeSetupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -9075,7 +11328,7 @@ export namespace Prisma {
      *     // ... data to create a TradeSetup
      *   }
      * })
-     * 
+     *
      */
     create<T extends TradeSetupCreateArgs>(args: SelectSubset<T, TradeSetupCreateArgs<ExtArgs>>): Prisma__TradeSetupClient<$Result.GetResult<Prisma.$TradeSetupPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -9089,7 +11342,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends TradeSetupCreateManyArgs>(args?: SelectSubset<T, TradeSetupCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -9103,7 +11356,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many TradeSetups and only return the `id`
      * const tradeSetupWithIdOnly = await prisma.tradeSetup.createManyAndReturn({
      *   select: { id: true },
@@ -9113,7 +11366,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends TradeSetupCreateManyAndReturnArgs>(args?: SelectSubset<T, TradeSetupCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradeSetupPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -9127,7 +11380,7 @@ export namespace Prisma {
      *     // ... filter to delete one TradeSetup
      *   }
      * })
-     * 
+     *
      */
     delete<T extends TradeSetupDeleteArgs>(args: SelectSubset<T, TradeSetupDeleteArgs<ExtArgs>>): Prisma__TradeSetupClient<$Result.GetResult<Prisma.$TradeSetupPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -9144,7 +11397,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends TradeSetupUpdateArgs>(args: SelectSubset<T, TradeSetupUpdateArgs<ExtArgs>>): Prisma__TradeSetupClient<$Result.GetResult<Prisma.$TradeSetupPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -9158,7 +11411,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends TradeSetupDeleteManyArgs>(args?: SelectSubset<T, TradeSetupDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -9177,7 +11430,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends TradeSetupUpdateManyArgs>(args: SelectSubset<T, TradeSetupUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -9194,7 +11447,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more TradeSetups and only return the `id`
      * const tradeSetupWithIdOnly = await prisma.tradeSetup.updateManyAndReturn({
      *   select: { id: true },
@@ -9207,7 +11460,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends TradeSetupUpdateManyAndReturnArgs>(args: SelectSubset<T, TradeSetupUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradeSetupPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -9296,7 +11549,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends TradeSetupGroupByArgs,
@@ -9459,7 +11712,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"TradeSetup", 'DateTime'>
     readonly updatedAt: FieldRef<"TradeSetup", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -9528,31 +11781,31 @@ export namespace Prisma {
     where?: TradeSetupWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of TradeSetups to fetch.
      */
     orderBy?: TradeSetupOrderByWithRelationInput | TradeSetupOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for TradeSetups.
      */
     cursor?: TradeSetupWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` TradeSetups from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` TradeSetups.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of TradeSetups.
      */
     distinct?: TradeSetupScalarFieldEnum | TradeSetupScalarFieldEnum[]
@@ -9580,31 +11833,31 @@ export namespace Prisma {
     where?: TradeSetupWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of TradeSetups to fetch.
      */
     orderBy?: TradeSetupOrderByWithRelationInput | TradeSetupOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for TradeSetups.
      */
     cursor?: TradeSetupWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` TradeSetups from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` TradeSetups.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of TradeSetups.
      */
     distinct?: TradeSetupScalarFieldEnum | TradeSetupScalarFieldEnum[]
@@ -9632,25 +11885,25 @@ export namespace Prisma {
     where?: TradeSetupWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of TradeSetups to fetch.
      */
     orderBy?: TradeSetupOrderByWithRelationInput | TradeSetupOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing TradeSetups.
      */
     cursor?: TradeSetupWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` TradeSetups from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` TradeSetups.
      */
     skip?: number
@@ -10154,55 +12407,55 @@ export namespace Prisma {
     where?: ExecutionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Executions to fetch.
      */
     orderBy?: ExecutionOrderByWithRelationInput | ExecutionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: ExecutionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Executions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Executions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned Executions
     **/
     _count?: true | ExecutionCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to average
     **/
     _avg?: ExecutionAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to sum
     **/
     _sum?: ExecutionSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: ExecutionMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: ExecutionMaxAggregateInputType
@@ -10473,13 +12726,13 @@ export namespace Prisma {
      * @example
      * // Get all Executions
      * const executions = await prisma.execution.findMany()
-     * 
+     *
      * // Get first 10 Executions
      * const executions = await prisma.execution.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `id`
      * const executionWithIdOnly = await prisma.execution.findMany({ select: { id: true } })
-     * 
+     *
      */
     findMany<T extends ExecutionFindManyArgs>(args?: SelectSubset<T, ExecutionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExecutionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -10493,7 +12746,7 @@ export namespace Prisma {
      *     // ... data to create a Execution
      *   }
      * })
-     * 
+     *
      */
     create<T extends ExecutionCreateArgs>(args: SelectSubset<T, ExecutionCreateArgs<ExtArgs>>): Prisma__ExecutionClient<$Result.GetResult<Prisma.$ExecutionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -10507,7 +12760,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends ExecutionCreateManyArgs>(args?: SelectSubset<T, ExecutionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -10521,7 +12774,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many Executions and only return the `id`
      * const executionWithIdOnly = await prisma.execution.createManyAndReturn({
      *   select: { id: true },
@@ -10531,7 +12784,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends ExecutionCreateManyAndReturnArgs>(args?: SelectSubset<T, ExecutionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExecutionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -10545,7 +12798,7 @@ export namespace Prisma {
      *     // ... filter to delete one Execution
      *   }
      * })
-     * 
+     *
      */
     delete<T extends ExecutionDeleteArgs>(args: SelectSubset<T, ExecutionDeleteArgs<ExtArgs>>): Prisma__ExecutionClient<$Result.GetResult<Prisma.$ExecutionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -10562,7 +12815,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends ExecutionUpdateArgs>(args: SelectSubset<T, ExecutionUpdateArgs<ExtArgs>>): Prisma__ExecutionClient<$Result.GetResult<Prisma.$ExecutionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -10576,7 +12829,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends ExecutionDeleteManyArgs>(args?: SelectSubset<T, ExecutionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -10595,7 +12848,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends ExecutionUpdateManyArgs>(args: SelectSubset<T, ExecutionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -10612,7 +12865,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more Executions and only return the `id`
      * const executionWithIdOnly = await prisma.execution.updateManyAndReturn({
      *   select: { id: true },
@@ -10625,7 +12878,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends ExecutionUpdateManyAndReturnArgs>(args: SelectSubset<T, ExecutionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExecutionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -10714,7 +12967,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends ExecutionGroupByArgs,
@@ -10837,7 +13090,7 @@ export namespace Prisma {
     readonly executionNotes: FieldRef<"Execution", 'String'>
     readonly createdAt: FieldRef<"Execution", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -10906,31 +13159,31 @@ export namespace Prisma {
     where?: ExecutionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Executions to fetch.
      */
     orderBy?: ExecutionOrderByWithRelationInput | ExecutionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for Executions.
      */
     cursor?: ExecutionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Executions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Executions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of Executions.
      */
     distinct?: ExecutionScalarFieldEnum | ExecutionScalarFieldEnum[]
@@ -10958,31 +13211,31 @@ export namespace Prisma {
     where?: ExecutionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Executions to fetch.
      */
     orderBy?: ExecutionOrderByWithRelationInput | ExecutionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for Executions.
      */
     cursor?: ExecutionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Executions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Executions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of Executions.
      */
     distinct?: ExecutionScalarFieldEnum | ExecutionScalarFieldEnum[]
@@ -11010,25 +13263,25 @@ export namespace Prisma {
     where?: ExecutionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Executions to fetch.
      */
     orderBy?: ExecutionOrderByWithRelationInput | ExecutionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing Executions.
      */
     cursor?: ExecutionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Executions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Executions.
      */
     skip?: number
@@ -11382,55 +13635,55 @@ export namespace Prisma {
     where?: WeeklyReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of WeeklyReports to fetch.
      */
     orderBy?: WeeklyReportOrderByWithRelationInput | WeeklyReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: WeeklyReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` WeeklyReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` WeeklyReports.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned WeeklyReports
     **/
     _count?: true | WeeklyReportCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to average
     **/
     _avg?: WeeklyReportAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to sum
     **/
     _sum?: WeeklyReportSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: WeeklyReportMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: WeeklyReportMaxAggregateInputType
@@ -11634,13 +13887,13 @@ export namespace Prisma {
      * @example
      * // Get all WeeklyReports
      * const weeklyReports = await prisma.weeklyReport.findMany()
-     * 
+     *
      * // Get first 10 WeeklyReports
      * const weeklyReports = await prisma.weeklyReport.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `weekStart`
      * const weeklyReportWithWeekStartOnly = await prisma.weeklyReport.findMany({ select: { weekStart: true } })
-     * 
+     *
      */
     findMany<T extends WeeklyReportFindManyArgs>(args?: SelectSubset<T, WeeklyReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -11654,7 +13907,7 @@ export namespace Prisma {
      *     // ... data to create a WeeklyReport
      *   }
      * })
-     * 
+     *
      */
     create<T extends WeeklyReportCreateArgs>(args: SelectSubset<T, WeeklyReportCreateArgs<ExtArgs>>): Prisma__WeeklyReportClient<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -11668,7 +13921,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends WeeklyReportCreateManyArgs>(args?: SelectSubset<T, WeeklyReportCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -11682,7 +13935,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many WeeklyReports and only return the `weekStart`
      * const weeklyReportWithWeekStartOnly = await prisma.weeklyReport.createManyAndReturn({
      *   select: { weekStart: true },
@@ -11692,7 +13945,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends WeeklyReportCreateManyAndReturnArgs>(args?: SelectSubset<T, WeeklyReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -11706,7 +13959,7 @@ export namespace Prisma {
      *     // ... filter to delete one WeeklyReport
      *   }
      * })
-     * 
+     *
      */
     delete<T extends WeeklyReportDeleteArgs>(args: SelectSubset<T, WeeklyReportDeleteArgs<ExtArgs>>): Prisma__WeeklyReportClient<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -11723,7 +13976,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends WeeklyReportUpdateArgs>(args: SelectSubset<T, WeeklyReportUpdateArgs<ExtArgs>>): Prisma__WeeklyReportClient<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -11737,7 +13990,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends WeeklyReportDeleteManyArgs>(args?: SelectSubset<T, WeeklyReportDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -11756,7 +14009,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends WeeklyReportUpdateManyArgs>(args: SelectSubset<T, WeeklyReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -11773,7 +14026,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more WeeklyReports and only return the `weekStart`
      * const weeklyReportWithWeekStartOnly = await prisma.weeklyReport.updateManyAndReturn({
      *   select: { weekStart: true },
@@ -11786,7 +14039,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends WeeklyReportUpdateManyAndReturnArgs>(args: SelectSubset<T, WeeklyReportUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WeeklyReportPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -11875,7 +14128,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends WeeklyReportGroupByArgs,
@@ -11988,7 +14241,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"WeeklyReport", 'DateTime'>
     readonly updatedAt: FieldRef<"WeeklyReport", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -12045,31 +14298,31 @@ export namespace Prisma {
     where?: WeeklyReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of WeeklyReports to fetch.
      */
     orderBy?: WeeklyReportOrderByWithRelationInput | WeeklyReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for WeeklyReports.
      */
     cursor?: WeeklyReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` WeeklyReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` WeeklyReports.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of WeeklyReports.
      */
     distinct?: WeeklyReportScalarFieldEnum | WeeklyReportScalarFieldEnum[]
@@ -12093,31 +14346,31 @@ export namespace Prisma {
     where?: WeeklyReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of WeeklyReports to fetch.
      */
     orderBy?: WeeklyReportOrderByWithRelationInput | WeeklyReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for WeeklyReports.
      */
     cursor?: WeeklyReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` WeeklyReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` WeeklyReports.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of WeeklyReports.
      */
     distinct?: WeeklyReportScalarFieldEnum | WeeklyReportScalarFieldEnum[]
@@ -12141,25 +14394,25 @@ export namespace Prisma {
     where?: WeeklyReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of WeeklyReports to fetch.
      */
     orderBy?: WeeklyReportOrderByWithRelationInput | WeeklyReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing WeeklyReports.
      */
     cursor?: WeeklyReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` WeeklyReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` WeeklyReports.
      */
     skip?: number
@@ -12413,43 +14666,43 @@ export namespace Prisma {
     where?: MonthlyReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of MonthlyReports to fetch.
      */
     orderBy?: MonthlyReportOrderByWithRelationInput | MonthlyReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: MonthlyReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` MonthlyReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` MonthlyReports.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned MonthlyReports
     **/
     _count?: true | MonthlyReportCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: MonthlyReportMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: MonthlyReportMaxAggregateInputType
@@ -12619,13 +14872,13 @@ export namespace Prisma {
      * @example
      * // Get all MonthlyReports
      * const monthlyReports = await prisma.monthlyReport.findMany()
-     * 
+     *
      * // Get first 10 MonthlyReports
      * const monthlyReports = await prisma.monthlyReport.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `yearMonth`
      * const monthlyReportWithYearMonthOnly = await prisma.monthlyReport.findMany({ select: { yearMonth: true } })
-     * 
+     *
      */
     findMany<T extends MonthlyReportFindManyArgs>(args?: SelectSubset<T, MonthlyReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -12639,7 +14892,7 @@ export namespace Prisma {
      *     // ... data to create a MonthlyReport
      *   }
      * })
-     * 
+     *
      */
     create<T extends MonthlyReportCreateArgs>(args: SelectSubset<T, MonthlyReportCreateArgs<ExtArgs>>): Prisma__MonthlyReportClient<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -12653,7 +14906,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends MonthlyReportCreateManyArgs>(args?: SelectSubset<T, MonthlyReportCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -12667,7 +14920,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many MonthlyReports and only return the `yearMonth`
      * const monthlyReportWithYearMonthOnly = await prisma.monthlyReport.createManyAndReturn({
      *   select: { yearMonth: true },
@@ -12677,7 +14930,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends MonthlyReportCreateManyAndReturnArgs>(args?: SelectSubset<T, MonthlyReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -12691,7 +14944,7 @@ export namespace Prisma {
      *     // ... filter to delete one MonthlyReport
      *   }
      * })
-     * 
+     *
      */
     delete<T extends MonthlyReportDeleteArgs>(args: SelectSubset<T, MonthlyReportDeleteArgs<ExtArgs>>): Prisma__MonthlyReportClient<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -12708,7 +14961,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends MonthlyReportUpdateArgs>(args: SelectSubset<T, MonthlyReportUpdateArgs<ExtArgs>>): Prisma__MonthlyReportClient<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -12722,7 +14975,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends MonthlyReportDeleteManyArgs>(args?: SelectSubset<T, MonthlyReportDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -12741,7 +14994,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends MonthlyReportUpdateManyArgs>(args: SelectSubset<T, MonthlyReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -12758,7 +15011,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more MonthlyReports and only return the `yearMonth`
      * const monthlyReportWithYearMonthOnly = await prisma.monthlyReport.updateManyAndReturn({
      *   select: { yearMonth: true },
@@ -12771,7 +15024,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends MonthlyReportUpdateManyAndReturnArgs>(args: SelectSubset<T, MonthlyReportUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyReportPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -12860,7 +15113,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends MonthlyReportGroupByArgs,
@@ -12968,7 +15221,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"MonthlyReport", 'DateTime'>
     readonly updatedAt: FieldRef<"MonthlyReport", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -13025,31 +15278,31 @@ export namespace Prisma {
     where?: MonthlyReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of MonthlyReports to fetch.
      */
     orderBy?: MonthlyReportOrderByWithRelationInput | MonthlyReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for MonthlyReports.
      */
     cursor?: MonthlyReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` MonthlyReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` MonthlyReports.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of MonthlyReports.
      */
     distinct?: MonthlyReportScalarFieldEnum | MonthlyReportScalarFieldEnum[]
@@ -13073,31 +15326,31 @@ export namespace Prisma {
     where?: MonthlyReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of MonthlyReports to fetch.
      */
     orderBy?: MonthlyReportOrderByWithRelationInput | MonthlyReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for MonthlyReports.
      */
     cursor?: MonthlyReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` MonthlyReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` MonthlyReports.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of MonthlyReports.
      */
     distinct?: MonthlyReportScalarFieldEnum | MonthlyReportScalarFieldEnum[]
@@ -13121,25 +15374,25 @@ export namespace Prisma {
     where?: MonthlyReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of MonthlyReports to fetch.
      */
     orderBy?: MonthlyReportOrderByWithRelationInput | MonthlyReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing MonthlyReports.
      */
     cursor?: MonthlyReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` MonthlyReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` MonthlyReports.
      */
     skip?: number
@@ -13393,43 +15646,43 @@ export namespace Prisma {
     where?: QuarterlyReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of QuarterlyReports to fetch.
      */
     orderBy?: QuarterlyReportOrderByWithRelationInput | QuarterlyReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: QuarterlyReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` QuarterlyReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` QuarterlyReports.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned QuarterlyReports
     **/
     _count?: true | QuarterlyReportCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: QuarterlyReportMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: QuarterlyReportMaxAggregateInputType
@@ -13599,13 +15852,13 @@ export namespace Prisma {
      * @example
      * // Get all QuarterlyReports
      * const quarterlyReports = await prisma.quarterlyReport.findMany()
-     * 
+     *
      * // Get first 10 QuarterlyReports
      * const quarterlyReports = await prisma.quarterlyReport.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `yearQuarter`
      * const quarterlyReportWithYearQuarterOnly = await prisma.quarterlyReport.findMany({ select: { yearQuarter: true } })
-     * 
+     *
      */
     findMany<T extends QuarterlyReportFindManyArgs>(args?: SelectSubset<T, QuarterlyReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -13619,7 +15872,7 @@ export namespace Prisma {
      *     // ... data to create a QuarterlyReport
      *   }
      * })
-     * 
+     *
      */
     create<T extends QuarterlyReportCreateArgs>(args: SelectSubset<T, QuarterlyReportCreateArgs<ExtArgs>>): Prisma__QuarterlyReportClient<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -13633,7 +15886,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends QuarterlyReportCreateManyArgs>(args?: SelectSubset<T, QuarterlyReportCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -13647,7 +15900,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many QuarterlyReports and only return the `yearQuarter`
      * const quarterlyReportWithYearQuarterOnly = await prisma.quarterlyReport.createManyAndReturn({
      *   select: { yearQuarter: true },
@@ -13657,7 +15910,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends QuarterlyReportCreateManyAndReturnArgs>(args?: SelectSubset<T, QuarterlyReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -13671,7 +15924,7 @@ export namespace Prisma {
      *     // ... filter to delete one QuarterlyReport
      *   }
      * })
-     * 
+     *
      */
     delete<T extends QuarterlyReportDeleteArgs>(args: SelectSubset<T, QuarterlyReportDeleteArgs<ExtArgs>>): Prisma__QuarterlyReportClient<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -13688,7 +15941,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends QuarterlyReportUpdateArgs>(args: SelectSubset<T, QuarterlyReportUpdateArgs<ExtArgs>>): Prisma__QuarterlyReportClient<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -13702,7 +15955,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends QuarterlyReportDeleteManyArgs>(args?: SelectSubset<T, QuarterlyReportDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -13721,7 +15974,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends QuarterlyReportUpdateManyArgs>(args: SelectSubset<T, QuarterlyReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -13738,7 +15991,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more QuarterlyReports and only return the `yearQuarter`
      * const quarterlyReportWithYearQuarterOnly = await prisma.quarterlyReport.updateManyAndReturn({
      *   select: { yearQuarter: true },
@@ -13751,7 +16004,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends QuarterlyReportUpdateManyAndReturnArgs>(args: SelectSubset<T, QuarterlyReportUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuarterlyReportPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -13840,7 +16093,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends QuarterlyReportGroupByArgs,
@@ -13948,7 +16201,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"QuarterlyReport", 'DateTime'>
     readonly updatedAt: FieldRef<"QuarterlyReport", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -14005,31 +16258,31 @@ export namespace Prisma {
     where?: QuarterlyReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of QuarterlyReports to fetch.
      */
     orderBy?: QuarterlyReportOrderByWithRelationInput | QuarterlyReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for QuarterlyReports.
      */
     cursor?: QuarterlyReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` QuarterlyReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` QuarterlyReports.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of QuarterlyReports.
      */
     distinct?: QuarterlyReportScalarFieldEnum | QuarterlyReportScalarFieldEnum[]
@@ -14053,31 +16306,31 @@ export namespace Prisma {
     where?: QuarterlyReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of QuarterlyReports to fetch.
      */
     orderBy?: QuarterlyReportOrderByWithRelationInput | QuarterlyReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for QuarterlyReports.
      */
     cursor?: QuarterlyReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` QuarterlyReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` QuarterlyReports.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of QuarterlyReports.
      */
     distinct?: QuarterlyReportScalarFieldEnum | QuarterlyReportScalarFieldEnum[]
@@ -14101,25 +16354,25 @@ export namespace Prisma {
     where?: QuarterlyReportWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of QuarterlyReports to fetch.
      */
     orderBy?: QuarterlyReportOrderByWithRelationInput | QuarterlyReportOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing QuarterlyReports.
      */
     cursor?: QuarterlyReportWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` QuarterlyReports from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` QuarterlyReports.
      */
     skip?: number
@@ -14397,55 +16650,55 @@ export namespace Prisma {
     where?: MissedReasonOptionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of MissedReasonOptions to fetch.
      */
     orderBy?: MissedReasonOptionOrderByWithRelationInput | MissedReasonOptionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: MissedReasonOptionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` MissedReasonOptions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` MissedReasonOptions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned MissedReasonOptions
     **/
     _count?: true | MissedReasonOptionCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to average
     **/
     _avg?: MissedReasonOptionAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to sum
     **/
     _sum?: MissedReasonOptionSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: MissedReasonOptionMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: MissedReasonOptionMaxAggregateInputType
@@ -14625,13 +16878,13 @@ export namespace Prisma {
      * @example
      * // Get all MissedReasonOptions
      * const missedReasonOptions = await prisma.missedReasonOption.findMany()
-     * 
+     *
      * // Get first 10 MissedReasonOptions
      * const missedReasonOptions = await prisma.missedReasonOption.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `id`
      * const missedReasonOptionWithIdOnly = await prisma.missedReasonOption.findMany({ select: { id: true } })
-     * 
+     *
      */
     findMany<T extends MissedReasonOptionFindManyArgs>(args?: SelectSubset<T, MissedReasonOptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -14645,7 +16898,7 @@ export namespace Prisma {
      *     // ... data to create a MissedReasonOption
      *   }
      * })
-     * 
+     *
      */
     create<T extends MissedReasonOptionCreateArgs>(args: SelectSubset<T, MissedReasonOptionCreateArgs<ExtArgs>>): Prisma__MissedReasonOptionClient<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -14659,7 +16912,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends MissedReasonOptionCreateManyArgs>(args?: SelectSubset<T, MissedReasonOptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -14673,7 +16926,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many MissedReasonOptions and only return the `id`
      * const missedReasonOptionWithIdOnly = await prisma.missedReasonOption.createManyAndReturn({
      *   select: { id: true },
@@ -14683,7 +16936,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends MissedReasonOptionCreateManyAndReturnArgs>(args?: SelectSubset<T, MissedReasonOptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -14697,7 +16950,7 @@ export namespace Prisma {
      *     // ... filter to delete one MissedReasonOption
      *   }
      * })
-     * 
+     *
      */
     delete<T extends MissedReasonOptionDeleteArgs>(args: SelectSubset<T, MissedReasonOptionDeleteArgs<ExtArgs>>): Prisma__MissedReasonOptionClient<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -14714,7 +16967,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends MissedReasonOptionUpdateArgs>(args: SelectSubset<T, MissedReasonOptionUpdateArgs<ExtArgs>>): Prisma__MissedReasonOptionClient<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -14728,7 +16981,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends MissedReasonOptionDeleteManyArgs>(args?: SelectSubset<T, MissedReasonOptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -14747,7 +17000,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends MissedReasonOptionUpdateManyArgs>(args: SelectSubset<T, MissedReasonOptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -14764,7 +17017,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more MissedReasonOptions and only return the `id`
      * const missedReasonOptionWithIdOnly = await prisma.missedReasonOption.updateManyAndReturn({
      *   select: { id: true },
@@ -14777,7 +17030,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends MissedReasonOptionUpdateManyAndReturnArgs>(args: SelectSubset<T, MissedReasonOptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MissedReasonOptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -14866,7 +17119,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends MissedReasonOptionGroupByArgs,
@@ -14975,7 +17228,7 @@ export namespace Prisma {
     readonly sortOrder: FieldRef<"MissedReasonOption", 'Int'>
     readonly createdAt: FieldRef<"MissedReasonOption", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -15032,31 +17285,31 @@ export namespace Prisma {
     where?: MissedReasonOptionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of MissedReasonOptions to fetch.
      */
     orderBy?: MissedReasonOptionOrderByWithRelationInput | MissedReasonOptionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for MissedReasonOptions.
      */
     cursor?: MissedReasonOptionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` MissedReasonOptions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` MissedReasonOptions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of MissedReasonOptions.
      */
     distinct?: MissedReasonOptionScalarFieldEnum | MissedReasonOptionScalarFieldEnum[]
@@ -15080,31 +17333,31 @@ export namespace Prisma {
     where?: MissedReasonOptionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of MissedReasonOptions to fetch.
      */
     orderBy?: MissedReasonOptionOrderByWithRelationInput | MissedReasonOptionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for MissedReasonOptions.
      */
     cursor?: MissedReasonOptionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` MissedReasonOptions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` MissedReasonOptions.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of MissedReasonOptions.
      */
     distinct?: MissedReasonOptionScalarFieldEnum | MissedReasonOptionScalarFieldEnum[]
@@ -15128,25 +17381,25 @@ export namespace Prisma {
     where?: MissedReasonOptionWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of MissedReasonOptions to fetch.
      */
     orderBy?: MissedReasonOptionOrderByWithRelationInput | MissedReasonOptionOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing MissedReasonOptions.
      */
     cursor?: MissedReasonOptionWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` MissedReasonOptions from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` MissedReasonOptions.
      */
     skip?: number
@@ -15478,55 +17731,55 @@ export namespace Prisma {
     where?: ScreenshotWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Screenshots to fetch.
      */
     orderBy?: ScreenshotOrderByWithRelationInput | ScreenshotOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: ScreenshotWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Screenshots from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Screenshots.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned Screenshots
     **/
     _count?: true | ScreenshotCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to average
     **/
     _avg?: ScreenshotAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to sum
     **/
     _sum?: ScreenshotSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: ScreenshotMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: ScreenshotMaxAggregateInputType
@@ -15788,13 +18041,13 @@ export namespace Prisma {
      * @example
      * // Get all Screenshots
      * const screenshots = await prisma.screenshot.findMany()
-     * 
+     *
      * // Get first 10 Screenshots
      * const screenshots = await prisma.screenshot.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `id`
      * const screenshotWithIdOnly = await prisma.screenshot.findMany({ select: { id: true } })
-     * 
+     *
      */
     findMany<T extends ScreenshotFindManyArgs>(args?: SelectSubset<T, ScreenshotFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -15808,7 +18061,7 @@ export namespace Prisma {
      *     // ... data to create a Screenshot
      *   }
      * })
-     * 
+     *
      */
     create<T extends ScreenshotCreateArgs>(args: SelectSubset<T, ScreenshotCreateArgs<ExtArgs>>): Prisma__ScreenshotClient<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -15822,7 +18075,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends ScreenshotCreateManyArgs>(args?: SelectSubset<T, ScreenshotCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -15836,7 +18089,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many Screenshots and only return the `id`
      * const screenshotWithIdOnly = await prisma.screenshot.createManyAndReturn({
      *   select: { id: true },
@@ -15846,7 +18099,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends ScreenshotCreateManyAndReturnArgs>(args?: SelectSubset<T, ScreenshotCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -15860,7 +18113,7 @@ export namespace Prisma {
      *     // ... filter to delete one Screenshot
      *   }
      * })
-     * 
+     *
      */
     delete<T extends ScreenshotDeleteArgs>(args: SelectSubset<T, ScreenshotDeleteArgs<ExtArgs>>): Prisma__ScreenshotClient<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -15877,7 +18130,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends ScreenshotUpdateArgs>(args: SelectSubset<T, ScreenshotUpdateArgs<ExtArgs>>): Prisma__ScreenshotClient<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -15891,7 +18144,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends ScreenshotDeleteManyArgs>(args?: SelectSubset<T, ScreenshotDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -15910,7 +18163,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends ScreenshotUpdateManyArgs>(args: SelectSubset<T, ScreenshotUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -15927,7 +18180,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more Screenshots and only return the `id`
      * const screenshotWithIdOnly = await prisma.screenshot.updateManyAndReturn({
      *   select: { id: true },
@@ -15940,7 +18193,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends ScreenshotUpdateManyAndReturnArgs>(args: SelectSubset<T, ScreenshotUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScreenshotPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -16029,7 +18282,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends ScreenshotGroupByArgs,
@@ -16150,7 +18403,7 @@ export namespace Prisma {
     readonly takenAt: FieldRef<"Screenshot", 'DateTime'>
     readonly createdAt: FieldRef<"Screenshot", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -16219,31 +18472,31 @@ export namespace Prisma {
     where?: ScreenshotWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Screenshots to fetch.
      */
     orderBy?: ScreenshotOrderByWithRelationInput | ScreenshotOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for Screenshots.
      */
     cursor?: ScreenshotWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Screenshots from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Screenshots.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of Screenshots.
      */
     distinct?: ScreenshotScalarFieldEnum | ScreenshotScalarFieldEnum[]
@@ -16271,31 +18524,31 @@ export namespace Prisma {
     where?: ScreenshotWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Screenshots to fetch.
      */
     orderBy?: ScreenshotOrderByWithRelationInput | ScreenshotOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for Screenshots.
      */
     cursor?: ScreenshotWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Screenshots from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Screenshots.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of Screenshots.
      */
     distinct?: ScreenshotScalarFieldEnum | ScreenshotScalarFieldEnum[]
@@ -16323,25 +18576,25 @@ export namespace Prisma {
     where?: ScreenshotWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of Screenshots to fetch.
      */
     orderBy?: ScreenshotOrderByWithRelationInput | ScreenshotOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing Screenshots.
      */
     cursor?: ScreenshotWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` Screenshots from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` Screenshots.
      */
     skip?: number
@@ -16890,43 +19143,43 @@ export namespace Prisma {
     where?: MnqDailyPlanWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of MnqDailyPlans to fetch.
      */
     orderBy?: MnqDailyPlanOrderByWithRelationInput | MnqDailyPlanOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the start position
      */
     cursor?: MnqDailyPlanWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` MnqDailyPlans from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` MnqDailyPlans.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Count returned MnqDailyPlans
     **/
     _count?: true | MnqDailyPlanCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the minimum value
     **/
     _min?: MnqDailyPlanMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
+     *
      * Select which fields to find the maximum value
     **/
     _max?: MnqDailyPlanMaxAggregateInputType
@@ -17320,13 +19573,13 @@ export namespace Prisma {
      * @example
      * // Get all MnqDailyPlans
      * const mnqDailyPlans = await prisma.mnqDailyPlan.findMany()
-     * 
+     *
      * // Get first 10 MnqDailyPlans
      * const mnqDailyPlans = await prisma.mnqDailyPlan.findMany({ take: 10 })
-     * 
+     *
      * // Only select the `id`
      * const mnqDailyPlanWithIdOnly = await prisma.mnqDailyPlan.findMany({ select: { id: true } })
-     * 
+     *
      */
     findMany<T extends MnqDailyPlanFindManyArgs>(args?: SelectSubset<T, MnqDailyPlanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
@@ -17340,7 +19593,7 @@ export namespace Prisma {
      *     // ... data to create a MnqDailyPlan
      *   }
      * })
-     * 
+     *
      */
     create<T extends MnqDailyPlanCreateArgs>(args: SelectSubset<T, MnqDailyPlanCreateArgs<ExtArgs>>): Prisma__MnqDailyPlanClient<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -17354,7 +19607,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     *     
+     *
      */
     createMany<T extends MnqDailyPlanCreateManyArgs>(args?: SelectSubset<T, MnqDailyPlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -17368,7 +19621,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Create many MnqDailyPlans and only return the `id`
      * const mnqDailyPlanWithIdOnly = await prisma.mnqDailyPlan.createManyAndReturn({
      *   select: { id: true },
@@ -17378,7 +19631,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     createManyAndReturn<T extends MnqDailyPlanCreateManyAndReturnArgs>(args?: SelectSubset<T, MnqDailyPlanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
@@ -17392,7 +19645,7 @@ export namespace Prisma {
      *     // ... filter to delete one MnqDailyPlan
      *   }
      * })
-     * 
+     *
      */
     delete<T extends MnqDailyPlanDeleteArgs>(args: SelectSubset<T, MnqDailyPlanDeleteArgs<ExtArgs>>): Prisma__MnqDailyPlanClient<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -17409,7 +19662,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     update<T extends MnqDailyPlanUpdateArgs>(args: SelectSubset<T, MnqDailyPlanUpdateArgs<ExtArgs>>): Prisma__MnqDailyPlanClient<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
@@ -17423,7 +19676,7 @@ export namespace Prisma {
      *     // ... provide filter here
      *   }
      * })
-     * 
+     *
      */
     deleteMany<T extends MnqDailyPlanDeleteManyArgs>(args?: SelectSubset<T, MnqDailyPlanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -17442,7 +19695,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   }
      * })
-     * 
+     *
      */
     updateMany<T extends MnqDailyPlanUpdateManyArgs>(args: SelectSubset<T, MnqDailyPlanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
@@ -17459,7 +19712,7 @@ export namespace Prisma {
      *     // ... provide data here
      *   ]
      * })
-     * 
+     *
      * // Update zero or more MnqDailyPlans and only return the `id`
      * const mnqDailyPlanWithIdOnly = await prisma.mnqDailyPlan.updateManyAndReturn({
      *   select: { id: true },
@@ -17472,7 +19725,7 @@ export namespace Prisma {
      * })
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * 
+     *
      */
     updateManyAndReturn<T extends MnqDailyPlanUpdateManyAndReturnArgs>(args: SelectSubset<T, MnqDailyPlanUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MnqDailyPlanPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
@@ -17561,7 +19814,7 @@ export namespace Prisma {
      *     _all: true
      *   },
      * })
-     * 
+     *
     **/
     groupBy<
       T extends MnqDailyPlanGroupByArgs,
@@ -17705,7 +19958,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"MnqDailyPlan", 'DateTime'>
     readonly updatedAt: FieldRef<"MnqDailyPlan", 'DateTime'>
   }
-    
+
 
   // Custom InputTypes
   /**
@@ -17774,31 +20027,31 @@ export namespace Prisma {
     where?: MnqDailyPlanWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of MnqDailyPlans to fetch.
      */
     orderBy?: MnqDailyPlanOrderByWithRelationInput | MnqDailyPlanOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for MnqDailyPlans.
      */
     cursor?: MnqDailyPlanWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` MnqDailyPlans from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` MnqDailyPlans.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of MnqDailyPlans.
      */
     distinct?: MnqDailyPlanScalarFieldEnum | MnqDailyPlanScalarFieldEnum[]
@@ -17826,31 +20079,31 @@ export namespace Prisma {
     where?: MnqDailyPlanWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of MnqDailyPlans to fetch.
      */
     orderBy?: MnqDailyPlanOrderByWithRelationInput | MnqDailyPlanOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for searching for MnqDailyPlans.
      */
     cursor?: MnqDailyPlanWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` MnqDailyPlans from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` MnqDailyPlans.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
+     *
      * Filter by unique combinations of MnqDailyPlans.
      */
     distinct?: MnqDailyPlanScalarFieldEnum | MnqDailyPlanScalarFieldEnum[]
@@ -17878,25 +20131,25 @@ export namespace Prisma {
     where?: MnqDailyPlanWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
+     *
      * Determine the order of MnqDailyPlans to fetch.
      */
     orderBy?: MnqDailyPlanOrderByWithRelationInput | MnqDailyPlanOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
+     *
      * Sets the position for listing MnqDailyPlans.
      */
     cursor?: MnqDailyPlanWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Take `±n` MnqDailyPlans from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
+     *
      * Skip the first `n` MnqDailyPlans.
      */
     skip?: number
@@ -18186,6 +20439,29 @@ export namespace Prisma {
   export type DailySessionScalarFieldEnum = (typeof DailySessionScalarFieldEnum)[keyof typeof DailySessionScalarFieldEnum]
 
 
+  export const KpiTargetSettingScalarFieldEnum: {
+    id: 'id',
+    effectiveFrom: 'effectiveFrom',
+    dailyBaseline: 'dailyBaseline',
+    dailyOptimistic: 'dailyOptimistic',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type KpiTargetSettingScalarFieldEnum = (typeof KpiTargetSettingScalarFieldEnum)[keyof typeof KpiTargetSettingScalarFieldEnum]
+
+
+  export const KpiDailyRecordScalarFieldEnum: {
+    date: 'date',
+    actualPcts: 'actualPcts',
+    note: 'note',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type KpiDailyRecordScalarFieldEnum = (typeof KpiDailyRecordScalarFieldEnum)[keyof typeof KpiDailyRecordScalarFieldEnum]
+
+
   export const NewsEventScalarFieldEnum: {
     id: 'id',
     sessionDate: 'sessionDate',
@@ -18419,119 +20695,119 @@ export namespace Prisma {
    * Reference to a field of type 'String'
    */
   export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
-    
+
 
 
   /**
    * Reference to a field of type 'NewsStrength'
    */
   export type EnumNewsStrengthFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NewsStrength'>
-    
+
 
 
   /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
+
 
 
   /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
+
 
 
   /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
 
-
-  /**
-   * Reference to a field of type 'NewsType'
-   */
-  export type EnumNewsTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NewsType'>
-    
-
-
-  /**
-   * Reference to a field of type 'NewsImpact'
-   */
-  export type EnumNewsImpactFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NewsImpact'>
-    
-
-
-  /**
-   * Reference to a field of type 'Direction'
-   */
-  export type EnumDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Direction'>
-    
-
-
-  /**
-   * Reference to a field of type 'SetupPriority'
-   */
-  export type EnumSetupPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SetupPriority'>
-    
-
-
-  /**
-   * Reference to a field of type 'PriceTier'
-   */
-  export type EnumPriceTierFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceTier'>
-    
-
-
-  /**
-   * Reference to a field of type 'MarketCapTier'
-   */
-  export type EnumMarketCapTierFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketCapTier'>
-    
 
 
   /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
+
+
+
+  /**
+   * Reference to a field of type 'NewsType'
+   */
+  export type EnumNewsTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NewsType'>
+
+
+
+  /**
+   * Reference to a field of type 'NewsImpact'
+   */
+  export type EnumNewsImpactFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NewsImpact'>
+
+
+
+  /**
+   * Reference to a field of type 'Direction'
+   */
+  export type EnumDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Direction'>
+
+
+
+  /**
+   * Reference to a field of type 'SetupPriority'
+   */
+  export type EnumSetupPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SetupPriority'>
+
+
+
+  /**
+   * Reference to a field of type 'PriceTier'
+   */
+  export type EnumPriceTierFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriceTier'>
+
+
+
+  /**
+   * Reference to a field of type 'MarketCapTier'
+   */
+  export type EnumMarketCapTierFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketCapTier'>
+
 
 
   /**
    * Reference to a field of type 'SetupStatus'
    */
   export type EnumSetupStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SetupStatus'>
-    
+
 
 
   /**
    * Reference to a field of type 'ChartTimeframe'
    */
   export type EnumChartTimeframeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChartTimeframe'>
-    
+
 
 
   /**
    * Reference to a field of type 'Grade'
    */
   export type EnumGradeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Grade'>
-    
+
 
 
   /**
    * Reference to a field of type 'ChartTag'
    */
   export type EnumChartTagFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChartTag'>
-    
+
 
 
   /**
    * Reference to a field of type 'MnqScenario'
    */
   export type EnumMnqScenarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MnqScenario'>
-    
+
   /**
    * Deep Input Types
    */
@@ -18844,6 +21120,119 @@ export namespace Prisma {
     focusRating?: IntNullableWithAggregatesFilter<"DailySession"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"DailySession"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"DailySession"> | Date | string
+  }
+
+  export type KpiTargetSettingWhereInput = {
+    AND?: KpiTargetSettingWhereInput | KpiTargetSettingWhereInput[]
+    OR?: KpiTargetSettingWhereInput[]
+    NOT?: KpiTargetSettingWhereInput | KpiTargetSettingWhereInput[]
+    id?: StringFilter<"KpiTargetSetting"> | string
+    effectiveFrom?: DateTimeFilter<"KpiTargetSetting"> | Date | string
+    dailyBaseline?: FloatFilter<"KpiTargetSetting"> | number
+    dailyOptimistic?: FloatFilter<"KpiTargetSetting"> | number
+    createdAt?: DateTimeFilter<"KpiTargetSetting"> | Date | string
+    updatedAt?: DateTimeFilter<"KpiTargetSetting"> | Date | string
+  }
+
+  export type KpiTargetSettingOrderByWithRelationInput = {
+    id?: SortOrder
+    effectiveFrom?: SortOrder
+    dailyBaseline?: SortOrder
+    dailyOptimistic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KpiTargetSettingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    effectiveFrom?: Date | string
+    AND?: KpiTargetSettingWhereInput | KpiTargetSettingWhereInput[]
+    OR?: KpiTargetSettingWhereInput[]
+    NOT?: KpiTargetSettingWhereInput | KpiTargetSettingWhereInput[]
+    dailyBaseline?: FloatFilter<"KpiTargetSetting"> | number
+    dailyOptimistic?: FloatFilter<"KpiTargetSetting"> | number
+    createdAt?: DateTimeFilter<"KpiTargetSetting"> | Date | string
+    updatedAt?: DateTimeFilter<"KpiTargetSetting"> | Date | string
+  }, "id" | "effectiveFrom">
+
+  export type KpiTargetSettingOrderByWithAggregationInput = {
+    id?: SortOrder
+    effectiveFrom?: SortOrder
+    dailyBaseline?: SortOrder
+    dailyOptimistic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: KpiTargetSettingCountOrderByAggregateInput
+    _avg?: KpiTargetSettingAvgOrderByAggregateInput
+    _max?: KpiTargetSettingMaxOrderByAggregateInput
+    _min?: KpiTargetSettingMinOrderByAggregateInput
+    _sum?: KpiTargetSettingSumOrderByAggregateInput
+  }
+
+  export type KpiTargetSettingScalarWhereWithAggregatesInput = {
+    AND?: KpiTargetSettingScalarWhereWithAggregatesInput | KpiTargetSettingScalarWhereWithAggregatesInput[]
+    OR?: KpiTargetSettingScalarWhereWithAggregatesInput[]
+    NOT?: KpiTargetSettingScalarWhereWithAggregatesInput | KpiTargetSettingScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"KpiTargetSetting"> | string
+    effectiveFrom?: DateTimeWithAggregatesFilter<"KpiTargetSetting"> | Date | string
+    dailyBaseline?: FloatWithAggregatesFilter<"KpiTargetSetting"> | number
+    dailyOptimistic?: FloatWithAggregatesFilter<"KpiTargetSetting"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"KpiTargetSetting"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"KpiTargetSetting"> | Date | string
+  }
+
+  export type KpiDailyRecordWhereInput = {
+    AND?: KpiDailyRecordWhereInput | KpiDailyRecordWhereInput[]
+    OR?: KpiDailyRecordWhereInput[]
+    NOT?: KpiDailyRecordWhereInput | KpiDailyRecordWhereInput[]
+    date?: DateTimeFilter<"KpiDailyRecord"> | Date | string
+    actualPcts?: FloatFilter<"KpiDailyRecord"> | number
+    note?: StringNullableFilter<"KpiDailyRecord"> | string | null
+    createdAt?: DateTimeFilter<"KpiDailyRecord"> | Date | string
+    updatedAt?: DateTimeFilter<"KpiDailyRecord"> | Date | string
+  }
+
+  export type KpiDailyRecordOrderByWithRelationInput = {
+    date?: SortOrder
+    actualPcts?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KpiDailyRecordWhereUniqueInput = Prisma.AtLeast<{
+    date?: Date | string
+    AND?: KpiDailyRecordWhereInput | KpiDailyRecordWhereInput[]
+    OR?: KpiDailyRecordWhereInput[]
+    NOT?: KpiDailyRecordWhereInput | KpiDailyRecordWhereInput[]
+    actualPcts?: FloatFilter<"KpiDailyRecord"> | number
+    note?: StringNullableFilter<"KpiDailyRecord"> | string | null
+    createdAt?: DateTimeFilter<"KpiDailyRecord"> | Date | string
+    updatedAt?: DateTimeFilter<"KpiDailyRecord"> | Date | string
+  }, "date">
+
+  export type KpiDailyRecordOrderByWithAggregationInput = {
+    date?: SortOrder
+    actualPcts?: SortOrder
+    note?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: KpiDailyRecordCountOrderByAggregateInput
+    _avg?: KpiDailyRecordAvgOrderByAggregateInput
+    _max?: KpiDailyRecordMaxOrderByAggregateInput
+    _min?: KpiDailyRecordMinOrderByAggregateInput
+    _sum?: KpiDailyRecordSumOrderByAggregateInput
+  }
+
+  export type KpiDailyRecordScalarWhereWithAggregatesInput = {
+    AND?: KpiDailyRecordScalarWhereWithAggregatesInput | KpiDailyRecordScalarWhereWithAggregatesInput[]
+    OR?: KpiDailyRecordScalarWhereWithAggregatesInput[]
+    NOT?: KpiDailyRecordScalarWhereWithAggregatesInput | KpiDailyRecordScalarWhereWithAggregatesInput[]
+    date?: DateTimeWithAggregatesFilter<"KpiDailyRecord"> | Date | string
+    actualPcts?: FloatWithAggregatesFilter<"KpiDailyRecord"> | number
+    note?: StringNullableWithAggregatesFilter<"KpiDailyRecord"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"KpiDailyRecord"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"KpiDailyRecord"> | Date | string
   }
 
   export type NewsEventWhereInput = {
@@ -20263,6 +22652,125 @@ export namespace Prisma {
     planFollowed?: NullableIntFieldUpdateOperationsInput | number | null
     emotionRating?: NullableIntFieldUpdateOperationsInput | number | null
     focusRating?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiTargetSettingCreateInput = {
+    id?: string
+    effectiveFrom: Date | string
+    dailyBaseline: number
+    dailyOptimistic: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KpiTargetSettingUncheckedCreateInput = {
+    id?: string
+    effectiveFrom: Date | string
+    dailyBaseline: number
+    dailyOptimistic: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KpiTargetSettingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    dailyBaseline?: FloatFieldUpdateOperationsInput | number
+    dailyOptimistic?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiTargetSettingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    dailyBaseline?: FloatFieldUpdateOperationsInput | number
+    dailyOptimistic?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiTargetSettingCreateManyInput = {
+    id?: string
+    effectiveFrom: Date | string
+    dailyBaseline: number
+    dailyOptimistic: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KpiTargetSettingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    dailyBaseline?: FloatFieldUpdateOperationsInput | number
+    dailyOptimistic?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiTargetSettingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    effectiveFrom?: DateTimeFieldUpdateOperationsInput | Date | string
+    dailyBaseline?: FloatFieldUpdateOperationsInput | number
+    dailyOptimistic?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiDailyRecordCreateInput = {
+    date: Date | string
+    actualPcts: number
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KpiDailyRecordUncheckedCreateInput = {
+    date: Date | string
+    actualPcts: number
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KpiDailyRecordUpdateInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    actualPcts?: FloatFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiDailyRecordUncheckedUpdateInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    actualPcts?: FloatFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiDailyRecordCreateManyInput = {
+    date: Date | string
+    actualPcts: number
+    note?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type KpiDailyRecordUpdateManyMutationInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    actualPcts?: FloatFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type KpiDailyRecordUncheckedUpdateManyInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    actualPcts?: FloatFieldUpdateOperationsInput | number
+    note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21897,6 +24405,102 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type KpiTargetSettingCountOrderByAggregateInput = {
+    id?: SortOrder
+    effectiveFrom?: SortOrder
+    dailyBaseline?: SortOrder
+    dailyOptimistic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KpiTargetSettingAvgOrderByAggregateInput = {
+    dailyBaseline?: SortOrder
+    dailyOptimistic?: SortOrder
+  }
+
+  export type KpiTargetSettingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    effectiveFrom?: SortOrder
+    dailyBaseline?: SortOrder
+    dailyOptimistic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KpiTargetSettingMinOrderByAggregateInput = {
+    id?: SortOrder
+    effectiveFrom?: SortOrder
+    dailyBaseline?: SortOrder
+    dailyOptimistic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KpiTargetSettingSumOrderByAggregateInput = {
+    dailyBaseline?: SortOrder
+    dailyOptimistic?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type KpiDailyRecordCountOrderByAggregateInput = {
+    date?: SortOrder
+    actualPcts?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KpiDailyRecordAvgOrderByAggregateInput = {
+    actualPcts?: SortOrder
+  }
+
+  export type KpiDailyRecordMaxOrderByAggregateInput = {
+    date?: SortOrder
+    actualPcts?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KpiDailyRecordMinOrderByAggregateInput = {
+    date?: SortOrder
+    actualPcts?: SortOrder
+    note?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type KpiDailyRecordSumOrderByAggregateInput = {
+    actualPcts?: SortOrder
+  }
+
   export type EnumNewsTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.NewsType | EnumNewsTypeFieldRefInput<$PrismaModel>
     in?: $Enums.NewsType[]
@@ -22373,17 +24977,6 @@ export namespace Prisma {
     _max?: NestedEnumGradeNullableFilter<$PrismaModel>
   }
 
-  export type FloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -22492,22 +25085,6 @@ export namespace Prisma {
     quantity?: SortOrder
     commission?: SortOrder
     pnl?: SortOrder
-  }
-
-  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -23228,6 +25805,14 @@ export namespace Prisma {
     update?: XOR<XOR<MnqDailyPlanUpdateToOneWithWhereWithoutSessionInput, MnqDailyPlanUpdateWithoutSessionInput>, MnqDailyPlanUncheckedUpdateWithoutSessionInput>
   }
 
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type DailySessionCreateNestedOneWithoutNewsEventsInput = {
     create?: XOR<DailySessionCreateWithoutNewsEventsInput, DailySessionUncheckedCreateWithoutNewsEventsInput>
     connectOrCreate?: DailySessionCreateOrConnectWithoutNewsEventsInput
@@ -23524,14 +26109,6 @@ export namespace Prisma {
     connect?: ScreenshotWhereUniqueInput | ScreenshotWhereUniqueInput[]
   }
 
-  export type FloatFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -23820,6 +26397,33 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type NestedEnumNewsTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.NewsType | EnumNewsTypeFieldRefInput<$PrismaModel>
     in?: $Enums.NewsType[]
@@ -24036,17 +26640,6 @@ export namespace Prisma {
     _max?: NestedEnumGradeNullableFilter<$PrismaModel>
   }
 
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -24063,22 +26656,6 @@ export namespace Prisma {
     in?: $Enums.Direction[] | null
     notIn?: $Enums.Direction[] | null
     not?: NestedEnumDirectionNullableFilter<$PrismaModel> | $Enums.Direction | null
-  }
-
-  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {

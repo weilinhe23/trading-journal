@@ -165,6 +165,23 @@ exports.Prisma.DailySessionScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.KpiTargetSettingScalarFieldEnum = {
+  id: 'id',
+  effectiveFrom: 'effectiveFrom',
+  dailyBaseline: 'dailyBaseline',
+  dailyOptimistic: 'dailyOptimistic',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.KpiDailyRecordScalarFieldEnum = {
+  date: 'date',
+  actualPcts: 'actualPcts',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.NewsEventScalarFieldEnum = {
   id: 'id',
   sessionDate: 'sessionDate',
@@ -448,6 +465,8 @@ exports.Prisma.ModelName = {
   Strategy: 'Strategy',
   TradeType: 'TradeType',
   DailySession: 'DailySession',
+  KpiTargetSetting: 'KpiTargetSetting',
+  KpiDailyRecord: 'KpiDailyRecord',
   NewsEvent: 'NewsEvent',
   TradeSetup: 'TradeSetup',
   Execution: 'Execution',

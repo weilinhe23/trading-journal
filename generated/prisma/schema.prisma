@@ -170,6 +170,25 @@ model DailySession {
   updatedAt DateTime @updatedAt
 }
 
+// KPI 每日目标设置；按 effectiveFrom 保留目标变更历史
+model KpiTargetSetting {
+  id              String   @id @default(cuid())
+  effectiveFrom   DateTime @unique
+  dailyBaseline   Float
+  dailyOptimistic Float
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// KPI 唯一原始记录；周/月/季/年均由每日记录自动汇总
+model KpiDailyRecord {
+  date       DateTime @id
+  actualPcts Float
+  note       String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 // 新闻催化剂
 model NewsEvent {
   id          String       @id @default(cuid())
@@ -298,12 +317,6 @@ model Execution {
   commission Float     @default(0)
   pnl        Float? // 自动计算后存储
 
-  // ── 交易回报指标（点位为单位，适用于 MNQ/NQ 等期货）──
-  plannedRiskPts           Float? // 计划风险（入场到止损点位距离）
-  maxAdverseExcursionPts   Float? // MAE 最大不利变动（盘中最大回撤点位）
-  maxFavorableExcursionPts Float? // MFE 最大有利变动（盘中最高盈利空间点位）
-  rMultiple                Float? // R 倍数（实际盈亏点位 / 计划风险，自动计算）
-
   // 执行纪律评估（定性为主）
   actualDirection Direction? // 实际执行方向（可与计划方向不同）
 
@@ -333,7 +346,6 @@ model WeeklyReport {
   updatedAt     DateTime @updatedAt
 }
 
-// 每月月报
 model MonthlyReport {
   yearMonth    String   @id // "2026-04"
   monthInsight String? // 月度复盘文字

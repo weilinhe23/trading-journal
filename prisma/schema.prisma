@@ -170,6 +170,25 @@ model DailySession {
   updatedAt        DateTime  @updatedAt
 }
 
+// KPI 每日目标设置；按 effectiveFrom 保留目标变更历史
+model KpiTargetSetting {
+  id              String   @id @default(cuid())
+  effectiveFrom   DateTime @unique
+  dailyBaseline   Float
+  dailyOptimistic Float
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// KPI 唯一原始记录；周/月/季/年均由每日记录自动汇总
+model KpiDailyRecord {
+  date       DateTime @id
+  actualPcts Float
+  note       String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 // 新闻催化剂
 model NewsEvent {
   id           String      @id @default(cuid())

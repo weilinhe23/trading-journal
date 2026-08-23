@@ -1,54 +1,71 @@
-import { notFound } from "next/navigation"
-import Link from "next/link"
-import { format } from "date-fns"
-import { zhCN } from "date-fns/locale"
-import { ChevronLeft } from "lucide-react"
-import { Button } from "~/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
-import { prisma } from "~/lib/prisma"
-import { PreMarketSection } from "~/components/journal/PreMarketSection"
-import { IntraMarketSection } from "~/components/journal/IntraMarketSection"
-import { PostMarketSection } from "~/components/journal/PostMarketSection"
-import { DailySummarySection } from "~/components/journal/DailySummarySection"
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { format } from "date-fns";
+import { zhCN } from "date-fns/locale";
+import { ChevronLeft } from "lucide-react";
+import { Button } from "~/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { prisma } from "~/lib/prisma";
+import { PreMarketSection } from "~/components/journal/PreMarketSection";
+import { IntraMarketSection } from "~/components/journal/IntraMarketSection";
+import { PostMarketSection } from "~/components/journal/PostMarketSection";
+import { DailySummarySection } from "~/components/journal/DailySummarySection";
 
 function parseDateParam(dateStr: string): Date | null {
-  const match = /^\d{4}-\d{2}-\d{2}$/.exec(dateStr)
-  if (!match) return null
-  const d = new Date(`${dateStr}T00:00:00.000Z`)
-  return isNaN(d.getTime()) ? null : d
+  const match = /^\d{4}-\d{2}-\d{2}$/.exec(dateStr);
+  if (!match) return null;
+  const d = new Date(`${dateStr}T00:00:00.000Z`);
+  return isNaN(d.getTime()) ? null : d;
 }
 
 interface PageProps {
-  params: Promise<{ date: string }>
+  params: Promise<{ date: string }>;
+  searchParams: Promise<{ tab?: string | string[] }>;
 }
 
-export default async function DailyJournalPage({ params }: PageProps) {
-  const { date: dateParam } = await params
-  const date = parseDateParam(dateParam)
-  if (!date) notFound()
+const JOURNAL_TABS = ["pre", "intra", "post", "summary"] as const;
+
+export default async function DailyJournalPage({
+  params,
+  searchParams,
+}: PageProps) {
+  const { date: dateParam } = await params;
+  const { tab } = await searchParams;
+  const date = parseDateParam(dateParam);
+  if (!date) notFound();
+
+  const defaultTab =
+    typeof tab === "string" && JOURNAL_TABS.some((value) => value === tab)
+      ? tab
+      : "pre";
 
   // upsert：不存在自动创建（必须先于 MnqDailyPlan 和 MNQ Setup）
   await prisma.dailySession.upsert({
     where: { date },
     create: { date },
     update: {},
-  })
+  });
 
   // 自动创建 MnqDailyPlan（upsert，DailySession 已存在）
   await prisma.mnqDailyPlan.upsert({
     where: { sessionDate: date },
     create: { sessionDate: date },
     update: {},
-  })
+  });
 
   // 自动创建 MNQ TradeSetup（如果当天还没有）
   const existingMnq = await prisma.tradeSetup.findFirst({
     where: { sessionDate: date, symbol: "MNQ" },
-  })
+  });
   if (!existingMnq) {
     await prisma.tradeSetup.create({
-      data: { sessionDate: date, symbol: "MNQ", direction: "TBD", priority: "HIGH" },
-    })
+      data: {
+        sessionDate: date,
+        symbol: "MNQ",
+        direction: "TBD",
+        priority: "HIGH",
+      },
+    });
   }
 
   // 重新查询完整数据（含关联）
@@ -69,12 +86,12 @@ export default async function DailyJournalPage({ params }: PageProps) {
       screenshots: true,
       mnqPlan: true,
     },
-  })
+  });
 
-  const displayDate = format(date, "yyyy年MM月dd日 EEEE", { locale: zhCN })
+  const displayDate = format(date, "yyyy年MM月dd日 EEEE", { locale: zhCN });
 
   return (
-    <div className="max-w-4xl mx-auto space-y-4">
+    <div className="mx-auto max-w-4xl space-y-4">
       {/* 页面头部 */}
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="icon" asChild>
@@ -84,12 +101,12 @@ export default async function DailyJournalPage({ params }: PageProps) {
         </Button>
         <div>
           <h1 className="text-xl font-bold">{displayDate}</h1>
-          <p className="text-xs text-muted-foreground">{dateParam}</p>
+          <p className="text-muted-foreground text-xs">{dateParam}</p>
         </div>
       </div>
 
       {/* 四段式 Tab */}
-      <Tabs defaultValue="pre" className="w-full">
+      <Tabs defaultValue={defaultTab} className="w-full">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="pre">盘前计划</TabsTrigger>
           <TabsTrigger value="intra">盘中记录</TabsTrigger>
@@ -114,5 +131,5 @@ export default async function DailyJournalPage({ params }: PageProps) {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

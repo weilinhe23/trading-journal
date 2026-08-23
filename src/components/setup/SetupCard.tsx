@@ -871,7 +871,11 @@ export function SetupCard({
                         {opps.length > 0 && (
                           <div className="space-y-1 pl-1">
                             {opps.map((opp, idx) => (
-                              <div key={opp.id} className="space-y-0.5">
+                              <div
+                                key={opp.id}
+                                id={`mnq-opportunity-${opp.id}`}
+                                className="scroll-mt-24 space-y-0.5 rounded border border-transparent px-1 py-0.5 target:border-cyan-500 target:bg-cyan-950/30 target:ring-2 target:ring-cyan-500/30"
+                              >
                                 <div className="flex items-start gap-1.5 text-xs">
                                   <span className="text-muted-foreground/50 mt-px shrink-0">
                                     机会{idx + 1}

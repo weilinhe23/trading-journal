@@ -1,18 +1,24 @@
 import Link from "next/link"
-import { format } from "date-fns"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import { Button } from "~/components/ui/button"
 import { Badge } from "~/components/ui/badge"
+import { KpiDashboardCard } from "~/components/kpi/KpiDashboardCard"
+import { formatEtDisplayDate, getEtDateString } from "~/lib/kpi"
+import { getKpiPeriodSummary } from "~/lib/kpi-server"
 
-export default function HomePage() {
-  const today = format(new Date(), "yyyy-MM-dd")
+export const dynamic = "force-dynamic"
+
+export default async function HomePage() {
+  const now = new Date()
+  const today = getEtDateString(now)
+  const weeklyKpi = await getKpiPeriodSummary("week", today)
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <p className="text-muted-foreground text-sm mt-1">
-          {format(new Date(), "yyyy年MM月dd日")} · 今日概览
+          美东时间 {formatEtDisplayDate(now)} · 今日概览
         </p>
       </div>
 
@@ -54,6 +60,8 @@ export default function HomePage() {
           </CardContent>
         </Card>
       </div>
+
+      <KpiDashboardCard summary={weeklyKpi} />
 
       {/* 开发阶段提示 */}
       <Card className="border-dashed">
