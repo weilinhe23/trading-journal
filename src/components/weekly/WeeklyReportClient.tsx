@@ -16,6 +16,7 @@ import type {
   WeeklyMnqTimeframeStat,
   WeeklyMnqTradeRecord,
 } from "~/lib/weekly-mnq-analysis";
+import type { MnqLevelForecastSummary } from "~/lib/mnq-level-forecast";
 import { MNQ_DECISION_TIMEFRAME_LABELS } from "~/types";
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
@@ -71,6 +72,7 @@ interface Props {
   opportunityImpacts: WeeklyMnqCountSummary[];
   impactTypes: WeeklyMnqCountSummary[];
   missedReasons: WeeklyMnqMissedReasonSummary[];
+  levelForecastSummary: MnqLevelForecastSummary;
   systemScore: {
     total: number;
     dims: { label: string; score: number }[];
@@ -600,6 +602,7 @@ export function WeeklyReportClient({
   opportunityImpacts,
   impactTypes,
   missedReasons,
+  levelForecastSummary,
   systemScore,
   segmentAccuracy,
 }: Props) {
@@ -2078,7 +2081,8 @@ export function WeeklyReportClient({
         {(deviationReasons.length > 0 ||
           opportunityImpacts.length > 0 ||
           impactTypes.length > 0 ||
-          missedReasons.length > 0) && (
+          missedReasons.length > 0 ||
+          levelForecastSummary.planned > 0) && (
           <Card style={{ marginBottom: 16 }}>
             <Sec>MNQ 行情判断与错失诊断</Sec>
             <div
@@ -2089,6 +2093,30 @@ export function WeeklyReportClient({
               }}
             >
               {[
+                {
+                  title: "Level 反应预测链",
+                  rows:
+                    levelForecastSummary.planned > 0
+                      ? [
+                          {
+                            label: "计划 / 已验证",
+                            value: `${levelForecastSummary.planned} / ${levelForecastSummary.evaluated}`,
+                          },
+                          {
+                            label: "正确 / 部分 / 错误",
+                            value: `${levelForecastSummary.correct} / ${levelForecastSummary.partial} / ${levelForecastSummary.wrong}`,
+                          },
+                          {
+                            label: "未触及",
+                            value: `${levelForecastSummary.notTested} 次`,
+                          },
+                          {
+                            label: "暂停 / 最大推进深度",
+                            value: `${levelForecastSummary.paused} / ${levelForecastSummary.deepestCompletedSequence}`,
+                          },
+                        ]
+                      : [],
+                },
                 {
                   title: "判断偏差原因",
                   rows: deviationReasons.map((item) => ({

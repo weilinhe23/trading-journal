@@ -22,6 +22,12 @@ import {
   type MnqMarketType,
   type MnqMissedReasonCategory,
 } from "~/types";
+import {
+  parseLevelForecasts,
+  summarizeLevelForecasts,
+  type MnqLevelForecasts,
+  type MnqLevelForecastSummary,
+} from "~/lib/mnq-level-forecast";
 
 const MNQ_POINT_VALUE = 2;
 
@@ -98,6 +104,7 @@ interface RawSegment {
   };
   opportunities?: RawOpportunity[];
   opportunity?: string;
+  levelForecasts?: unknown;
 }
 
 interface RawPremarketPhase {
@@ -168,6 +175,8 @@ export interface MnqSegmentSummary {
   impactTypes: MnqMarketImpactType[];
   affectedOpportunities: string[];
   impactNote: string;
+  levelForecasts: MnqLevelForecasts;
+  levelSummary: MnqLevelForecastSummary;
   premarketPhases: MnqPremarketPhaseSummary[];
 }
 
@@ -375,6 +384,7 @@ export interface DailyOpportunityAnalysis {
   profitAnalysis: MnqDailyProfitAnalysis;
   missedProfitAnalysis: MnqDailyMissedProfitAnalysis;
   marketDayAnalysis: MnqMarketDayAnalysis;
+  levelForecastSummary: MnqLevelForecastSummary;
   totalCount: number;
   completedCount: number;
   capturedCount: number;
@@ -1459,6 +1469,7 @@ export function analyzeDailyOpportunities(
         return [description.length > 0 ? description : `机会 ${index + 1}`];
       },
     );
+    const levelForecasts = parseLevelForecasts(segment.levelForecasts);
     segments.push({
       key: segmentDef.key,
       label: segmentDef.label,
@@ -1502,6 +1513,8 @@ export function analyzeDailyOpportunities(
         : [],
       affectedOpportunities,
       impactNote: segment.impactNote?.trim() ?? "",
+      levelForecasts,
+      levelSummary: summarizeLevelForecasts(levelForecasts),
       premarketPhases:
         segmentDef.key === "marketPreJson"
           ? summarizePremarketPhases(segment)
@@ -1531,6 +1544,11 @@ export function analyzeDailyOpportunities(
     (segment) =>
       segment.key === "marketOpenJson" || segment.key === "marketMidJson",
   );
+  const levelForecastSummary = summarizeLevelForecasts({
+    version: 1,
+    upper: coreSegments.flatMap((segment) => segment.levelForecasts.upper),
+    lower: coreSegments.flatMap((segment) => segment.levelForecasts.lower),
+  });
   const segmentAccuracyRate = marketAccuracyRate(
     coreSegments.map((segment) => segment.accuracy),
   );
@@ -1555,6 +1573,12 @@ export function analyzeDailyOpportunities(
   const missedProfitAnalysis = buildDailyMissedProfitAnalysis(rows);
   const marketDayAnalysis = buildMnqMarketDayAnalysis(segments);
   const strategyInsights: string[] = [];
+
+  if (levelForecastSummary.evaluated > 0) {
+    insights.push(
+      `关键 Level 已验证 ${levelForecastSummary.evaluated} 个：正确 ${levelForecastSummary.correct}、部分正确 ${levelForecastSummary.partial}、错误 ${levelForecastSummary.wrong}；另有 ${levelForecastSummary.notTested} 个未触及。`,
+    );
+  }
 
   if (completedCount > 0 && captureRate !== null) {
     insights.push(
@@ -1650,6 +1674,7 @@ export function analyzeDailyOpportunities(
     profitAnalysis,
     missedProfitAnalysis,
     marketDayAnalysis,
+    levelForecastSummary,
     totalCount: rows.length,
     completedCount,
     capturedCount: capturedRows.length,

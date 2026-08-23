@@ -90,7 +90,9 @@ export default function RootLayout({
               </nav>
             </div>
           </header>
-          <main className="container mx-auto flex-1 px-4 py-6">{children}</main>
+          <main className="mx-auto w-full max-w-[1800px] flex-1 px-4 py-6">
+            {children}
+          </main>
         </div>
         <Toaster />
       </body>

@@ -36,6 +36,7 @@ import {
 } from "~/components/ui/dialog";
 import { cn } from "~/lib/utils";
 import { formatPnL } from "~/lib/pnl";
+import { formatLevelName, parseLevelForecasts } from "~/lib/mnq-level-forecast";
 import {
   MISSED_REASON_LABELS,
   NEWS_TYPE_LABELS,
@@ -533,6 +534,7 @@ export function SetupCard({
                 impactTypes?: MnqMarketImpactType[];
                 impactOpportunityIds?: string[];
                 impactNote?: string;
+                levelForecasts?: unknown;
                 premarketPhases?: {
                   overnight?: ParsedPremarketPhase;
                   usPremarket?: ParsedPremarketPhase;
@@ -623,6 +625,7 @@ export function SetupCard({
                       : undefined) ??
                     seg.opportunityImpact ??
                     seg.impactNote?.trim() ??
+                    (seg.levelForecasts ? "levelForecasts" : undefined) ??
                     ((seg.opportunities?.length ?? 0) > 0
                       ? "opportunities"
                       : undefined) ??
@@ -672,6 +675,9 @@ export function SetupCard({
                       : seg?.actualNote?.trim().length
                         ? seg.actualNote.trim()
                         : (seg?.note?.trim() ?? "");
+                    const levelForecasts = parseLevelForecasts(
+                      seg?.levelForecasts,
+                    );
                     const hasExpectedSummary = [
                       seg?.expectedType,
                       seg?.expectedDirection,
@@ -818,6 +824,60 @@ export function SetupCard({
                             </span>
                           </div>
                         )}
+                        {levelForecasts.upper.length > 0 ||
+                        levelForecasts.lower.length > 0 ? (
+                          <div className="grid gap-1.5 sm:grid-cols-2">
+                            {(["upper", "lower"] as const).map((side) => (
+                              <div
+                                key={side}
+                                className="border-border/40 rounded border p-1.5"
+                              >
+                                <p className="text-muted-foreground mb-1 text-[9px] font-medium">
+                                  {side === "upper" ? "上端链" : "下端链"}
+                                </p>
+                                {levelForecasts[side].length > 0 ? (
+                                  <div className="flex flex-wrap items-center gap-1 text-[10px]">
+                                    {levelForecasts[side].map((node, index) => (
+                                      <span
+                                        key={node.id}
+                                        className={cn(
+                                          "rounded border px-1.5 py-0.5",
+                                          node.status === "ACTIVE" &&
+                                            "border-cyan-700 text-cyan-300",
+                                          node.status === "COMPLETED" &&
+                                            "border-green-800 text-green-400",
+                                          node.status === "PAUSED" &&
+                                            "border-red-800 text-red-400",
+                                          (node.status === "PLANNED" ||
+                                            node.status === "INVALIDATED") &&
+                                            "border-muted-foreground/20 text-muted-foreground",
+                                        )}
+                                      >
+                                        {index + 1}. {formatLevelName(node)}
+                                        {node.accuracy === "CORRECT"
+                                          ? " ✓"
+                                          : node.accuracy === "PARTIAL"
+                                            ? " ◐"
+                                            : node.accuracy === "WRONG"
+                                              ? " ×"
+                                              : node.accuracy ===
+                                                  "NOT_TRIGGERED"
+                                                ? " 未触及"
+                                                : node.status === "ACTIVE"
+                                                  ? " 当前"
+                                                  : ""}
+                                      </span>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <span className="text-muted-foreground/50 text-[9px]">
+                                    未规划
+                                  </span>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        ) : null}
                         {seg?.deviationReason && (
                           <div className="flex gap-1.5 text-[11px]">
                             <span className="shrink-0 text-orange-400/80">
@@ -1692,7 +1752,7 @@ export function SetupCard({
           })()}
           {/* 催化剂 — 始终显示 */}
           <div className="flex gap-1.5">
-            <span className="w-10 shrink-0 text-xs font-medium text-yellow-500/80">
+            <span className="w-12 shrink-0 text-xs font-medium text-yellow-500/80">
               催化剂
             </span>
             {setup.newsType ? (

@@ -152,6 +152,7 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
       opportunityImpacts={analysis.opportunityImpacts}
       impactTypes={analysis.impactTypes}
       missedReasons={analysis.missedReasons}
+      levelForecastSummary={analysis.levelForecastSummary}
       systemScore={systemScore}
       segmentAccuracy={analysis.segmentAccuracy}
     />

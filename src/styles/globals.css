@@ -6,7 +6,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+  --font-sans:
+    var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
@@ -126,5 +127,37 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@media (min-width: 1200px) {
+  .daily-journal-wide .text-\[9px\] {
+    font-size: 0.6875rem;
+    line-height: 1rem;
+  }
+
+  .daily-journal-wide .text-\[10px\] {
+    font-size: 0.75rem;
+    line-height: 1.0625rem;
+  }
+
+  .daily-journal-wide .text-\[11px\] {
+    font-size: 0.8125rem;
+    line-height: 1.125rem;
+  }
+
+  .daily-journal-wide .text-xs {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .daily-journal-wide .text-sm {
+    font-size: 0.9375rem;
+    line-height: 1.375rem;
+  }
+
+  .daily-journal-wide .text-xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 }

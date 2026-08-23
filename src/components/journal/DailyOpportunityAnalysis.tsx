@@ -22,6 +22,15 @@ import {
 } from "~/lib/daily-opportunity-analysis";
 import { cn } from "~/lib/utils";
 import {
+  MNQ_LEVEL_ACTUAL_REACTIONS,
+  MNQ_LEVEL_EXPECTED_REACTIONS,
+  MNQ_LEVEL_TIMEFRAME_OPTIONS,
+  formatActualLevelName,
+  formatActualLevelTimeframe,
+  formatLevelName,
+  type MnqLevelForecastNode,
+} from "~/lib/mnq-level-forecast";
+import {
   MNQ_DECISION_TIMEFRAME_LABELS,
   MNQ_MARKET_ACCURACY_LABELS,
   MNQ_MARKET_DEVIATION_REASON_LABELS,
@@ -1021,6 +1030,104 @@ function MissedReasonAnalysis({
   );
 }
 
+function expectedLevelDescription(node: MnqLevelForecastNode): string {
+  const timeframe = MNQ_LEVEL_TIMEFRAME_OPTIONS.find(
+    (option) => option.value === node.decisionTimeframe,
+  )?.label;
+  const reaction = MNQ_LEVEL_EXPECTED_REACTIONS.find(
+    (option) => option.value === node.expectedReaction,
+  )?.label;
+  return `${formatLevelName(node)}${timeframe ? ` [${timeframe}]` : ""}${
+    reaction ? `，预期${reaction}` : ""
+  }`;
+}
+
+function actualLevelDescription(node: MnqLevelForecastNode): string {
+  if (!node.actualReaction) {
+    return `${formatLevelName(node)}${
+      node.status === "PLANNED" ? "尚未激活" : "尚未记录实际反应"
+    }`;
+  }
+  if (node.actualReaction === "NOT_TESTED") {
+    return `${formatLevelName(node)}未触及`;
+  }
+
+  const reaction = MNQ_LEVEL_ACTUAL_REACTIONS.find(
+    (option) => option.value === node.actualReaction,
+  )?.label;
+  const timeframe = formatActualLevelTimeframe(node);
+  const accuracy =
+    node.accuracy === "CORRECT"
+      ? "判断正确"
+      : node.accuracy === "PARTIAL"
+        ? "部分正确"
+        : node.accuracy === "WRONG"
+          ? "判断错误"
+          : "尚未评估";
+  const expectedLevel = formatLevelName(node);
+  const actualLevel = formatActualLevelName(node);
+  if (actualLevel === "尚未选择") {
+    return `${expectedLevel}的实际 Level 尚未补录，实际反应为${
+      reaction ?? "待补录"
+    }，${accuracy}`;
+  }
+  const levelComparison =
+    actualLevel === expectedLevel
+      ? actualLevel
+      : `${expectedLevel}对应的实际 Level 为${actualLevel}`;
+  return `${levelComparison}${
+    timeframe === "未选择" ? "" : `（${timeframe}）`
+  }出现${reaction ?? "实际反应待补录"}，${accuracy}`;
+}
+
+function buildLevelSituationSummary(segment: MnqSegmentSummary): {
+  side: "upper" | "lower" | "summary";
+  text: string;
+}[] {
+  const summaries = (["upper", "lower"] as const).flatMap((side) => {
+    const chain = segment.levelForecasts[side];
+    if (chain.length === 0) return [];
+    const sideLabel = side === "upper" ? "上端" : "下端";
+    const expectedPath = chain.map(expectedLevelDescription).join(" → ");
+    const actualPath = chain.map(actualLevelDescription).join("；");
+    return [
+      {
+        side,
+        text: `${sideLabel}预计路径为 ${expectedPath}。实际为 ${actualPath}。`,
+      },
+    ];
+  });
+
+  const { evaluated, correct, partial, wrong, notTested } =
+    segment.levelSummary;
+  let conclusion: string;
+  if (evaluated === 0) {
+    conclusion =
+      notTested > 0
+        ? `本时段有 ${notTested} 个预计 Level 未触及，暂无有效准确性结论。`
+        : "本时段尚未完成 Level 实际判断。";
+  } else if (wrong === 0 && partial === 0) {
+    conclusion = `已验证 ${evaluated} 个 Level，全部符合预计路径。`;
+  } else {
+    const resultBreakdown = [
+      correct > 0 ? `正确 ${correct} 个` : "",
+      partial > 0 ? `部分正确 ${partial} 个` : "",
+      wrong > 0 ? `错误 ${wrong} 个` : "",
+      notTested > 0 ? `另有 ${notTested} 个未触及` : "",
+    ]
+      .filter(Boolean)
+      .join("、");
+    conclusion = `已验证 ${evaluated} 个 Level：${resultBreakdown}。`;
+  }
+
+  const deepest = segment.levelSummary.deepestCompletedSequence;
+  if (deepest > 1) {
+    conclusion += ` 行情最深推进至第 ${deepest} 层 Level。`;
+  }
+
+  return [...summaries, { side: "summary", text: conclusion }];
+}
+
 function MarketJudgmentReview({ segments }: { segments: MnqSegmentSummary[] }) {
   const premarketSegment = segments.find(
     (segment) =>
@@ -1037,6 +1144,7 @@ function MarketJudgmentReview({ segments }: { segments: MnqSegmentSummary[] }) {
         segment.actualDirection,
         segment.actualNote,
         segment.accuracy,
+        segment.levelSummary.planned > 0,
         segment.opportunityImpact,
         segment.impactNote,
       ].some(Boolean),
@@ -1221,6 +1329,189 @@ function MarketJudgmentReview({ segments }: { segments: MnqSegmentSummary[] }) {
                 )}
               </div>
             </div>
+
+            {segment.levelSummary.planned > 0 ? (
+              <div className="space-y-1.5 rounded-md border border-violet-500/20 bg-violet-500/5 p-2.5">
+                <p className="text-[10px] font-semibold text-violet-300">
+                  Level 行情总结
+                </p>
+                {buildLevelSituationSummary(segment).map((summary, index) => (
+                  <p
+                    key={`${summary.side}-${index}`}
+                    className={cn(
+                      "text-[11px] leading-relaxed",
+                      summary.side === "upper" && "text-emerald-200/80",
+                      summary.side === "lower" && "text-rose-200/80",
+                      summary.side === "summary" &&
+                        "text-foreground/75 border-border/40 border-t pt-1.5 font-medium",
+                    )}
+                  >
+                    {summary.text}
+                  </p>
+                ))}
+              </div>
+            ) : null}
+
+            {segment.levelSummary.planned > 0 ? (
+              <div className="space-y-2 rounded-md border border-cyan-500/15 bg-slate-950/20 p-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-[10px] font-semibold text-cyan-300">
+                    Level 预计与实际明细
+                  </p>
+                  <span className="text-muted-foreground text-[9px]">
+                    计划 {segment.levelSummary.planned} · 已验证{" "}
+                    {segment.levelSummary.evaluated} · 未触及{" "}
+                    {segment.levelSummary.notTested}
+                  </span>
+                </div>
+
+                {(["upper", "lower"] as const).map((side) => {
+                  const chain = segment.levelForecasts[side];
+                  if (chain.length === 0) return null;
+                  return (
+                    <div key={side} className="space-y-1.5">
+                      <p
+                        className={cn(
+                          "text-[10px] font-medium",
+                          side === "upper"
+                            ? "text-emerald-300"
+                            : "text-rose-300",
+                        )}
+                      >
+                        {side === "upper" ? "上端链" : "下端链"}
+                      </p>
+                      {chain.map((node) => {
+                        const timeframe = MNQ_LEVEL_TIMEFRAME_OPTIONS.find(
+                          (option) => option.value === node.decisionTimeframe,
+                        )?.label;
+                        const expectedReaction =
+                          MNQ_LEVEL_EXPECTED_REACTIONS.find(
+                            (option) => option.value === node.expectedReaction,
+                          )?.label;
+                        const actualReaction = MNQ_LEVEL_ACTUAL_REACTIONS.find(
+                          (option) => option.value === node.actualReaction,
+                        )?.label;
+                        return (
+                          <div
+                            key={node.id}
+                            className="border-border/50 bg-background/20 space-y-1.5 rounded border p-2"
+                          >
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <div className="flex flex-wrap items-center gap-1.5">
+                                <span className="text-[11px] font-semibold">
+                                  {node.sequence}. {formatLevelName(node)}
+                                  {node.referencePrice
+                                    ? ` · ${node.referencePrice}`
+                                    : ""}
+                                </span>
+                                {timeframe ? (
+                                  <span className="rounded bg-violet-500/15 px-1.5 py-0.5 text-[9px] font-medium text-violet-200">
+                                    {timeframe} 判断
+                                  </span>
+                                ) : null}
+                              </div>
+                              <span
+                                className={cn(
+                                  "rounded px-1.5 py-0.5 text-[9px]",
+                                  node.status === "ACTIVE" &&
+                                    "bg-cyan-500/15 text-cyan-300",
+                                  node.status === "PLANNED" &&
+                                    "bg-slate-500/15 text-slate-400",
+                                  node.status === "COMPLETED" &&
+                                    "bg-emerald-500/15 text-emerald-300",
+                                  node.status === "PAUSED" &&
+                                    "bg-red-500/15 text-red-300",
+                                  node.status === "INVALIDATED" &&
+                                    "bg-zinc-500/15 text-zinc-400",
+                                )}
+                              >
+                                {node.status === "ACTIVE"
+                                  ? "当前"
+                                  : node.status === "PLANNED"
+                                    ? "待激活"
+                                    : node.status === "COMPLETED"
+                                      ? "已完成"
+                                      : node.status === "PAUSED"
+                                        ? "已暂停"
+                                        : "已失效"}
+                              </span>
+                            </div>
+
+                            <div className="grid gap-1.5 sm:grid-cols-2">
+                              <div className="border-l-2 border-cyan-500/40 pl-2">
+                                <p className="text-[9px] font-medium text-cyan-300/80">
+                                  预计反应
+                                </p>
+                                <p className="text-foreground/75 mt-0.5 text-[10px]">
+                                  {expectedReaction ?? "未记录"}
+                                </p>
+                                {node.confirmationCondition ? (
+                                  <p className="text-muted-foreground mt-1 text-[10px] leading-relaxed">
+                                    判断依据：{node.confirmationCondition}
+                                  </p>
+                                ) : null}
+                                {node.expectedNote ? (
+                                  <p className="text-muted-foreground mt-1 text-[10px] leading-relaxed">
+                                    {node.expectedNote}
+                                  </p>
+                                ) : null}
+                              </div>
+
+                              <div className="border-l-2 border-violet-500/40 pl-2">
+                                <div className="flex flex-wrap items-center gap-1.5">
+                                  <p className="text-[9px] font-medium text-violet-300/80">
+                                    实际反应
+                                  </p>
+                                  {node.accuracy ? (
+                                    <span
+                                      className={cn(
+                                        "rounded px-1 py-0.5 text-[9px]",
+                                        node.accuracy === "CORRECT" &&
+                                          "bg-green-500/15 text-green-300",
+                                        node.accuracy === "PARTIAL" &&
+                                          "bg-amber-500/15 text-amber-300",
+                                        node.accuracy === "WRONG" &&
+                                          "bg-red-500/15 text-red-300",
+                                        node.accuracy === "NOT_TRIGGERED" &&
+                                          "bg-slate-500/15 text-slate-300",
+                                      )}
+                                    >
+                                      {node.accuracy === "CORRECT"
+                                        ? "正确"
+                                        : node.accuracy === "PARTIAL"
+                                          ? "部分正确"
+                                          : node.accuracy === "WRONG"
+                                            ? "错误"
+                                            : "未触及"}
+                                    </span>
+                                  ) : null}
+                                </div>
+                                {node.actualReaction &&
+                                node.actualReaction !== "NOT_TESTED" ? (
+                                  <p className="text-foreground/75 mt-0.5 text-[10px]">
+                                    实际 Level：{formatActualLevelName(node)}
+                                    {" · "}
+                                    {formatActualLevelTimeframe(node)}
+                                  </p>
+                                ) : null}
+                                <p className="text-foreground/75 mt-0.5 text-[10px]">
+                                  {actualReaction ?? "尚未记录"}
+                                </p>
+                                {node.actualNote ? (
+                                  <p className="text-muted-foreground mt-1 text-[10px] leading-relaxed">
+                                    {node.actualNote}
+                                  </p>
+                                ) : null}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : null}
 
             {(segment.accuracy === "PARTIAL" ||
               segment.accuracy === "WRONG") && (

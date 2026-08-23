@@ -1,23 +1,28 @@
-"use client"
+"use client";
 
-import { Card, CardContent } from "~/components/ui/card"
-import { SetupCard } from "~/components/setup/SetupCard"
-import { CreateSetupDialog } from "~/components/setup/CreateSetupDialog"
-import type { DailySession, Execution, MnqDailyPlan, TradeSetup } from "../../../generated/prisma"
+import { Card, CardContent } from "~/components/ui/card";
+import { SetupCard } from "~/components/setup/SetupCard";
+import { CreateSetupDialog } from "~/components/setup/CreateSetupDialog";
+import type {
+  DailySession,
+  Execution,
+  MnqDailyPlan,
+  TradeSetup,
+} from "../../../generated/prisma";
 
-type SetupWithExecutions = TradeSetup & { executions: Execution[] }
+type SetupWithExecutions = TradeSetup & { executions: Execution[] };
 
 interface Props {
   session: DailySession & {
-    setups: SetupWithExecutions[]
-    mnqPlan: MnqDailyPlan | null
-  }
-  date: string
+    setups: SetupWithExecutions[];
+    mnqPlan: MnqDailyPlan | null;
+  };
+  date: string;
 }
 
 export function IntraMarketSection({ session, date }: Props) {
-  const watching = session.setups.filter((s) => s.status === "WATCHING")
-  const done = session.setups.filter((s) => s.status !== "WATCHING")
+  const watching = session.setups.filter((s) => s.status === "WATCHING");
+  const done = session.setups.filter((s) => s.status !== "WATCHING");
 
   return (
     <div className="space-y-4">
@@ -27,7 +32,9 @@ export function IntraMarketSection({ session, date }: Props) {
           <h3 className="text-sm font-medium">
             观察中
             {watching.length > 0 && (
-              <span className="ml-2 text-muted-foreground font-normal">({watching.length})</span>
+              <span className="text-muted-foreground ml-2 font-normal">
+                ({watching.length})
+              </span>
             )}
           </h3>
           <CreateSetupDialog date={date} />
@@ -36,7 +43,7 @@ export function IntraMarketSection({ session, date }: Props) {
         {watching.length === 0 ? (
           <Card className="border-dashed">
             <CardContent className="py-6 text-center">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {session.setups.length === 0
                   ? "请先在「盘前计划」中添加 Setup"
                   : "所有 Setup 已处理完毕"}
@@ -44,7 +51,7 @@ export function IntraMarketSection({ session, date }: Props) {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3">
             {watching.map((setup) => (
               <SetupCard
                 key={setup.id}
@@ -60,10 +67,10 @@ export function IntraMarketSection({ session, date }: Props) {
       {/* 已处理 */}
       {done.length > 0 && (
         <div className="space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">
+          <h3 className="text-muted-foreground text-sm font-medium">
             已处理 ({done.length})
           </h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3">
             {done.map((setup) => (
               <SetupCard
                 key={setup.id}
@@ -76,5 +83,5 @@ export function IntraMarketSection({ session, date }: Props) {
         </div>
       )}
     </div>
-  )
+  );
 }

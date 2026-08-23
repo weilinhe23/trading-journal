@@ -9,6 +9,7 @@ import {
   MNQ_MISSED_REASON_LABELS,
   type MnqDecisionTimeframe,
 } from "~/types";
+import type { MnqLevelForecastSummary } from "~/lib/mnq-level-forecast";
 
 const DAY_LABELS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"] as const;
 
@@ -156,6 +157,7 @@ export interface WeeklyMnqAnalysis {
   opportunityImpacts: WeeklyMnqCountSummary[];
   impactTypes: WeeklyMnqCountSummary[];
   missedReasons: WeeklyMnqMissedReasonSummary[];
+  levelForecastSummary: MnqLevelForecastSummary;
   equity: number[];
 }
 
@@ -215,6 +217,14 @@ export function aggregateWeeklyMnq(
   let realizedRCount = 0;
   let missedPotentialR = 0;
   let missedEvaluatedCount = 0;
+  let levelPlanned = 0;
+  let levelEvaluated = 0;
+  let levelCorrect = 0;
+  let levelPartial = 0;
+  let levelWrong = 0;
+  let levelNotTested = 0;
+  let levelPaused = 0;
+  let deepestCompletedSequence = 0;
   let recordedDays = 0;
   let recordedMarketSegments = 0;
   let evaluatedMarketSegments = 0;
@@ -225,6 +235,17 @@ export function aggregateWeeklyMnq(
     (a, b) => a.date.getTime() - b.date.getTime(),
   )) {
     const analysis = analyzeDailyOpportunities(session.mnqPlan);
+    levelPlanned += analysis.levelForecastSummary.planned;
+    levelEvaluated += analysis.levelForecastSummary.evaluated;
+    levelCorrect += analysis.levelForecastSummary.correct;
+    levelPartial += analysis.levelForecastSummary.partial;
+    levelWrong += analysis.levelForecastSummary.wrong;
+    levelNotTested += analysis.levelForecastSummary.notTested;
+    levelPaused += analysis.levelForecastSummary.paused;
+    deepestCompletedSequence = Math.max(
+      deepestCompletedSequence,
+      analysis.levelForecastSummary.deepestCompletedSequence,
+    );
     const dayLabel = DAY_LABELS[session.date.getUTCDay()] ?? "MON";
     const date = session.date.toISOString().split("T")[0]!;
     const dayRealizedR = analysis.rows.reduce(
@@ -489,6 +510,16 @@ export function aggregateWeeklyMnq(
     deviationReasons: toCountSummaries(deviationMap),
     opportunityImpacts: toCountSummaries(opportunityImpactMap),
     impactTypes: toCountSummaries(impactTypeMap),
+    levelForecastSummary: {
+      planned: levelPlanned,
+      evaluated: levelEvaluated,
+      correct: levelCorrect,
+      partial: levelPartial,
+      wrong: levelWrong,
+      notTested: levelNotTested,
+      paused: levelPaused,
+      deepestCompletedSequence,
+    },
     missedReasons: [...missedReasonMap.values()]
       .map((item) => ({ ...item, hypotheticalR: round(item.hypotheticalR) }))
       .sort((a, b) => b.count - a.count || b.hypotheticalR - a.hypotheticalR),

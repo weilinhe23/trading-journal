@@ -91,7 +91,7 @@ export default async function DailyJournalPage({
   const displayDate = format(date, "yyyy年MM月dd日 EEEE", { locale: zhCN });
 
   return (
-    <div className="mx-auto max-w-4xl space-y-4">
+    <div className="daily-journal-wide mx-auto max-w-[1600px] space-y-4">
       {/* 页面头部 */}
       <div className="flex items-center gap-3">
         <Button variant="ghost" size="icon" asChild>

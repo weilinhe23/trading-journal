@@ -17,6 +17,15 @@ import {
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
+import { MnqLevelActualRecorder } from "./MnqLevelActualRecorder";
+import { MnqLevelForecastEditor } from "./MnqLevelForecastEditor";
+import {
+  createEmptyLevelForecasts,
+  finalizePendingLevelOutcomes,
+  parseLevelForecasts,
+  validateLevelForecasts,
+  type MnqLevelForecasts,
+} from "~/lib/mnq-level-forecast";
 import { cn } from "~/lib/utils";
 import {
   MNQ_DECISION_TIMEFRAME_LABELS,
@@ -130,6 +139,7 @@ export interface MarketSegmentData {
   impactTypes: MnqMarketImpactType[];
   impactOpportunityIds: string[];
   impactNote: string;
+  levelForecasts: MnqLevelForecasts;
   premarketPhases: PremarketPhasesData;
   opportunities: TradeOpportunity[];
 }
@@ -168,6 +178,7 @@ const EMPTY_SEGMENT: MarketSegmentData = {
   impactTypes: [],
   impactOpportunityIds: [],
   impactNote: "",
+  levelForecasts: createEmptyLevelForecasts(),
   premarketPhases: createEmptyPremarketPhases(),
   opportunities: [],
 };
@@ -293,6 +304,7 @@ function parseSegmentFields(
     impactTypes,
     impactOpportunityIds,
     impactNote: typeof parsed.impactNote === "string" ? parsed.impactNote : "",
+    levelForecasts: parseLevelForecasts(parsed.levelForecasts),
     premarketPhases,
   };
 }
@@ -1823,6 +1835,11 @@ export function MnqMarketNotes({ plan, date }: Props) {
     for (const key of ["marketOpenJson", "marketMidJson"] as const) {
       const segment = segments[key];
       const label = key === "marketOpenJson" ? "开盘行情" : "盘中行情";
+      const levelErrors = validateLevelForecasts(segment.levelForecasts);
+      if (levelErrors.length > 0) {
+        toast.error(`${label}：${levelErrors[0]}`);
+        return;
+      }
       const hasExpected = [
         segment.expectedType,
         segment.expectedDirection,
@@ -1871,6 +1888,22 @@ export function MnqMarketNotes({ plan, date }: Props) {
       }
     }
 
+    const finalizedSegments = {
+      ...segments,
+      marketOpenJson: {
+        ...segments.marketOpenJson,
+        levelForecasts: finalizePendingLevelOutcomes(
+          segments.marketOpenJson.levelForecasts,
+        ),
+      },
+      marketMidJson: {
+        ...segments.marketMidJson,
+        levelForecasts: finalizePendingLevelOutcomes(
+          segments.marketMidJson.levelForecasts,
+        ),
+      },
+    };
+
     setSaving(true);
     try {
       const toJson = (key: SegmentKey, seg: MarketSegmentData) => {
@@ -1895,6 +1928,8 @@ export function MnqMarketNotes({ plan, date }: Props) {
           seg.impactTypes.length === 0 &&
           seg.impactOpportunityIds.length === 0 &&
           !seg.impactNote.trim() &&
+          seg.levelForecasts.upper.length === 0 &&
+          seg.levelForecasts.lower.length === 0 &&
           !hasPremarketPhaseData &&
           seg.opportunities.length === 0;
         if (isEmpty) return null;
@@ -1915,12 +1950,21 @@ export function MnqMarketNotes({ plan, date }: Props) {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          marketPreJson: toJson("marketPreJson", segments.marketPreJson),
-          marketOpenJson: toJson("marketOpenJson", segments.marketOpenJson),
-          marketMidJson: toJson("marketMidJson", segments.marketMidJson),
+          marketPreJson: toJson(
+            "marketPreJson",
+            finalizedSegments.marketPreJson,
+          ),
+          marketOpenJson: toJson(
+            "marketOpenJson",
+            finalizedSegments.marketOpenJson,
+          ),
+          marketMidJson: toJson(
+            "marketMidJson",
+            finalizedSegments.marketMidJson,
+          ),
           marketAfternoonJson: toJson(
             "marketAfternoonJson",
-            segments.marketAfternoonJson,
+            finalizedSegments.marketAfternoonJson,
           ),
           heldOvernight,
           overnightNote: overnightNote.trim() || null,
@@ -1929,6 +1973,7 @@ export function MnqMarketNotes({ plan, date }: Props) {
       const json = (await res.json()) as { success: boolean };
       if (json.success) {
         toast.success("行情记录已保存");
+        setSegments(finalizedSegments);
         setSaved(true);
         router.refresh();
       } else {
@@ -1954,6 +1999,8 @@ export function MnqMarketNotes({ plan, date }: Props) {
       s.opportunityImpact !== null ||
       s.impactTypes.length > 0 ||
       s.impactNote.trim() ||
+      s.levelForecasts.upper.length > 0 ||
+      s.levelForecasts.lower.length > 0 ||
       Object.values(s.premarketPhases).some(
         (phase) =>
           phase.type !== null || phase.direction !== null || phase.note.trim(),
@@ -2095,162 +2142,184 @@ export function MnqMarketNotes({ plan, date }: Props) {
                   </div>
                 ) : isCore ? (
                   <div className="space-y-3">
-                    <div className="space-y-2 rounded-md border border-cyan-900/40 bg-cyan-950/10 p-2.5">
-                      <div>
-                        <p className="text-[11px] font-medium text-cyan-300">
-                          预计行情
-                        </p>
-                        <p className="text-muted-foreground text-[10px]">
-                          在该时段开始前记录，避免盘后重构判断
-                        </p>
-                      </div>
-                      <div className="space-y-1">
-                        <span className="text-muted-foreground text-[10px]">
-                          预计类型
-                        </span>
-                        <div className="flex flex-wrap gap-1">
-                          {MNQ_MARKET_TYPE_OPTIONS.map((option) => (
-                            <button
-                              key={option.value}
-                              type="button"
-                              onClick={() =>
-                                updateSegment(key, {
-                                  expectedType:
+                    <div className="grid gap-3 lg:grid-cols-2">
+                      <div className="space-y-3">
+                        <div className="space-y-2 rounded-md border border-cyan-900/40 bg-cyan-950/10 p-2.5">
+                          <div>
+                            <p className="text-[11px] font-medium text-cyan-300">
+                              预计行情
+                            </p>
+                            <p className="text-muted-foreground text-[10px]">
+                              在该时段开始前记录，避免盘后重构判断
+                            </p>
+                          </div>
+                          <div className="space-y-1">
+                            <span className="text-muted-foreground text-[10px]">
+                              预计类型
+                            </span>
+                            <div className="flex flex-wrap gap-1">
+                              {MNQ_MARKET_TYPE_OPTIONS.map((option) => (
+                                <button
+                                  key={option.value}
+                                  type="button"
+                                  onClick={() =>
+                                    updateSegment(key, {
+                                      expectedType:
+                                        seg.expectedType === option.value
+                                          ? null
+                                          : option.value,
+                                    })
+                                  }
+                                  className={cn(
+                                    "rounded border px-2 py-0.5 text-[11px] transition-colors",
                                     seg.expectedType === option.value
-                                      ? null
-                                      : option.value,
-                                })
-                              }
-                              className={cn(
-                                "rounded border px-2 py-0.5 text-[11px] transition-colors",
-                                seg.expectedType === option.value
-                                  ? "border-cyan-600 bg-cyan-800/70 text-white"
-                                  : "border-muted-foreground/30 text-muted-foreground hover:border-cyan-700 hover:text-cyan-300",
-                              )}
-                            >
-                              {option.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="space-y-1">
-                        <span className="text-muted-foreground text-[10px]">
-                          预计方向
-                        </span>
-                        <div className="flex flex-wrap gap-1">
-                          {MNQ_MARKET_DIRECTION_OPTIONS.map((option) => (
-                            <button
-                              key={option.value}
-                              type="button"
-                              onClick={() =>
-                                updateSegment(key, {
-                                  expectedDirection:
+                                      ? "border-cyan-600 bg-cyan-800/70 text-white"
+                                      : "border-muted-foreground/30 text-muted-foreground hover:border-cyan-700 hover:text-cyan-300",
+                                  )}
+                                >
+                                  {option.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="space-y-1">
+                            <span className="text-muted-foreground text-[10px]">
+                              预计方向
+                            </span>
+                            <div className="flex flex-wrap gap-1">
+                              {MNQ_MARKET_DIRECTION_OPTIONS.map((option) => (
+                                <button
+                                  key={option.value}
+                                  type="button"
+                                  onClick={() =>
+                                    updateSegment(key, {
+                                      expectedDirection:
+                                        seg.expectedDirection === option.value
+                                          ? null
+                                          : option.value,
+                                    })
+                                  }
+                                  className={cn(
+                                    "rounded border px-2 py-0.5 text-[11px] transition-colors",
                                     seg.expectedDirection === option.value
-                                      ? null
-                                      : option.value,
-                                })
-                              }
-                              className={cn(
-                                "rounded border px-2 py-0.5 text-[11px] transition-colors",
-                                seg.expectedDirection === option.value
-                                  ? "border-cyan-600 bg-cyan-800/70 text-white"
-                                  : "border-muted-foreground/30 text-muted-foreground hover:border-cyan-700 hover:text-cyan-300",
-                              )}
-                            >
-                              {option.label}
-                            </button>
-                          ))}
+                                      ? "border-cyan-600 bg-cyan-800/70 text-white"
+                                      : "border-muted-foreground/30 text-muted-foreground hover:border-cyan-700 hover:text-cyan-300",
+                                  )}
+                                >
+                                  {option.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                          <Textarea
+                            placeholder="预期运行路径、关键 Level 反应及判断依据..."
+                            value={seg.expectedNote}
+                            onChange={(e) =>
+                              updateSegment(key, {
+                                expectedNote: e.target.value,
+                              })
+                            }
+                            rows={2}
+                            className="resize-none text-xs"
+                          />
                         </div>
-                      </div>
-                      <Textarea
-                        placeholder="预期运行路径、关键 Level 反应及判断依据..."
-                        value={seg.expectedNote}
-                        onChange={(e) =>
-                          updateSegment(key, { expectedNote: e.target.value })
-                        }
-                        rows={2}
-                        className="resize-none text-xs"
-                      />
-                    </div>
 
-                    <div className="space-y-2 rounded-md border border-violet-900/40 bg-violet-950/10 p-2.5">
-                      <div>
-                        <p className="text-[11px] font-medium text-violet-300">
-                          实际行情
-                        </p>
-                        <p className="text-muted-foreground text-[10px]">
-                          在该时段结束后记录实际结构和关键转折
-                        </p>
+                        <MnqLevelForecastEditor
+                          value={seg.levelForecasts}
+                          onChange={(levelForecasts) =>
+                            updateSegment(key, { levelForecasts })
+                          }
+                        />
                       </div>
-                      <div className="space-y-1">
-                        <span className="text-muted-foreground text-[10px]">
-                          实际类型
-                        </span>
-                        <div className="flex flex-wrap gap-1">
-                          {MNQ_MARKET_TYPE_OPTIONS.filter(
-                            (option) => option.value !== "UNCERTAIN",
-                          ).map((option) => (
-                            <button
-                              key={option.value}
-                              type="button"
-                              onClick={() =>
-                                updateSegment(key, {
-                                  actualType:
+
+                      <div className="space-y-3">
+                        <div className="space-y-2 rounded-md border border-violet-900/40 bg-violet-950/10 p-2.5">
+                          <div>
+                            <p className="text-[11px] font-medium text-violet-300">
+                              实际行情
+                            </p>
+                            <p className="text-muted-foreground text-[10px]">
+                              在该时段结束后记录实际结构和关键转折
+                            </p>
+                          </div>
+                          <div className="space-y-1">
+                            <span className="text-muted-foreground text-[10px]">
+                              实际类型
+                            </span>
+                            <div className="flex flex-wrap gap-1">
+                              {MNQ_MARKET_TYPE_OPTIONS.filter(
+                                (option) => option.value !== "UNCERTAIN",
+                              ).map((option) => (
+                                <button
+                                  key={option.value}
+                                  type="button"
+                                  onClick={() =>
+                                    updateSegment(key, {
+                                      actualType:
+                                        seg.actualType === option.value
+                                          ? null
+                                          : option.value,
+                                    })
+                                  }
+                                  className={cn(
+                                    "rounded border px-2 py-0.5 text-[11px] transition-colors",
                                     seg.actualType === option.value
-                                      ? null
-                                      : option.value,
-                                })
-                              }
-                              className={cn(
-                                "rounded border px-2 py-0.5 text-[11px] transition-colors",
-                                seg.actualType === option.value
-                                  ? "border-violet-600 bg-violet-800/70 text-white"
-                                  : "border-muted-foreground/30 text-muted-foreground hover:border-violet-700 hover:text-violet-300",
-                              )}
-                            >
-                              {option.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="space-y-1">
-                        <span className="text-muted-foreground text-[10px]">
-                          实际方向
-                        </span>
-                        <div className="flex flex-wrap gap-1">
-                          {MNQ_MARKET_DIRECTION_OPTIONS.map((option) => (
-                            <button
-                              key={option.value}
-                              type="button"
-                              onClick={() =>
-                                updateSegment(key, {
-                                  actualDirection:
+                                      ? "border-violet-600 bg-violet-800/70 text-white"
+                                      : "border-muted-foreground/30 text-muted-foreground hover:border-violet-700 hover:text-violet-300",
+                                  )}
+                                >
+                                  {option.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="space-y-1">
+                            <span className="text-muted-foreground text-[10px]">
+                              实际方向
+                            </span>
+                            <div className="flex flex-wrap gap-1">
+                              {MNQ_MARKET_DIRECTION_OPTIONS.map((option) => (
+                                <button
+                                  key={option.value}
+                                  type="button"
+                                  onClick={() =>
+                                    updateSegment(key, {
+                                      actualDirection:
+                                        seg.actualDirection === option.value
+                                          ? null
+                                          : option.value,
+                                    })
+                                  }
+                                  className={cn(
+                                    "rounded border px-2 py-0.5 text-[11px] transition-colors",
                                     seg.actualDirection === option.value
-                                      ? null
-                                      : option.value,
-                                })
-                              }
-                              className={cn(
-                                "rounded border px-2 py-0.5 text-[11px] transition-colors",
-                                seg.actualDirection === option.value
-                                  ? "border-violet-600 bg-violet-800/70 text-white"
-                                  : "border-muted-foreground/30 text-muted-foreground hover:border-violet-700 hover:text-violet-300",
-                              )}
-                            >
-                              {option.label}
-                            </button>
-                          ))}
+                                      ? "border-violet-600 bg-violet-800/70 text-white"
+                                      : "border-muted-foreground/30 text-muted-foreground hover:border-violet-700 hover:text-violet-300",
+                                  )}
+                                >
+                                  {option.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                          <Textarea
+                            placeholder={notePlaceholder}
+                            value={seg.actualNote}
+                            onChange={(e) =>
+                              updateSegment(key, { actualNote: e.target.value })
+                            }
+                            rows={2}
+                            className="resize-none text-xs"
+                          />
                         </div>
+
+                        <MnqLevelActualRecorder
+                          value={seg.levelForecasts}
+                          onChange={(levelForecasts) =>
+                            updateSegment(key, { levelForecasts })
+                          }
+                        />
                       </div>
-                      <Textarea
-                        placeholder={notePlaceholder}
-                        value={seg.actualNote}
-                        onChange={(e) =>
-                          updateSegment(key, { actualNote: e.target.value })
-                        }
-                        rows={2}
-                        className="resize-none text-xs"
-                      />
                     </div>
 
                     <div className="border-border/50 space-y-2 rounded-md border p-2.5">
