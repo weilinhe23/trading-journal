@@ -33,7 +33,7 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
   const weekEnd = new Date(friday);
   weekEnd.setUTCHours(23, 59, 59, 999);
 
-  const [report, sessions, allSessions] = await Promise.all([
+  const [report, sessions, allSessions, pendingInsightCount] = await Promise.all([
     prisma.weeklyReport.findUnique({ where: { weekStart } }),
     prisma.dailySession.findMany({
       where: { date: { gte: weekStart, lte: weekEnd } },
@@ -51,6 +51,9 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
     prisma.dailySession.findMany({
       select: { date: true },
       orderBy: { date: "asc" },
+    }),
+    prisma.insightSource.count({
+      where: { weekStart, state: "PENDING", isCurrent: true },
     }),
   ]);
 
@@ -141,6 +144,7 @@ export default async function WeeklyDetailPage({ params }: PageProps) {
             }
           : null
       }
+      pendingInsightCount={pendingInsightCount}
       stats={analysis.stats}
       days={analysis.days}
       trades={analysis.trades}

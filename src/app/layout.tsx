@@ -76,6 +76,12 @@ export default function RootLayout({
                   周报
                 </Link>
                 <Link
+                  href="/insights"
+                  className="hover:text-foreground transition-colors"
+                >
+                  经验库
+                </Link>
+                <Link
                   href="/monthly"
                   className="hover:text-foreground transition-colors"
                 >

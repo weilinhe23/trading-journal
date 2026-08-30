@@ -7,6 +7,7 @@ import { cn } from "~/lib/utils";
 import { formatPnL } from "~/lib/pnl";
 import { CreateWeeklyReportButton } from "~/components/weekly/CreateWeeklyReportButton";
 import { aggregateWeeklyMnq } from "~/lib/weekly-mnq-analysis";
+import { Button } from "~/components/ui/button";
 
 function getMondayOf(date: Date): Date {
   const d = new Date(date);
@@ -18,10 +19,13 @@ function getMondayOf(date: Date): Date {
 }
 
 export default async function WeeklyListPage() {
-  const sessions = await prisma.dailySession.findMany({
-    orderBy: { date: "asc" },
-    include: { mnqPlan: true },
-  });
+  const [sessions, pendingInsightCount] = await Promise.all([
+    prisma.dailySession.findMany({
+      orderBy: { date: "asc" },
+      include: { mnqPlan: true },
+    }),
+    prisma.insightSource.count({ where: { state: "PENDING", isCurrent: true } }),
+  ]);
 
   // Group sessions by ISO week Monday
   const weekMap = new Map<
@@ -58,6 +62,11 @@ export default async function WeeklyListPage() {
             共 {weeks.length} 周交易记录
           </p>
           <CreateWeeklyReportButton />
+          <Button asChild variant="outline" size="sm">
+            <Link href="/insights">
+              经验库{pendingInsightCount > 0 ? ` (${pendingInsightCount})` : ""}
+            </Link>
+          </Button>
         </div>
       </div>
 

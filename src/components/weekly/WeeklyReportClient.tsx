@@ -18,6 +18,7 @@ import type {
 } from "~/lib/weekly-mnq-analysis";
 import type { MnqLevelForecastSummary } from "~/lib/mnq-level-forecast";
 import { MNQ_DECISION_TIMEFRAME_LABELS } from "~/types";
+import { WeeklyInsightsPanel } from "~/components/weekly/WeeklyInsightsPanel";
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 const C = {
@@ -61,6 +62,7 @@ interface Props {
   year: number;
   dateRange: string;
   initialReport: WeeklyReportData | null;
+  pendingInsightCount: number;
   stats: WeeklyStats;
   days: DayRecord[];
   trades: TradeRecord[];
@@ -591,6 +593,7 @@ export function WeeklyReportClient({
   year,
   dateRange,
   initialReport,
+  pendingInsightCount,
   stats,
   days,
   trades,
@@ -609,6 +612,7 @@ export function WeeklyReportClient({
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [insightSyncFailed, setInsightSyncFailed] = useState(false);
   const [expandedTradeId, setExpandedTradeId] = useState<string | null>(null);
   const [form, setForm] = useState({
     summary: initialReport?.summary ?? "",
@@ -629,17 +633,30 @@ export function WeeklyReportClient({
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          summary: form.summary || undefined,
-          strengths: form.strengths || undefined,
-          weaknesses: form.weaknesses || undefined,
-          keyLessons: form.keyLessons || undefined,
-          nextWeekPlan: form.nextWeekPlan || undefined,
+          summary: form.summary,
+          strengths: form.strengths,
+          weaknesses: form.weaknesses,
+          keyLessons: form.keyLessons,
+          nextWeekPlan: form.nextWeekPlan,
         }),
       });
-      const json = (await res.json()) as { success: boolean; error?: string };
+      const json = (await res.json()) as {
+        success: boolean;
+        error?: string;
+        insightSync?: { success: boolean; error?: string; created?: number };
+      };
       if (json.success) {
         setSaved(true);
         setTimeout(() => setSaved(false), 2500);
+        if (json.insightSync?.success === false) {
+          setInsightSyncFailed(true);
+          toast.warning(json.insightSync.error ?? "周报已保存，但经验同步失败");
+        } else if (json.insightSync?.success) {
+          setInsightSyncFailed(false);
+          if ((json.insightSync.created ?? 0) > 0) {
+            toast.success(`周报已保存，新增 ${json.insightSync.created} 条待整理经验`);
+          }
+        }
         router.refresh();
       } else {
         toast.error(json.error ?? "保存失败");
@@ -2392,6 +2409,12 @@ export function WeeklyReportClient({
               "开盘阶段禁止行情中间进入\nBig engulfing candle 后的再次进入规则\n（每行一条）"
             }
             rows={5}
+          />
+          <WeeklyInsightsPanel
+            weekStart={weekStart}
+            pendingCount={pendingInsightCount}
+            syncFailed={insightSyncFailed}
+            onSyncRecovered={() => setInsightSyncFailed(false)}
           />
         </Card>
 
