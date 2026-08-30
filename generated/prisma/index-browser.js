@@ -282,6 +282,31 @@ exports.Prisma.WeeklyReportScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.InsightScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  tagsJson: 'tagsJson',
+  status: 'status',
+  isPinned: 'isPinned',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InsightSourceScalarFieldEnum = {
+  id: 'id',
+  weekStart: 'weekStart',
+  sourceText: 'sourceText',
+  normalizedText: 'normalizedText',
+  sourceHash: 'sourceHash',
+  sortOrder: 'sortOrder',
+  state: 'state',
+  insightId: 'insightId',
+  isCurrent: 'isCurrent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.MonthlyReportScalarFieldEnum = {
   yearMonth: 'yearMonth',
   monthInsight: 'monthInsight',
@@ -444,6 +469,17 @@ exports.Grade = exports.$Enums.Grade = {
   D: 'D'
 };
 
+exports.InsightStatus = exports.$Enums.InsightStatus = {
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.InsightSourceState = exports.$Enums.InsightSourceState = {
+  PENDING: 'PENDING',
+  LINKED: 'LINKED',
+  IGNORED: 'IGNORED'
+};
+
 exports.ChartTag = exports.$Enums.ChartTag = {
   PRE_MARKET_PLAN: 'PRE_MARKET_PLAN',
   ENTRY_SIGNAL: 'ENTRY_SIGNAL',
@@ -471,6 +507,8 @@ exports.Prisma.ModelName = {
   TradeSetup: 'TradeSetup',
   Execution: 'Execution',
   WeeklyReport: 'WeeklyReport',
+  Insight: 'Insight',
+  InsightSource: 'InsightSource',
   MonthlyReport: 'MonthlyReport',
   QuarterlyReport: 'QuarterlyReport',
   MissedReasonOption: 'MissedReasonOption',

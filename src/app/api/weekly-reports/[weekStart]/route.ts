@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "~/lib/prisma";
 import { aggregateWeeklyMnq } from "~/lib/weekly-mnq-analysis";
+import { syncWeeklyInsightSources } from "~/lib/insights-server";
 
 function parseWeekStart(value: string): Date | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
@@ -106,7 +107,22 @@ export async function PUT(
       create: { weekStart, ...parsed.data },
       update: parsed.data,
     });
-    return NextResponse.json({ success: true, data: report });
+    let insightSync:
+      | ({ success: true } & Awaited<ReturnType<typeof syncWeeklyInsightSources>>)
+      | { success: false; error: string }
+      | undefined;
+    if (Object.prototype.hasOwnProperty.call(parsed.data, "keyLessons")) {
+      try {
+        insightSync = {
+          success: true,
+          ...(await syncWeeklyInsightSources(weekStart, parsed.data.keyLessons)),
+        };
+      } catch (syncError) {
+        console.error("[weekly insight sync]", syncError);
+        insightSync = { success: false, error: "经验同步失败，可重试" };
+      }
+    }
+    return NextResponse.json({ success: true, data: report, insightSync });
   } catch (error) {
     console.error("[PUT /api/weekly-reports/[weekStart]]", error);
     return NextResponse.json(

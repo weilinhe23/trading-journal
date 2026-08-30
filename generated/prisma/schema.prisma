@@ -93,6 +93,17 @@ enum ChartTag {
   MARKET_OVERVIEW // 大盘/指数图
 }
 
+enum InsightStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum InsightSourceState {
+  PENDING
+  LINKED
+  IGNORED
+}
+
 enum MnqScenario {
   RANGE_SWEEP // 震荡日 Sweep 反转
   TREND_REGULAR // 情景 A: 常规趋势日
@@ -335,15 +346,53 @@ model Execution {
 
 // 每周周报
 model WeeklyReport {
-  weekStart     DateTime @unique // 当周周一 00:00:00 UTC
-  summary       String? // 本周总结
-  strengths     String? // 本周亮点
-  weaknesses    String? // 本周不足
-  keyLessons    String? // 核心经验教训
-  nextWeekPlan  String? // 下周展望/计划
-  overallRating Int? // 整体评分 1-5
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  weekStart      DateTime        @unique // 当周周一 00:00:00 UTC
+  summary        String? // 本周总结
+  strengths      String? // 本周亮点
+  weaknesses     String? // 本周不足
+  keyLessons     String? // 核心经验教训
+  nextWeekPlan   String? // 下周展望/计划
+  overallRating  Int? // 整体评分 1-5
+  insightSources InsightSource[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+// 从周报核心经验中归并出的经验条目
+model Insight {
+  id        String          @id @default(cuid())
+  title     String
+  content   String?
+  tagsJson  String          @default("[]")
+  status    InsightStatus   @default(ACTIVE)
+  isPinned  Boolean         @default(false)
+  sources   InsightSource[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@index([status, isPinned])
+  @@index([updatedAt])
+}
+
+// 周报核心经验的逐行快照；保留历史关联，避免编辑周报后丢失来源
+model InsightSource {
+  id             String             @id @default(cuid())
+  weekStart      DateTime
+  weeklyReport   WeeklyReport       @relation(fields: [weekStart], references: [weekStart], onDelete: Restrict, onUpdate: Cascade)
+  sourceText     String
+  normalizedText String
+  sourceHash     String
+  sortOrder      Int
+  state          InsightSourceState @default(PENDING)
+  insightId      String?
+  insight        Insight?           @relation(fields: [insightId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  isCurrent      Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  @@unique([weekStart, sourceHash])
+  @@index([state, isCurrent, weekStart])
+  @@index([insightId, weekStart])
 }
 
 model MonthlyReport {
