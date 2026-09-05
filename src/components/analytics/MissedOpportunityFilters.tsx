@@ -1,38 +1,26 @@
 "use client";
 
-import { Label } from "~/components/ui/label";
-import { Input } from "~/components/ui/input";
+import { RotateCcw, Search } from "lucide-react";
 import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
-import { Search, RotateCcw } from "lucide-react";
 import { cn } from "~/lib/utils";
-import type { ExecutionFilterOptions } from "~/lib/execution-aggregator";
+import type { MissedOpportunityFilterOptions } from "~/lib/missed-opportunity-aggregator";
 
-export interface FilterState {
+export interface MissedFilterState {
   dateFrom: string;
   dateTo: string;
-  direction: string;
-  result: string;
   strategy: string;
   tradeType: string;
+  reason: string;
 }
 
-const DIRECTION_OPTIONS = [
-  { value: "LONG", label: "做多" },
-  { value: "SHORT", label: "做空" },
-];
-
-const RESULT_OPTIONS = [
-  { value: "WIN", label: "盈利" },
-  { value: "LOSS", label: "亏损" },
-  { value: "BREAKEVEN", label: "保本" },
-];
-
 interface Props {
-  filters: FilterState;
-  options: ExecutionFilterOptions;
+  filters: MissedFilterState;
+  options: MissedOpportunityFilterOptions;
   loading: boolean;
-  onChange: (patch: Partial<FilterState>) => void;
+  onChange: (patch: Partial<MissedFilterState>) => void;
   onSearch: () => void;
   onReset: () => void;
 }
@@ -40,12 +28,10 @@ interface Props {
 function ToggleButton({
   active,
   onClick,
-  className,
   children,
 }: {
   active: boolean;
   onClick: () => void;
-  className?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -56,11 +42,8 @@ function ToggleButton({
       className={cn(
         "rounded border px-2.5 py-1 text-xs transition-colors",
         active
-          ? "bg-primary text-primary-foreground border-primary"
-          : cn(
-              "border-muted-foreground/40 text-muted-foreground hover:border-primary hover:text-foreground",
-              className,
-            ),
+          ? "border-primary bg-primary text-primary-foreground"
+          : "border-muted-foreground/40 text-muted-foreground hover:border-primary hover:text-foreground",
       )}
     >
       {children}
@@ -68,7 +51,7 @@ function ToggleButton({
   );
 }
 
-export function ExecutionFilters({
+export function MissedOpportunityFilters({
   filters,
   options,
   loading,
@@ -76,22 +59,16 @@ export function ExecutionFilters({
   onSearch,
   onReset,
 }: Props) {
-  const hasFilter =
-    filters.dateFrom ||
-    filters.dateTo ||
-    filters.direction ||
-    filters.result ||
-    filters.strategy ||
-    filters.tradeType;
-
+  const hasFilter = Object.values(filters).some(Boolean);
   const tradeTypes = filters.strategy
-    ? (options.strategies.find((s) => s.name === filters.strategy)
+    ? (options.strategies.find((item) => item.name === filters.strategy)
         ?.tradeTypes ?? [])
     : options.tradeTypes;
 
   function selectStrategy(strategy: string) {
     const nextTypes = strategy
-      ? (options.strategies.find((s) => s.name === strategy)?.tradeTypes ?? [])
+      ? (options.strategies.find((item) => item.name === strategy)
+          ?.tradeTypes ?? [])
       : options.tradeTypes;
     onChange({
       strategy,
@@ -99,7 +76,7 @@ export function ExecutionFilters({
     });
   }
 
-  function toggleSingle(field: keyof FilterState, value: string) {
+  function toggleSingle(field: keyof MissedFilterState, value: string) {
     onChange({ [field]: filters[field] === value ? "" : value });
   }
 
@@ -156,14 +133,36 @@ export function ExecutionFilters({
 
       <Separator />
 
-      {/* 日期范围 */}
+      <fieldset className="space-y-2">
+        <legend className="text-sm font-medium">错过原因</legend>
+        <div className="flex flex-wrap gap-2">
+          <ToggleButton
+            active={!filters.reason}
+            onClick={() => onChange({ reason: "" })}
+          >
+            全部原因
+          </ToggleButton>
+          {options.reasons.map((item) => (
+            <ToggleButton
+              key={item.value}
+              active={filters.reason === item.value}
+              onClick={() => toggleSingle("reason", item.value)}
+            >
+              {item.label}
+            </ToggleButton>
+          ))}
+        </div>
+      </fieldset>
+
+      <Separator />
+
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
           <Label className="text-muted-foreground text-xs">起始日期</Label>
           <Input
             type="date"
             value={filters.dateFrom}
-            onChange={(e) => onChange({ dateFrom: e.target.value })}
+            onChange={(event) => onChange({ dateFrom: event.target.value })}
             className="h-8 text-sm"
           />
         </div>
@@ -172,53 +171,12 @@ export function ExecutionFilters({
           <Input
             type="date"
             value={filters.dateTo}
-            onChange={(e) => onChange({ dateTo: e.target.value })}
+            onChange={(event) => onChange({ dateTo: event.target.value })}
             className="h-8 text-sm"
           />
         </div>
       </div>
 
-      <Separator />
-
-      {/* 方向 + 结果 */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <Label className="text-muted-foreground text-xs">方向</Label>
-          <div className="flex gap-1.5">
-            {DIRECTION_OPTIONS.map((o) => (
-              <ToggleButton
-                key={o.value}
-                active={filters.direction === o.value}
-                onClick={() => toggleSingle("direction", o.value)}
-                className={
-                  o.value === "LONG"
-                    ? "border-green-800/50 text-green-400/70 hover:border-green-600"
-                    : "border-red-800/50 text-red-400/70 hover:border-red-600"
-                }
-              >
-                {o.label}
-              </ToggleButton>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-1.5">
-          <Label className="text-muted-foreground text-xs">结果</Label>
-          <div className="flex gap-1.5">
-            {RESULT_OPTIONS.map((o) => (
-              <ToggleButton
-                key={o.value}
-                active={filters.result === o.value}
-                onClick={() => toggleSingle("result", o.value)}
-              >
-                {o.label}
-              </ToggleButton>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* 操作按钮 */}
       <div className="flex gap-2">
         <Button
           size="sm"

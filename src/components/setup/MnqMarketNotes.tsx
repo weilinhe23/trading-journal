@@ -537,6 +537,7 @@ const ENTRY_APPROACH_OPTIONS: {
 
 interface OpportunityCardProps {
   opp: TradeOpportunity;
+  anchorId: string;
   index: number;
   placeholder: string;
   segmentType: MnqMarketType | null;
@@ -547,6 +548,7 @@ interface OpportunityCardProps {
 
 function OpportunityCard({
   opp,
+  anchorId,
   index,
   placeholder,
   segmentType,
@@ -555,7 +557,11 @@ function OpportunityCard({
   strategies,
 }: OpportunityCardProps) {
   return (
-    <div className="border-border/50 bg-muted/20 space-y-2 rounded border p-2">
+    <div
+      id={anchorId}
+      tabIndex={-1}
+      className="border-border/50 bg-muted/20 scroll-mt-24 space-y-2 rounded border p-2 outline-none target:border-cyan-500 target:bg-cyan-950/30 target:ring-2 target:ring-cyan-500/30"
+    >
       {/* 标题行 */}
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground text-[10px]">
@@ -2721,6 +2727,7 @@ export function MnqMarketNotes({ plan, date }: Props) {
                         <OpportunityCard
                           key={opp.id}
                           opp={opp}
+                          anchorId={`mnq-opportunity-${opp.id}`}
                           index={idx}
                           placeholder={oppPlaceholder}
                           segmentType={seg.type}

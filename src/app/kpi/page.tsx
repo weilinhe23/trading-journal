@@ -25,7 +25,7 @@ export default async function KpiPage() {
         where: { date: todayDate },
         select: { date: true, actualPcts: true, note: true },
       }),
-      fetchExecutionRows({ source: "MNQ", dateTo: today }),
+      fetchExecutionRows({ dateTo: today }),
     ]);
 
   const mnqTrades = executionRows

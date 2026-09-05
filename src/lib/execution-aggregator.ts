@@ -1,47 +1,4 @@
-import { prisma } from "~/lib/prisma";
-
-const MNQ_TICK = 2;
-
-const MNQ_SEG_KEYS = [
-  { key: "marketPreJson", label: "MNQ盘前" },
-  { key: "marketOpenJson", label: "MNQ开盘" },
-  { key: "marketMidJson", label: "MNQ盘中" },
-  { key: "marketAfternoonJson", label: "MNQ午盘" },
-] as const;
-
-interface MnqOpportunity {
-  id?: string;
-  captured: boolean | null;
-  tradeDirection: "LONG" | "SHORT" | null;
-  entryPrice: string;
-  exitPrice: string;
-  contracts: string;
-  strategyName?: string | null;
-  tradeTypeName?: string | null;
-  entryAccuracy?: "CORRECT" | "WRONG" | null;
-  entryAccuracyNote?: string | null;
-  exitAccuracy?: "CORRECT" | "WRONG" | null;
-  exitAccuracyNote?: string | null;
-}
-
-function parseMnqOpps(raw: string | null | undefined): MnqOpportunity[] {
-  if (!raw) return [];
-  try {
-    const seg = JSON.parse(raw) as { opportunities?: MnqOpportunity[] };
-    return seg.opportunities ?? [];
-  } catch {
-    return [];
-  }
-}
-
-function parseFirstTradeType(json: string): string | null {
-  try {
-    const arr = JSON.parse(json) as string[];
-    return arr.length > 0 ? (arr[0] ?? null) : null;
-  } catch {
-    return null;
-  }
-}
+import { getMnqAnalyticsSnapshot } from "~/lib/mnq-analytics-server";
 
 function getMondayOf(date: Date): Date {
   const d = new Date(date);
@@ -60,18 +17,17 @@ export interface TradeRow {
   direction: "LONG" | "SHORT";
   strategy: string | null;
   tradeTypeName: string | null;
+  description: string;
   segment: string | null;
   entryPrice: number;
   exitPrice: number | null;
   quantity: number;
   pnl: number | null;
   settled: boolean;
-  entryConditionMet: boolean | null;
-  exitConditionMet: boolean | null;
-  executionGrade: string | null;
   entryAccuracy: "CORRECT" | "WRONG" | null;
+  entryAccuracyNote: string;
   exitAccuracy: "CORRECT" | "WRONG" | null;
-  source: "STOCK" | "MNQ";
+  exitAccuracyNote: string;
   opportunityId: string | null;
 }
 
@@ -80,148 +36,105 @@ export interface ExecutionFilters {
   dateTo?: string | null;
   symbol?: string | null;
   strategy?: string | null;
+  tradeType?: string | null;
   direction?: string | null;
   result?: string | null;
-  source?: string | null;
 }
 
 export async function fetchExecutionRows(
   filters: ExecutionFilters = {},
 ): Promise<TradeRow[]> {
-  const { dateFrom, dateTo, symbol, strategy, direction, source } = filters;
+  const { rows: opportunities } = await getMnqAnalyticsSnapshot();
 
-  const sessionWhere: Record<string, unknown> = {};
-  if (dateFrom || dateTo) {
-    sessionWhere.date = {
-      ...(dateFrom ? { gte: new Date(`${dateFrom}T00:00:00.000Z`) } : {}),
-      ...(dateTo ? { lte: new Date(`${dateTo}T00:00:00.000Z`) } : {}),
-    };
+  const rows = opportunities
+    .filter((row) => row.status === "CAPTURED" && row.direction !== null)
+    .map<TradeRow>((row) => ({
+      id: row.id,
+      date: row.date,
+      weekStart: getMondayOf(new Date(`${row.date}T00:00:00.000Z`))
+        .toISOString()
+        .split("T")[0]!,
+      symbol: "MNQ",
+      direction: row.direction!,
+      strategy: normalizeCategory(row.strategy),
+      tradeTypeName: normalizeCategory(row.tradeType),
+      description: row.description,
+      segment: row.segment,
+      entryPrice: row.entryPrice ?? 0,
+      exitPrice: row.exitPrice,
+      quantity: row.contracts ?? 1,
+      pnl: row.pnl,
+      settled: row.pnl !== null,
+      entryAccuracy: row.entryAccuracy,
+      entryAccuracyNote: row.entryAccuracyNote,
+      exitAccuracy: row.exitAccuracy,
+      exitAccuracyNote: row.exitAccuracyNote,
+      opportunityId: row.opportunityId,
+    }));
+
+  return filterExecutionRows(rows, filters);
+}
+
+function normalizeCategory(value: string | null): string | null {
+  const name = value?.trim();
+  return name?.length ? name : null;
+}
+
+function categoryName(value: string | null): string {
+  return normalizeCategory(value) ?? "未分类";
+}
+
+export function filterExecutionRows(
+  rows: TradeRow[],
+  filters: ExecutionFilters = {},
+): TradeRow[] {
+  const symbol = filters.symbol?.trim().toUpperCase();
+  const strategy = filters.strategy?.trim().toLowerCase();
+  const tradeType = filters.tradeType?.trim().toLowerCase();
+
+  return rows.filter(
+    (row) =>
+      (!filters.dateFrom || row.date >= filters.dateFrom) &&
+      (!filters.dateTo || row.date <= filters.dateTo) &&
+      (!symbol || row.symbol.includes(symbol)) &&
+      (!filters.direction || row.direction === filters.direction) &&
+      (!strategy || categoryName(row.strategy).toLowerCase() === strategy) &&
+      (!tradeType ||
+        categoryName(row.tradeTypeName).toLowerCase() === tradeType) &&
+      (filters.result !== "WIN" || (row.pnl !== null && row.pnl > 0)) &&
+      (filters.result !== "LOSS" || (row.pnl !== null && row.pnl < 0)) &&
+      (filters.result !== "BREAKEVEN" || row.pnl === 0),
+  );
+}
+
+export interface ExecutionFilterOptions {
+  strategies: Array<{ name: string; tradeTypes: string[] }>;
+  tradeTypes: string[];
+}
+
+// Use recorded names so historical classifications remain available after library edits.
+export function buildExecutionFilterOptions(
+  rows: TradeRow[],
+): ExecutionFilterOptions {
+  const strategies = new Map<string, Set<string>>();
+  const tradeTypes = new Set<string>();
+  for (const row of rows) {
+    const strategy = categoryName(row.strategy);
+    const tradeType = categoryName(row.tradeTypeName);
+    const types = strategies.get(strategy) ?? new Set<string>();
+    types.add(tradeType);
+    strategies.set(strategy, types);
+    tradeTypes.add(tradeType);
   }
-
-  const sessions = await prisma.dailySession.findMany({
-    where: sessionWhere,
-    include: {
-      setups: {
-        where: { status: "EXECUTED" },
-        include: { executions: true },
-      },
-      mnqPlan: true,
-    },
-    orderBy: { date: "asc" },
-  });
-
-  const rows: TradeRow[] = [];
-  let stockIdx = 1;
-  let mnqIdx = 1;
-
-  const symUpper = symbol?.toUpperCase() ?? "";
-  const showStock = !source || source === "STOCK";
-  const showMnq = !source || source === "MNQ";
-
-  for (const session of sessions) {
-    const dateStr = session.date.toISOString().split("T")[0]!;
-    const weekStart = getMondayOf(session.date).toISOString().split("T")[0]!;
-
-    // ── Stock trades ──────────────────────────────────────────────────────
-    if (showStock) {
-      for (const setup of session.setups) {
-        if (symUpper && !setup.symbol.includes(symUpper)) continue;
-        if (direction === "LONG" && setup.direction !== "LONG") continue;
-        if (direction === "SHORT" && setup.direction !== "SHORT") continue;
-        if (strategy && !setup.strategy?.includes(strategy)) continue;
-
-        for (const ex of setup.executions) {
-          rows.push({
-            id: `T${String(stockIdx++).padStart(2, "0")}`,
-            date: dateStr,
-            weekStart,
-            symbol: setup.symbol,
-            direction: setup.direction as "LONG" | "SHORT",
-            strategy: setup.strategy ?? null,
-            tradeTypeName: parseFirstTradeType(setup.selectedTradeTypes),
-            segment: null,
-            entryPrice: ex.entryPrice,
-            exitPrice: ex.exitPrice ?? null,
-            quantity: ex.quantity,
-            pnl: ex.pnl ?? null,
-            settled: ex.pnl !== null,
-            entryConditionMet: ex.entryConditionMet ?? null,
-            exitConditionMet: ex.exitConditionMet ?? null,
-            executionGrade: ex.executionGrade ?? null,
-            entryAccuracy: null,
-            exitAccuracy: null,
-            source: "STOCK",
-            opportunityId: null,
-          });
-        }
-      }
-    }
-
-    // ── MNQ trades ────────────────────────────────────────────────────────
-    if (showMnq && session.mnqPlan) {
-      if (!symUpper || "MNQ".includes(symUpper)) {
-        const plan = session.mnqPlan;
-        for (const { key, label } of MNQ_SEG_KEYS) {
-          const raw = plan[key];
-          const opps = parseMnqOpps(raw);
-          for (const opp of opps) {
-            if (opp.captured !== true) continue;
-            if (!opp.tradeDirection) continue;
-            if (direction && opp.tradeDirection !== direction) continue;
-            if (strategy && !opp.strategyName?.includes(strategy)) continue;
-
-            const entry = parseFloat(opp.entryPrice);
-            const exit = parseFloat(opp.exitPrice);
-            const qty = parseFloat(opp.contracts || "1");
-
-            let pnl: number | null = null;
-            if (!isNaN(entry) && !isNaN(exit) && entry > 0 && exit > 0) {
-              const dir = opp.tradeDirection === "SHORT" ? -1 : 1;
-              pnl =
-                Math.round(
-                  (exit - entry) *
-                    dir *
-                    (isNaN(qty) ? 1 : qty) *
-                    MNQ_TICK *
-                    100,
-                ) / 100;
-            }
-
-            rows.push({
-              id: `M${String(mnqIdx++).padStart(2, "0")}`,
-              date: dateStr,
-              weekStart,
-              symbol: "MNQ",
-              direction: opp.tradeDirection,
-              strategy: opp.strategyName ?? null,
-              tradeTypeName: opp.tradeTypeName ?? null,
-              segment: label,
-              entryPrice: !isNaN(entry) && entry > 0 ? entry : 0,
-              exitPrice: !isNaN(exit) && exit > 0 ? exit : null,
-              quantity: !isNaN(qty) && qty > 0 ? qty : 1,
-              pnl,
-              settled: pnl !== null,
-              entryConditionMet: null,
-              exitConditionMet: null,
-              executionGrade: null,
-              entryAccuracy: opp.entryAccuracy ?? null,
-              exitAccuracy: opp.exitAccuracy ?? null,
-              source: "MNQ",
-              opportunityId: opp.id ?? null,
-            });
-          }
-        }
-      }
-    }
-  }
-
-  // Apply result filter after computing pnl
-  const result = filters.result;
-  if (result === "WIN") return rows.filter((r) => r.pnl !== null && r.pnl > 0);
-  if (result === "LOSS") return rows.filter((r) => r.pnl !== null && r.pnl < 0);
-  if (result === "BREAKEVEN")
-    return rows.filter((r) => r.pnl !== null && r.pnl === 0);
-  return rows;
+  const sorted = (values: Iterable<string>) =>
+    Array.from(values).sort((a, b) => a.localeCompare(b, "zh-CN"));
+  return {
+    strategies: sorted(strategies.keys()).map((name) => ({
+      name,
+      tradeTypes: sorted(strategies.get(name)!),
+    })),
+    tradeTypes: sorted(tradeTypes),
+  };
 }
 
 export function computeSummary(rows: TradeRow[]) {
@@ -230,19 +143,14 @@ export function computeSummary(rows: TradeRow[]) {
   const losses = settled.filter((r) => (r.pnl ?? 0) < 0);
 
   const totalPnL = settled.reduce((s, r) => s + (r.pnl ?? 0), 0);
-  const winRate = settled.length > 0 ? (wins.length / settled.length) * 100 : 0;
+  const decidedCount = wins.length + losses.length;
+  const winRate = decidedCount > 0 ? (wins.length / decidedCount) * 100 : 0;
   const avgPnL = settled.length > 0 ? totalPnL / settled.length : 0;
   const maxWin = wins.length > 0 ? Math.max(...wins.map((r) => r.pnl ?? 0)) : 0;
   const maxLoss =
     losses.length > 0 ? Math.min(...losses.map((r) => r.pnl ?? 0)) : 0;
-  const avgWin =
-    wins.length > 0
-      ? wins.reduce((s, r) => s + (r.pnl ?? 0), 0) / wins.length
-      : 0;
-  const avgLoss =
-    losses.length > 0
-      ? losses.reduce((s, r) => s + (r.pnl ?? 0), 0) / losses.length
-      : 0;
+  const grossProfit = wins.reduce((s, row) => s + (row.pnl ?? 0), 0);
+  const grossLoss = Math.abs(losses.reduce((s, row) => s + (row.pnl ?? 0), 0));
 
   const r = (n: number) => Math.round(n * 100) / 100;
   const r1 = (n: number) => Math.round(n * 10) / 10;
@@ -255,7 +163,7 @@ export function computeSummary(rows: TradeRow[]) {
     avgPnL: r(avgPnL),
     maxWin: r(maxWin),
     maxLoss: r(maxLoss),
-    profitFactor: avgLoss !== 0 ? r1(Math.abs(avgWin / avgLoss)) : null,
+    profitFactor: grossLoss > 0 ? r1(grossProfit / grossLoss) : null,
     winsCount: wins.length,
     lossesCount: losses.length,
   };
@@ -278,19 +186,6 @@ export function computeCharts(rows: TradeRow[]) {
       running += pnl;
       return { date, pnl: r(pnl), cumPnL: r(running) };
     });
-
-  // By symbol
-  const symMap = new Map<string, { pnl: number; count: number }>();
-  for (const row of settled) {
-    const cur = symMap.get(row.symbol) ?? { pnl: 0, count: 0 };
-    symMap.set(row.symbol, {
-      pnl: cur.pnl + (row.pnl ?? 0),
-      count: cur.count + 1,
-    });
-  }
-  const bySymbol = Array.from(symMap.entries())
-    .map(([sym, { pnl, count }]) => ({ symbol: sym, pnl: r(pnl), count }))
-    .sort((a, b) => b.pnl - a.pnl);
 
   // By strategy
   const stratMap = new Map<
@@ -328,5 +223,5 @@ export function computeCharts(rows: TradeRow[]) {
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([date, { pnl, count }]) => ({ date, pnl: r(pnl), count }));
 
-  return { cumulative, bySymbol, byStrategy, dailyHeatmap };
+  return { cumulative, byStrategy, dailyHeatmap };
 }

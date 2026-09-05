@@ -1,120 +1,158 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback } from "react"
-import { Download } from "lucide-react"
-import { Button } from "~/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
-import { ExecutionFilters, type FilterState } from "./ExecutionFilters"
-import { ExecutionSummaryPanel } from "./ExecutionSummaryPanel"
-import { ExecutionTable } from "./ExecutionTable"
-import { SymbolPnLChart } from "./SymbolPnLChart"
-import { StrategyPnLChart } from "./StrategyPnLChart"
-import { DailyPnLHeatmap } from "./DailyPnLHeatmap"
-import { PnLCurveChart } from "./PnLCurveChart"
-import type { TradeRow } from "~/lib/execution-aggregator"
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Download } from "lucide-react";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { ExecutionFilters, type FilterState } from "./ExecutionFilters";
+import { ExecutionSummaryPanel } from "./ExecutionSummaryPanel";
+import { ExecutionTable } from "./ExecutionTable";
+import { StrategyPnLChart } from "./StrategyPnLChart";
+import { DailyPnLHeatmap } from "./DailyPnLHeatmap";
+import { PnLCurveChart } from "./PnLCurveChart";
+import type {
+  TradeRow,
+  ExecutionFilterOptions,
+} from "~/lib/execution-aggregator";
 
 interface ExecutionSummary {
-  totalCount: number
-  settledCount: number
-  totalPnL: number
-  winRate: number
-  avgPnL: number
-  maxWin: number
-  maxLoss: number
-  profitFactor: number | null
-  winsCount: number
-  lossesCount: number
+  totalCount: number;
+  settledCount: number;
+  totalPnL: number;
+  winRate: number;
+  avgPnL: number;
+  maxWin: number;
+  maxLoss: number;
+  profitFactor: number | null;
+  winsCount: number;
+  lossesCount: number;
 }
 
 interface ChartData {
-  cumulative: Array<{ date: string; pnl: number; cumPnL: number }>
-  bySymbol: Array<{ symbol: string; pnl: number; count: number }>
-  byStrategy: Array<{ strategy: string; pnl: number; count: number; winRate: number }>
-  dailyHeatmap: Array<{ date: string; pnl: number; count: number }>
+  cumulative: Array<{ date: string; pnl: number; cumPnL: number }>;
+  byStrategy: Array<{
+    strategy: string;
+    pnl: number;
+    count: number;
+    winRate: number;
+  }>;
+  dailyHeatmap: Array<{ date: string; pnl: number; count: number }>;
 }
 
 interface ApiData {
-  executions: TradeRow[]
-  summary: ExecutionSummary
-  charts: ChartData
+  executions: TradeRow[];
+  summary: ExecutionSummary;
+  charts: ChartData;
+  filterOptions: ExecutionFilterOptions;
 }
 
 const EMPTY_FILTERS: FilterState = {
-  symbol: "", dateFrom: "", dateTo: "", direction: "", result: "", strategy: "", source: "",
-}
+  dateFrom: "",
+  dateTo: "",
+  direction: "",
+  result: "",
+  strategy: "",
+  tradeType: "",
+};
 
 const EMPTY_SUMMARY: ExecutionSummary = {
-  totalCount: 0, settledCount: 0, totalPnL: 0, winRate: 0, avgPnL: 0,
-  maxWin: 0, maxLoss: 0, profitFactor: null, winsCount: 0, lossesCount: 0,
-}
+  totalCount: 0,
+  settledCount: 0,
+  totalPnL: 0,
+  winRate: 0,
+  avgPnL: 0,
+  maxWin: 0,
+  maxLoss: 0,
+  profitFactor: null,
+  winsCount: 0,
+  lossesCount: 0,
+};
 
 function filtersToParams(f: FilterState): URLSearchParams {
-  const p = new URLSearchParams()
-  if (f.symbol)    p.set("symbol",    f.symbol)
-  if (f.dateFrom)  p.set("dateFrom",  f.dateFrom)
-  if (f.dateTo)    p.set("dateTo",    f.dateTo)
-  if (f.direction) p.set("direction", f.direction)
-  if (f.result)    p.set("result",    f.result)
-  if (f.strategy)  p.set("strategy",  f.strategy)
-  if (f.source)    p.set("source",    f.source)
-  return p
+  const p = new URLSearchParams();
+  if (f.dateFrom) p.set("dateFrom", f.dateFrom);
+  if (f.dateTo) p.set("dateTo", f.dateTo);
+  if (f.direction) p.set("direction", f.direction);
+  if (f.result) p.set("result", f.result);
+  if (f.strategy) p.set("strategy", f.strategy);
+  if (f.tradeType) p.set("tradeType", f.tradeType);
+  return p;
 }
 
 export function ExecutionDetailClient() {
-  const [filters,    setFilters]    = useState<FilterState>(EMPTY_FILTERS)
-  const [data,       setData]       = useState<ApiData | null>(null)
-  const [loading,    setLoading]    = useState(false)
-  const [strategies, setStrategies] = useState<string[]>([])
-
-  useEffect(() => {
-    fetch("/api/strategies")
-      .then((r) => r.json() as Promise<{ success: boolean; data: Array<{ name: string; isActive: boolean }> }>)
-      .then((j) => {
-        if (j.success) setStrategies(j.data.filter((s) => s.isActive).map((s) => s.name))
-      })
-      .catch(() => undefined)
-  }, [])
+  const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
+  const [appliedFilters, setAppliedFilters] =
+    useState<FilterState>(EMPTY_FILTERS);
+  const [data, setData] = useState<ApiData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const requestId = useRef(0);
 
   const fetchData = useCallback(async (f: FilterState) => {
-    setLoading(true)
+    const currentRequest = ++requestId.current;
+    setLoading(true);
+    setError(null);
     try {
-      const res  = await fetch(`/api/analytics/executions?${filtersToParams(f).toString()}`)
-      const json = (await res.json()) as { success: boolean; data: ApiData }
-      if (json.success) setData(json.data)
+      const res = await fetch(
+        `/api/analytics/executions?${filtersToParams(f).toString()}`,
+      );
+      const json = (await res.json()) as { success: boolean; data: ApiData };
+      if (!res.ok || !json.success) throw new Error("查询失败");
+      if (currentRequest === requestId.current) {
+        setData(json.data);
+        setAppliedFilters(f);
+      }
     } catch {
-      // keep previous data on error
+      if (currentRequest === requestId.current)
+        setError("查询失败，请重试。当前仍显示上次查询结果。");
     } finally {
-      setLoading(false)
+      if (currentRequest === requestId.current) setLoading(false);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    void fetchData(EMPTY_FILTERS)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    void fetchData(EMPTY_FILTERS);
+  }, [fetchData]);
 
-  function handleSearch() { void fetchData(filters) }
+  function handleSearch() {
+    void fetchData(filters);
+  }
 
   function handleReset() {
-    setFilters(EMPTY_FILTERS)
-    void fetchData(EMPTY_FILTERS)
+    setFilters(EMPTY_FILTERS);
+    void fetchData(EMPTY_FILTERS);
   }
 
   function handleExport() {
-    const params = filtersToParams(filters)
-    window.open(`/api/analytics/executions/export?${params.toString()}`, "_blank")
+    const params = filtersToParams(appliedFilters);
+    window.open(
+      `/api/analytics/executions/export?${params.toString()}`,
+      "_blank",
+    );
   }
 
-  const summary    = data?.summary    ?? EMPTY_SUMMARY
-  const executions = data?.executions ?? []
-  const charts     = data?.charts     ?? { cumulative: [], bySymbol: [], byStrategy: [], dailyHeatmap: [] }
+  const summary = data?.summary ?? EMPTY_SUMMARY;
+  const executions = data?.executions ?? [];
+  const charts = data?.charts ?? {
+    cumulative: [],
+    byStrategy: [],
+    dailyHeatmap: [],
+  };
 
   return (
     <div className="space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">汇总股票和 MNQ 期货所有已成交记录（数据来源：每日/每周周报）</p>
-        <Button size="sm" variant="outline" className="gap-1.5" onClick={handleExport}>
+        <p className="text-muted-foreground text-sm">
+          仅汇总每日 MNQ 行情记录中已把握的机会
+        </p>
+        <Button
+          size="sm"
+          variant="outline"
+          className="gap-1.5"
+          onClick={handleExport}
+          disabled={loading || !data}
+        >
           <Download className="h-3.5 w-3.5" />
           导出 CSV
         </Button>
@@ -123,12 +161,18 @@ export function ExecutionDetailClient() {
       {/* Filters */}
       <ExecutionFilters
         filters={filters}
-        strategies={strategies}
+        options={data?.filterOptions ?? { strategies: [], tradeTypes: [] }}
         loading={loading}
         onChange={(patch) => setFilters((prev) => ({ ...prev, ...patch }))}
         onSearch={handleSearch}
         onReset={handleReset}
       />
+
+      {error && (
+        <p role="alert" className="text-destructive text-sm">
+          {error}
+        </p>
+      )}
 
       {/* Summary cards */}
       <ExecutionSummaryPanel summary={summary} />
@@ -140,7 +184,7 @@ export function ExecutionDetailClient() {
         </CardHeader>
         <CardContent className="pt-0">
           {loading ? (
-            <div className="flex items-center justify-center h-24 text-muted-foreground text-sm">
+            <div className="text-muted-foreground flex h-24 items-center justify-center text-sm">
               加载中...
             </div>
           ) : (
@@ -154,26 +198,21 @@ export function ExecutionDetailClient() {
         <>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">累计盈亏曲线</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                累计盈亏曲线
+              </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
               <PnLCurveChart data={charts.cumulative} />
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">各标的盈亏</CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <SymbolPnLChart data={charts.bySymbol} />
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">各策略盈亏</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  各策略盈亏
+                </CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
                 <StrategyPnLChart data={charts.byStrategy} />
@@ -183,7 +222,9 @@ export function ExecutionDetailClient() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">每日盈亏热力图</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                每日盈亏热力图
+              </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
               <DailyPnLHeatmap data={charts.dailyHeatmap} />
@@ -192,5 +233,5 @@ export function ExecutionDetailClient() {
         </>
       )}
     </div>
-  )
+  );
 }

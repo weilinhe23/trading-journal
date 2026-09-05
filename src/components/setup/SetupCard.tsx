@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -238,6 +238,39 @@ export function SetupCard({
     actualExitOpportunity.trim() ||
     dailySummary.trim() ||
     hasMnqMarketNotes;
+
+  useEffect(() => {
+    if (
+      intraMode &&
+      mnqPlan &&
+      window.location.hash.startsWith("#mnq-opportunity-")
+    ) {
+      setShowIntraEval(true);
+    }
+  }, [intraMode, mnqPlan]);
+
+  useEffect(() => {
+    if (!intraMode || !showIntraEval) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const encodedId = window.location.hash.slice(1);
+      if (!encodedId.startsWith("mnq-opportunity-")) return;
+
+      let targetId = encodedId;
+      try {
+        targetId = decodeURIComponent(encodedId);
+      } catch {
+        // Keep the literal fragment when it is not valid percent encoding.
+      }
+
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+      target.focus({ preventScroll: true });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [intraMode, showIntraEval]);
 
   async function handleDelete() {
     setDeleting(true);
