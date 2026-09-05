@@ -21,7 +21,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import type { KpiChartPoint } from "~/components/kpi/KpiProgressChart";
-import { KpiTrendExplorer } from "~/components/kpi/KpiTrendExplorer";
+import { KpiAnalysisExplorer } from "~/components/kpi/KpiAnalysisExplorer";
 import {
   KpiTradeDetailsTable,
   type KpiMnqTradeDetail,
@@ -359,6 +359,14 @@ export function KpiTrackerClient({
         </div>
       </section>
 
+      <KpiAnalysisExplorer
+        initialSummary={
+          summaries.find((summary) => summary.period === "month") ??
+          summaries[0]!
+        }
+        today={today}
+      />
+
       <section className="border-border/70 bg-card overflow-hidden rounded-xl border shadow-sm">
         <div className="border-border/70 flex flex-col gap-3 border-b p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div>
@@ -425,14 +433,6 @@ export function KpiTrackerClient({
           </div>
         </div>
       </section>
-
-      <KpiTrendExplorer
-        initialSummary={
-          summaries.find((summary) => summary.period === "month") ??
-          summaries[0]!
-        }
-        today={today}
-      />
 
       <section className="border-border/70 bg-card overflow-hidden rounded-xl border shadow-sm">
         <div className="border-border/70 border-b p-5 sm:p-6">
