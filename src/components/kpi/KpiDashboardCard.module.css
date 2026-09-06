@@ -1,0 +1,347 @@
+.board {
+  --sage: #bdd0b5;
+  --muted: #a3aeb9;
+  overflow: hidden;
+  border: 1px solid #bdd0b526;
+  border-radius: 1rem;
+  background: #111b24;
+  color: #eeeae1;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem 1.75rem 0;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--sage);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.detailLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid #bdd0b52e;
+  border-radius: 0.5rem;
+  color: var(--sage);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.detailLink:hover {
+  background: #bdd0b510;
+}
+.detailLink:focus-visible {
+  outline: 2px solid var(--sage);
+  outline-offset: 4px;
+}
+
+.overview {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem 2.5rem;
+  padding: 1.75rem;
+}
+
+.metricLabel {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.total {
+  min-width: 0;
+}
+.totalValue {
+  margin-top: 0.25rem;
+  color: var(--sage);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.totalValue[data-negative="true"] {
+  color: #efa69e;
+}
+.totalValue > span {
+  margin-left: 0.5rem;
+  color: var(--muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.25rem;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.completion {
+  padding-left: 2.5rem;
+  border-left: 1px solid #bdd0b526;
+}
+.completionValue {
+  margin-top: 0.25rem;
+  font-size: 1.75rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+.completionValue > span {
+  margin-left: 0.5rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.dayMarkers {
+  display: flex;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+}
+.dayMarkers span {
+  width: 1rem;
+  height: 0.25rem;
+  border-radius: 1px;
+  background: #bdd0b526;
+}
+.dayMarkers span[data-achieved="true"] {
+  background: var(--sage);
+}
+
+.period {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.periodLabel {
+  margin-bottom: 0.5rem;
+  color: #eeeae1;
+  font-size: 0.625rem;
+  letter-spacing: 0.15em;
+}
+.periodNote {
+  margin-top: 0.25rem;
+}
+
+.days {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0 1.75rem 1.5rem;
+  list-style: none;
+}
+.day {
+  --day-color: #d5b980;
+  min-width: 0;
+  padding: 1.125rem;
+  border: 1px solid #d5b98030;
+  border-top: 2px solid var(--day-color);
+  border-radius: 0.625rem;
+  background: #d5b98005;
+}
+.day[data-state="achieved"] {
+  --day-color: #bdd0b5;
+  border-color: #bdd0b540;
+  border-top-color: var(--day-color);
+  background: #bdd0b50a;
+}
+.day[data-state="negative"] {
+  --day-color: #efa69e;
+  border-color: #efa69e30;
+  border-top-color: var(--day-color);
+  background: #efa69e05;
+}
+.day[data-state="empty"] {
+  --day-color: #8d9ba8;
+  border: 1px dashed #8d9ba840;
+  padding-top: calc(1.125rem + 1px);
+  background: transparent;
+}
+.dayHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+.weekday {
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.dayDate {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.375rem;
+  color: var(--muted);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+}
+.today {
+  color: var(--sage);
+  font-size: 0.625rem;
+}
+.seal {
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  color: var(--day-color);
+}
+.day[data-state="achieved"] .seal {
+  border-color: var(--sage);
+  background: var(--sage);
+  color: #111b24;
+}
+.day[data-state="empty"] .seal {
+  border-style: dotted;
+}
+.dailyValue {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 1.5rem;
+  color: var(--day-color);
+  font-size: clamp(1.5rem, 2.5vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.dailyValue > span:first-child {
+  min-width: 0;
+}
+.unit {
+  color: var(--muted);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.status {
+  margin-top: 0.5rem;
+  color: var(--day-color);
+  font-size: 0.6875rem;
+}
+.targetBlock {
+  margin-top: 1.5rem;
+}
+.targetLabel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem;
+  color: var(--muted);
+  font-size: 0.625rem;
+  font-variant-numeric: tabular-nums;
+}
+.track {
+  height: 3px;
+  margin-top: 0.5rem;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #8d9ba826;
+}
+.track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--day-color);
+}
+.difference {
+  margin-top: 0.625rem;
+  color: var(--muted);
+  font-size: 0.625rem;
+  font-variant-numeric: tabular-nums;
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem 1.75rem;
+  border-top: 1px solid #bdd0b51a;
+  color: var(--muted);
+  font-size: 0.6875rem;
+}
+.empty {
+  padding: 1rem 1.75rem 2rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 1023px) {
+  .days {
+    gap: 0.5rem;
+  }
+  .day {
+    padding-inline: 0.75rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .header,
+  .overview,
+  .footer {
+    padding-inline: 1.25rem;
+  }
+  .overview {
+    gap: 1.5rem;
+  }
+  .completion {
+    padding-left: 1.5rem;
+  }
+  .period {
+    width: 100%;
+    margin-left: 0;
+    text-align: left;
+  }
+  .periodLabel {
+    display: none;
+  }
+  .days {
+    grid-template-columns: 1fr !important;
+    padding-inline: 1.25rem;
+  }
+  .day {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 0.625rem 1rem;
+    padding: 1rem;
+  }
+  .day[data-state="empty"] {
+    padding-top: calc(1rem + 1px);
+  }
+  .dailyValue {
+    justify-content: flex-end;
+    margin: 0;
+    font-size: 1.875rem;
+  }
+  .status {
+    margin: 0;
+  }
+  .targetBlock {
+    grid-column: 1 / -1;
+    margin-top: 0.25rem;
+  }
+}

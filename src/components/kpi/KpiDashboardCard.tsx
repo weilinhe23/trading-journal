@@ -1,65 +1,178 @@
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, Target } from "lucide-react";
-import { Button } from "~/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import type { KpiPeriodSummary } from "~/lib/kpi";
+import { ArrowRight, Check, Minus, Target } from "lucide-react";
+import type { KpiBreakdownItem, KpiPeriodSummary } from "~/lib/kpi";
+import styles from "./KpiDashboardCard.module.css";
 
+const numberFormatter = new Intl.NumberFormat("en-US", {
+  maximumFractionDigits: 2,
+});
+const weekdayFormatter = new Intl.DateTimeFormat("en-US", {
+  weekday: "short",
+  timeZone: "UTC",
+});
+const points = (value: number) => numberFormatter.format(value);
+const signedPoints = (value: number) =>
+  `${value > 0 ? "+" : ""}${points(value)}`;
+
+function DailyResult({ day, today }: { day: KpiBreakdownItem; today: string }) {
+  const actual = day.actualPcts;
+  const recorded = actual !== null;
+  const achieved = recorded && actual >= day.baselineTarget;
+  const future = day.startDate > today;
+  const state = !recorded
+    ? "empty"
+    : achieved
+      ? "achieved"
+      : actual < 0
+        ? "negative"
+        : "below";
+  const status = recorded
+    ? achieved
+      ? "基准达标"
+      : "未达基准"
+    : future
+      ? "待开始"
+      : "未填写";
+  const difference = recorded ? actual - day.baselineTarget : null;
+  const progress =
+    recorded && day.baselineTarget > 0
+      ? Math.min(100, Math.max(0, (actual / day.baselineTarget) * 100))
+      : 0;
+
+  return (
+    <li className={styles.day} data-state={state}>
+      <div className={styles.dayHeading}>
+        <div>
+          <p className={styles.weekday} lang="en">
+            {weekdayFormatter.format(new Date(`${day.startDate}T00:00:00Z`))}
+          </p>
+          <p className={styles.dayDate}>
+            <time dateTime={day.startDate}>
+              {day.startDate.slice(5).replace("-", "/")}
+            </time>
+            {day.startDate === today && (
+              <span className={styles.today}>今天</span>
+            )}
+          </p>
+        </div>
+        <span className={styles.seal} aria-hidden="true">
+          {achieved ? <Check size={16} /> : <Minus size={14} />}
+        </span>
+      </div>
+      <div className={styles.dailyValue}>
+        <span>{recorded ? signedPoints(actual) : "—"}</span>
+        <span className={styles.unit}>pts</span>
+      </div>
+      <p className={styles.status}>{status}</p>
+      <div className={styles.targetBlock}>
+        <div className={styles.targetLabel}>
+          <span>基准</span>
+          <span>{points(day.baselineTarget)} pts</span>
+        </div>
+        <div className={styles.track} aria-hidden="true">
+          <span style={{ width: `${progress}%` }} />
+        </div>
+        <p className={styles.difference}>
+          {difference === null
+            ? future
+              ? "等待这个交易日"
+              : "等待 KPI 记录"
+            : difference === 0
+              ? "刚好达标"
+              : difference > 0
+                ? `超出 ${points(difference)} pts`
+                : `距目标 ${points(Math.abs(difference))} pts`}
+        </p>
+      </div>
+    </li>
+  );
+}
+
+// Server component: totals come from the same server summary used by the KPI page.
 export function KpiDashboardCard({ summary }: { summary: KpiPeriodSummary }) {
   const completedDays = summary.dailyResults.filter(
     (day) => day.actualPcts !== null && day.actualPcts >= day.baselineTarget,
   ).length;
-  const completionRate =
-    summary.tradingDayCount === 0
-      ? 0
-      : Math.min(100, (completedDays / summary.tradingDayCount) * 100);
-
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="flex flex-row items-start justify-between gap-4 border-b">
+    <section className={styles.board} aria-labelledby="weekly-kpi-heading">
+      <header className={styles.header}>
         <div>
-          <div className="text-primary mb-2 flex items-center gap-2 text-xs font-semibold tracking-wider uppercase">
-            <Target aria-hidden="true" className="size-3.5" />
-            Weekly KPI
-          </div>
-          <CardTitle className="text-base">本周目标完成日</CardTitle>
+          <p className={styles.eyebrow}>
+            <Target size={14} aria-hidden="true" /> Weekly KPI
+          </p>
+          <h2 id="weekly-kpi-heading" className={styles.title}>
+            本周交易成绩
+          </h2>
         </div>
-        <Button asChild size="sm" variant="ghost">
-          <Link
-            href={`/kpi?period=week&date=${summary.anchorDate}&goal=baseline`}
+        <Link className={styles.detailLink} href="/kpi">
+          查看 KPI <ArrowRight size={15} aria-hidden="true" />
+        </Link>
+      </header>
+      <div className={styles.overview}>
+        <div className={styles.total}>
+          <p className={styles.metricLabel}>本周累计实际</p>
+          <p
+            className={styles.totalValue}
+            data-negative={
+              summary.actualPcts !== null && summary.actualPcts < 0
+            }
           >
-            查看
-            <ArrowRight aria-hidden="true" className="size-4" />
-          </Link>
-        </Button>
-      </CardHeader>
-      <CardContent className="pt-5">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-4xl font-semibold tracking-tight tabular-nums">
-              {completedDays}
-              <span className="text-muted-foreground ml-1 text-base font-normal">
-                / {summary.tradingDayCount} 天
-              </span>
-            </p>
-            <p className="text-muted-foreground mt-2 flex items-center gap-1.5 text-xs">
-              <CheckCircle2
-                aria-hidden="true"
-                className="size-3.5 text-emerald-400"
+            {summary.actualPcts === null
+              ? "—"
+              : signedPoints(summary.actualPcts)}
+            <span>pts</span>
+          </p>
+        </div>
+        <div className={styles.completion}>
+          <p className={styles.metricLabel}>基准达标交易日</p>
+          <p className={styles.completionValue}>
+            {completedDays}
+            <span>/ {summary.tradingDayCount} 天</span>
+          </p>
+          <div className={styles.dayMarkers} aria-hidden="true">
+            {summary.dailyResults.map((day) => (
+              <span
+                key={day.key}
+                data-achieved={
+                  day.actualPcts !== null &&
+                  day.actualPcts >= day.baselineTarget
+                }
               />
-              基准目标达标交易日
-            </p>
+            ))}
           </div>
-          <span className="text-muted-foreground text-sm tabular-nums">
-            {Math.round(completionRate)}%
-          </span>
         </div>
-        <div className="bg-muted mt-5 h-1.5 overflow-hidden rounded-full">
-          <div
-            className="h-full rounded-full bg-emerald-500"
-            style={{ width: `${completionRate}%` }}
-          />
+        <div className={styles.period}>
+          <p className={styles.periodLabel} lang="en">
+            THE WEEK IN POINTS
+          </p>
+          <p>
+            {summary.startDate.replaceAll("-", ".")} —{" "}
+            {summary.endDate.slice(5).replace("-", ".")}
+          </p>
+          <p className={styles.periodNote}>
+            美东时间 · 已填写 {summary.recordedDayCount} /{" "}
+            {summary.tradingDayCount} 天
+          </p>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+      {summary.dailyResults.length > 0 ? (
+        <ol
+          className={styles.days}
+          style={{
+            gridTemplateColumns: `repeat(${summary.dailyResults.length}, minmax(0, 1fr))`,
+          }}
+        >
+          {summary.dailyResults.map((day) => (
+            <DailyResult key={day.key} day={day} today={summary.anchorDate} />
+          ))}
+        </ol>
+      ) : (
+        <p className={styles.empty}>本周没有 KPI 交易日。</p>
+      )}
+      <footer className={styles.footer}>
+        <p>来自 KPI 每日填写的 pts · 基准按当日生效的目标判定</p>
+        <p>交易日历与 KPI 页面一致</p>
+      </footer>
+    </section>
   );
 }
