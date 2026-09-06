@@ -1,0 +1,130 @@
+.hero {
+  --motto-accent: #bdd0b5;
+  position: relative;
+  overflow: hidden;
+  padding: 1.5rem 2rem 1.25rem;
+  border: 1px solid #bdd0b526;
+  border-radius: 1rem;
+  background: #111b24;
+  color: #eeeae1;
+}
+
+.masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.mark {
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1px solid var(--motto-accent);
+  transform: rotate(45deg);
+}
+
+.date {
+  color: #a5afb7;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.composition {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-block: 2rem;
+}
+
+.motto {
+  margin: 0;
+  font-size: clamp(2rem, 4.2vw, 4rem);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: 1.2;
+}
+
+.line {
+  display: block;
+}
+
+.line + .line {
+  margin-top: 0.125em;
+}
+
+.motto em {
+  color: var(--motto-accent);
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: -0.055em;
+}
+
+.artwork {
+  display: none;
+  width: clamp(10rem, 15vw, 15rem);
+  flex-shrink: 0;
+  color: var(--motto-accent);
+}
+
+.signature {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.signatureRule {
+  height: 1px;
+  flex: 1;
+  background: #bdd0b526;
+}
+
+.rhythm {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.rhythm span {
+  width: 0.1875rem;
+  height: 0.625rem;
+  background: var(--motto-accent);
+  opacity: 0.55;
+}
+
+@media (min-width: 1280px) {
+  .artwork {
+    display: block;
+  }
+}
+
+@media (max-width: 639px) {
+  .hero {
+    padding: 1.25rem;
+  }
+
+  .composition {
+    padding-block: 1.75rem;
+  }
+
+  .motto {
+    font-size: clamp(1.375rem, 5.5vw, 2.125rem);
+    letter-spacing: -0.05em;
+    line-height: 1.35;
+  }
+
+  .wordmark {
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+  }
+}
