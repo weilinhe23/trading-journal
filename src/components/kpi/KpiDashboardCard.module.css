@@ -1,5 +1,6 @@
 .board {
   --sage: #bdd0b5;
+  --lavender: #c8b9ed;
   --muted: #a3aeb9;
   overflow: hidden;
   border: 1px solid #bdd0b526;
@@ -91,11 +92,67 @@
   letter-spacing: 0;
 }
 
+.weeklyGaps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem;
+  margin-top: 1rem;
+}
+.weeklyGap {
+  --target-color: var(--sage);
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid #bdd0b526;
+  border-radius: 0.5rem;
+  background: #bdd0b505;
+}
+.weeklyGap[data-tone="optimistic"] {
+  --target-color: var(--lavender);
+  border-color: #c8b9ed26;
+  background: #c8b9ed05;
+}
+.weeklyGap dt {
+  color: var(--target-color);
+  font-size: 0.6875rem;
+}
+.weeklyGap dd {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.gapValue {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.6875rem;
+}
+.gapValue strong {
+  min-width: 0;
+  color: var(--target-color);
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
 .completion {
+  --target-color: var(--sage);
   padding-left: 2.5rem;
   border-left: 1px solid #bdd0b526;
 }
+.completion[data-tone="optimistic"],
+.targetBlock[data-tone="optimistic"] {
+  --target-color: var(--lavender);
+}
 .completionValue {
+  color: var(--target-color);
   margin-top: 0.25rem;
   font-size: 1.75rem;
   font-variant-numeric: tabular-nums;
@@ -118,7 +175,7 @@
   background: #bdd0b526;
 }
 .dayMarkers span[data-achieved="true"] {
-  background: var(--sage);
+  background: var(--target-color);
 }
 
 .period {
@@ -164,6 +221,12 @@
   border-color: #efa69e30;
   border-top-color: var(--day-color);
   background: #efa69e05;
+}
+.day[data-state="optimistic"] {
+  --day-color: var(--lavender);
+  border-color: #c8b9ed40;
+  border-top-color: var(--day-color);
+  background: #c8b9ed0a;
 }
 .day[data-state="empty"] {
   --day-color: #8d9ba8;
@@ -211,6 +274,11 @@
   background: var(--sage);
   color: #111b24;
 }
+.day[data-state="optimistic"] .seal {
+  border-color: var(--lavender);
+  background: var(--lavender);
+  color: #111b24;
+}
 .day[data-state="empty"] .seal {
   border-style: dotted;
 }
@@ -242,8 +310,31 @@
   color: var(--day-color);
   font-size: 0.6875rem;
 }
-.targetBlock {
+.targets {
+  display: grid;
+  gap: 1rem;
   margin-top: 1.5rem;
+}
+.targetBlock {
+  --target-color: var(--sage);
+}
+.targetBlock + .targetBlock {
+  padding-top: 1rem;
+  border-top: 1px solid #bdd0b51a;
+}
+.targetName {
+  color: var(--target-color);
+}
+.targetStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.625rem;
+}
+.targetStatus[data-achieved="true"] {
+  color: var(--target-color);
 }
 .targetLabel {
   display: flex;
@@ -265,10 +356,10 @@
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: var(--day-color);
+  background: var(--target-color);
 }
 .difference {
-  margin-top: 0.625rem;
+  margin-top: 0.25rem;
   color: var(--muted);
   font-size: 0.625rem;
   font-variant-numeric: tabular-nums;
@@ -307,6 +398,9 @@
   .overview {
     gap: 1.5rem;
   }
+  .total {
+    width: 100%;
+  }
   .completion {
     padding-left: 1.5rem;
   }
@@ -340,8 +434,15 @@
   .status {
     margin: 0;
   }
-  .targetBlock {
+  .targets {
     grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-top: 0.25rem;
+  }
+  .targetBlock + .targetBlock {
+    padding-top: 0;
+    border-top: 0;
+    padding-left: 1rem;
+    border-left: 1px solid #bdd0b51a;
   }
 }

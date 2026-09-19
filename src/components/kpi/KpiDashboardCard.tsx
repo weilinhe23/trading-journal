@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Check, Minus, Target } from "lucide-react";
+import { ArrowRight, Check, Minus, Star, Target } from "lucide-react";
 import type { KpiBreakdownItem, KpiPeriodSummary } from "~/lib/kpi";
 import styles from "./KpiDashboardCard.module.css";
 
@@ -14,30 +14,89 @@ const points = (value: number) => numberFormatter.format(value);
 const signedPoints = (value: number) =>
   `${value > 0 ? "+" : ""}${points(value)}`;
 
+const TARGETS = [
+  { key: "baselineTarget", label: "基准", tone: "baseline" },
+  { key: "optimisticTarget", label: "乐观", tone: "optimistic" },
+] as const;
+
+function TargetProgress({
+  actual,
+  target,
+  label,
+  tone,
+  future,
+}: {
+  actual: number | null;
+  target: number;
+  label: string;
+  tone: string;
+  future: boolean;
+}) {
+  const difference = actual === null ? null : actual - target;
+  const achieved = difference !== null && difference >= 0;
+  const progress =
+    actual !== null && target > 0
+      ? Math.min(100, Math.max(0, (actual / target) * 100))
+      : 0;
+
+  return (
+    <div className={styles.targetBlock} data-tone={tone}>
+      <div className={styles.targetLabel}>
+        <span className={styles.targetName}>{label}</span>
+        <span>{points(target)} pts</span>
+      </div>
+      <div className={styles.track} aria-hidden="true">
+        <span style={{ width: `${progress}%` }} />
+      </div>
+      <p className={styles.targetStatus} data-achieved={achieved}>
+        {achieved && <Check size={11} aria-hidden="true" />}
+        {actual === null
+          ? future
+            ? "待开始"
+            : "未填写"
+          : achieved
+            ? "已达标"
+            : "未达标"}
+      </p>
+      <p className={styles.difference}>
+        {difference === null
+          ? future
+            ? "等待这个交易日"
+            : "等待 KPI 记录"
+          : difference === 0
+            ? "刚好达标"
+            : difference > 0
+              ? `超出 ${points(difference)} pts`
+              : `距目标 ${points(Math.abs(difference))} pts`}
+      </p>
+    </div>
+  );
+}
+
 function DailyResult({ day, today }: { day: KpiBreakdownItem; today: string }) {
   const actual = day.actualPcts;
   const recorded = actual !== null;
   const achieved = recorded && actual >= day.baselineTarget;
+  const optimisticAchieved = recorded && actual >= day.optimisticTarget;
   const future = day.startDate > today;
   const state = !recorded
     ? "empty"
-    : achieved
-      ? "achieved"
-      : actual < 0
-        ? "negative"
-        : "below";
+    : optimisticAchieved
+      ? "optimistic"
+      : achieved
+        ? "achieved"
+        : actual < 0
+          ? "negative"
+          : "below";
   const status = recorded
-    ? achieved
-      ? "基准达标"
-      : "未达基准"
+    ? optimisticAchieved
+      ? "乐观达标"
+      : achieved
+        ? "基准达标"
+        : "未达基准"
     : future
       ? "待开始"
       : "未填写";
-  const difference = recorded ? actual - day.baselineTarget : null;
-  const progress =
-    recorded && day.baselineTarget > 0
-      ? Math.min(100, Math.max(0, (actual / day.baselineTarget) * 100))
-      : 0;
 
   return (
     <li className={styles.day} data-state={state}>
@@ -56,7 +115,13 @@ function DailyResult({ day, today }: { day: KpiBreakdownItem; today: string }) {
           </p>
         </div>
         <span className={styles.seal} aria-hidden="true">
-          {achieved ? <Check size={16} /> : <Minus size={14} />}
+          {optimisticAchieved ? (
+            <Star size={14} />
+          ) : achieved ? (
+            <Check size={16} />
+          ) : (
+            <Minus size={14} />
+          )}
         </span>
       </div>
       <div className={styles.dailyValue}>
@@ -64,25 +129,17 @@ function DailyResult({ day, today }: { day: KpiBreakdownItem; today: string }) {
         <span className={styles.unit}>pts</span>
       </div>
       <p className={styles.status}>{status}</p>
-      <div className={styles.targetBlock}>
-        <div className={styles.targetLabel}>
-          <span>基准</span>
-          <span>{points(day.baselineTarget)} pts</span>
-        </div>
-        <div className={styles.track} aria-hidden="true">
-          <span style={{ width: `${progress}%` }} />
-        </div>
-        <p className={styles.difference}>
-          {difference === null
-            ? future
-              ? "等待这个交易日"
-              : "等待 KPI 记录"
-            : difference === 0
-              ? "刚好达标"
-              : difference > 0
-                ? `超出 ${points(difference)} pts`
-                : `距目标 ${points(Math.abs(difference))} pts`}
-        </p>
+      <div className={styles.targets}>
+        {TARGETS.map(({ key, label, tone }) => (
+          <TargetProgress
+            key={key}
+            actual={actual}
+            target={day[key]}
+            label={label}
+            tone={tone}
+            future={future}
+          />
+        ))}
       </div>
     </li>
   );
@@ -90,9 +147,6 @@ function DailyResult({ day, today }: { day: KpiBreakdownItem; today: string }) {
 
 // Server component: totals come from the same server summary used by the KPI page.
 export function KpiDashboardCard({ summary }: { summary: KpiPeriodSummary }) {
-  const completedDays = summary.dailyResults.filter(
-    (day) => day.actualPcts !== null && day.actualPcts >= day.baselineTarget,
-  ).length;
   return (
     <section className={styles.board} aria-labelledby="weekly-kpi-heading">
       <header className={styles.header}>
@@ -122,25 +176,63 @@ export function KpiDashboardCard({ summary }: { summary: KpiPeriodSummary }) {
               : signedPoints(summary.actualPcts)}
             <span>pts</span>
           </p>
-        </div>
-        <div className={styles.completion}>
-          <p className={styles.metricLabel}>基准达标交易日</p>
-          <p className={styles.completionValue}>
-            {completedDays}
-            <span>/ {summary.tradingDayCount} 天</span>
-          </p>
-          <div className={styles.dayMarkers} aria-hidden="true">
-            {summary.dailyResults.map((day) => (
-              <span
-                key={day.key}
-                data-achieved={
-                  day.actualPcts !== null &&
-                  day.actualPcts >= day.baselineTarget
-                }
-              />
-            ))}
+          <div className={styles.weeklyGaps}>
+            {TARGETS.map(({ key, label, tone }) => {
+              const gap =
+                summary.actualPcts === null
+                  ? null
+                  : summary[key] - summary.actualPcts;
+              return (
+                <div key={key} className={styles.weeklyGap} data-tone={tone}>
+                  <dl>
+                    <dt>{label}全周应实现</dt>
+                    <dd>{points(summary[key])} pts</dd>
+                  </dl>
+                  <p className={styles.gapValue}>
+                    <span>
+                      {gap === null
+                        ? "待填写"
+                        : gap > 0
+                          ? "还差"
+                          : gap < 0
+                            ? "超出"
+                            : "差额"}
+                    </span>
+                    <strong>
+                      {gap === null ? "—" : points(Math.abs(gap))}
+                    </strong>
+                    <span>pts</span>
+                    {gap === 0 && <span>（已达标）</span>}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
+        {TARGETS.map(({ key, label, tone }) => (
+          <div key={key} className={styles.completion} data-tone={tone}>
+            <p className={styles.metricLabel}>{label}达标交易日</p>
+            <p className={styles.completionValue}>
+              {
+                summary.dailyResults.filter(
+                  (day) =>
+                    day.actualPcts !== null && day.actualPcts >= day[key],
+                ).length
+              }
+              <span>/ {summary.tradingDayCount} 天</span>
+            </p>
+            <div className={styles.dayMarkers} aria-hidden="true">
+              {summary.dailyResults.map((day) => (
+                <span
+                  key={day.key}
+                  data-achieved={
+                    day.actualPcts !== null && day.actualPcts >= day[key]
+                  }
+                />
+              ))}
+            </div>
+          </div>
+        ))}
         <div className={styles.period}>
           <p className={styles.periodLabel} lang="en">
             THE WEEK IN POINTS
@@ -170,7 +262,7 @@ export function KpiDashboardCard({ summary }: { summary: KpiPeriodSummary }) {
         <p className={styles.empty}>本周没有 KPI 交易日。</p>
       )}
       <footer className={styles.footer}>
-        <p>来自 KPI 每日填写的 pts · 基准按当日生效的目标判定</p>
+        <p>来自 KPI 每日填写的 pts · 基准与乐观均按当日生效的目标判定</p>
         <p>交易日历与 KPI 页面一致</p>
       </footer>
     </section>
