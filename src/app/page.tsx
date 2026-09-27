@@ -9,6 +9,8 @@ import {
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { KpiDashboardCard } from "~/components/kpi/KpiDashboardCard";
+import { TradingGrowthSummary } from "~/components/kpi/TradingGrowthSummary";
+import { getTradingGrowthProgress } from "~/lib/trading-growth-server";
 import { formatEtDisplayDate, getEtDateString } from "~/lib/kpi";
 import { getKpiPeriodSummary } from "~/lib/kpi-server";
 import styles from "./home.module.css";
@@ -18,7 +20,10 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   const now = new Date();
   const today = getEtDateString(now);
-  const weeklyKpi = await getKpiPeriodSummary("week", today);
+  const [weeklyKpi, growthProgress] = await Promise.all([
+    getKpiPeriodSummary("week", today),
+    getTradingGrowthProgress(),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -86,6 +91,8 @@ export default async function HomePage() {
           </span>
         </div>
       </section>
+
+      <TradingGrowthSummary progress={growthProgress} />
 
       {/* 快捷入口 */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">

@@ -218,6 +218,9 @@ export function KpiTrackerClient({
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" size="sm" asChild>
+            <Link href="/kpi/growth">交易成长计划</Link>
+          </Button>
+          <Button variant="outline" size="sm" asChild>
             <Link href={`/kpi/yearly?year=${today.slice(0, 4)}`}>
               <CalendarRange aria-hidden="true" className="size-4" />
               年度每日视图

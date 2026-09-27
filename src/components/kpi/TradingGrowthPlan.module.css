@@ -1,0 +1,348 @@
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+.breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.breadcrumb a:hover {
+  color: var(--foreground);
+}
+.board,
+.summary {
+  --growth-color: var(--chart-2);
+  --growth-soft: color-mix(in oklch, var(--chart-2) 12%, var(--background));
+}
+.board {
+  padding: 36px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background:
+    radial-gradient(
+      ellipse at 100% 0%,
+      color-mix(in oklch, var(--chart-2) 6%, transparent),
+      transparent 48%
+    ),
+    var(--background);
+}
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--muted-foreground);
+}
+.heading h1 {
+  margin: 10px 0;
+  font-size: clamp(26px, 3.4vw, 36px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+.subtitle {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted-foreground);
+}
+.total {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.total strong {
+  font-size: 36px;
+  font-weight: 500;
+}
+.total span {
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+.meter {
+  height: 5px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--muted);
+  margin: 26px 0;
+}
+.meter > div {
+  height: 100%;
+  background: var(--growth-color);
+  transition: width 0.3s ease;
+}
+.currentPanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 24px 28px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.currentCaption {
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.currentPanel h2 {
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  margin: 6px 0;
+}
+.next {
+  font-size: 14px;
+}
+.startDate {
+  color: var(--muted-foreground);
+  font-size: 12px;
+  margin-top: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  max-width: 100%;
+}
+.actions .completeButton {
+  white-space: normal;
+  height: auto;
+  min-height: 42px;
+  padding-block: 10px;
+}
+.feedback {
+  min-height: 38px;
+  padding-top: 12px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted-foreground);
+}
+.feedback[data-error] {
+  color: var(--destructive);
+}
+.routeHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 26px 0 30px;
+}
+.routeHeader h2 {
+  font-size: 15px;
+  font-weight: 500;
+}
+.routeHeader p {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  margin-top: 5px;
+}
+.routeTools {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.route {
+  position: relative;
+  width: 100%;
+}
+.paths {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.trackPath {
+  stroke: var(--border);
+  stroke-width: 1.5;
+  fill: none;
+}
+.completedPath {
+  stroke: var(--growth-color);
+  stroke-width: 2;
+  fill: none;
+}
+.nodes {
+  position: relative;
+  display: grid;
+  list-style: none;
+  margin: 0;
+  grid-auto-rows: 140px;
+}
+.node {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 8px;
+  scroll-margin-top: 80px;
+}
+.dot {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--background);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.nodeLabel {
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 12px;
+  white-space: nowrap;
+}
+.nodeStatus {
+  color: var(--muted-foreground);
+  font-size: 11px;
+  margin-top: 5px;
+}
+.nodeDate {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+  margin-top: 5px;
+  white-space: nowrap;
+}
+.milestone {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  margin-top: 5px;
+}
+.node[data-state="done"] .dot {
+  color: var(--growth-color);
+  background: var(--growth-soft);
+  border-color: var(--growth-color);
+}
+.node[data-state="current"] .dot {
+  color: var(--background);
+  background: var(--growth-color);
+  border-color: var(--growth-color);
+  box-shadow: 0 0 0 6px var(--growth-soft);
+}
+.node[data-state="current"] .nodeLabel {
+  font-weight: 700;
+}
+.node[data-state="current"] .nodeStatus {
+  color: var(--growth-color);
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.summary {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: space-between;
+}
+.summaryLabel {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  margin-bottom: 6px;
+}
+.summaryGoal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.summaryGoal strong {
+  font-weight: 600;
+  font-size: 20px;
+}
+.summaryGoal span {
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+.summaryProgress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+.summaryProgress p {
+  color: var(--muted-foreground);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 640px) {
+  .board {
+    padding: 22px 14px;
+    border-radius: 14px;
+  }
+  .currentPanel {
+    padding: 20px 16px;
+  }
+  .heading {
+    gap: 16px;
+  }
+  .total strong {
+    font-size: 28px;
+  }
+  .currentPanel h2 {
+    font-size: 30px;
+  }
+  .actions {
+    width: 100%;
+  }
+  .routeTools {
+    gap: 8px;
+  }
+  .nodeLabel {
+    font-size: 13px;
+  }
+  .summary {
+    padding: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .meter > div {
+    transition: none;
+  }
+}

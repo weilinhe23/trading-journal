@@ -200,6 +200,25 @@ model KpiDailyRecord {
   updatedAt  DateTime @updatedAt
 }
 
+// 长期仓位成长计划，独立于每日交易日志；revision 防止重复点击或旧页面跳级。
+model TradingGrowthPlan {
+  id             String                    @id @default("primary")
+  completedCount Int                       @default(0)
+  revision       Int                       @default(0)
+  createdAt      DateTime                  @default(now())
+  updatedAt      DateTime                  @updatedAt
+  completions    TradingGrowthCompletion[]
+}
+
+model TradingGrowthCompletion {
+  planId      String
+  stepIndex   Int
+  completedAt DateTime // 服务器记录实际完成时刻，展示时转换为美东日期
+  plan        TradingGrowthPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@id([planId, stepIndex])
+}
+
 // 新闻催化剂
 model NewsEvent {
   id          String       @id @default(cuid())
