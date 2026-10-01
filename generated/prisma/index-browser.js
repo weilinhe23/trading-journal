@@ -182,6 +182,20 @@ exports.Prisma.KpiDailyRecordScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.TradingGrowthPlanScalarFieldEnum = {
+  id: 'id',
+  completedCount: 'completedCount',
+  revision: 'revision',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TradingGrowthCompletionScalarFieldEnum = {
+  planId: 'planId',
+  stepIndex: 'stepIndex',
+  completedAt: 'completedAt'
+};
+
 exports.Prisma.NewsEventScalarFieldEnum = {
   id: 'id',
   sessionDate: 'sessionDate',
@@ -503,6 +517,8 @@ exports.Prisma.ModelName = {
   DailySession: 'DailySession',
   KpiTargetSetting: 'KpiTargetSetting',
   KpiDailyRecord: 'KpiDailyRecord',
+  TradingGrowthPlan: 'TradingGrowthPlan',
+  TradingGrowthCompletion: 'TradingGrowthCompletion',
   NewsEvent: 'NewsEvent',
   TradeSetup: 'TradeSetup',
   Execution: 'Execution',

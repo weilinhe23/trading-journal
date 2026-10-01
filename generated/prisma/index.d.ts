@@ -44,6 +44,16 @@ export type KpiTargetSetting = $Result.DefaultSelection<Prisma.$KpiTargetSetting
  */
 export type KpiDailyRecord = $Result.DefaultSelection<Prisma.$KpiDailyRecordPayload>
 /**
+ * Model TradingGrowthPlan
+ * 
+ */
+export type TradingGrowthPlan = $Result.DefaultSelection<Prisma.$TradingGrowthPlanPayload>
+/**
+ * Model TradingGrowthCompletion
+ * 
+ */
+export type TradingGrowthCompletion = $Result.DefaultSelection<Prisma.$TradingGrowthCompletionPayload>
+/**
  * Model NewsEvent
  * 
  */
@@ -478,6 +488,26 @@ export class PrismaClient<
     * ```
     */
   get kpiDailyRecord(): Prisma.KpiDailyRecordDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tradingGrowthPlan`: Exposes CRUD operations for the **TradingGrowthPlan** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TradingGrowthPlans
+    * const tradingGrowthPlans = await prisma.tradingGrowthPlan.findMany()
+    * ```
+    */
+  get tradingGrowthPlan(): Prisma.TradingGrowthPlanDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tradingGrowthCompletion`: Exposes CRUD operations for the **TradingGrowthCompletion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TradingGrowthCompletions
+    * const tradingGrowthCompletions = await prisma.tradingGrowthCompletion.findMany()
+    * ```
+    */
+  get tradingGrowthCompletion(): Prisma.TradingGrowthCompletionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.newsEvent`: Exposes CRUD operations for the **NewsEvent** model.
@@ -1035,6 +1065,8 @@ export namespace Prisma {
     DailySession: 'DailySession',
     KpiTargetSetting: 'KpiTargetSetting',
     KpiDailyRecord: 'KpiDailyRecord',
+    TradingGrowthPlan: 'TradingGrowthPlan',
+    TradingGrowthCompletion: 'TradingGrowthCompletion',
     NewsEvent: 'NewsEvent',
     TradeSetup: 'TradeSetup',
     Execution: 'Execution',
@@ -1064,7 +1096,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "newsCatalog" | "strategy" | "tradeType" | "dailySession" | "kpiTargetSetting" | "kpiDailyRecord" | "newsEvent" | "tradeSetup" | "execution" | "weeklyReport" | "insight" | "insightSource" | "monthlyReport" | "quarterlyReport" | "missedReasonOption" | "screenshot" | "mnqDailyPlan"
+      modelProps: "newsCatalog" | "strategy" | "tradeType" | "dailySession" | "kpiTargetSetting" | "kpiDailyRecord" | "tradingGrowthPlan" | "tradingGrowthCompletion" | "newsEvent" | "tradeSetup" | "execution" | "weeklyReport" | "insight" | "insightSource" | "monthlyReport" | "quarterlyReport" | "missedReasonOption" | "screenshot" | "mnqDailyPlan"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1509,6 +1541,154 @@ export namespace Prisma {
           count: {
             args: Prisma.KpiDailyRecordCountArgs<ExtArgs>
             result: $Utils.Optional<KpiDailyRecordCountAggregateOutputType> | number
+          }
+        }
+      }
+      TradingGrowthPlan: {
+        payload: Prisma.$TradingGrowthPlanPayload<ExtArgs>
+        fields: Prisma.TradingGrowthPlanFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TradingGrowthPlanFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthPlanPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TradingGrowthPlanFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthPlanPayload>
+          }
+          findFirst: {
+            args: Prisma.TradingGrowthPlanFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthPlanPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TradingGrowthPlanFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthPlanPayload>
+          }
+          findMany: {
+            args: Prisma.TradingGrowthPlanFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthPlanPayload>[]
+          }
+          create: {
+            args: Prisma.TradingGrowthPlanCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthPlanPayload>
+          }
+          createMany: {
+            args: Prisma.TradingGrowthPlanCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TradingGrowthPlanCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthPlanPayload>[]
+          }
+          delete: {
+            args: Prisma.TradingGrowthPlanDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthPlanPayload>
+          }
+          update: {
+            args: Prisma.TradingGrowthPlanUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthPlanPayload>
+          }
+          deleteMany: {
+            args: Prisma.TradingGrowthPlanDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TradingGrowthPlanUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TradingGrowthPlanUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthPlanPayload>[]
+          }
+          upsert: {
+            args: Prisma.TradingGrowthPlanUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthPlanPayload>
+          }
+          aggregate: {
+            args: Prisma.TradingGrowthPlanAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTradingGrowthPlan>
+          }
+          groupBy: {
+            args: Prisma.TradingGrowthPlanGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TradingGrowthPlanGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TradingGrowthPlanCountArgs<ExtArgs>
+            result: $Utils.Optional<TradingGrowthPlanCountAggregateOutputType> | number
+          }
+        }
+      }
+      TradingGrowthCompletion: {
+        payload: Prisma.$TradingGrowthCompletionPayload<ExtArgs>
+        fields: Prisma.TradingGrowthCompletionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TradingGrowthCompletionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthCompletionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TradingGrowthCompletionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthCompletionPayload>
+          }
+          findFirst: {
+            args: Prisma.TradingGrowthCompletionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthCompletionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TradingGrowthCompletionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthCompletionPayload>
+          }
+          findMany: {
+            args: Prisma.TradingGrowthCompletionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthCompletionPayload>[]
+          }
+          create: {
+            args: Prisma.TradingGrowthCompletionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthCompletionPayload>
+          }
+          createMany: {
+            args: Prisma.TradingGrowthCompletionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TradingGrowthCompletionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthCompletionPayload>[]
+          }
+          delete: {
+            args: Prisma.TradingGrowthCompletionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthCompletionPayload>
+          }
+          update: {
+            args: Prisma.TradingGrowthCompletionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthCompletionPayload>
+          }
+          deleteMany: {
+            args: Prisma.TradingGrowthCompletionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TradingGrowthCompletionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TradingGrowthCompletionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthCompletionPayload>[]
+          }
+          upsert: {
+            args: Prisma.TradingGrowthCompletionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TradingGrowthCompletionPayload>
+          }
+          aggregate: {
+            args: Prisma.TradingGrowthCompletionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTradingGrowthCompletion>
+          }
+          groupBy: {
+            args: Prisma.TradingGrowthCompletionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TradingGrowthCompletionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TradingGrowthCompletionCountArgs<ExtArgs>
+            result: $Utils.Optional<TradingGrowthCompletionCountAggregateOutputType> | number
           }
         }
       }
@@ -2428,6 +2608,8 @@ export namespace Prisma {
     dailySession?: DailySessionOmit
     kpiTargetSetting?: KpiTargetSettingOmit
     kpiDailyRecord?: KpiDailyRecordOmit
+    tradingGrowthPlan?: TradingGrowthPlanOmit
+    tradingGrowthCompletion?: TradingGrowthCompletionOmit
     newsEvent?: NewsEventOmit
     tradeSetup?: TradeSetupOmit
     execution?: ExecutionOmit
@@ -2631,6 +2813,37 @@ export namespace Prisma {
    */
   export type DailySessionCountOutputTypeCountScreenshotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ScreenshotWhereInput
+  }
+
+
+  /**
+   * Count Type TradingGrowthPlanCountOutputType
+   */
+
+  export type TradingGrowthPlanCountOutputType = {
+    completions: number
+  }
+
+  export type TradingGrowthPlanCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    completions?: boolean | TradingGrowthPlanCountOutputTypeCountCompletionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TradingGrowthPlanCountOutputType without action
+   */
+  export type TradingGrowthPlanCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlanCountOutputType
+     */
+    select?: TradingGrowthPlanCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TradingGrowthPlanCountOutputType without action
+   */
+  export type TradingGrowthPlanCountOutputTypeCountCompletionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TradingGrowthCompletionWhereInput
   }
 
 
@@ -9483,6 +9696,2176 @@ export namespace Prisma {
      * Omit specific fields from the KpiDailyRecord
      */
     omit?: KpiDailyRecordOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TradingGrowthPlan
+   */
+
+  export type AggregateTradingGrowthPlan = {
+    _count: TradingGrowthPlanCountAggregateOutputType | null
+    _avg: TradingGrowthPlanAvgAggregateOutputType | null
+    _sum: TradingGrowthPlanSumAggregateOutputType | null
+    _min: TradingGrowthPlanMinAggregateOutputType | null
+    _max: TradingGrowthPlanMaxAggregateOutputType | null
+  }
+
+  export type TradingGrowthPlanAvgAggregateOutputType = {
+    completedCount: number | null
+    revision: number | null
+  }
+
+  export type TradingGrowthPlanSumAggregateOutputType = {
+    completedCount: number | null
+    revision: number | null
+  }
+
+  export type TradingGrowthPlanMinAggregateOutputType = {
+    id: string | null
+    completedCount: number | null
+    revision: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TradingGrowthPlanMaxAggregateOutputType = {
+    id: string | null
+    completedCount: number | null
+    revision: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TradingGrowthPlanCountAggregateOutputType = {
+    id: number
+    completedCount: number
+    revision: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TradingGrowthPlanAvgAggregateInputType = {
+    completedCount?: true
+    revision?: true
+  }
+
+  export type TradingGrowthPlanSumAggregateInputType = {
+    completedCount?: true
+    revision?: true
+  }
+
+  export type TradingGrowthPlanMinAggregateInputType = {
+    id?: true
+    completedCount?: true
+    revision?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TradingGrowthPlanMaxAggregateInputType = {
+    id?: true
+    completedCount?: true
+    revision?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TradingGrowthPlanCountAggregateInputType = {
+    id?: true
+    completedCount?: true
+    revision?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TradingGrowthPlanAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TradingGrowthPlan to aggregate.
+     */
+    where?: TradingGrowthPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TradingGrowthPlans to fetch.
+     */
+    orderBy?: TradingGrowthPlanOrderByWithRelationInput | TradingGrowthPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TradingGrowthPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TradingGrowthPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TradingGrowthPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TradingGrowthPlans
+    **/
+    _count?: true | TradingGrowthPlanCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TradingGrowthPlanAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TradingGrowthPlanSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TradingGrowthPlanMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TradingGrowthPlanMaxAggregateInputType
+  }
+
+  export type GetTradingGrowthPlanAggregateType<T extends TradingGrowthPlanAggregateArgs> = {
+        [P in keyof T & keyof AggregateTradingGrowthPlan]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTradingGrowthPlan[P]>
+      : GetScalarType<T[P], AggregateTradingGrowthPlan[P]>
+  }
+
+
+
+
+  export type TradingGrowthPlanGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TradingGrowthPlanWhereInput
+    orderBy?: TradingGrowthPlanOrderByWithAggregationInput | TradingGrowthPlanOrderByWithAggregationInput[]
+    by: TradingGrowthPlanScalarFieldEnum[] | TradingGrowthPlanScalarFieldEnum
+    having?: TradingGrowthPlanScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TradingGrowthPlanCountAggregateInputType | true
+    _avg?: TradingGrowthPlanAvgAggregateInputType
+    _sum?: TradingGrowthPlanSumAggregateInputType
+    _min?: TradingGrowthPlanMinAggregateInputType
+    _max?: TradingGrowthPlanMaxAggregateInputType
+  }
+
+  export type TradingGrowthPlanGroupByOutputType = {
+    id: string
+    completedCount: number
+    revision: number
+    createdAt: Date
+    updatedAt: Date
+    _count: TradingGrowthPlanCountAggregateOutputType | null
+    _avg: TradingGrowthPlanAvgAggregateOutputType | null
+    _sum: TradingGrowthPlanSumAggregateOutputType | null
+    _min: TradingGrowthPlanMinAggregateOutputType | null
+    _max: TradingGrowthPlanMaxAggregateOutputType | null
+  }
+
+  type GetTradingGrowthPlanGroupByPayload<T extends TradingGrowthPlanGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TradingGrowthPlanGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TradingGrowthPlanGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TradingGrowthPlanGroupByOutputType[P]>
+            : GetScalarType<T[P], TradingGrowthPlanGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TradingGrowthPlanSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    completedCount?: boolean
+    revision?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    completions?: boolean | TradingGrowthPlan$completionsArgs<ExtArgs>
+    _count?: boolean | TradingGrowthPlanCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tradingGrowthPlan"]>
+
+  export type TradingGrowthPlanSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    completedCount?: boolean
+    revision?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["tradingGrowthPlan"]>
+
+  export type TradingGrowthPlanSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    completedCount?: boolean
+    revision?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["tradingGrowthPlan"]>
+
+  export type TradingGrowthPlanSelectScalar = {
+    id?: boolean
+    completedCount?: boolean
+    revision?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TradingGrowthPlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "completedCount" | "revision" | "createdAt" | "updatedAt", ExtArgs["result"]["tradingGrowthPlan"]>
+  export type TradingGrowthPlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    completions?: boolean | TradingGrowthPlan$completionsArgs<ExtArgs>
+    _count?: boolean | TradingGrowthPlanCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TradingGrowthPlanIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type TradingGrowthPlanIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $TradingGrowthPlanPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TradingGrowthPlan"
+    objects: {
+      completions: Prisma.$TradingGrowthCompletionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      completedCount: number
+      revision: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["tradingGrowthPlan"]>
+    composites: {}
+  }
+
+  type TradingGrowthPlanGetPayload<S extends boolean | null | undefined | TradingGrowthPlanDefaultArgs> = $Result.GetResult<Prisma.$TradingGrowthPlanPayload, S>
+
+  type TradingGrowthPlanCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TradingGrowthPlanFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TradingGrowthPlanCountAggregateInputType | true
+    }
+
+  export interface TradingGrowthPlanDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TradingGrowthPlan'], meta: { name: 'TradingGrowthPlan' } }
+    /**
+     * Find zero or one TradingGrowthPlan that matches the filter.
+     * @param {TradingGrowthPlanFindUniqueArgs} args - Arguments to find a TradingGrowthPlan
+     * @example
+     * // Get one TradingGrowthPlan
+     * const tradingGrowthPlan = await prisma.tradingGrowthPlan.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TradingGrowthPlanFindUniqueArgs>(args: SelectSubset<T, TradingGrowthPlanFindUniqueArgs<ExtArgs>>): Prisma__TradingGrowthPlanClient<$Result.GetResult<Prisma.$TradingGrowthPlanPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TradingGrowthPlan that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TradingGrowthPlanFindUniqueOrThrowArgs} args - Arguments to find a TradingGrowthPlan
+     * @example
+     * // Get one TradingGrowthPlan
+     * const tradingGrowthPlan = await prisma.tradingGrowthPlan.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TradingGrowthPlanFindUniqueOrThrowArgs>(args: SelectSubset<T, TradingGrowthPlanFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TradingGrowthPlanClient<$Result.GetResult<Prisma.$TradingGrowthPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TradingGrowthPlan that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthPlanFindFirstArgs} args - Arguments to find a TradingGrowthPlan
+     * @example
+     * // Get one TradingGrowthPlan
+     * const tradingGrowthPlan = await prisma.tradingGrowthPlan.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TradingGrowthPlanFindFirstArgs>(args?: SelectSubset<T, TradingGrowthPlanFindFirstArgs<ExtArgs>>): Prisma__TradingGrowthPlanClient<$Result.GetResult<Prisma.$TradingGrowthPlanPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TradingGrowthPlan that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthPlanFindFirstOrThrowArgs} args - Arguments to find a TradingGrowthPlan
+     * @example
+     * // Get one TradingGrowthPlan
+     * const tradingGrowthPlan = await prisma.tradingGrowthPlan.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TradingGrowthPlanFindFirstOrThrowArgs>(args?: SelectSubset<T, TradingGrowthPlanFindFirstOrThrowArgs<ExtArgs>>): Prisma__TradingGrowthPlanClient<$Result.GetResult<Prisma.$TradingGrowthPlanPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TradingGrowthPlans that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthPlanFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TradingGrowthPlans
+     * const tradingGrowthPlans = await prisma.tradingGrowthPlan.findMany()
+     * 
+     * // Get first 10 TradingGrowthPlans
+     * const tradingGrowthPlans = await prisma.tradingGrowthPlan.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tradingGrowthPlanWithIdOnly = await prisma.tradingGrowthPlan.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TradingGrowthPlanFindManyArgs>(args?: SelectSubset<T, TradingGrowthPlanFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradingGrowthPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TradingGrowthPlan.
+     * @param {TradingGrowthPlanCreateArgs} args - Arguments to create a TradingGrowthPlan.
+     * @example
+     * // Create one TradingGrowthPlan
+     * const TradingGrowthPlan = await prisma.tradingGrowthPlan.create({
+     *   data: {
+     *     // ... data to create a TradingGrowthPlan
+     *   }
+     * })
+     * 
+     */
+    create<T extends TradingGrowthPlanCreateArgs>(args: SelectSubset<T, TradingGrowthPlanCreateArgs<ExtArgs>>): Prisma__TradingGrowthPlanClient<$Result.GetResult<Prisma.$TradingGrowthPlanPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TradingGrowthPlans.
+     * @param {TradingGrowthPlanCreateManyArgs} args - Arguments to create many TradingGrowthPlans.
+     * @example
+     * // Create many TradingGrowthPlans
+     * const tradingGrowthPlan = await prisma.tradingGrowthPlan.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TradingGrowthPlanCreateManyArgs>(args?: SelectSubset<T, TradingGrowthPlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TradingGrowthPlans and returns the data saved in the database.
+     * @param {TradingGrowthPlanCreateManyAndReturnArgs} args - Arguments to create many TradingGrowthPlans.
+     * @example
+     * // Create many TradingGrowthPlans
+     * const tradingGrowthPlan = await prisma.tradingGrowthPlan.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TradingGrowthPlans and only return the `id`
+     * const tradingGrowthPlanWithIdOnly = await prisma.tradingGrowthPlan.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TradingGrowthPlanCreateManyAndReturnArgs>(args?: SelectSubset<T, TradingGrowthPlanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradingGrowthPlanPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TradingGrowthPlan.
+     * @param {TradingGrowthPlanDeleteArgs} args - Arguments to delete one TradingGrowthPlan.
+     * @example
+     * // Delete one TradingGrowthPlan
+     * const TradingGrowthPlan = await prisma.tradingGrowthPlan.delete({
+     *   where: {
+     *     // ... filter to delete one TradingGrowthPlan
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TradingGrowthPlanDeleteArgs>(args: SelectSubset<T, TradingGrowthPlanDeleteArgs<ExtArgs>>): Prisma__TradingGrowthPlanClient<$Result.GetResult<Prisma.$TradingGrowthPlanPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TradingGrowthPlan.
+     * @param {TradingGrowthPlanUpdateArgs} args - Arguments to update one TradingGrowthPlan.
+     * @example
+     * // Update one TradingGrowthPlan
+     * const tradingGrowthPlan = await prisma.tradingGrowthPlan.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TradingGrowthPlanUpdateArgs>(args: SelectSubset<T, TradingGrowthPlanUpdateArgs<ExtArgs>>): Prisma__TradingGrowthPlanClient<$Result.GetResult<Prisma.$TradingGrowthPlanPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TradingGrowthPlans.
+     * @param {TradingGrowthPlanDeleteManyArgs} args - Arguments to filter TradingGrowthPlans to delete.
+     * @example
+     * // Delete a few TradingGrowthPlans
+     * const { count } = await prisma.tradingGrowthPlan.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TradingGrowthPlanDeleteManyArgs>(args?: SelectSubset<T, TradingGrowthPlanDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TradingGrowthPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthPlanUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TradingGrowthPlans
+     * const tradingGrowthPlan = await prisma.tradingGrowthPlan.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TradingGrowthPlanUpdateManyArgs>(args: SelectSubset<T, TradingGrowthPlanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TradingGrowthPlans and returns the data updated in the database.
+     * @param {TradingGrowthPlanUpdateManyAndReturnArgs} args - Arguments to update many TradingGrowthPlans.
+     * @example
+     * // Update many TradingGrowthPlans
+     * const tradingGrowthPlan = await prisma.tradingGrowthPlan.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TradingGrowthPlans and only return the `id`
+     * const tradingGrowthPlanWithIdOnly = await prisma.tradingGrowthPlan.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TradingGrowthPlanUpdateManyAndReturnArgs>(args: SelectSubset<T, TradingGrowthPlanUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradingGrowthPlanPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TradingGrowthPlan.
+     * @param {TradingGrowthPlanUpsertArgs} args - Arguments to update or create a TradingGrowthPlan.
+     * @example
+     * // Update or create a TradingGrowthPlan
+     * const tradingGrowthPlan = await prisma.tradingGrowthPlan.upsert({
+     *   create: {
+     *     // ... data to create a TradingGrowthPlan
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TradingGrowthPlan we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TradingGrowthPlanUpsertArgs>(args: SelectSubset<T, TradingGrowthPlanUpsertArgs<ExtArgs>>): Prisma__TradingGrowthPlanClient<$Result.GetResult<Prisma.$TradingGrowthPlanPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TradingGrowthPlans.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthPlanCountArgs} args - Arguments to filter TradingGrowthPlans to count.
+     * @example
+     * // Count the number of TradingGrowthPlans
+     * const count = await prisma.tradingGrowthPlan.count({
+     *   where: {
+     *     // ... the filter for the TradingGrowthPlans we want to count
+     *   }
+     * })
+    **/
+    count<T extends TradingGrowthPlanCountArgs>(
+      args?: Subset<T, TradingGrowthPlanCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TradingGrowthPlanCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TradingGrowthPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthPlanAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TradingGrowthPlanAggregateArgs>(args: Subset<T, TradingGrowthPlanAggregateArgs>): Prisma.PrismaPromise<GetTradingGrowthPlanAggregateType<T>>
+
+    /**
+     * Group by TradingGrowthPlan.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthPlanGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TradingGrowthPlanGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TradingGrowthPlanGroupByArgs['orderBy'] }
+        : { orderBy?: TradingGrowthPlanGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TradingGrowthPlanGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTradingGrowthPlanGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TradingGrowthPlan model
+   */
+  readonly fields: TradingGrowthPlanFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TradingGrowthPlan.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TradingGrowthPlanClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    completions<T extends TradingGrowthPlan$completionsArgs<ExtArgs> = {}>(args?: Subset<T, TradingGrowthPlan$completionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradingGrowthCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TradingGrowthPlan model
+   */
+  interface TradingGrowthPlanFieldRefs {
+    readonly id: FieldRef<"TradingGrowthPlan", 'String'>
+    readonly completedCount: FieldRef<"TradingGrowthPlan", 'Int'>
+    readonly revision: FieldRef<"TradingGrowthPlan", 'Int'>
+    readonly createdAt: FieldRef<"TradingGrowthPlan", 'DateTime'>
+    readonly updatedAt: FieldRef<"TradingGrowthPlan", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TradingGrowthPlan findUnique
+   */
+  export type TradingGrowthPlanFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlan
+     */
+    select?: TradingGrowthPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthPlan
+     */
+    omit?: TradingGrowthPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which TradingGrowthPlan to fetch.
+     */
+    where: TradingGrowthPlanWhereUniqueInput
+  }
+
+  /**
+   * TradingGrowthPlan findUniqueOrThrow
+   */
+  export type TradingGrowthPlanFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlan
+     */
+    select?: TradingGrowthPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthPlan
+     */
+    omit?: TradingGrowthPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which TradingGrowthPlan to fetch.
+     */
+    where: TradingGrowthPlanWhereUniqueInput
+  }
+
+  /**
+   * TradingGrowthPlan findFirst
+   */
+  export type TradingGrowthPlanFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlan
+     */
+    select?: TradingGrowthPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthPlan
+     */
+    omit?: TradingGrowthPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which TradingGrowthPlan to fetch.
+     */
+    where?: TradingGrowthPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TradingGrowthPlans to fetch.
+     */
+    orderBy?: TradingGrowthPlanOrderByWithRelationInput | TradingGrowthPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TradingGrowthPlans.
+     */
+    cursor?: TradingGrowthPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TradingGrowthPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TradingGrowthPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TradingGrowthPlans.
+     */
+    distinct?: TradingGrowthPlanScalarFieldEnum | TradingGrowthPlanScalarFieldEnum[]
+  }
+
+  /**
+   * TradingGrowthPlan findFirstOrThrow
+   */
+  export type TradingGrowthPlanFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlan
+     */
+    select?: TradingGrowthPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthPlan
+     */
+    omit?: TradingGrowthPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which TradingGrowthPlan to fetch.
+     */
+    where?: TradingGrowthPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TradingGrowthPlans to fetch.
+     */
+    orderBy?: TradingGrowthPlanOrderByWithRelationInput | TradingGrowthPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TradingGrowthPlans.
+     */
+    cursor?: TradingGrowthPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TradingGrowthPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TradingGrowthPlans.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TradingGrowthPlans.
+     */
+    distinct?: TradingGrowthPlanScalarFieldEnum | TradingGrowthPlanScalarFieldEnum[]
+  }
+
+  /**
+   * TradingGrowthPlan findMany
+   */
+  export type TradingGrowthPlanFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlan
+     */
+    select?: TradingGrowthPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthPlan
+     */
+    omit?: TradingGrowthPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthPlanInclude<ExtArgs> | null
+    /**
+     * Filter, which TradingGrowthPlans to fetch.
+     */
+    where?: TradingGrowthPlanWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TradingGrowthPlans to fetch.
+     */
+    orderBy?: TradingGrowthPlanOrderByWithRelationInput | TradingGrowthPlanOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TradingGrowthPlans.
+     */
+    cursor?: TradingGrowthPlanWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TradingGrowthPlans from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TradingGrowthPlans.
+     */
+    skip?: number
+    distinct?: TradingGrowthPlanScalarFieldEnum | TradingGrowthPlanScalarFieldEnum[]
+  }
+
+  /**
+   * TradingGrowthPlan create
+   */
+  export type TradingGrowthPlanCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlan
+     */
+    select?: TradingGrowthPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthPlan
+     */
+    omit?: TradingGrowthPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthPlanInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TradingGrowthPlan.
+     */
+    data: XOR<TradingGrowthPlanCreateInput, TradingGrowthPlanUncheckedCreateInput>
+  }
+
+  /**
+   * TradingGrowthPlan createMany
+   */
+  export type TradingGrowthPlanCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TradingGrowthPlans.
+     */
+    data: TradingGrowthPlanCreateManyInput | TradingGrowthPlanCreateManyInput[]
+  }
+
+  /**
+   * TradingGrowthPlan createManyAndReturn
+   */
+  export type TradingGrowthPlanCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlan
+     */
+    select?: TradingGrowthPlanSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthPlan
+     */
+    omit?: TradingGrowthPlanOmit<ExtArgs> | null
+    /**
+     * The data used to create many TradingGrowthPlans.
+     */
+    data: TradingGrowthPlanCreateManyInput | TradingGrowthPlanCreateManyInput[]
+  }
+
+  /**
+   * TradingGrowthPlan update
+   */
+  export type TradingGrowthPlanUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlan
+     */
+    select?: TradingGrowthPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthPlan
+     */
+    omit?: TradingGrowthPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthPlanInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TradingGrowthPlan.
+     */
+    data: XOR<TradingGrowthPlanUpdateInput, TradingGrowthPlanUncheckedUpdateInput>
+    /**
+     * Choose, which TradingGrowthPlan to update.
+     */
+    where: TradingGrowthPlanWhereUniqueInput
+  }
+
+  /**
+   * TradingGrowthPlan updateMany
+   */
+  export type TradingGrowthPlanUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TradingGrowthPlans.
+     */
+    data: XOR<TradingGrowthPlanUpdateManyMutationInput, TradingGrowthPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which TradingGrowthPlans to update
+     */
+    where?: TradingGrowthPlanWhereInput
+    /**
+     * Limit how many TradingGrowthPlans to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TradingGrowthPlan updateManyAndReturn
+   */
+  export type TradingGrowthPlanUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlan
+     */
+    select?: TradingGrowthPlanSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthPlan
+     */
+    omit?: TradingGrowthPlanOmit<ExtArgs> | null
+    /**
+     * The data used to update TradingGrowthPlans.
+     */
+    data: XOR<TradingGrowthPlanUpdateManyMutationInput, TradingGrowthPlanUncheckedUpdateManyInput>
+    /**
+     * Filter which TradingGrowthPlans to update
+     */
+    where?: TradingGrowthPlanWhereInput
+    /**
+     * Limit how many TradingGrowthPlans to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TradingGrowthPlan upsert
+   */
+  export type TradingGrowthPlanUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlan
+     */
+    select?: TradingGrowthPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthPlan
+     */
+    omit?: TradingGrowthPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthPlanInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TradingGrowthPlan to update in case it exists.
+     */
+    where: TradingGrowthPlanWhereUniqueInput
+    /**
+     * In case the TradingGrowthPlan found by the `where` argument doesn't exist, create a new TradingGrowthPlan with this data.
+     */
+    create: XOR<TradingGrowthPlanCreateInput, TradingGrowthPlanUncheckedCreateInput>
+    /**
+     * In case the TradingGrowthPlan was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TradingGrowthPlanUpdateInput, TradingGrowthPlanUncheckedUpdateInput>
+  }
+
+  /**
+   * TradingGrowthPlan delete
+   */
+  export type TradingGrowthPlanDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlan
+     */
+    select?: TradingGrowthPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthPlan
+     */
+    omit?: TradingGrowthPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthPlanInclude<ExtArgs> | null
+    /**
+     * Filter which TradingGrowthPlan to delete.
+     */
+    where: TradingGrowthPlanWhereUniqueInput
+  }
+
+  /**
+   * TradingGrowthPlan deleteMany
+   */
+  export type TradingGrowthPlanDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TradingGrowthPlans to delete
+     */
+    where?: TradingGrowthPlanWhereInput
+    /**
+     * Limit how many TradingGrowthPlans to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TradingGrowthPlan.completions
+   */
+  export type TradingGrowthPlan$completionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionInclude<ExtArgs> | null
+    where?: TradingGrowthCompletionWhereInput
+    orderBy?: TradingGrowthCompletionOrderByWithRelationInput | TradingGrowthCompletionOrderByWithRelationInput[]
+    cursor?: TradingGrowthCompletionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TradingGrowthCompletionScalarFieldEnum | TradingGrowthCompletionScalarFieldEnum[]
+  }
+
+  /**
+   * TradingGrowthPlan without action
+   */
+  export type TradingGrowthPlanDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthPlan
+     */
+    select?: TradingGrowthPlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthPlan
+     */
+    omit?: TradingGrowthPlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthPlanInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TradingGrowthCompletion
+   */
+
+  export type AggregateTradingGrowthCompletion = {
+    _count: TradingGrowthCompletionCountAggregateOutputType | null
+    _avg: TradingGrowthCompletionAvgAggregateOutputType | null
+    _sum: TradingGrowthCompletionSumAggregateOutputType | null
+    _min: TradingGrowthCompletionMinAggregateOutputType | null
+    _max: TradingGrowthCompletionMaxAggregateOutputType | null
+  }
+
+  export type TradingGrowthCompletionAvgAggregateOutputType = {
+    stepIndex: number | null
+  }
+
+  export type TradingGrowthCompletionSumAggregateOutputType = {
+    stepIndex: number | null
+  }
+
+  export type TradingGrowthCompletionMinAggregateOutputType = {
+    planId: string | null
+    stepIndex: number | null
+    completedAt: Date | null
+  }
+
+  export type TradingGrowthCompletionMaxAggregateOutputType = {
+    planId: string | null
+    stepIndex: number | null
+    completedAt: Date | null
+  }
+
+  export type TradingGrowthCompletionCountAggregateOutputType = {
+    planId: number
+    stepIndex: number
+    completedAt: number
+    _all: number
+  }
+
+
+  export type TradingGrowthCompletionAvgAggregateInputType = {
+    stepIndex?: true
+  }
+
+  export type TradingGrowthCompletionSumAggregateInputType = {
+    stepIndex?: true
+  }
+
+  export type TradingGrowthCompletionMinAggregateInputType = {
+    planId?: true
+    stepIndex?: true
+    completedAt?: true
+  }
+
+  export type TradingGrowthCompletionMaxAggregateInputType = {
+    planId?: true
+    stepIndex?: true
+    completedAt?: true
+  }
+
+  export type TradingGrowthCompletionCountAggregateInputType = {
+    planId?: true
+    stepIndex?: true
+    completedAt?: true
+    _all?: true
+  }
+
+  export type TradingGrowthCompletionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TradingGrowthCompletion to aggregate.
+     */
+    where?: TradingGrowthCompletionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TradingGrowthCompletions to fetch.
+     */
+    orderBy?: TradingGrowthCompletionOrderByWithRelationInput | TradingGrowthCompletionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TradingGrowthCompletionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TradingGrowthCompletions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TradingGrowthCompletions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TradingGrowthCompletions
+    **/
+    _count?: true | TradingGrowthCompletionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TradingGrowthCompletionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TradingGrowthCompletionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TradingGrowthCompletionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TradingGrowthCompletionMaxAggregateInputType
+  }
+
+  export type GetTradingGrowthCompletionAggregateType<T extends TradingGrowthCompletionAggregateArgs> = {
+        [P in keyof T & keyof AggregateTradingGrowthCompletion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTradingGrowthCompletion[P]>
+      : GetScalarType<T[P], AggregateTradingGrowthCompletion[P]>
+  }
+
+
+
+
+  export type TradingGrowthCompletionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TradingGrowthCompletionWhereInput
+    orderBy?: TradingGrowthCompletionOrderByWithAggregationInput | TradingGrowthCompletionOrderByWithAggregationInput[]
+    by: TradingGrowthCompletionScalarFieldEnum[] | TradingGrowthCompletionScalarFieldEnum
+    having?: TradingGrowthCompletionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TradingGrowthCompletionCountAggregateInputType | true
+    _avg?: TradingGrowthCompletionAvgAggregateInputType
+    _sum?: TradingGrowthCompletionSumAggregateInputType
+    _min?: TradingGrowthCompletionMinAggregateInputType
+    _max?: TradingGrowthCompletionMaxAggregateInputType
+  }
+
+  export type TradingGrowthCompletionGroupByOutputType = {
+    planId: string
+    stepIndex: number
+    completedAt: Date
+    _count: TradingGrowthCompletionCountAggregateOutputType | null
+    _avg: TradingGrowthCompletionAvgAggregateOutputType | null
+    _sum: TradingGrowthCompletionSumAggregateOutputType | null
+    _min: TradingGrowthCompletionMinAggregateOutputType | null
+    _max: TradingGrowthCompletionMaxAggregateOutputType | null
+  }
+
+  type GetTradingGrowthCompletionGroupByPayload<T extends TradingGrowthCompletionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TradingGrowthCompletionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TradingGrowthCompletionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TradingGrowthCompletionGroupByOutputType[P]>
+            : GetScalarType<T[P], TradingGrowthCompletionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TradingGrowthCompletionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    planId?: boolean
+    stepIndex?: boolean
+    completedAt?: boolean
+    plan?: boolean | TradingGrowthPlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tradingGrowthCompletion"]>
+
+  export type TradingGrowthCompletionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    planId?: boolean
+    stepIndex?: boolean
+    completedAt?: boolean
+    plan?: boolean | TradingGrowthPlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tradingGrowthCompletion"]>
+
+  export type TradingGrowthCompletionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    planId?: boolean
+    stepIndex?: boolean
+    completedAt?: boolean
+    plan?: boolean | TradingGrowthPlanDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tradingGrowthCompletion"]>
+
+  export type TradingGrowthCompletionSelectScalar = {
+    planId?: boolean
+    stepIndex?: boolean
+    completedAt?: boolean
+  }
+
+  export type TradingGrowthCompletionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"planId" | "stepIndex" | "completedAt", ExtArgs["result"]["tradingGrowthCompletion"]>
+  export type TradingGrowthCompletionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plan?: boolean | TradingGrowthPlanDefaultArgs<ExtArgs>
+  }
+  export type TradingGrowthCompletionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plan?: boolean | TradingGrowthPlanDefaultArgs<ExtArgs>
+  }
+  export type TradingGrowthCompletionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    plan?: boolean | TradingGrowthPlanDefaultArgs<ExtArgs>
+  }
+
+  export type $TradingGrowthCompletionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TradingGrowthCompletion"
+    objects: {
+      plan: Prisma.$TradingGrowthPlanPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      planId: string
+      stepIndex: number
+      completedAt: Date
+    }, ExtArgs["result"]["tradingGrowthCompletion"]>
+    composites: {}
+  }
+
+  type TradingGrowthCompletionGetPayload<S extends boolean | null | undefined | TradingGrowthCompletionDefaultArgs> = $Result.GetResult<Prisma.$TradingGrowthCompletionPayload, S>
+
+  type TradingGrowthCompletionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TradingGrowthCompletionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TradingGrowthCompletionCountAggregateInputType | true
+    }
+
+  export interface TradingGrowthCompletionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TradingGrowthCompletion'], meta: { name: 'TradingGrowthCompletion' } }
+    /**
+     * Find zero or one TradingGrowthCompletion that matches the filter.
+     * @param {TradingGrowthCompletionFindUniqueArgs} args - Arguments to find a TradingGrowthCompletion
+     * @example
+     * // Get one TradingGrowthCompletion
+     * const tradingGrowthCompletion = await prisma.tradingGrowthCompletion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TradingGrowthCompletionFindUniqueArgs>(args: SelectSubset<T, TradingGrowthCompletionFindUniqueArgs<ExtArgs>>): Prisma__TradingGrowthCompletionClient<$Result.GetResult<Prisma.$TradingGrowthCompletionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TradingGrowthCompletion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TradingGrowthCompletionFindUniqueOrThrowArgs} args - Arguments to find a TradingGrowthCompletion
+     * @example
+     * // Get one TradingGrowthCompletion
+     * const tradingGrowthCompletion = await prisma.tradingGrowthCompletion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TradingGrowthCompletionFindUniqueOrThrowArgs>(args: SelectSubset<T, TradingGrowthCompletionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TradingGrowthCompletionClient<$Result.GetResult<Prisma.$TradingGrowthCompletionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TradingGrowthCompletion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthCompletionFindFirstArgs} args - Arguments to find a TradingGrowthCompletion
+     * @example
+     * // Get one TradingGrowthCompletion
+     * const tradingGrowthCompletion = await prisma.tradingGrowthCompletion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TradingGrowthCompletionFindFirstArgs>(args?: SelectSubset<T, TradingGrowthCompletionFindFirstArgs<ExtArgs>>): Prisma__TradingGrowthCompletionClient<$Result.GetResult<Prisma.$TradingGrowthCompletionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TradingGrowthCompletion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthCompletionFindFirstOrThrowArgs} args - Arguments to find a TradingGrowthCompletion
+     * @example
+     * // Get one TradingGrowthCompletion
+     * const tradingGrowthCompletion = await prisma.tradingGrowthCompletion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TradingGrowthCompletionFindFirstOrThrowArgs>(args?: SelectSubset<T, TradingGrowthCompletionFindFirstOrThrowArgs<ExtArgs>>): Prisma__TradingGrowthCompletionClient<$Result.GetResult<Prisma.$TradingGrowthCompletionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TradingGrowthCompletions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthCompletionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TradingGrowthCompletions
+     * const tradingGrowthCompletions = await prisma.tradingGrowthCompletion.findMany()
+     * 
+     * // Get first 10 TradingGrowthCompletions
+     * const tradingGrowthCompletions = await prisma.tradingGrowthCompletion.findMany({ take: 10 })
+     * 
+     * // Only select the `planId`
+     * const tradingGrowthCompletionWithPlanIdOnly = await prisma.tradingGrowthCompletion.findMany({ select: { planId: true } })
+     * 
+     */
+    findMany<T extends TradingGrowthCompletionFindManyArgs>(args?: SelectSubset<T, TradingGrowthCompletionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradingGrowthCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TradingGrowthCompletion.
+     * @param {TradingGrowthCompletionCreateArgs} args - Arguments to create a TradingGrowthCompletion.
+     * @example
+     * // Create one TradingGrowthCompletion
+     * const TradingGrowthCompletion = await prisma.tradingGrowthCompletion.create({
+     *   data: {
+     *     // ... data to create a TradingGrowthCompletion
+     *   }
+     * })
+     * 
+     */
+    create<T extends TradingGrowthCompletionCreateArgs>(args: SelectSubset<T, TradingGrowthCompletionCreateArgs<ExtArgs>>): Prisma__TradingGrowthCompletionClient<$Result.GetResult<Prisma.$TradingGrowthCompletionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TradingGrowthCompletions.
+     * @param {TradingGrowthCompletionCreateManyArgs} args - Arguments to create many TradingGrowthCompletions.
+     * @example
+     * // Create many TradingGrowthCompletions
+     * const tradingGrowthCompletion = await prisma.tradingGrowthCompletion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TradingGrowthCompletionCreateManyArgs>(args?: SelectSubset<T, TradingGrowthCompletionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TradingGrowthCompletions and returns the data saved in the database.
+     * @param {TradingGrowthCompletionCreateManyAndReturnArgs} args - Arguments to create many TradingGrowthCompletions.
+     * @example
+     * // Create many TradingGrowthCompletions
+     * const tradingGrowthCompletion = await prisma.tradingGrowthCompletion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TradingGrowthCompletions and only return the `planId`
+     * const tradingGrowthCompletionWithPlanIdOnly = await prisma.tradingGrowthCompletion.createManyAndReturn({
+     *   select: { planId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TradingGrowthCompletionCreateManyAndReturnArgs>(args?: SelectSubset<T, TradingGrowthCompletionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradingGrowthCompletionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TradingGrowthCompletion.
+     * @param {TradingGrowthCompletionDeleteArgs} args - Arguments to delete one TradingGrowthCompletion.
+     * @example
+     * // Delete one TradingGrowthCompletion
+     * const TradingGrowthCompletion = await prisma.tradingGrowthCompletion.delete({
+     *   where: {
+     *     // ... filter to delete one TradingGrowthCompletion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TradingGrowthCompletionDeleteArgs>(args: SelectSubset<T, TradingGrowthCompletionDeleteArgs<ExtArgs>>): Prisma__TradingGrowthCompletionClient<$Result.GetResult<Prisma.$TradingGrowthCompletionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TradingGrowthCompletion.
+     * @param {TradingGrowthCompletionUpdateArgs} args - Arguments to update one TradingGrowthCompletion.
+     * @example
+     * // Update one TradingGrowthCompletion
+     * const tradingGrowthCompletion = await prisma.tradingGrowthCompletion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TradingGrowthCompletionUpdateArgs>(args: SelectSubset<T, TradingGrowthCompletionUpdateArgs<ExtArgs>>): Prisma__TradingGrowthCompletionClient<$Result.GetResult<Prisma.$TradingGrowthCompletionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TradingGrowthCompletions.
+     * @param {TradingGrowthCompletionDeleteManyArgs} args - Arguments to filter TradingGrowthCompletions to delete.
+     * @example
+     * // Delete a few TradingGrowthCompletions
+     * const { count } = await prisma.tradingGrowthCompletion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TradingGrowthCompletionDeleteManyArgs>(args?: SelectSubset<T, TradingGrowthCompletionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TradingGrowthCompletions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthCompletionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TradingGrowthCompletions
+     * const tradingGrowthCompletion = await prisma.tradingGrowthCompletion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TradingGrowthCompletionUpdateManyArgs>(args: SelectSubset<T, TradingGrowthCompletionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TradingGrowthCompletions and returns the data updated in the database.
+     * @param {TradingGrowthCompletionUpdateManyAndReturnArgs} args - Arguments to update many TradingGrowthCompletions.
+     * @example
+     * // Update many TradingGrowthCompletions
+     * const tradingGrowthCompletion = await prisma.tradingGrowthCompletion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TradingGrowthCompletions and only return the `planId`
+     * const tradingGrowthCompletionWithPlanIdOnly = await prisma.tradingGrowthCompletion.updateManyAndReturn({
+     *   select: { planId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TradingGrowthCompletionUpdateManyAndReturnArgs>(args: SelectSubset<T, TradingGrowthCompletionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TradingGrowthCompletionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TradingGrowthCompletion.
+     * @param {TradingGrowthCompletionUpsertArgs} args - Arguments to update or create a TradingGrowthCompletion.
+     * @example
+     * // Update or create a TradingGrowthCompletion
+     * const tradingGrowthCompletion = await prisma.tradingGrowthCompletion.upsert({
+     *   create: {
+     *     // ... data to create a TradingGrowthCompletion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TradingGrowthCompletion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TradingGrowthCompletionUpsertArgs>(args: SelectSubset<T, TradingGrowthCompletionUpsertArgs<ExtArgs>>): Prisma__TradingGrowthCompletionClient<$Result.GetResult<Prisma.$TradingGrowthCompletionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TradingGrowthCompletions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthCompletionCountArgs} args - Arguments to filter TradingGrowthCompletions to count.
+     * @example
+     * // Count the number of TradingGrowthCompletions
+     * const count = await prisma.tradingGrowthCompletion.count({
+     *   where: {
+     *     // ... the filter for the TradingGrowthCompletions we want to count
+     *   }
+     * })
+    **/
+    count<T extends TradingGrowthCompletionCountArgs>(
+      args?: Subset<T, TradingGrowthCompletionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TradingGrowthCompletionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TradingGrowthCompletion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthCompletionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TradingGrowthCompletionAggregateArgs>(args: Subset<T, TradingGrowthCompletionAggregateArgs>): Prisma.PrismaPromise<GetTradingGrowthCompletionAggregateType<T>>
+
+    /**
+     * Group by TradingGrowthCompletion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TradingGrowthCompletionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TradingGrowthCompletionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TradingGrowthCompletionGroupByArgs['orderBy'] }
+        : { orderBy?: TradingGrowthCompletionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TradingGrowthCompletionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTradingGrowthCompletionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TradingGrowthCompletion model
+   */
+  readonly fields: TradingGrowthCompletionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TradingGrowthCompletion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TradingGrowthCompletionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    plan<T extends TradingGrowthPlanDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TradingGrowthPlanDefaultArgs<ExtArgs>>): Prisma__TradingGrowthPlanClient<$Result.GetResult<Prisma.$TradingGrowthPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TradingGrowthCompletion model
+   */
+  interface TradingGrowthCompletionFieldRefs {
+    readonly planId: FieldRef<"TradingGrowthCompletion", 'String'>
+    readonly stepIndex: FieldRef<"TradingGrowthCompletion", 'Int'>
+    readonly completedAt: FieldRef<"TradingGrowthCompletion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TradingGrowthCompletion findUnique
+   */
+  export type TradingGrowthCompletionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which TradingGrowthCompletion to fetch.
+     */
+    where: TradingGrowthCompletionWhereUniqueInput
+  }
+
+  /**
+   * TradingGrowthCompletion findUniqueOrThrow
+   */
+  export type TradingGrowthCompletionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which TradingGrowthCompletion to fetch.
+     */
+    where: TradingGrowthCompletionWhereUniqueInput
+  }
+
+  /**
+   * TradingGrowthCompletion findFirst
+   */
+  export type TradingGrowthCompletionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which TradingGrowthCompletion to fetch.
+     */
+    where?: TradingGrowthCompletionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TradingGrowthCompletions to fetch.
+     */
+    orderBy?: TradingGrowthCompletionOrderByWithRelationInput | TradingGrowthCompletionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TradingGrowthCompletions.
+     */
+    cursor?: TradingGrowthCompletionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TradingGrowthCompletions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TradingGrowthCompletions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TradingGrowthCompletions.
+     */
+    distinct?: TradingGrowthCompletionScalarFieldEnum | TradingGrowthCompletionScalarFieldEnum[]
+  }
+
+  /**
+   * TradingGrowthCompletion findFirstOrThrow
+   */
+  export type TradingGrowthCompletionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which TradingGrowthCompletion to fetch.
+     */
+    where?: TradingGrowthCompletionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TradingGrowthCompletions to fetch.
+     */
+    orderBy?: TradingGrowthCompletionOrderByWithRelationInput | TradingGrowthCompletionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TradingGrowthCompletions.
+     */
+    cursor?: TradingGrowthCompletionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TradingGrowthCompletions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TradingGrowthCompletions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TradingGrowthCompletions.
+     */
+    distinct?: TradingGrowthCompletionScalarFieldEnum | TradingGrowthCompletionScalarFieldEnum[]
+  }
+
+  /**
+   * TradingGrowthCompletion findMany
+   */
+  export type TradingGrowthCompletionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which TradingGrowthCompletions to fetch.
+     */
+    where?: TradingGrowthCompletionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TradingGrowthCompletions to fetch.
+     */
+    orderBy?: TradingGrowthCompletionOrderByWithRelationInput | TradingGrowthCompletionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TradingGrowthCompletions.
+     */
+    cursor?: TradingGrowthCompletionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TradingGrowthCompletions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TradingGrowthCompletions.
+     */
+    skip?: number
+    distinct?: TradingGrowthCompletionScalarFieldEnum | TradingGrowthCompletionScalarFieldEnum[]
+  }
+
+  /**
+   * TradingGrowthCompletion create
+   */
+  export type TradingGrowthCompletionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TradingGrowthCompletion.
+     */
+    data: XOR<TradingGrowthCompletionCreateInput, TradingGrowthCompletionUncheckedCreateInput>
+  }
+
+  /**
+   * TradingGrowthCompletion createMany
+   */
+  export type TradingGrowthCompletionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TradingGrowthCompletions.
+     */
+    data: TradingGrowthCompletionCreateManyInput | TradingGrowthCompletionCreateManyInput[]
+  }
+
+  /**
+   * TradingGrowthCompletion createManyAndReturn
+   */
+  export type TradingGrowthCompletionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * The data used to create many TradingGrowthCompletions.
+     */
+    data: TradingGrowthCompletionCreateManyInput | TradingGrowthCompletionCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TradingGrowthCompletion update
+   */
+  export type TradingGrowthCompletionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TradingGrowthCompletion.
+     */
+    data: XOR<TradingGrowthCompletionUpdateInput, TradingGrowthCompletionUncheckedUpdateInput>
+    /**
+     * Choose, which TradingGrowthCompletion to update.
+     */
+    where: TradingGrowthCompletionWhereUniqueInput
+  }
+
+  /**
+   * TradingGrowthCompletion updateMany
+   */
+  export type TradingGrowthCompletionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TradingGrowthCompletions.
+     */
+    data: XOR<TradingGrowthCompletionUpdateManyMutationInput, TradingGrowthCompletionUncheckedUpdateManyInput>
+    /**
+     * Filter which TradingGrowthCompletions to update
+     */
+    where?: TradingGrowthCompletionWhereInput
+    /**
+     * Limit how many TradingGrowthCompletions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TradingGrowthCompletion updateManyAndReturn
+   */
+  export type TradingGrowthCompletionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * The data used to update TradingGrowthCompletions.
+     */
+    data: XOR<TradingGrowthCompletionUpdateManyMutationInput, TradingGrowthCompletionUncheckedUpdateManyInput>
+    /**
+     * Filter which TradingGrowthCompletions to update
+     */
+    where?: TradingGrowthCompletionWhereInput
+    /**
+     * Limit how many TradingGrowthCompletions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TradingGrowthCompletion upsert
+   */
+  export type TradingGrowthCompletionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TradingGrowthCompletion to update in case it exists.
+     */
+    where: TradingGrowthCompletionWhereUniqueInput
+    /**
+     * In case the TradingGrowthCompletion found by the `where` argument doesn't exist, create a new TradingGrowthCompletion with this data.
+     */
+    create: XOR<TradingGrowthCompletionCreateInput, TradingGrowthCompletionUncheckedCreateInput>
+    /**
+     * In case the TradingGrowthCompletion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TradingGrowthCompletionUpdateInput, TradingGrowthCompletionUncheckedUpdateInput>
+  }
+
+  /**
+   * TradingGrowthCompletion delete
+   */
+  export type TradingGrowthCompletionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionInclude<ExtArgs> | null
+    /**
+     * Filter which TradingGrowthCompletion to delete.
+     */
+    where: TradingGrowthCompletionWhereUniqueInput
+  }
+
+  /**
+   * TradingGrowthCompletion deleteMany
+   */
+  export type TradingGrowthCompletionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TradingGrowthCompletions to delete
+     */
+    where?: TradingGrowthCompletionWhereInput
+    /**
+     * Limit how many TradingGrowthCompletions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TradingGrowthCompletion without action
+   */
+  export type TradingGrowthCompletionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TradingGrowthCompletion
+     */
+    select?: TradingGrowthCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TradingGrowthCompletion
+     */
+    omit?: TradingGrowthCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TradingGrowthCompletionInclude<ExtArgs> | null
   }
 
 
@@ -23108,6 +25491,26 @@ export namespace Prisma {
   export type KpiDailyRecordScalarFieldEnum = (typeof KpiDailyRecordScalarFieldEnum)[keyof typeof KpiDailyRecordScalarFieldEnum]
 
 
+  export const TradingGrowthPlanScalarFieldEnum: {
+    id: 'id',
+    completedCount: 'completedCount',
+    revision: 'revision',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TradingGrowthPlanScalarFieldEnum = (typeof TradingGrowthPlanScalarFieldEnum)[keyof typeof TradingGrowthPlanScalarFieldEnum]
+
+
+  export const TradingGrowthCompletionScalarFieldEnum: {
+    planId: 'planId',
+    stepIndex: 'stepIndex',
+    completedAt: 'completedAt'
+  };
+
+  export type TradingGrowthCompletionScalarFieldEnum = (typeof TradingGrowthCompletionScalarFieldEnum)[keyof typeof TradingGrowthCompletionScalarFieldEnum]
+
+
   export const NewsEventScalarFieldEnum: {
     id: 'id',
     sessionDate: 'sessionDate',
@@ -23924,6 +26327,111 @@ export namespace Prisma {
     note?: StringNullableWithAggregatesFilter<"KpiDailyRecord"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"KpiDailyRecord"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"KpiDailyRecord"> | Date | string
+  }
+
+  export type TradingGrowthPlanWhereInput = {
+    AND?: TradingGrowthPlanWhereInput | TradingGrowthPlanWhereInput[]
+    OR?: TradingGrowthPlanWhereInput[]
+    NOT?: TradingGrowthPlanWhereInput | TradingGrowthPlanWhereInput[]
+    id?: StringFilter<"TradingGrowthPlan"> | string
+    completedCount?: IntFilter<"TradingGrowthPlan"> | number
+    revision?: IntFilter<"TradingGrowthPlan"> | number
+    createdAt?: DateTimeFilter<"TradingGrowthPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"TradingGrowthPlan"> | Date | string
+    completions?: TradingGrowthCompletionListRelationFilter
+  }
+
+  export type TradingGrowthPlanOrderByWithRelationInput = {
+    id?: SortOrder
+    completedCount?: SortOrder
+    revision?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    completions?: TradingGrowthCompletionOrderByRelationAggregateInput
+  }
+
+  export type TradingGrowthPlanWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TradingGrowthPlanWhereInput | TradingGrowthPlanWhereInput[]
+    OR?: TradingGrowthPlanWhereInput[]
+    NOT?: TradingGrowthPlanWhereInput | TradingGrowthPlanWhereInput[]
+    completedCount?: IntFilter<"TradingGrowthPlan"> | number
+    revision?: IntFilter<"TradingGrowthPlan"> | number
+    createdAt?: DateTimeFilter<"TradingGrowthPlan"> | Date | string
+    updatedAt?: DateTimeFilter<"TradingGrowthPlan"> | Date | string
+    completions?: TradingGrowthCompletionListRelationFilter
+  }, "id">
+
+  export type TradingGrowthPlanOrderByWithAggregationInput = {
+    id?: SortOrder
+    completedCount?: SortOrder
+    revision?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TradingGrowthPlanCountOrderByAggregateInput
+    _avg?: TradingGrowthPlanAvgOrderByAggregateInput
+    _max?: TradingGrowthPlanMaxOrderByAggregateInput
+    _min?: TradingGrowthPlanMinOrderByAggregateInput
+    _sum?: TradingGrowthPlanSumOrderByAggregateInput
+  }
+
+  export type TradingGrowthPlanScalarWhereWithAggregatesInput = {
+    AND?: TradingGrowthPlanScalarWhereWithAggregatesInput | TradingGrowthPlanScalarWhereWithAggregatesInput[]
+    OR?: TradingGrowthPlanScalarWhereWithAggregatesInput[]
+    NOT?: TradingGrowthPlanScalarWhereWithAggregatesInput | TradingGrowthPlanScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TradingGrowthPlan"> | string
+    completedCount?: IntWithAggregatesFilter<"TradingGrowthPlan"> | number
+    revision?: IntWithAggregatesFilter<"TradingGrowthPlan"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"TradingGrowthPlan"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"TradingGrowthPlan"> | Date | string
+  }
+
+  export type TradingGrowthCompletionWhereInput = {
+    AND?: TradingGrowthCompletionWhereInput | TradingGrowthCompletionWhereInput[]
+    OR?: TradingGrowthCompletionWhereInput[]
+    NOT?: TradingGrowthCompletionWhereInput | TradingGrowthCompletionWhereInput[]
+    planId?: StringFilter<"TradingGrowthCompletion"> | string
+    stepIndex?: IntFilter<"TradingGrowthCompletion"> | number
+    completedAt?: DateTimeFilter<"TradingGrowthCompletion"> | Date | string
+    plan?: XOR<TradingGrowthPlanScalarRelationFilter, TradingGrowthPlanWhereInput>
+  }
+
+  export type TradingGrowthCompletionOrderByWithRelationInput = {
+    planId?: SortOrder
+    stepIndex?: SortOrder
+    completedAt?: SortOrder
+    plan?: TradingGrowthPlanOrderByWithRelationInput
+  }
+
+  export type TradingGrowthCompletionWhereUniqueInput = Prisma.AtLeast<{
+    planId_stepIndex?: TradingGrowthCompletionPlanIdStepIndexCompoundUniqueInput
+    AND?: TradingGrowthCompletionWhereInput | TradingGrowthCompletionWhereInput[]
+    OR?: TradingGrowthCompletionWhereInput[]
+    NOT?: TradingGrowthCompletionWhereInput | TradingGrowthCompletionWhereInput[]
+    planId?: StringFilter<"TradingGrowthCompletion"> | string
+    stepIndex?: IntFilter<"TradingGrowthCompletion"> | number
+    completedAt?: DateTimeFilter<"TradingGrowthCompletion"> | Date | string
+    plan?: XOR<TradingGrowthPlanScalarRelationFilter, TradingGrowthPlanWhereInput>
+  }, "planId_stepIndex">
+
+  export type TradingGrowthCompletionOrderByWithAggregationInput = {
+    planId?: SortOrder
+    stepIndex?: SortOrder
+    completedAt?: SortOrder
+    _count?: TradingGrowthCompletionCountOrderByAggregateInput
+    _avg?: TradingGrowthCompletionAvgOrderByAggregateInput
+    _max?: TradingGrowthCompletionMaxOrderByAggregateInput
+    _min?: TradingGrowthCompletionMinOrderByAggregateInput
+    _sum?: TradingGrowthCompletionSumOrderByAggregateInput
+  }
+
+  export type TradingGrowthCompletionScalarWhereWithAggregatesInput = {
+    AND?: TradingGrowthCompletionScalarWhereWithAggregatesInput | TradingGrowthCompletionScalarWhereWithAggregatesInput[]
+    OR?: TradingGrowthCompletionScalarWhereWithAggregatesInput[]
+    NOT?: TradingGrowthCompletionScalarWhereWithAggregatesInput | TradingGrowthCompletionScalarWhereWithAggregatesInput[]
+    planId?: StringWithAggregatesFilter<"TradingGrowthCompletion"> | string
+    stepIndex?: IntWithAggregatesFilter<"TradingGrowthCompletion"> | number
+    completedAt?: DateTimeWithAggregatesFilter<"TradingGrowthCompletion"> | Date | string
   }
 
   export type NewsEventWhereInput = {
@@ -25628,6 +28136,107 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TradingGrowthPlanCreateInput = {
+    id?: string
+    completedCount?: number
+    revision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completions?: TradingGrowthCompletionCreateNestedManyWithoutPlanInput
+  }
+
+  export type TradingGrowthPlanUncheckedCreateInput = {
+    id?: string
+    completedCount?: number
+    revision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    completions?: TradingGrowthCompletionUncheckedCreateNestedManyWithoutPlanInput
+  }
+
+  export type TradingGrowthPlanUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    completedCount?: IntFieldUpdateOperationsInput | number
+    revision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completions?: TradingGrowthCompletionUpdateManyWithoutPlanNestedInput
+  }
+
+  export type TradingGrowthPlanUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    completedCount?: IntFieldUpdateOperationsInput | number
+    revision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completions?: TradingGrowthCompletionUncheckedUpdateManyWithoutPlanNestedInput
+  }
+
+  export type TradingGrowthPlanCreateManyInput = {
+    id?: string
+    completedCount?: number
+    revision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TradingGrowthPlanUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    completedCount?: IntFieldUpdateOperationsInput | number
+    revision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TradingGrowthPlanUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    completedCount?: IntFieldUpdateOperationsInput | number
+    revision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TradingGrowthCompletionCreateInput = {
+    stepIndex: number
+    completedAt: Date | string
+    plan: TradingGrowthPlanCreateNestedOneWithoutCompletionsInput
+  }
+
+  export type TradingGrowthCompletionUncheckedCreateInput = {
+    planId: string
+    stepIndex: number
+    completedAt: Date | string
+  }
+
+  export type TradingGrowthCompletionUpdateInput = {
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    plan?: TradingGrowthPlanUpdateOneRequiredWithoutCompletionsNestedInput
+  }
+
+  export type TradingGrowthCompletionUncheckedUpdateInput = {
+    planId?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TradingGrowthCompletionCreateManyInput = {
+    planId: string
+    stepIndex: number
+    completedAt: Date | string
+  }
+
+  export type TradingGrowthCompletionUpdateManyMutationInput = {
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TradingGrowthCompletionUncheckedUpdateManyInput = {
+    planId?: StringFieldUpdateOperationsInput | string
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NewsEventCreateInput = {
@@ -27537,6 +30146,113 @@ export namespace Prisma {
     actualPcts?: SortOrder
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type TradingGrowthCompletionListRelationFilter = {
+    every?: TradingGrowthCompletionWhereInput
+    some?: TradingGrowthCompletionWhereInput
+    none?: TradingGrowthCompletionWhereInput
+  }
+
+  export type TradingGrowthCompletionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TradingGrowthPlanCountOrderByAggregateInput = {
+    id?: SortOrder
+    completedCount?: SortOrder
+    revision?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TradingGrowthPlanAvgOrderByAggregateInput = {
+    completedCount?: SortOrder
+    revision?: SortOrder
+  }
+
+  export type TradingGrowthPlanMaxOrderByAggregateInput = {
+    id?: SortOrder
+    completedCount?: SortOrder
+    revision?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TradingGrowthPlanMinOrderByAggregateInput = {
+    id?: SortOrder
+    completedCount?: SortOrder
+    revision?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TradingGrowthPlanSumOrderByAggregateInput = {
+    completedCount?: SortOrder
+    revision?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type TradingGrowthPlanScalarRelationFilter = {
+    is?: TradingGrowthPlanWhereInput
+    isNot?: TradingGrowthPlanWhereInput
+  }
+
+  export type TradingGrowthCompletionPlanIdStepIndexCompoundUniqueInput = {
+    planId: string
+    stepIndex: number
+  }
+
+  export type TradingGrowthCompletionCountOrderByAggregateInput = {
+    planId?: SortOrder
+    stepIndex?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type TradingGrowthCompletionAvgOrderByAggregateInput = {
+    stepIndex?: SortOrder
+  }
+
+  export type TradingGrowthCompletionMaxOrderByAggregateInput = {
+    planId?: SortOrder
+    stepIndex?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type TradingGrowthCompletionMinOrderByAggregateInput = {
+    planId?: SortOrder
+    stepIndex?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type TradingGrowthCompletionSumOrderByAggregateInput = {
+    stepIndex?: SortOrder
+  }
+
   export type EnumNewsTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.NewsType | EnumNewsTypeFieldRefInput<$PrismaModel>
     in?: $Enums.NewsType[]
@@ -28013,17 +30729,6 @@ export namespace Prisma {
     _max?: NestedEnumGradeNullableFilter<$PrismaModel>
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -28121,22 +30826,6 @@ export namespace Prisma {
     quantity?: SortOrder
     commission?: SortOrder
     pnl?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -28991,6 +31680,70 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type TradingGrowthCompletionCreateNestedManyWithoutPlanInput = {
+    create?: XOR<TradingGrowthCompletionCreateWithoutPlanInput, TradingGrowthCompletionUncheckedCreateWithoutPlanInput> | TradingGrowthCompletionCreateWithoutPlanInput[] | TradingGrowthCompletionUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: TradingGrowthCompletionCreateOrConnectWithoutPlanInput | TradingGrowthCompletionCreateOrConnectWithoutPlanInput[]
+    createMany?: TradingGrowthCompletionCreateManyPlanInputEnvelope
+    connect?: TradingGrowthCompletionWhereUniqueInput | TradingGrowthCompletionWhereUniqueInput[]
+  }
+
+  export type TradingGrowthCompletionUncheckedCreateNestedManyWithoutPlanInput = {
+    create?: XOR<TradingGrowthCompletionCreateWithoutPlanInput, TradingGrowthCompletionUncheckedCreateWithoutPlanInput> | TradingGrowthCompletionCreateWithoutPlanInput[] | TradingGrowthCompletionUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: TradingGrowthCompletionCreateOrConnectWithoutPlanInput | TradingGrowthCompletionCreateOrConnectWithoutPlanInput[]
+    createMany?: TradingGrowthCompletionCreateManyPlanInputEnvelope
+    connect?: TradingGrowthCompletionWhereUniqueInput | TradingGrowthCompletionWhereUniqueInput[]
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type TradingGrowthCompletionUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<TradingGrowthCompletionCreateWithoutPlanInput, TradingGrowthCompletionUncheckedCreateWithoutPlanInput> | TradingGrowthCompletionCreateWithoutPlanInput[] | TradingGrowthCompletionUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: TradingGrowthCompletionCreateOrConnectWithoutPlanInput | TradingGrowthCompletionCreateOrConnectWithoutPlanInput[]
+    upsert?: TradingGrowthCompletionUpsertWithWhereUniqueWithoutPlanInput | TradingGrowthCompletionUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: TradingGrowthCompletionCreateManyPlanInputEnvelope
+    set?: TradingGrowthCompletionWhereUniqueInput | TradingGrowthCompletionWhereUniqueInput[]
+    disconnect?: TradingGrowthCompletionWhereUniqueInput | TradingGrowthCompletionWhereUniqueInput[]
+    delete?: TradingGrowthCompletionWhereUniqueInput | TradingGrowthCompletionWhereUniqueInput[]
+    connect?: TradingGrowthCompletionWhereUniqueInput | TradingGrowthCompletionWhereUniqueInput[]
+    update?: TradingGrowthCompletionUpdateWithWhereUniqueWithoutPlanInput | TradingGrowthCompletionUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: TradingGrowthCompletionUpdateManyWithWhereWithoutPlanInput | TradingGrowthCompletionUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: TradingGrowthCompletionScalarWhereInput | TradingGrowthCompletionScalarWhereInput[]
+  }
+
+  export type TradingGrowthCompletionUncheckedUpdateManyWithoutPlanNestedInput = {
+    create?: XOR<TradingGrowthCompletionCreateWithoutPlanInput, TradingGrowthCompletionUncheckedCreateWithoutPlanInput> | TradingGrowthCompletionCreateWithoutPlanInput[] | TradingGrowthCompletionUncheckedCreateWithoutPlanInput[]
+    connectOrCreate?: TradingGrowthCompletionCreateOrConnectWithoutPlanInput | TradingGrowthCompletionCreateOrConnectWithoutPlanInput[]
+    upsert?: TradingGrowthCompletionUpsertWithWhereUniqueWithoutPlanInput | TradingGrowthCompletionUpsertWithWhereUniqueWithoutPlanInput[]
+    createMany?: TradingGrowthCompletionCreateManyPlanInputEnvelope
+    set?: TradingGrowthCompletionWhereUniqueInput | TradingGrowthCompletionWhereUniqueInput[]
+    disconnect?: TradingGrowthCompletionWhereUniqueInput | TradingGrowthCompletionWhereUniqueInput[]
+    delete?: TradingGrowthCompletionWhereUniqueInput | TradingGrowthCompletionWhereUniqueInput[]
+    connect?: TradingGrowthCompletionWhereUniqueInput | TradingGrowthCompletionWhereUniqueInput[]
+    update?: TradingGrowthCompletionUpdateWithWhereUniqueWithoutPlanInput | TradingGrowthCompletionUpdateWithWhereUniqueWithoutPlanInput[]
+    updateMany?: TradingGrowthCompletionUpdateManyWithWhereWithoutPlanInput | TradingGrowthCompletionUpdateManyWithWhereWithoutPlanInput[]
+    deleteMany?: TradingGrowthCompletionScalarWhereInput | TradingGrowthCompletionScalarWhereInput[]
+  }
+
+  export type TradingGrowthPlanCreateNestedOneWithoutCompletionsInput = {
+    create?: XOR<TradingGrowthPlanCreateWithoutCompletionsInput, TradingGrowthPlanUncheckedCreateWithoutCompletionsInput>
+    connectOrCreate?: TradingGrowthPlanCreateOrConnectWithoutCompletionsInput
+    connect?: TradingGrowthPlanWhereUniqueInput
+  }
+
+  export type TradingGrowthPlanUpdateOneRequiredWithoutCompletionsNestedInput = {
+    create?: XOR<TradingGrowthPlanCreateWithoutCompletionsInput, TradingGrowthPlanUncheckedCreateWithoutCompletionsInput>
+    connectOrCreate?: TradingGrowthPlanCreateOrConnectWithoutCompletionsInput
+    upsert?: TradingGrowthPlanUpsertWithoutCompletionsInput
+    connect?: TradingGrowthPlanWhereUniqueInput
+    update?: XOR<XOR<TradingGrowthPlanUpdateToOneWithWhereWithoutCompletionsInput, TradingGrowthPlanUpdateWithoutCompletionsInput>, TradingGrowthPlanUncheckedUpdateWithoutCompletionsInput>
+  }
+
   export type DailySessionCreateNestedOneWithoutNewsEventsInput = {
     create?: XOR<DailySessionCreateWithoutNewsEventsInput, DailySessionUncheckedCreateWithoutNewsEventsInput>
     connectOrCreate?: DailySessionCreateOrConnectWithoutNewsEventsInput
@@ -29285,14 +32038,6 @@ export namespace Prisma {
     connectOrCreate?: ScreenshotCreateOrConnectWithoutExecutionInput | ScreenshotCreateOrConnectWithoutExecutionInput[]
     createMany?: ScreenshotCreateManyExecutionInputEnvelope
     connect?: ScreenshotWhereUniqueInput | ScreenshotWhereUniqueInput[]
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -29724,6 +32469,22 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
   export type NestedEnumNewsTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.NewsType | EnumNewsTypeFieldRefInput<$PrismaModel>
     in?: $Enums.NewsType[]
@@ -29956,22 +32717,6 @@ export namespace Prisma {
     in?: $Enums.Direction[] | null
     notIn?: $Enums.Direction[] | null
     not?: NestedEnumDirectionNullableFilter<$PrismaModel> | $Enums.Direction | null
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[]
-    notIn?: number[]
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -30976,6 +33721,98 @@ export namespace Prisma {
     heldOvernight?: NullableBoolFieldUpdateOperationsInput | boolean | null
     overnightNote?: NullableStringFieldUpdateOperationsInput | string | null
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TradingGrowthCompletionCreateWithoutPlanInput = {
+    stepIndex: number
+    completedAt: Date | string
+  }
+
+  export type TradingGrowthCompletionUncheckedCreateWithoutPlanInput = {
+    stepIndex: number
+    completedAt: Date | string
+  }
+
+  export type TradingGrowthCompletionCreateOrConnectWithoutPlanInput = {
+    where: TradingGrowthCompletionWhereUniqueInput
+    create: XOR<TradingGrowthCompletionCreateWithoutPlanInput, TradingGrowthCompletionUncheckedCreateWithoutPlanInput>
+  }
+
+  export type TradingGrowthCompletionCreateManyPlanInputEnvelope = {
+    data: TradingGrowthCompletionCreateManyPlanInput | TradingGrowthCompletionCreateManyPlanInput[]
+  }
+
+  export type TradingGrowthCompletionUpsertWithWhereUniqueWithoutPlanInput = {
+    where: TradingGrowthCompletionWhereUniqueInput
+    update: XOR<TradingGrowthCompletionUpdateWithoutPlanInput, TradingGrowthCompletionUncheckedUpdateWithoutPlanInput>
+    create: XOR<TradingGrowthCompletionCreateWithoutPlanInput, TradingGrowthCompletionUncheckedCreateWithoutPlanInput>
+  }
+
+  export type TradingGrowthCompletionUpdateWithWhereUniqueWithoutPlanInput = {
+    where: TradingGrowthCompletionWhereUniqueInput
+    data: XOR<TradingGrowthCompletionUpdateWithoutPlanInput, TradingGrowthCompletionUncheckedUpdateWithoutPlanInput>
+  }
+
+  export type TradingGrowthCompletionUpdateManyWithWhereWithoutPlanInput = {
+    where: TradingGrowthCompletionScalarWhereInput
+    data: XOR<TradingGrowthCompletionUpdateManyMutationInput, TradingGrowthCompletionUncheckedUpdateManyWithoutPlanInput>
+  }
+
+  export type TradingGrowthCompletionScalarWhereInput = {
+    AND?: TradingGrowthCompletionScalarWhereInput | TradingGrowthCompletionScalarWhereInput[]
+    OR?: TradingGrowthCompletionScalarWhereInput[]
+    NOT?: TradingGrowthCompletionScalarWhereInput | TradingGrowthCompletionScalarWhereInput[]
+    planId?: StringFilter<"TradingGrowthCompletion"> | string
+    stepIndex?: IntFilter<"TradingGrowthCompletion"> | number
+    completedAt?: DateTimeFilter<"TradingGrowthCompletion"> | Date | string
+  }
+
+  export type TradingGrowthPlanCreateWithoutCompletionsInput = {
+    id?: string
+    completedCount?: number
+    revision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TradingGrowthPlanUncheckedCreateWithoutCompletionsInput = {
+    id?: string
+    completedCount?: number
+    revision?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TradingGrowthPlanCreateOrConnectWithoutCompletionsInput = {
+    where: TradingGrowthPlanWhereUniqueInput
+    create: XOR<TradingGrowthPlanCreateWithoutCompletionsInput, TradingGrowthPlanUncheckedCreateWithoutCompletionsInput>
+  }
+
+  export type TradingGrowthPlanUpsertWithoutCompletionsInput = {
+    update: XOR<TradingGrowthPlanUpdateWithoutCompletionsInput, TradingGrowthPlanUncheckedUpdateWithoutCompletionsInput>
+    create: XOR<TradingGrowthPlanCreateWithoutCompletionsInput, TradingGrowthPlanUncheckedCreateWithoutCompletionsInput>
+    where?: TradingGrowthPlanWhereInput
+  }
+
+  export type TradingGrowthPlanUpdateToOneWithWhereWithoutCompletionsInput = {
+    where?: TradingGrowthPlanWhereInput
+    data: XOR<TradingGrowthPlanUpdateWithoutCompletionsInput, TradingGrowthPlanUncheckedUpdateWithoutCompletionsInput>
+  }
+
+  export type TradingGrowthPlanUpdateWithoutCompletionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    completedCount?: IntFieldUpdateOperationsInput | number
+    revision?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TradingGrowthPlanUncheckedUpdateWithoutCompletionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    completedCount?: IntFieldUpdateOperationsInput | number
+    revision?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33497,6 +36334,26 @@ export namespace Prisma {
     executionId?: NullableStringFieldUpdateOperationsInput | string | null
     takenAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TradingGrowthCompletionCreateManyPlanInput = {
+    stepIndex: number
+    completedAt: Date | string
+  }
+
+  export type TradingGrowthCompletionUpdateWithoutPlanInput = {
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TradingGrowthCompletionUncheckedUpdateWithoutPlanInput = {
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TradingGrowthCompletionUncheckedUpdateManyWithoutPlanInput = {
+    stepIndex?: IntFieldUpdateOperationsInput | number
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TradeSetupUpdateWithoutNewsEventsInput = {
