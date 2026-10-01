@@ -4,7 +4,9 @@ import { Fragment, useState, useMemo } from "react";
 import Link from "next/link";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "~/components/ui/button";
+import { DailyScreenshotReview } from "~/components/analytics/DailyScreenshotReview";
 import { cn } from "~/lib/utils";
+import type { DailyScreenshots } from "~/lib/analytics-screenshots";
 import { formatPnL } from "~/lib/pnl";
 import type { TradeRow } from "~/lib/execution-aggregator";
 
@@ -64,9 +66,10 @@ function AccuracyCell({ accuracy }: { accuracy: TradeRow["entryAccuracy"] }) {
 
 interface Props {
   data: TradeRow[];
+  screenshotsByDate: DailyScreenshots;
 }
 
-export function ExecutionTable({ data }: Props) {
+export function ExecutionTable({ data, screenshotsByDate }: Props) {
   const [sortKey, setSortKey] = useState<SortKey>("date");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [page, setPage] = useState(0);
@@ -290,6 +293,9 @@ export function ExecutionTable({ data }: Props) {
                           </p>
                         </section>
                       </div>
+                      <DailyScreenshotReview
+                        screenshots={screenshotsByDate[row.date] ?? []}
+                      />
                     </td>
                   </tr>
                 )}

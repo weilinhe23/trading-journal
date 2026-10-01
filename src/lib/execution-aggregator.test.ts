@@ -9,13 +9,33 @@ import {
   type ExecutionFilterOptions,
 } from "~/lib/execution-aggregator";
 
-const { findMany } = vi.hoisted(() => ({ findMany: vi.fn() }));
-vi.mock("~/lib/prisma", () => ({ prisma: { mnqDailyPlan: { findMany } } }));
+const { findMany, screenshotFindMany } = vi.hoisted(() => ({
+  findMany: vi.fn(),
+  screenshotFindMany: vi.fn(),
+}));
+vi.mock("~/lib/prisma", () => ({
+  prisma: {
+    mnqDailyPlan: { findMany },
+    screenshot: { findMany: screenshotFindMany },
+  },
+}));
 
 const entryNote = '等待确认后进入，信号为 "failed lower"\n没有追高';
 const exitNote = "过早退出,没有等待目标";
 
 beforeEach(() => {
+  screenshotFindMany.mockResolvedValue([
+    {
+      id: "setup-image",
+      filePath: "/uploads/2026/09/04/setup.png",
+      originalName: "setup.png",
+      caption: "入场图",
+      timeframe: "5min",
+      sessionDate: null,
+      setup: { sessionDate: new Date("2026-09-04T00:00:00.000Z") },
+      execution: null,
+    },
+  ]);
   findMany.mockResolvedValue([
     {
       sessionDate: new Date("2026-09-04T00:00:00.000Z"),
@@ -124,10 +144,14 @@ describe("MNQ execution detail", () => {
         summary: ReturnType<typeof computeSummary>;
         charts: ReturnType<typeof computeCharts>;
         filterOptions: ExecutionFilterOptions;
+        screenshotsByDate: Record<string, Array<{ id: string }>>;
       };
     };
     expect(body.data.executions).toHaveLength(1);
     expect(body.data.executions[0]?.opportunityId).toBe("range-long");
+    expect(
+      body.data.screenshotsByDate["2026-09-04"]?.map((image) => image.id),
+    ).toEqual(["setup-image"]);
     expect(body.data.summary).toMatchObject({ totalCount: 1, totalPnL: 80 });
     expect(body.data.charts.cumulative).toEqual([
       { date: "2026-09-04", pnl: 80, cumPnL: 80 },

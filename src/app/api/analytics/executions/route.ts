@@ -6,6 +6,7 @@ import {
   filterExecutionRows,
   buildExecutionFilterOptions,
 } from "~/lib/execution-aggregator";
+import { fetchDailyScreenshots } from "~/lib/analytics-screenshots";
 
 // GET /api/analytics/executions
 export async function GET(request: NextRequest) {
@@ -22,6 +23,9 @@ export async function GET(request: NextRequest) {
       direction: searchParams.get("direction"),
       result: searchParams.get("result"),
     });
+    const screenshotsByDate = await fetchDailyScreenshots(
+      rows.map((row) => row.date),
+    );
 
     return NextResponse.json({
       success: true,
@@ -30,6 +34,7 @@ export async function GET(request: NextRequest) {
         summary: computeSummary(rows),
         charts: computeCharts(rows),
         filterOptions: buildExecutionFilterOptions(allRows),
+        screenshotsByDate,
       },
     });
   } catch (error) {

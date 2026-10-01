@@ -4,7 +4,9 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "~/components/ui/button";
+import { DailyScreenshotReview } from "~/components/analytics/DailyScreenshotReview";
 import { cn } from "~/lib/utils";
+import type { DailyScreenshots } from "~/lib/analytics-screenshots";
 import {
   missedReasonLabel,
   type DatedMnqOpportunity,
@@ -77,8 +79,10 @@ function displayCategory(value: string | null): string {
 
 export function MissedOpportunityTable({
   data,
+  screenshotsByDate,
 }: {
   data: DatedMnqOpportunity[];
+  screenshotsByDate: DailyScreenshots;
 }) {
   const [sortKey, setSortKey] = useState<SortKey>("date");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
@@ -327,6 +331,9 @@ export function MissedOpportunityTable({
                             </dl>
                           </section>
                         </div>
+                        <DailyScreenshotReview
+                          screenshots={screenshotsByDate[row.date] ?? []}
+                        />
                       </td>
                     </tr>
                   )}

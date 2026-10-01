@@ -8,12 +8,32 @@ import {
 } from "~/lib/missed-opportunity-aggregator";
 import type { MnqMissedAnalytics } from "~/lib/mnq-analytics";
 
-const { findMany } = vi.hoisted(() => ({ findMany: vi.fn() }));
-vi.mock("~/lib/prisma", () => ({ prisma: { mnqDailyPlan: { findMany } } }));
+const { findMany, screenshotFindMany } = vi.hoisted(() => ({
+  findMany: vi.fn(),
+  screenshotFindMany: vi.fn(),
+}));
+vi.mock("~/lib/prisma", () => ({
+  prisma: {
+    mnqDailyPlan: { findMany },
+    screenshot: { findMany: screenshotFindMany },
+  },
+}));
 
 const missedProcess = '看到信号后犹豫，等到 "确认" 时已经走远\n没有追单';
 
 beforeEach(() => {
+  screenshotFindMany.mockResolvedValue([
+    {
+      id: "daily-image",
+      filePath: "/uploads/2026/09/04/daily.png",
+      originalName: "daily.png",
+      caption: null,
+      timeframe: null,
+      sessionDate: new Date("2026-09-04T00:00:00.000Z"),
+      setup: null,
+      execution: null,
+    },
+  ]);
   findMany.mockResolvedValue([
     {
       sessionDate: new Date("2026-09-04T00:00:00.000Z"),
@@ -113,12 +133,16 @@ describe("MNQ missed opportunity detail", () => {
     const body = (await response.json()) as {
       data: MnqMissedAnalytics & {
         filterOptions: MissedOpportunityFilterOptions;
+        screenshotsByDate: Record<string, Array<{ id: string }>>;
       };
     };
 
     expect(body.data.rows.map((row) => row.opportunityId)).toEqual([
       "range-pullback",
     ]);
+    expect(
+      body.data.screenshotsByDate["2026-09-04"]?.map((image) => image.id),
+    ).toEqual(["daily-image"]);
     expect(body.data).toMatchObject({
       totalMissed: 1,
       categorizedCount: 1,

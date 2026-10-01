@@ -14,6 +14,7 @@ import type {
   TradeRow,
   ExecutionFilterOptions,
 } from "~/lib/execution-aggregator";
+import type { DailyScreenshots } from "~/lib/analytics-screenshots";
 
 interface ExecutionSummary {
   totalCount: number;
@@ -44,6 +45,7 @@ interface ApiData {
   summary: ExecutionSummary;
   charts: ChartData;
   filterOptions: ExecutionFilterOptions;
+  screenshotsByDate: DailyScreenshots;
 }
 
 const EMPTY_FILTERS: FilterState = {
@@ -188,7 +190,10 @@ export function ExecutionDetailClient() {
               加载中...
             </div>
           ) : (
-            <ExecutionTable data={executions} />
+            <ExecutionTable
+              data={executions}
+              screenshotsByDate={data?.screenshotsByDate ?? {}}
+            />
           )}
         </CardContent>
       </Card>

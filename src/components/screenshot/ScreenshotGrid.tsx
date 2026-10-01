@@ -189,7 +189,7 @@ function Lightbox({ src, alt, index, total, onClose, onPrev, onNext }: LightboxP
 }
 
 // ── 截图网格 ──────────────────────────────────────────────────────────
-export function ScreenshotGrid({ screenshots, title }: { screenshots: Screenshot[]; title?: string }) {
+export function ScreenshotGrid({ screenshots, title }: { screenshots: Pick<Screenshot, "id" | "filePath" | "originalName" | "caption" | "timeframe">[]; title?: string }) {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null)
   if (screenshots.length === 0) return null
 

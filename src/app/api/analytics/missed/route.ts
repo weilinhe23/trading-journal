@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getMnqAnalyticsSnapshot } from "~/lib/mnq-analytics-server";
 import { buildMissedOpportunityResponse } from "~/lib/missed-opportunity-aggregator";
+import { fetchDailyScreenshots } from "~/lib/analytics-screenshots";
 
 // GET /api/analytics/missed — MNQ missed opportunities only
 export async function GET(request: NextRequest) {
@@ -14,7 +15,13 @@ export async function GET(request: NextRequest) {
       tradeType: searchParams.get("tradeType"),
       reason: searchParams.get("reason"),
     });
-    return NextResponse.json({ success: true, data });
+    const screenshotsByDate = await fetchDailyScreenshots(
+      data.rows.map((row) => row.date),
+    );
+    return NextResponse.json({
+      success: true,
+      data: { ...data, screenshotsByDate },
+    });
   } catch (error) {
     console.error("[GET /api/analytics/missed]", error);
     return NextResponse.json(

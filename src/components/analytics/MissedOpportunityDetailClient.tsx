@@ -15,10 +15,12 @@ import type {
   MnqMissedAnalytics,
 } from "~/lib/mnq-analytics";
 import type { MissedOpportunityFilterOptions } from "~/lib/missed-opportunity-aggregator";
+import type { DailyScreenshots } from "~/lib/analytics-screenshots";
 
 interface ApiData extends MnqMissedAnalytics {
   rows: DatedMnqOpportunity[];
   filterOptions: MissedOpportunityFilterOptions;
+  screenshotsByDate: DailyScreenshots;
 }
 
 const EMPTY_FILTERS: MissedFilterState = {
@@ -37,6 +39,7 @@ const EMPTY_DATA: ApiData = {
   totalHypotheticalR: 0,
   breakdown: [],
   filterOptions: { strategies: [], tradeTypes: [], reasons: [] },
+  screenshotsByDate: {},
 };
 
 function filtersToParams(filters: MissedFilterState): URLSearchParams {
@@ -189,7 +192,10 @@ export function MissedOpportunityDetailClient() {
               加载中...
             </div>
           ) : (
-            <MissedOpportunityTable data={current.rows} />
+            <MissedOpportunityTable
+              data={current.rows}
+              screenshotsByDate={current.screenshotsByDate}
+            />
           )}
         </CardContent>
       </Card>
